@@ -1,0 +1,6 @@
+# Work Diary
+## Week 1
+Group formed. I created the Jira account.  We discussed the project, and decided to do the E-Commerce recommender system project. I wrote some user stories for the chatbot feature.
+
+## Week 2
+I added epic and user stories to Jira.  We further discussed the topic of the project and potential innovative ideas. We haven't come up with a good innovative idea because it seems that current e-commerce website has covered most features. We will continue discussing until we find one.
