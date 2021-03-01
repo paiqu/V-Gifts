@@ -1,0 +1,42 @@
+######################################################################
+
+Week 1:
+
+Group formed. Jira created, as well as project on Jira.
+
+Start preparing for project proposal. 
+
+Plan to get proposal done by next week.
+
+Done chosen project 5 (little ebay) as group project.
+
+Find some literature about e-commerce.
+
+Build some user story for sprint backlog based on project objectives.
+
+######################################################################
+
+week 2:
+
+Completed process flow diagram, UI flow diagram,
+
+and completed user stories for all basic functionalities.
+
+Basic functionalities mensioned in project spec are summarized
+
+into 6 bullet points.
+
+All progress are saved in google doc. After anchoring the topic
+
+and innovations, all backlogs will be uploaded to Jira.
+
+######################################################################
+
+week 3:
+
+Joined gitlab classroom, and created our repo.
+
+Firstly, uploaded README.md and my weekly report.
+
+
+
