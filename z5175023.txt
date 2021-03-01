@@ -1,0 +1,33 @@
+Working Diary for Yifan Wang
+
+
+############################################################
+Week 1
+############################################################
+Group formed.
+
+Whole team had a brainstorming and then dicide to design our
+project based on given project 5 (e-commerce system).
+
+I helped to build some user stories and provided some ideas
+out of project spec.
+
+Next week we will prepare for the starting of the project 
+proposal.
+
+
+############################################################
+Week 2
+############################################################
+We start to work on the proposal, I helped to add our user
+stories to Jira and helped to created the Jira backlog and 
+sprint.
+
+We tried to find some innovative ideas but end with little 
+bit failure cause the current systems seem already kind of 
+perfect, we will continue work on this and may try to get 
+some help from tutor in next week's tutorial.
+
+We plan to finish our proposal at the end of this week or 
+the beginning of next week and start work on the code part.
+
