@@ -1,0 +1,15 @@
+Chenkai Lyu 
+z5192710
+#####################################################
+week 1:
+Find the team and the Scrum Master was chosen. 
+Team made a deliberate choice together that we choose the e-commerce project. 
+Project created on Jira. Team start brainstorm for the basic feature.
+Build a series of user story based on project objectives and innovations.  
+
+#####################################################
+week 2：
+Teams work together to think about specific commodity directions for our project.
+However, we still We still don't have a unified answer to this question.
+Teams try to find and specify innovative ideas. 
+We try to complete the user story for each objectives. 
