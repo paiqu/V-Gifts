@@ -1,0 +1,23 @@
+Work diary 
+Jie Mei z5173405
+
+#######################################################################################
+
+Week 1:
+
+Group formed. We discuss which topic to choose and finally choose the e-commerce system. 
+
+Learn how to use jira to add user story to backlog. Ready to start the proposal.
+
+#######################################################################################
+
+Week 2:
+
+Our proposal already has a framework, and we plan to improve it. 
+
+I add some innovative ideas to google doc for the e-commerce system but found that 
+
+most of the functions have been implemented in some current system.
+
+Plan to complete the proposal and start coding next week.
+
