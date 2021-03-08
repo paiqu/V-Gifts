@@ -42,10 +42,12 @@ class Database:
 
     def add_fund_to_user(self, user_id, num):
         user = self.get_user_by_id(user_id)
-        user.add_fund(num)
 
-        # update the database
-        save_to_database()
+        if user is not None:
+            user.add_fund(num)
+
+            # update the database
+            save_to_database()
 
 
     def save_to_database(self)
