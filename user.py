@@ -2,9 +2,10 @@
     This file contains user side functions
 '''
 class User:
-    def __init__(self, name, email):
+    def __init__(self, name, password, email):
         self.id = None
         self.name = name
+        self.password = password
         self.email = email
         self.address = ""
         self.fund = 0
@@ -29,8 +30,9 @@ class User:
         :param product: the product to be purchased
         '''
         
-
-
+####################################################################
+########### Corrections for function below are required ############
+####################################################################
 
 def edit_info_user(id):
     '''
