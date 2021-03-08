@@ -9,6 +9,11 @@ class Database:
         self.orders = []
 
     def to_json(self):
+        """
+        a function to transfer the User object to JSON format
+
+        return: 
+        """
         output = {
             "users": self.users,
             "admins": self.admins,
@@ -25,6 +30,11 @@ class Database:
         @param user - type: User
         """
         self.users.append(user)
+
+        # assign an ID for the user
+        user.id = len(self.users) + 1
+
+        # save to the database
         self.save_to_database()
         
     def get_user_by_id(self, user_id):
@@ -50,6 +60,6 @@ class Database:
             save_to_database()
 
 
-    def save_to_database(self)
+    def save_to_database(self):
         with open("data.txt", 'w') as f:
             f.write(self.to_json())
