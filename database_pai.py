@@ -1,4 +1,5 @@
 import json
+from user import User
 
 class Database:
     def __init__(self):
@@ -38,6 +39,14 @@ class Database:
                 return user
         
         return None
+
+    def add_fund_to_user(self, user_id, num):
+        user = self.get_user_by_id(user_id)
+        user.add_fund(num)
+
+        # update the database
+        save_to_database()
+
 
     def save_to_database(self)
         with open("data.txt", 'w') as f:
