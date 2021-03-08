@@ -1,6 +1,36 @@
 '''
     This file contains user side functions
 '''
+class User:
+    def __init__(self, name, email):
+        self.id = None
+        self.name = name
+        self.email = email
+        self.address = ""
+        self.fund = 0
+        self.cart = []
+        self.orders = []
+        self.interests = [] 
+
+    # Implement getters and setters later
+
+    def add_fund(self, num):
+        '''
+        This function adds fund to a user
+        '''
+        self.fund += num
+    
+    def buy_product_from_cart(self, product):
+        '''
+        This function buys a product if user has 
+        enough fund, and create a corresponding
+        ordr
+
+        :param product: the product to be purchased
+        '''
+        
+
+
 
 def edit_info_user(id):
     '''
