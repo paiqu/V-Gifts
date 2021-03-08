@@ -32,6 +32,15 @@ class User:
 
 
 
+# # Users manage profile
+# def manage_profile(name, cart, address, ):
+#     '''
+#     Users could manage their name, cart, address at their will
+#     This function change users' information
+#     '''
+#     return {
+#         ...
+#     }
 def edit_info_user(id):
     '''
         This function edits user info
