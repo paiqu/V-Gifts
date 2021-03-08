@@ -5,7 +5,10 @@
     attributes, PLEASE do pytest to remove any
     conflict changes.
 '''
+# may create class objects instead later
 
+
+# main content
 ID_DB = {
     '''
         This DB stores the next id should be used upon
