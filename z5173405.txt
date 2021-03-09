@@ -21,3 +21,11 @@ most of the functions have been implemented in some current system.
 
 Plan to complete the proposal and start coding next week.
 
+#######################################################################################
+
+Week 3:
+
+Joined the github classroom. Then we have finished the proposal.
+
+Learn some knowledge about react framework and bootstrap. Next week will start coding part.
+

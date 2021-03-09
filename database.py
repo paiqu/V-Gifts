@@ -24,7 +24,10 @@ ID_DB = {
 USER_DB = {
     '''
     format:
-        '<id>':{                # type: string
+        '<id>':                 # type: string
+                <User class object>
+            contains:
+            {                
             'id': 1             # type: int, serial
             'name': 'Zard'      # type: string
             'fund': 10          # type: int; unit: $
@@ -44,7 +47,10 @@ USER_DB = {
 ADMIN_DB = {
     '''
     format:
-        '<id>':{                # type: string
+        '<id>':{                 # type: string
+                <Admin class object>
+            contains:
+            {     
             'id': 2             # type: int, serial
             'name': 'YYF'       # type: string
             'admin_token': '198ANFu72oDJ0827'
@@ -56,7 +62,10 @@ ADMIN_DB = {
 PRODUCT_DB = {
     '''
     format:
-        '<id>':{                # type: string
+        '<id>':{                 # type: string
+                <Product class object>
+            contains:
+            {     
             'id': 3             # type: int, serial
             'name': 'gift_1'    # type: string
             'pic': ??????
@@ -74,7 +83,10 @@ PRODUCT_DB = {
 ORDER_DB = {
     '''
     format:
-        '<id>':{                # type: string, 
+        '<id>':{                 # type: string
+                <Order class object>
+            contains:
+            {      
                                         e.g. '<id>' means: '3' for item with 'id': 3
             'id': 4             # type: int, serial
             'product_id': 3     # type: int
