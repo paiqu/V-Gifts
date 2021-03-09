@@ -34,6 +34,32 @@ class User:
 ########### Corrections for function below are required ############
 ####################################################################
 
+def encrypt_password(password):
+    '''
+    Encrypt the password with sha256 and store in database
+    sha_signature = \
+        hashlib.sha256(password.encode()).hexdigest()
+    '''
+    return sha_signature
+
+# User forget password and reset
+def forget_password(name, email):
+    '''
+    Check the email exist
+    Send reset url to the email
+    return new password
+    '''
+    return new_password
+
+# Users change password
+def change_password(name,old_password):
+    '''
+    Check the name and password match
+    Reset the password
+    '''
+    return new_password
+
+
 def edit_info_user(id):
     '''
         This function edits user info
