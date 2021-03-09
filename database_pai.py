@@ -9,11 +9,18 @@ class Database:
         self.orders = {}
 
     def to_json(self):
+        """
+        a function to transfer the User object to JSON format
+
+        return: 
+        """
+
+        # users - type: dict of {'id': User}
         output = {
-            "users": self.users,
-            "admins": self.admins,
-            "products": self.products,
-            "orders": self.orders
+            "users": {key: value.to_dict() for (key, value) in self.users.items()},
+            "admins": {key: value.to_dict() for (key, value) in self.admins.items()},
+            "products": {key: value.to_dict() for (key, value) in self.products.items()},
+            "orders": {key: value.to_dict() for (key, value) in self.orders.items()}
         }
 
         return json.dumps(output)
@@ -31,6 +38,7 @@ class Database:
 
         @param user - type: User
         """
+
         self.users[str(user_object.get_id)] = user_object
         self.save_to_database()
         

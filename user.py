@@ -29,7 +29,13 @@ class User:
 
         :param product: the product to be purchased
         '''
-        
+    
+    def to_dict(self):
+        '''
+        This function will transfer the User object to a dict
+        Will be used in JSON later
+        '''
+        return self.__dict__
 ####################################################################
 ########### Corrections for function below are required ############
 ####################################################################
@@ -108,3 +114,4 @@ def buy_product_from_cart(user_id, product_id):
         'product_id': product_id,
         'order_id': 1               # order_id
     }
+
