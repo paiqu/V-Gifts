@@ -2,9 +2,10 @@
     This file contains user side functions
 '''
 class User:
-    def __init__(self, name, email):
+    def __init__(self, name, password, email):
         self.id = None
         self.name = name
+        self.password = password
         self.email = email
         self.address = ""
         self.fund = 0
@@ -28,8 +29,41 @@ class User:
 
         :param product: the product to be purchased
         '''
-        
+    
+    def to_dict(self):
+        '''
+        This function will transfer the User object to a dict
+        Will be used in JSON later
+        '''
+        return self.__dict__
+####################################################################
+########### Corrections for function below are required ############
+####################################################################
 
+def encrypt_password(password):
+    '''
+    Encrypt the password with sha256 and store in database
+    sha_signature = \
+        hashlib.sha256(password.encode()).hexdigest()
+    '''
+    return sha_signature
+
+# User forget password and reset
+def forget_password(name, email):
+    '''
+    Check the email exist
+    Send reset url to the email
+    return new password
+    '''
+    return new_password
+
+# Users change password
+def change_password(name,old_password):
+    '''
+    Check the name and password match
+    Reset the password
+    '''
+    return new_password
 
 
 # # Users manage profile
@@ -89,3 +123,4 @@ def buy_product_from_cart(user_id, product_id):
         'product_id': product_id,
         'order_id': 1               # order_id
     }
+
