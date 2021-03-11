@@ -1,0 +1,16 @@
+.row > div {
+    border: 1px solid grey;
+}
+
+/* .row  > div:hover {
+    background-color: wheat;
+    opacity: 1;
+} */
+
+.add-cart-icon {
+    font-size: 1.6rem;
+}
+
+.price {
+    font-weight: bold;
+}
