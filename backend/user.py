@@ -1,6 +1,8 @@
 '''
     This file contains user side functions
 '''
+# global variable
+TYPE_OF_PRODUCTS = 10   # dimension of interests
 class User:
     def __init__(self, name, password, email):
         self.id = None
@@ -11,7 +13,7 @@ class User:
         self.fund = 0
         self.cart = []
         self.orders = []
-        self.interests = [] 
+        self.interests = [0] * TYPE_OF_PRODUCTS
 
     # Implement getters and setters later
 
@@ -36,6 +38,16 @@ class User:
         Will be used in JSON later
         '''
         return self.__dict__
+
+    def e_interest(self):
+        return self.interests
+
+    def add_interest(self, num):
+        '''
+            Prevent overflow
+        '''
+        self.interests[num % TYPE_OF_PRODUCTS] += 1
+
 ####################################################################
 ########### Corrections for function below are required ############
 ####################################################################

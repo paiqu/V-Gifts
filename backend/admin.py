@@ -13,6 +13,9 @@ ADMIN_DB = {
 }
 '''
 
+from user import TYPE_OF_PRODUCTS
+from database_pai import Database
+
 class Admin:
     def __init__(name, password, email):
         self.id = None
@@ -38,7 +41,18 @@ class Admin:
 
     def get_email(self):
         return self.email 
-    
+
+class product:
+    def __init__(self, names, descriptions):
+        temp = Database()
+        temp = temp.load_json()
+        self.id = temp.id_generator('product')
+        self.name = names
+        self.description = descriptions
+        self.features = [0] * TYPE_OF_PRODUCTS
+        self.pic = None
+
+
 def add_product(prod_name, prod_feature, prod_descrip, prod_pic):
     '''
         This function creates a product with inputs above
