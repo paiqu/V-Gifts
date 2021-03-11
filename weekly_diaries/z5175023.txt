@@ -31,3 +31,20 @@ some help from tutor in next week's tutorial.
 We plan to finish our proposal at the end of this week or 
 the beginning of next week and start work on the code part.
 
+
+############################################################
+Week 2
+############################################################
+Joined GitHUb Classroom.
+
+I moved all seprate parts of proposal to the word file, 
+reorganized the Jira and screenshoted all user stories, 
+backlog and sprint then put them in word file as well.
+I then composed the whole proposal and made some adjustments
+to some user stories in order to make them sounds more 
+logical, finally I made table of contents and title page then
+export proposal to the PDF form, our leader Haoran submitted 
+the final proposal on Saturday.
+
+We will start codeing part from next week.
+
