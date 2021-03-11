@@ -14,6 +14,18 @@ class User:
         self.interests = [] 
 
     # Implement getters and setters later
+    def set_email(self, email):
+        self.email = email
+
+    def get_email(self):
+        return self.email 
+
+    def set_address(self, address):
+        self.address = address
+
+    def get_adress(self):
+        return self.address
+    
 
     def add_fund(self, num):
         '''
