@@ -2,13 +2,8 @@
     border: 1px solid grey;
 }
 
-/* .row  > div:hover {
-    background-color: wheat;
-    opacity: 1;
-} */
-
 .add-cart-icon {
-    font-size: 1.6rem;
+    font-size: 1.3rem;
 }
 
 .price {
@@ -18,3 +13,5 @@
 .products-grid {
     margin-top: 2rem;
 }
+
+
