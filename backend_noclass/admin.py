@@ -48,6 +48,8 @@ def new_product(name, price, description, feature, deli_days):
         "description": description,
         "feature": feature,
         "delivery": deli_days,
+        "ratings": [],
+                    # [(u_id, rating), ...]
         "pic": None
     }
 
