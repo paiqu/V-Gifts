@@ -29,7 +29,7 @@ class Database:
 
         return json.dumps(output)
 
-    def load_json(self):
+    def load_json(self, location):
         '''
             This function loads database from json
             into Database class object
@@ -45,7 +45,7 @@ class Database:
         @param user - type: User
         """
 
-        self.users[str(user_object.get_id)] = user_object
+        self.users[str(user_object.get_id())] = user_object
         self.save_to_database()
         
     def get_user_by_id(self, user_id):

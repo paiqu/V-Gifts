@@ -1,0 +1,1 @@
+{"TYPE_OF_PRODUCTS": 3, "USER_ID": 0, "ADMIN_ID": 1, "PRODUCT_ID": 1, "ORDER_ID": 0, "USER_DB": {}, "ADMIN_DB": {"1": {"id": 1, "name": "admin", "password": "123456", "email": "123@unsw"}}, "PRODUCT_DB": {"1": {"id": 1, "name": "prod_1", "description": "test_use", "feature": [1, 0, 0], "pic": null}}, "ORDER_DB": {}}
