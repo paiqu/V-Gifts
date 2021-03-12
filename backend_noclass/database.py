@@ -113,6 +113,7 @@ def add_order(order):
         Add order to db
     '''
     temp = load_json()
+    # add to order db
     temp['ORDER_DB'][str(order['id'])] = order
     to_json(temp)
     return {}
