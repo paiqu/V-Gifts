@@ -60,6 +60,6 @@ def test_2():
     print(temp_2)
 
 if __name__ == "__main__":
-    # test_0()
-    # test_1()
+    test_0()
+    test_1()
     test_2()
