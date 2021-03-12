@@ -42,7 +42,11 @@ class Admin:
     def get_email(self):
         return self.email 
 
+
 class product:
+    '''
+        Template of product class
+    '''
     def __init__(self, names, descriptions):
         temp = Database()
         temp = temp.load_json()

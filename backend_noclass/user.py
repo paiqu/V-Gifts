@@ -3,8 +3,7 @@
 '''
 from database_pai import Database
 
-# global variable
-TYPE_OF_PRODUCTS = 10   # dimension of interests
+
 class User:
     def __init__(self, name, password, email):
         # used to generate id from database
