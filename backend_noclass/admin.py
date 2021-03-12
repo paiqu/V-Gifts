@@ -33,7 +33,7 @@ def new_admin(name, password, email):
         "email": email
     }
 
-def new_product(name, description, feature):
+def new_product(name, price, description, feature, deli_days):
     '''
         create a new product,
         feature should be a lst of int with length of
@@ -44,8 +44,10 @@ def new_product(name, description, feature):
     return {
         "id": new_id,
         "name": name,
+        "price": price,
         "description": description,
         "feature": feature,
+        "delivery": deli_days,
         "pic": None
     }
 

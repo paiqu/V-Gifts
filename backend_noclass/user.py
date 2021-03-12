@@ -1,63 +1,77 @@
 '''
     This file contains user side functions
 '''
-from database_pai import Database
+import database as db
 
+def new_user(name, password, email, address):
+    new_id = db.id_generator('user')
+    temp = db.load_json()
+    return {
+        "id": new_id,
+        "name": name,
+        "password": password,
+        "email": email,
+        "address": address,
+        "fund": 0,
+        "shopping_cart": [],
+        "orders": [],
+        "interest": [0] * temp['TYPE_OF_PRODUCTS']
+    }
 
-class User:
-    def __init__(self, name, password, email):
-        # used to generate id from database
-        temp = Database()
-        temp = temp.load_json()
-        self.id = temp.id_generator('user')
-        self.name = name
-        self.password = password
-        self.email = email
-        self.address = ""
-        self.fund = 0
-        self.cart = []
-        self.orders = []
-        self.interests = [0] * TYPE_OF_PRODUCTS
-
-    # Implement getters and setters later
-
-    def get_id(self):
-        return self.id
-
-    def add_fund(self, num):
-        '''
-        This function adds fund to a user
-        '''
-        self.fund += num
-    
-    def buy_product_from_cart(self, product):
-        '''
-        This function buys a product if user has 
-        enough fund, and create a corresponding
-        ordr
-
-        :param product: the product to be purchased
-        '''
-    
-    def to_dict(self):
-        '''
-        This function will transfer the User object to a dict
-        Will be used in JSON later
-        '''
-        return self.__dict__
-
-    def e_interest(self):
-        return self.interests
-
-    def add_interest(self, num):
-        '''
-            Prevent overflow
-        '''
-        self.interests[num % TYPE_OF_PRODUCTS] += 1
+def new_order(user_id, product_id, datee):
+    '''
+        create a new product,
+        feature should be a lst of int with length of
+        TYPE_OF_PRODUCTS
+    '''
+    new_id = db.id_generator('order')
+    return {
+        "id": new_id,
+        "user_id": user_id,
+        "product_id": product_id,
+        "purchase_date": datee,
+        "state": 0,             # 0: just purchase
+                                # 1: delivering
+                                # 2: done
+                                # 3: cancelled
+    }
 
 ####################################################################
 ########### Corrections for function below are required ############
 ####################################################################
+
+
+def add_fund(u_id, num):
+    '''
+    This function adds fund to a user
+    '''
+    temp = db.load_json
+    db.valid_id('user',u_id)
+    temp['USER_DB'][str(u_id)]['fund'] += num
+    db.to_json(temp)
+    return temp['USER_DB'][str(u_id)]['fund']
+
+def buy_product_from_cart(self, product):
+    '''
+    This function buys a product if user has 
+    enough fund, and create a corresponding
+    ordr
+
+    :param product: the product to be purchased
+    '''
+
+
+def add_interest(u_id, posi, num):
+    '''
+        This function updates user's interest
+        Prevent overflow
+    '''
+    temp = db.load_json
+    db.valid_id('user',u_id)
+    temp['USER_DB'][str(u_id)]['interest'][posi % temp['TYPE_OF_PRODUCTS']] \
+             += num
+    return temp['USER_DB'][str(u_id)]['interest']
+
 
 def encrypt_password(password):
     '''
@@ -85,7 +99,7 @@ def change_password(name,old_password):
     return new_password
 
 
-def edit_info_user(id):
+def edit_info_user(u_id):
     '''
         This function edits user info
     '''
@@ -110,27 +124,32 @@ def add_product_to_cart(user_id, product_id):
         'product_id': product_id
     }
 
-def create_order(user_id, product_id):
+def create_order(user_id, product_id, datee):
     '''
         This function creates an order
         and generate an order id and store it in user
+        1. check fund
+        2. make payments
+        3. create order
+        4. remove product from cart
+        5. add order to user & order_db
+        6. save to db
 
         This function adds order to ORDER_DB
     '''
+    order = new_order(user_id, product_id, datee)
+    db.valid_id('user', user_id)
+    temp = db.load_json()
+
+    db.to_json(temp)
     return {
         'order_id': 1               # order_id
     }
 
-def buy_product_from_cart(user_id, product_id):
+def remove_prod_from_cart(user_id, product_id):
     '''
-        This function buys a product if user has 
-        enough fund, and create a corresponding
-        order.
+        This function remvoes prod from cart
     '''
     # order_id = create_order(user_id, product_id)
-    return {
-        'user_id': user_id, 
-        'product_id': product_id,
-        'order_id': 1               # order_id
-    }
+    return {}
 
