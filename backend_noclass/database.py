@@ -38,6 +38,31 @@ def init_db():
     'ORDER_DB': {},
 }
 
+# check valid
+
+def valid_id(option, idd):
+    '''
+        This func checks if an id exist in DB
+    '''
+    temp = load_json()
+    if option == 'user' or option == 'users':
+        if str(idd) in temp['USER_DB']:
+            return True
+    elif option == 'product' or option == 'products':
+        if str(idd) in temp['PRODUCT_DB']:
+            return True
+    elif option == 'admin' or option == 'admins':
+        if str(idd) in temp['ADMIN_DB']:
+            return True
+    elif option == 'order' or option == 'orders':
+        if str(idd) in temp['ORDER_DB']:
+            return True
+    # Temporary
+    # invalid id
+    raise KeyError()
+
+# read and write
+
 def to_json(DB, filename = 'database.json'):
     '''
         Save DB to json file
@@ -88,6 +113,7 @@ def add_order(order):
         Add order to db
     '''
     temp = load_json()
+    # add to order db
     temp['ORDER_DB'][str(order['id'])] = order
     to_json(temp)
     return {}
@@ -132,6 +158,8 @@ def add_product_type():
         temp['PRODUCT_DB'][key]['feature'].append(0)
     for key in temp['USER_DB']:
         temp['USER_DB'][key]['interest'].append(0)
+    to_json(temp)
+    return temp['TYPE_OF_PRODUCTS']
 
 # USER_DB = {
 #     '''

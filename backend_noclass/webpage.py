@@ -7,7 +7,7 @@
 '''
 import random as rd
 import numpy as np
-import database_pai as dbp
+import database as db
 
 def unit_vector(vector):
     '''
@@ -54,18 +54,16 @@ def interest_calculator(v_1, v_2, key):
 
 def prod_picker(user_id, percent): # percent -> the chance of product is joining the recommendation
     # prod_lst = DB
-    temp = dbp.Database()
-    temp = temp.load_json()
-    prod_lst = temp.export_product()
-    user_lst = temp.export_user()
+    temp = db.load_json()
+    prod_lst = temp['PRODUCT_DB']
+    user_v = temp['USER_DB'][str(user_id)]['interest']
     # append to lst
     lst = []
     for item in prod_lst:
         rdd = rd.randint(0, 100)
         if rdd > 100 * percent:
-            v_1 = prod_lst[item].e_feature()
-            v_2 = user_lst[str(user_id)].e_interest()
-            lst.append(interest_calculator(v_1, v_2, item))
+            v_1 = prod_lst[item]['feature']
+            lst.append(interest_calculator(v_1, user_v, item))
     return lst
 
 def sorting_helper(lst1, lst2, posi, mode = 0):
