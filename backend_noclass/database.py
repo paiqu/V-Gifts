@@ -161,6 +161,24 @@ def add_product_type():
     to_json(temp)
     return temp['TYPE_OF_PRODUCTS']
 
+def prod_rating_calculator(prod_id):
+    '''
+        This function is used to obtain total 
+        rating for a product from individual 
+        user ratings
+    '''
+    valid_id('product', prod_id)
+    temp = load_json()
+    rating_lst = temp['PRODUCT_DB'][str(prod_id)]['rating']
+    if len(rating_lst) == 0:
+        return 0
+    summ = 0
+    for rating in rating_lst:
+        summ += rating[1]
+    return summ / len(rating_lst)
+
+
+
 # USER_DB = {
 #     '''
 #     format:

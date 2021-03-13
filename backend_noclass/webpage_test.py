@@ -55,9 +55,11 @@ def test3():
     # add some product/user/admin
     admin_1 = ad.new_admin('admin','123456','123@unsw')
     prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5)
+    prod_2 = ad.new_product('prod_2', 100, 'test_use', [1, 1, 0], 20)
     user_1 = us.new_user('user_1', '123', '123@unsw', 'somewhere')
     db.add_admin(admin_1)
     db.add_prod(prod_1)
+    db.add_prod(prod_2)
     db.add_user(user_1)
     us.add_fund(user_1['id'], 500)
     us.add_product_to_cart(user_1['id'], prod_1['id'], 3)
@@ -76,9 +78,10 @@ def test3():
     ad.change_order_state(1, 2)
     ad.change_order_state(2, 1)
     ad.change_order_state(3, 3)
-    # print(db.load_json())
     print(wb.order_filter_switch(['1','2','3'], 'state', 2, 2))
-    print(wb.order_filter('rating', 3, 5))
+    print(wb.order_filter([['rating', 3, 5]]))
+    # print(db.load_json())
+    print(wb.prod_filter([['price', 40, 60]]))
 
 if __name__ == '__main__':
     # test0()
