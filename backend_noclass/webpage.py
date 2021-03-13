@@ -114,12 +114,6 @@ def sorting_merge(lst, posi = 1, mode = 0): # lst -> [(id, value), ....]
     new = sorting_helper(left, right, posi, mode)
     return new
 
-def prod_filter():
-    '''
-        This function is used to filter/reorder product_list
-    '''
-    pass
-
 def order_filter_sort(order_keys, option = None, mode = 1):
     '''
         This function is used to reorder order_list
@@ -147,7 +141,7 @@ def order_filter_sort(order_keys, option = None, mode = 1):
         rt.append(item[0])
     return rt
 
-def order_filter_switch(order_keys, option, minn, maxx):
+def order_filter_switch(order_keys, option, minn = None, maxx = None):
     '''
         This function filters order based on
         option and the value of the option
@@ -164,16 +158,21 @@ def order_filter_switch(order_keys, option, minn, maxx):
         raise KeyError()
     else:
         for key in order_keys:
-            if temp['ORDER_DB'][key][option] >= minn \
+            # must have min and max at the same time
+            if minn != None and maxx != None \
+                and temp['ORDER_DB'][key][option] >= minn \
                 and temp['ORDER_DB'][key][option] <= maxx:
+                temp_lst.append([key, temp['ORDER_DB'][key][option]])
+            else:
                 temp_lst.append([key, temp['ORDER_DB'][key][option]])
     # turn into list of keys
     for item in temp_lst:
         rt.append(item[0])
     return rt
 
-def order_filter(option, minn, maxx, mode = 1, permission = 'admin', u_id = -1):
+def order_filter(option_lst, mode = 1, permission = 'admin', u_id = -1):
     '''
+        option_lst => [[option, min, max], ...]
         A combination of
         order_filter_switch
         and
@@ -186,8 +185,93 @@ def order_filter(option, minn, maxx, mode = 1, permission = 'admin', u_id = -1):
         order_keys = temp['USER_DB'][str(u_id)]['order']
     else:
         raise ValueError() 
-
-    order_keys = order_filter_sort(order_keys, option)
-    order_keys = order_filter_switch(order_keys, option, minn, maxx)
+    
+    for options in option_lst:
+        option, minn, maxx = options
+        order_keys = order_filter_sort(order_keys, option)
+        order_keys = order_filter_switch(order_keys, option, minn, maxx)
     
     return order_keys
+
+def prod_filter(option_lst, mode = 1):
+    '''
+        This function is used to filter/reorder product_list
+        option_lst => [[option, min, max], ...]
+        product:{
+            "id": new_id,
+            "name": name,
+            "price": price,
+            "description": description,
+            "feature": feature, # [0] * temp['TYPE_OF_PRODUCTS']
+            "delivery": deli_days,
+            "ratings": [],
+                        # [(u_id, rating), ...]
+            "pic": None
+        }
+    '''
+    temp = db.load_json()
+    prod_keys = list(temp['PRODUCT_DB'].keys())
+    for options in option_lst:
+        option, minn, maxx = options
+        prod_keys = prod_filter_sort(prod_keys, option, mode)
+        prod_keys = prod_filter_switch(prod_keys, option, minn, maxx)
+    
+    return prod_keys
+
+
+def prod_filter_switch(prod_keys, option, minn = None, maxx = None):
+    '''
+        This function filters order based on
+        option and the value of the option (['price', 'delivery'])
+
+        Only allows option with values in range 
+        to be returned
+
+        usually apply to:
+            1. price
+            2. delivery days
+    '''
+    temp = db.load_json()
+    # order_keys = list(temp['ORDER_DB'].keys())
+    rt = []
+    # sort list for all options
+    temp_lst = []
+    if option not in temp['PRODUCT_DB'][prod_keys[0]]:
+        raise KeyError()
+    else:
+        for key in prod_keys:
+            # must have min and max at the same time
+            if minn != None and maxx != None \
+                and temp['PRODUCT_DB'][key][option] >= minn \
+                and temp['PRODUCT_DB'][key][option] <= maxx:
+                temp_lst.append([key, temp['PRODUCT_DB'][key][option]])
+    # turn into list of keys
+    for item in temp_lst:
+        rt.append(item[0])
+    return rt
+
+def prod_filter_sort(prod_keys, option = None, mode = 1):
+    '''
+        This function is used to reorder order_list
+        mode = 1  -> decending
+        mode = 0  -> ascending
+    '''
+    temp = db.load_json()
+    rt = []
+    temp_lst = [] # [[key, <option>], ...]
+    for item in prod_keys:
+        temp_lst.append([item, temp['PRODUCT_DB'][item]['id']])
+    # sort list for all options
+    if option is None:
+        return prod_keys
+    else:
+        if option not in temp['PRODUCT_DB'][prod_keys[0]]:
+            raise KeyError()
+        else:
+            for item in temp_lst:
+                item[1] = temp['PRODUCT_DB'][item[0]][option]
+            temp_lst = sorting_merge(temp_lst, 1, mode)
+    # turn into list of keys
+    for item in temp_lst:
+        rt.append(item[0])
+    return rt
