@@ -221,12 +221,12 @@ def rate_order(u_id, order_id, rating):
     elif rating >= 5:
         rating = 5
     temp = db.load_json()
-    if u_id != temp['ORDER_DB'][str(order_id)]['u_id']:
+    if u_id != temp['ORDER_DB'][str(order_id)]['user_id']:
         raise KeyError()
         return {}
     prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
     temp['ORDER_DB'][str(order_id)]['rating'] = rating
-    temp['PRODUCT_DB'][str(prod_id)]['rating'].append([u_id, rating])
+    temp['PRODUCT_DB'][str(prod_id)]['ratings'].append([u_id, rating])
     db.to_json(temp)
     return {}
 

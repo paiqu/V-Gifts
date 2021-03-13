@@ -114,3 +114,80 @@ def sorting_merge(lst, posi = 1, mode = 0): # lst -> [(id, value), ....]
     new = sorting_helper(left, right, posi, mode)
     return new
 
+def prod_filter():
+    '''
+        This function is used to filter/reorder product_list
+    '''
+    pass
+
+def order_filter_sort(order_keys, option = None, mode = 1):
+    '''
+        This function is used to reorder order_list
+        mode = 1  -> decending
+        mode = 0  -> ascending
+    '''
+    temp = db.load_json()
+    order_keys = list(temp['ORDER_DB'].keys())
+    rt = []
+    temp_lst = [] # [[key, <option>], ...]
+    for item in order_keys:
+        temp_lst.append([item, temp['ORDER_DB'][item]['id']])
+    # sort list for all options
+    if option is None:
+        return order_keys
+    else:
+        if option not in temp['ORDER_DB'][order_keys[0]]:
+            raise KeyError()
+        else:
+            for item in temp_lst:
+                item[1] = temp['ORDER_DB'][item[0]][option]
+            temp_lst = sorting_merge(temp_lst, 1, mode)
+    # turn into list of keys
+    for item in temp_lst:
+        rt.append(item[0])
+    return rt
+
+def order_filter_switch(order_keys, option, minn, maxx):
+    '''
+        This function filters order based on
+        option and the value of the option
+
+        Only allows option with values in range 
+        to be returned
+    '''
+    temp = db.load_json()
+    # order_keys = list(temp['ORDER_DB'].keys())
+    rt = []
+    # sort list for all options
+    temp_lst = []
+    if option not in temp['ORDER_DB'][order_keys[0]]:
+        raise KeyError()
+    else:
+        for key in order_keys:
+            if temp['ORDER_DB'][key][option] >= minn \
+                and temp['ORDER_DB'][key][option] <= maxx:
+                temp_lst.append([key, temp['ORDER_DB'][key][option]])
+    # turn into list of keys
+    for item in temp_lst:
+        rt.append(item[0])
+    return rt
+
+def order_filter(option, minn, maxx, mode = 1, permission = 'admin', u_id = -1):
+    '''
+        A combination of
+        order_filter_switch
+        and
+        order_filter_sort
+    '''
+    temp = db.load_json()
+    if permission == 'admin':
+        order_keys = list(temp['ORDER_DB'].keys())
+    elif permission == 'user':
+        order_keys = temp['USER_DB'][str(u_id)]['order']
+    else:
+        raise ValueError() 
+
+    order_keys = order_filter_sort(order_keys, option)
+    order_keys = order_filter_switch(order_keys, option, minn, maxx)
+    
+    return order_keys
