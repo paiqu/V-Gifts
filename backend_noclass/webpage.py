@@ -52,16 +52,16 @@ def interest_calculator(v_1, v_2, key):
     return (key, angle_between(v_1, v_2))
     
 
-def prod_picker(user_id, percent): # percent -> the chance of product is joining the recommendation
+def prod_picker(user_id, percent = 100): # percent -> the chance of product is joining the recommendation
     # prod_lst = DB
     temp = db.load_json()
     prod_lst = temp['PRODUCT_DB']
-    user_v = temp['USER_DB'][str(user_id)]['interest']
+    user_v = temp['USER_DB'][str(int(user_id))]['interest']
     # append to lst
     lst = []
     for item in prod_lst:
         rdd = rd.randint(0, 100)
-        if rdd > 100 * percent:
+        if rdd > (100-percent):
             v_1 = prod_lst[item]['feature']
             lst.append(interest_calculator(v_1, user_v, item))
     return lst
@@ -113,3 +113,4 @@ def sorting_merge(lst, posi = 1, mode = 0): # lst -> [(id, value), ....]
     right = sorting_merge(lst[midd:], posi, mode)
     new = sorting_helper(left, right, posi, mode)
     return new
+

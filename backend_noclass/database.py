@@ -23,11 +23,11 @@ import json
 # }
 
 # global
-TYPE_OF_PRODUCTS = 3
+TYPE_OF_PRODUCTS_INIT = 3
 
 def init_db():
     return {
-    'TYPE_OF_PRODUCTS': TYPE_OF_PRODUCTS,   # dimension of interests
+    'TYPE_OF_PRODUCTS': TYPE_OF_PRODUCTS_INIT,   # dimension of interests
     'USER_ID': 0,
     'ADMIN_ID': 0,
     'PRODUCT_ID': 0,

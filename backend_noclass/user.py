@@ -54,7 +54,6 @@ def add_fund(u_id, num):
     '''
     temp = db.load_json()
     db.valid_id('user',u_id)
-    print(temp['USER_DB'][str(u_id)])
     temp['USER_DB'][str(u_id)]['fund'] += num
     db.to_json(temp)
     return {}
@@ -126,7 +125,6 @@ def add_product_to_cart(user_id, product_id, amount):
     item = [product_id, amount]
     # (product_id, amount)
     temp['USER_DB'][str(user_id)]['shopping_cart'].append(item)
-    print(temp['USER_DB'][str(user_id)]['shopping_cart'])
     db.to_json(temp)
     return {}
 
@@ -210,7 +208,6 @@ def create_order(user_id, product_id, amount):
     # 6
     db.to_json(temp)
     return {
-        'order_id': 1               # order_id
     }
 
 def rate_order(u_id, order_id, rating):
@@ -230,4 +227,20 @@ def rate_order(u_id, order_id, rating):
     prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
     temp['ORDER_DB'][str(order_id)]['rating'] = rating
     temp['PRODUCT_DB'][str(prod_id)]['rating'].append([u_id, rating])
+    db.to_json(temp)
+    return {}
+
+def edit_user_interest(u_id, interest_lst):
+    '''
+        This function is used to directly edit 
+        user's interest vecetor
+    '''
+    db.valid_id('user', u_id)
+    temp = db.load_json()
+    if len(interest_lst) != temp['TYPE_OF_PRODUCTS']:
+        raise ValueError()
+        return {}
+    else:
+        temp['USER_DB'][str(u_id)]['interest'] = interest_lst
+        db.to_json(temp)
     return {}

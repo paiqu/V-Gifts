@@ -46,7 +46,7 @@ def new_product(name, price, description, feature, deli_days):
         "name": name,
         "price": price,
         "description": description,
-        "feature": feature,
+        "feature": feature, # [0] * temp['TYPE_OF_PRODUCTS']
         "delivery": deli_days,
         "ratings": [],
                     # [(u_id, rating), ...]
@@ -97,6 +97,20 @@ def delete_product(prod_id):
         raise KeyError()
     else:
         return temp['PRODUCT_DB'].pop(str(prod_id))
+
+def edit_prod_feature(prod_id, feature_lst):
+    '''
+        This function can update the feature vector of a product
+    '''
+    db.valid_id('product', prod_id)
+    temp = db.load_json()
+    if len(feature_lst) != temp['TYPE_OF_PRODUCTS']:
+        raise ValueError()
+        return {}
+    else:
+        temp['PRODUCT_DB'][str(prod_id)]['feature'] = feature_lst
+        db.to_json(temp)
+    return {}
 
 # def order_history():
 #     '''
