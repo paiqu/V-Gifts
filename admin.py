@@ -14,7 +14,7 @@ ADMIN_DB = {
 '''
 
 class Admin:
-    def __init__(name, password, email):
+    def __init__(self, name, password, email):
         self.id = None
         self.name = name
         self.password = password
@@ -38,6 +38,12 @@ class Admin:
 
     def get_email(self):
         return self.email 
+    def to_dict(self):
+            '''
+            This function will transfer the User object to a dict
+            Will be used in JSON later
+            '''
+            return self.__dict__
     
 def add_product(prod_name, prod_feature, prod_descrip, prod_pic):
     '''

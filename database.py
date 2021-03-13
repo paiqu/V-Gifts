@@ -9,54 +9,73 @@
 
 
 # main content
+    # '''
+    #     This DB stores the next id should be used upon
+    #     creating new user/admin/product/order
+    # '''
 ID_DB = {
-    '''
-        This DB stores the next id should be used upon
-        creating new user/admin/product/order
-    '''
-    'USER_DB': 0,
-    'ADMIN_DB': 0,
+    'USER_DB': 1,
+    'ADMIN_DB': 1,
     'PRODUCT_DB': 0,
     'ORDER_DB': 0
+    
 }
 
 
 USER_DB = {
-    '''
-    format:
-        '<id>':                 # type: string
-                <User class object>
-            contains:
-            {                
-            'id': 1             # type: int, serial
-            'name': 'Zard'      # type: string
-            'fund': 10          # type: int; unit: $
-            'address': 'Pacific Ocean'
-                                # type: string
-            'cart': [list of product ID]
-                                # type: list of int
-            'orders': [list of order ID]
-                                # type: list of int
-            'interests': [('cheap', 1.0), ...]
-                                # type: list of tuple, tuple of (feature, weight)
-                                #                                string,  float
-        }
-    '''
+    # '''
+    # format:
+    #     '<id>':                 # type: string
+    #             <User class object>
+    #         contains:
+    #         {                
+    #         'id': 1             # type: int, serial
+    #         'name': 'Zard'      # type: string
+    #         'email': '123@unsw' # type: string
+    #         'fund': 10          # type: int; unit: $
+    #         'address': 'Pacific Ocean'
+    #                             # type: string
+    #         'cart': [list of product ID]
+    #                             # type: list of int
+    #         'orders': [list of order ID]
+    #                             # type: list of int
+    #         'interests': [('cheap', 1.0), ...]
+    #                             # type: list of tuple, tuple of (feature, weight)
+    #                             #                                string,  float
+    #     }
+    # '''
+    '1':  {
+        'id':1,
+        'name': 'Tim',
+        'password':'12312313',
+        'email': '123@unsw',
+        'fund': 0,
+        'address':'',
+        'cart': [],
+        'orders':[],
+        'interests':[]
+    }
+    
 }
 
 ADMIN_DB = {
-    '''
-    format:
-        '<id>':{                 # type: string
-                <Admin class object>
-            contains:
-            {     
-            'id': 2             # type: int, serial
-            'name': 'YYF'       # type: string
-            'admin_token': '198ANFu72oDJ0827'
-                                # type: string
-        }
-    '''
+    # '''
+    # format:
+    #     '<id>':{                 # type: string
+    #             <Admin class object>
+    #         contains:
+    #         {     
+    #         'id': 2             # type: int, serial
+    #         'name': 'YYF'       # type: string
+    #         'admin_token': '198ANFu72oDJ0827'
+    #                             # type: string
+    #     }
+    # '''
+    '1':  {
+        'id': 1,
+        'name': 'Tim',
+        'password': '123456'
+    }
 }
 
 PRODUCT_DB = {
@@ -102,4 +121,14 @@ ORDER_DB = {
                                 #             3: cancelled]
         }
     '''
+}
+
+TOKEN_DB = {
+    # '''
+    # format:
+    # {
+    #     'Tim': 'token'          # type: string
+    #     'Amy': '...'     
+    # }
+
 }

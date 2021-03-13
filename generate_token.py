@@ -3,6 +3,8 @@ import hmac
 import hashlib 
 import binascii
 import datetime
+import time
+import json
 
 header	='{"alg":"HS256","typ":"JWT"}'
 key 	= "victimH16A"
@@ -15,15 +17,16 @@ def encodeBase64(text):
 
 def get_payload(name):
     payload = {"user":name,"timestamp":time.time()}
+    payload = json.dumps(payload).encode('utf-8')
     return payload
 
 #signature = HMAC-SHA256(key, unsignedToken)
-def create_sha256_signature(key, unsignedToken):
+def create_signature(key, unsignedToken):
 	signature = hmac.new(toBytes(key), unsignedToken, hashlib.sha256).digest()
 	return encodeBase64(signature)
 
-def token(name)
-    unsignedToken = encodeBase64(toBytes(header)) + toBytes('.') + encodeBase64(toBytes(get_payload(name)))
+def token(name):
+    unsignedToken = encodeBase64(toBytes(header)) + toBytes('.') + encodeBase64(get_payload(name))
     signature = create_signature(key,unsignedToken)
-    tokenn=unsignedToken.decode("utf-8") +'.'+signature.decode("utf-8")
+    tokenn=unsignedToken.decode("utf-8")  + '.' + signature.decode("utf-8")
     return token
