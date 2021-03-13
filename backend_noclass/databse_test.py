@@ -4,6 +4,7 @@
 import database as db
 import user as us
 import admin as ad
+import webpage as wb
 
 # test 0
 def test_0():
@@ -58,8 +59,31 @@ def test_2():
     # testing
     temp_2 = db.load_json()
     print(temp_2)
+    assert temp_2['USER_DB'][str(user_1['id'])]['fund'] == (500 - 7*50)
+
+def test_3():
+    db.clear_db()
+    temp = db.init_db()
+    db.to_json(temp)
+    # add some product/user/admin
+    admin_1 = ad.new_admin('admin','123456','123@unsw')
+    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5)
+    prod_2 = ad.new_product('prod_2', 30, 'test_use', [1, 1, 1], 5)
+    user_1 = us.new_user('user_1', '123', '123@unsw', 'somewhere')
+    db.add_admin(admin_1)
+    db.add_prod(prod_1)
+    db.add_prod(prod_2)
+    db.add_user(user_1)
+    us.edit_user_interest(user_1['id'], [2,1,1])
+    us.add_fund(user_1['id'], 500)
+    temp_2 = db.load_json()
+    print(temp_2)
+    print(wb.prod_picker(user_1['id']))
+    print(wb.prod_recommendation(user_1['id']))
+
 
 if __name__ == "__main__":
     test_0()
     test_1()
     test_2()
+    test_3()
