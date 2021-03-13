@@ -40,6 +40,7 @@ def new_order(user_id, product_id, datee, amount):
                                 # 1: delivering
                                 # 2: done
                                 # 3: cancelled
+        "rating": 0
     }
 
 ####################################################################
@@ -211,3 +212,22 @@ def create_order(user_id, product_id, amount):
     return {
         'order_id': 1               # order_id
     }
+
+def rate_order(u_id, order_id, rating):
+    '''
+        This function allows user to rate an order if order is completed
+    '''
+    db.valid_id('user', u_id)
+    db.valid_id('order', order_id)
+    if rating <= 0:
+        rating = 0
+    elif rating >= 5:
+        rating = 5
+    temp = db.load_json()
+    if u_id != temp['ORDER_DB'][str(order_id)]['u_id']:
+        raise KeyError()
+        return {}
+    prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
+    temp['ORDER_DB'][str(order_id)]['rating'] = rating
+    temp['PRODUCT_DB'][str(prod_id)]['rating'].append([u_id, rating])
+    return {}
