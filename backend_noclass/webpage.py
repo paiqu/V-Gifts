@@ -38,7 +38,7 @@ def prod_recommendation(user_id, num = 10):
         returns a list of product_id, sorted
     '''
     # item & value calculator
-    lst = prod_picker(1.0)
+    lst = prod_picker(user_id)
     # return sorted result (descending)
     return sorting_merge(lst, 1)
 
