@@ -112,6 +112,22 @@ def edit_prod_feature(prod_id, feature_lst):
         db.to_json(temp)
     return {}
 
+def change_order_state(order_id, new_state):
+    '''
+        Thi function changes the delivery state of an order
+        # 0: just purchase
+        # 1: delivering
+        # 2: done
+        # 3: cancelled
+    '''
+    assert new_state in [0,1,2,3]
+    db.valid_id('order', order_id)
+    temp = db.load_json()
+    temp['ORDER_DB'][str(order_id)]['state'] = new_state
+    db.to_json(temp)
+    return {}
+
+
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.
