@@ -1,17 +1,25 @@
-.row > div {
-    border: 1px solid grey;
+#website-name {
+    position: fixed;
+    z-index: 999;
+    margin-left: 2rem;
+    color: white;
 }
 
-.add-cart-icon {
-    font-size: 1.3rem;
+#register-login {
+    position: fixed;
+    z-index: 999;
 }
 
-.price {
-    font-weight: bold;
+#register-login > button {
+    width: 8rem;
 }
 
-.products-grid {
-    margin-top: 2rem;
+.carousel-item > img{
+    height: 100vh;
+    filter: brightness(50%)
 }
 
+.carousel-captions > * {
+    z-index: 10;
+}
 
