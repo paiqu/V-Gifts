@@ -87,9 +87,17 @@ def test_4():
     temp = db.load_json()
     db.pretty_print(temp)
 
+def test_5():
+    admin_1, user_1, user_2, user_3 = samp.generate_sample_db_1()
+    temp = db.load_json()
+    # db.pretty_print(temp)
+    recommend = wb.prod_recommendation(user_1['id'])
+    print(recommend)
+
 if __name__ == "__main__":
     # test_0()
     # test_1()
     # test_2()
     # test_3()
-    test_4()
+    # test_4()
+    test_5()
