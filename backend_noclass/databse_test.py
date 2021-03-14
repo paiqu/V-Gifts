@@ -83,9 +83,19 @@ def test_3():
     print(wb.prod_recommendation(user_1['id']))
 
 def test_4():
-    samp.generate_sample_db_0()
-    temp = db.load_json()
-    db.pretty_print(temp)
+    admin_1, user_1, user_2, user_3 = samp.generate_sample_db_0()
+    # db.pretty_print(temp)
+    us.add_product_to_cart(user_1['id'], 2, 10)
+    us.add_product_to_cart(user_1['id'], 3, 7)
+    us.add_product_to_cart(user_1['id'], 7, 1)
+    us.add_product_to_cart(user_1['id'], 15, 2)
+    sp_cart = us.show_user_cart(user_1['id'])
+    us.remove_prod_from_cart(user_1['id'], sp_cart[1])
+    us.purchase(user_1['id'], us.show_user_cart(user_1['id']))
+    us.order_refund(user_1['id'], 1)
+    us.order_refund(user_1['id'], 2)
+    us.order_refund(user_1['id'], 3)
+    db.pretty_print(db.load_json())
 
 def test_5():
     admin_1, user_1, user_2, user_3 = samp.generate_sample_db_1()
@@ -99,5 +109,5 @@ if __name__ == "__main__":
     # test_1()
     # test_2()
     # test_3()
-    # test_4()
-    test_5()
+    test_4()
+    # test_5()

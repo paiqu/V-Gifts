@@ -3,6 +3,7 @@
 '''
 import database as db
 import datetime as dt
+import admin as ad
 
 def new_user(name, password, email, address):
     new_id = db.id_generator('user')
@@ -159,7 +160,7 @@ def total_price(lst):
 def purchase(u_id, lst):
     '''
         This function makes payment
-        lst -> [(product_id, amount), ...]
+        lst -> [[product_id, amount], ...]
         1. check fund
         2. make payments
     '''
@@ -261,6 +262,14 @@ def show_product_detail(prod_id):
     temp = db.load_json()
     return temp['PRODUCT_DB'][str(prod_id)]
 
+def refund_helper(db, u_id, amount):
+    '''
+        This function adds amount to a user
+        WITHOUT loading/saving from/to Database
+    '''
+    db['USER_DB'][str(u_id)]['fund'] += amount
+    return db
+
 def order_refund(u_id, order_id):
     '''
         This function refunds an order if 
@@ -270,23 +279,30 @@ def order_refund(u_id, order_id):
     db.valid_id('order', order_id)
     temp = db.load_json()
     # if refund is applicable
-    if temp['ORDER_ID'][str(order_id)]['state'] == 3:
+    if temp['ORDER_DB'][str(order_id)]['state'] == 3:
         print('Order already refunded')
         return {}
-    elif temp['ORDER_ID'][str(order_id)]['state'] == 0:
-        if int(u_id) != temp['ORDER_ID'][str(order_id)]['user_id']:
+    elif temp['ORDER_DB'][str(order_id)]['state'] == 0:
+        if int(u_id) != temp['ORDER_DB'][str(order_id)]['user_id']:
             print('Only user paid for this order can refund')
             return {}
-        temp['ORDER_ID'][str(order_id)]['state'] = 3
-        prod_id = temp['ORDER_ID'][str(order_id)]['product_id']
-        price = temp['PRODUCT_ID'][str(prod_id)]['price']
-        amount = temp['ORDER_ID'][str(order_id)]['amount']
-        add_fund(u_id, amount * price)
+        ad.change_order_state(order_id, 3)
+        prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
+        price = temp['PRODUCT_DB'][str(prod_id)]['price']
+        amount = temp['ORDER_DB'][str(order_id)]['amount']
+        temp = refund_helper(temp, u_id, amount * price)
         db.to_json(temp)
+        print('Refund success')
         return {}
     else:
         print('Already on delivery, refund not applicable')
         return {}
 
-
+def show_order_user(u_id):
+    '''
+        This functions shows order ids done by selected user
+    '''
+    db.valid_id('user', u_id)
+    temp = db.load_json()
+    return temp['USER_DB'][str(u_id)]['order']
 
