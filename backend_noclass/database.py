@@ -38,6 +38,19 @@ def init_db():
     'ORDER_DB': {},
 }
 
+def pretty_print(dct, level = 0, strr = "    "):
+    for key in dct.keys():
+        for i in range(level):
+            print(strr, end = "")
+        print(key, ":")
+        if isinstance(dct[key], dict):
+            pretty_print(dct[key], level+1)
+        else:
+            for i in range(level+1):
+                print(strr, end = "")
+            print(dct[key])
+    return {}
+
 # check valid
 
 def valid_id(option, idd):

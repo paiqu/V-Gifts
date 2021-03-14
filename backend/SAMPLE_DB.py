@@ -1,10 +1,9 @@
 '''
     This file provides a sample database
 '''
-import Database from database_pai.py
+
 
 def generate_sample_db():
-    new = Database()
     # admin
 
     # user
@@ -13,4 +12,4 @@ def generate_sample_db():
 
     # order
 
-    return new
+    return {}
