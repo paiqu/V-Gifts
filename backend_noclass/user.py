@@ -15,7 +15,7 @@ def new_user(name, password, email, address):
         "address": address,
         "fund": 0,
         "shopping_cart": [],
-                # [(product_id, amount), ...]
+                # [[product_id, amount], ...]
         "order": [],
                 # [order_id, ...]
         "interest": [0] * temp['TYPE_OF_PRODUCTS']
@@ -39,7 +39,7 @@ def new_order(user_id, product_id, datee, amount):
         "state": 0,             # 0: just purchase
                                 # 1: delivering
                                 # 2: done
-                                # 3: cancelled
+                                # 3: cancelled / refunded
         "rating": 0
     }
 
@@ -244,3 +244,49 @@ def edit_user_interest(u_id, interest_lst):
         temp['USER_DB'][str(u_id)]['interest'] = interest_lst
         db.to_json(temp)
     return {}
+
+def show_user_cart(u_id):
+    '''
+        This function shows the shopping cart of a user
+    '''
+    db.valid_id('user', u_id)
+    temp = db.load_json()
+    return temp['USER_DB'][str(u_id)]['shopping_cart']
+
+def show_product_detail(prod_id):
+    '''
+        This function shows the details of a product
+    '''
+    db.valid_id('product', prod_id)
+    temp = db.load_json()
+    return temp['PRODUCT_DB'][str(prod_id)]
+
+def order_refund(u_id, order_id):
+    '''
+        This function refunds an order if 
+        the order is not delivered yet (state = 0)
+    '''
+    db.valid_id('user', u_id)
+    db.valid_id('order', order_id)
+    temp = db.load_json()
+    # if refund is applicable
+    if temp['ORDER_ID'][str(order_id)]['state'] == 3:
+        print('Order already refunded')
+        return {}
+    elif temp['ORDER_ID'][str(order_id)]['state'] == 0:
+        if int(u_id) != temp['ORDER_ID'][str(order_id)]['user_id']:
+            print('Only user paid for this order can refund')
+            return {}
+        temp['ORDER_ID'][str(order_id)]['state'] = 3
+        prod_id = temp['ORDER_ID'][str(order_id)]['product_id']
+        price = temp['PRODUCT_ID'][str(prod_id)]['price']
+        amount = temp['ORDER_ID'][str(order_id)]['amount']
+        add_fund(u_id, amount * price)
+        db.to_json(temp)
+        return {}
+    else:
+        print('Already on delivery, refund not applicable')
+        return {}
+
+
+
