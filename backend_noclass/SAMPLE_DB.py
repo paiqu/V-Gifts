@@ -5,11 +5,12 @@ import database as db
 import user as us
 import admin as ad
 import webpage as wb
+import random as rd
 
 def generate_sample_db_0():
     '''
         Usage:
-             = generate_sample_db()
+             [admin_1, user_1, user_2, user_3] = generate_sample_db()
         This function generates a sample DB
         with functions in 
         database.py
@@ -27,7 +28,7 @@ def generate_sample_db_0():
     # user
     user_1 = us.new_user('user_1', '123', '123@unsw', 'somewhere')
     user_2 = us.new_user('user_2', '123', '123@unsw', 'somewhere')
-    user_3 = us.new_user('user_2', '123', '123@unsw', 'somewhere')
+    user_3 = us.new_user('user_3', '123', '123@unsw', 'somewhere')
     db.add_user(user_1)
     db.add_user(user_2)
     db.add_user(user_3)
@@ -77,6 +78,63 @@ def generate_sample_db_0():
     us.edit_user_interest(user_1['id'], [2,1,1])
     us.edit_user_interest(user_2['id'], [0,4,1])
     us.edit_user_interest(user_3['id'], [3,-5,7])
+    us.add_fund(user_1['id'], 10000)
+    us.add_fund(user_2['id'], 1000)
+    us.add_fund(user_3['id'], 100)
+
+    return [admin_1, 
+            user_1,
+            user_2,
+            user_3]
+
+def generate_sample_db_1(prod_num = 50):
+    '''
+        Usage:
+             [admin_1, user_1, user_2, user_3] = generate_sample_db()
+        This function generates a sample DB
+        with functions in 
+        database.py
+        admin.py
+        user.py
+        webpage.py
+    '''
+    db.clear_db()
+    temp = db.init_db()
+    db.to_json(temp)
+    # add some product/user/admin
+    # admin
+    admin_1 = ad.new_admin('admin','123456','123@unsw')
+    db.add_admin(admin_1)
+    # user
+    user_1 = us.new_user('user_1', '123', '123@unsw', 'somewhere')
+    user_2 = us.new_user('user_2', '123', '123@unsw', 'somewhere')
+    user_3 = us.new_user('user_3', '123', '123@unsw', 'somewhere')
+    db.add_user(user_1)
+    db.add_user(user_2)
+    db.add_user(user_3)
+    # prod
+    for i in range(prod_num):
+        name = 'prod' + str(i)
+        price = int(rd.randint(1, 500))
+        feature = [int(rd.randint(-10, 10)), 
+                  int(rd.randint(-10, 10)),
+                  int(rd.randint(-10, 10))]
+        deli_day = rd.randint(1, 30)
+        prod = ad.new_product(name, price, 'test_use', feature, deli_day)
+        db.add_prod(prod)
+    # other pre-settings
+    interest_1 = [int(rd.randint(-10, 10)), 
+                  int(rd.randint(-10, 10)),
+                  int(rd.randint(-10, 10))]
+    interest_2 = [int(rd.randint(-10, 10)), 
+                  int(rd.randint(-10, 10)),
+                  int(rd.randint(-10, 10))]
+    interest_3 = [int(rd.randint(-10, 10)), 
+                  int(rd.randint(-10, 10)),
+                  int(rd.randint(-10, 10))]
+    us.edit_user_interest(user_1['id'], interest_1)
+    us.edit_user_interest(user_2['id'], interest_2)
+    us.edit_user_interest(user_3['id'], interest_3)
     us.add_fund(user_1['id'], 10000)
     us.add_fund(user_2['id'], 1000)
     us.add_fund(user_3['id'], 100)

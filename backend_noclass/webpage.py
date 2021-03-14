@@ -40,7 +40,11 @@ def prod_recommendation(user_id, num = 10):
     # item & value calculator
     lst = prod_picker(user_id)
     # return sorted result (descending)
-    return sorting_merge(lst, 1)
+    rt = sorting_merge(lst, 1)
+    if len(rt) <= num:
+        return rt
+    else:
+        return rt[:num]
 
 
 def interest_calculator(v_1, v_2, key):
