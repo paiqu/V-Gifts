@@ -5,6 +5,7 @@ import database as db
 import user as us
 import admin as ad
 import webpage as wb
+import SAMPLE_DB as samp
 
 # test 0
 def test_0():
@@ -81,9 +82,14 @@ def test_3():
     print(wb.prod_picker(user_1['id']))
     print(wb.prod_recommendation(user_1['id']))
 
+def test_4():
+    samp.generate_sample_db_0()
+    temp = db.load_json()
+    db.pretty_print(temp)
 
 if __name__ == "__main__":
-    test_0()
-    test_1()
-    test_2()
-    test_3()
+    # test_0()
+    # test_1()
+    # test_2()
+    # test_3()
+    test_4()
