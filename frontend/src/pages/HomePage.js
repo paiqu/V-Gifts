@@ -7,7 +7,7 @@ function HomePage(props) {
 				<h1 id="website-name" className="mt-3">V-Gifts</h1>
 				<div className="d-flex justify-content-end w-100 mt-3" id="register-login">
 					<a href="register.html"><button type="button" className="btn btn-primary me-2">Register</button></a>
-					<a href="login.html"><button type="button" className="btn btn-primary me-4">Log in</button></a>
+					<a href="/login"><button type="button" className="btn btn-primary me-4">Log in</button></a>
 				</div>
 				<div id="introCarousel" className="carousel slide"  data-bs-ride="carousel">
 					<div className="carousel-indicators">
@@ -43,7 +43,7 @@ function HomePage(props) {
 								<div className="carousel-caption text-end">
 									<h1>Already has a account?</h1>
 									<p>Log in now and continue your exploration</p>
-									<p><a className="btn btn-lg btn-primary" href="login.html">Log in</a></p>
+									<p><a className="btn btn-lg btn-primary" href="/login">Log in</a></p>
 								</div>
 							</div>
 						</div>
