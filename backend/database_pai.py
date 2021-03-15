@@ -7,11 +7,15 @@ class Database:
         self.admins = {}
         self.products = {}
         self.orders = {}
+        self.u_id = 0
+        self.p_id = 0
+        self.a_id = 0
+        self.o_id = 0
 
     def to_json(self):
         """
         a function to transfer the User object to JSON format
-
+        remember to save ids (see __init__)
         return: 
         """
 
@@ -25,12 +29,14 @@ class Database:
 
         return json.dumps(output)
 
-    def load_json(self):
+    def load_json(self, location):
         '''
             This function loads database from json
             into Database class object
+
+            remember to load ids (see __init__)
         '''
-        return {}
+        return self # {}
 
     def add_user(self, user_object):
         """
@@ -39,7 +45,7 @@ class Database:
         @param user - type: User
         """
 
-        self.users[str(user_object.get_id)] = user_object
+        self.users[str(user_object.get_id())] = user_object
         self.save_to_database()
         
     def get_user_by_id(self, user_id):
@@ -73,3 +79,36 @@ class Database:
 
     def add_order(self, admin_object):
         return {}
+
+    def export_product(self):
+        '''
+            extract product dict
+        '''
+        return self.products
+
+    def export_user(self):
+        '''
+            extract user dict
+        '''
+        return self.user
+
+    def id_generator(self, option):
+        if option == 'user' or option == 'users':
+            self.u_id += 1
+            return self.u_id
+        elif option == 'product' or option == 'products':
+            self.p_id += 1
+            return self.u_id
+        elif option == 'admin' or option == 'admins':
+            self.a_id += 1
+            return self.u_id
+        elif option == 'order' or option == 'orders':
+            self.o_id += 1
+            return self.u_id
+        else:
+            # Temporary
+            raise KeyError()
+
+# place holder for Database
+
+DB_ALL = Database()
