@@ -81,13 +81,6 @@ def add_interest(u_id, posi, num):
     return temp['USER_DB'][str(u_id)]['interest']
 
 
-def encrypt_password(password):
-    '''
-    Encrypt the password with sha256 and store in database
-    sha_signature = \
-        hashlib.sha256(password.encode()).hexdigest()
-    '''
-    return sha_signature
 
 # User forget password and reset
 def forget_password(name, email):
@@ -104,7 +97,17 @@ def change_password(name,old_password):
     Check the name and password match
     Reset the password
     '''
-    return new_password
+    
+    if check_token(token) is not True:
+        print('Invalid Token!')
+        return False
+    temp = db.load_json()
+    for user_id, user_info in temp['USER_DB'].items():
+        if user_info["password"] == encrypt_password(old_password):
+            user_info["password"] = encrypt_password(new_password)
+            logout_user(user_info["name"], token)
+            return True
+    return False
 
 
 def edit_info_user(u_id):
@@ -305,4 +308,14 @@ def show_order_user(u_id):
     db.valid_id('user', u_id)
     temp = db.load_json()
     return temp['USER_DB'][str(u_id)]['order']
+
+
+
+# Check token is available
+def check_token(token):
+    temp = db.load_json()
+    for name, user_token in temp['TOKEN_DB'].items():
+        if user_token is token:
+            return True
+    return False
 

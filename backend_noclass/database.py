@@ -36,6 +36,7 @@ def init_db():
     'ADMIN_DB': {},
     'PRODUCT_DB': {},
     'ORDER_DB': {},
+    'TOKEN_DB':{}
 }
 
 def pretty_print(dct, level = 0, strr = "    "):

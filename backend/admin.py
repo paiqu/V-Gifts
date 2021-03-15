@@ -17,7 +17,7 @@ from user import TYPE_OF_PRODUCTS
 from database_pai import Database
 
 class Admin:
-    def __init__(name, password, email):
+    def __init__(self, name, password, email):
         self.id = None
         self.name = name
         self.password = password

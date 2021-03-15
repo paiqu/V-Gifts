@@ -21,6 +21,18 @@ class User:
         self.interests = [0] * TYPE_OF_PRODUCTS
 
     # Implement getters and setters later
+    def set_email(self, email):
+        self.email = email
+
+    def get_email(self):
+        return self.email 
+
+    def set_address(self, address):
+        self.address = address
+
+    def get_adress(self):
+        return self.address
+    
 
     def get_id(self):
         return self.id
@@ -86,6 +98,15 @@ def change_password(name,old_password):
     return new_password
 
 
+# # Users manage profile
+# def manage_profile(name, cart, address, ):
+#     '''
+#     Users could manage their name, cart, address at their will
+#     This function change users' information
+#     '''
+#     return {
+#         ...
+#     }
 def edit_info_user(id):
     '''
         This function edits user info
