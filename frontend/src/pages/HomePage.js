@@ -6,7 +6,7 @@ function HomePage(props) {
 			<main>
 				<h1 id="website-name" className="mt-3">V-Gifts</h1>
 				<div className="d-flex justify-content-end w-100 mt-3" id="register-login">
-					<a href="register.html"><button type="button" className="btn btn-primary me-2">Register</button></a>
+					<a href="/register"><button type="button" className="btn btn-primary me-2">Register</button></a>
 					<a href="/login"><button type="button" className="btn btn-primary me-4">Log in</button></a>
 				</div>
 				<div id="introCarousel" className="carousel slide"  data-bs-ride="carousel">
@@ -20,7 +20,8 @@ function HomePage(props) {
 							<img src="img/intro/intro-1.jpeg" className="d-block w-100 img-fluid" alt="..." />
 							<div className="container">
 								<div className="carousel-caption text-start">
-								<h1>Looking for a gift for your special one?
+								<h1>
+									Looking for a gift for your special one?
 								</h1>
 								<h2>Explore our range of gits </h2>
 								<p><a className="btn btn-lg btn-primary" href="products-page.html">Browse the Market</a></p>
@@ -33,7 +34,7 @@ function HomePage(props) {
 							<div className="carousel-caption">
 								<h1>Don't know want to purchase?</h1>
 								<h2>Sign up today and talk to our <b>GiftBot</b> and receive a customized gift idea.</h2>
-								<p><a className="btn btn-lg btn-primary" href="register.html">Sign up today</a></p>
+								<p><a className="btn btn-lg btn-primary" href="/register">Sign up today</a></p>
 							</div>
 						</div>
 						</div>
