@@ -24,7 +24,7 @@ function HomePage(props) {
 									Looking for a gift for your special one?
 								</h1>
 								<h2>Explore our range of gits </h2>
-								<p><a className="btn btn-lg btn-primary" href="products-page.html">Browse the Market</a></p>
+								<p><a className="btn btn-lg btn-primary" href="/products">Browse the Market</a></p>
 								</div>
 							</div>
 						</div>

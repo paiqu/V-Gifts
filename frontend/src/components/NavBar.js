@@ -47,7 +47,7 @@ function NavBar(props) {
                             </li>
             
                             <li className="nav-item">
-                                <a className="nav-link" href="/">
+                                <a className="nav-link" href="/profile">
                                     <button type="button" className="btn btn-primary"><i className="bi bi-person-fill"></i>My Account</button>
                                 </a>
                             </li>
