@@ -1,5 +1,6 @@
 import React from 'react';
 import NavBar from '../components/NavBar';
+import '../css/products-page.css';
 
 function ProductsPage(props) {
     return (
