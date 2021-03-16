@@ -18,3 +18,15 @@ This week we finish our proposal.
 I added and rephrased some epics and user stories.
 
 Coding will start next week.
+
+## Week 4
+This week I design and implement the frontend of our website using HTML and CSS:
+  1. HomePage
+  2. ProductsPage
+  3. ProfilePage
+  4. AdminPage
+
+We used a google doc to distribute our work 
+  * Link: https://docs.google.com/document/d/1521L0bGdORup6tYT4n_iusHdem7Pz0QwBJ5AvpVL9WE/edit?usp=sharing
+  
+Next week I will transfer our website to a React app and connect our frontend to the backend.

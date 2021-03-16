@@ -1,6 +1,6 @@
-body {
+/* body {
     font-family: Arial;
-}
+} */
 
 #login-yellow {
     color: yellow;
@@ -9,7 +9,7 @@ body {
 
 .sidenav {
     height: 100%;
-    background-color: cornflowerblue;
+    background-color: #0d6efd;
     overflow-x: hidden;
     padding-top: 40px;
 }
