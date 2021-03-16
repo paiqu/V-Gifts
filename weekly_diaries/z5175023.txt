@@ -33,7 +33,7 @@ the beginning of next week and start work on the code part.
 
 
 ############################################################
-Week 2
+Week 3
 ############################################################
 Joined GitHUb Classroom.
 
@@ -47,4 +47,18 @@ export proposal to the PDF form, our leader Haoran submitted
 the final proposal on Saturday.
 
 We will start codeing part from next week.
+
+
+############################################################
+Week 4
+############################################################
+Had a discussion about work we need to done.
+
+Pushed the proposal I finished before to the Github Classroom,
+This week I had another course's assignment due so did not do
+much work, will start my parts from next week.
+
+Next week I will learn flask and help QP to connect frontend 
+and backend, and also help my team members to prepare demo 1.
+
 
