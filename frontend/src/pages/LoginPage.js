@@ -1,4 +1,6 @@
 import React from 'react';
+import '../css/login.css';
+
 
 function LoginPage() {
     return (
@@ -20,7 +22,7 @@ function LoginPage() {
                             <input id="login_user_password" type="password" className="form-control" placeholder="Password" />
                         </div>
                         <button type="button" className="btn btn-primary btn-lg btn-block">Log in</button>
-                        <a role="button" className="btn btn-secondary btn-lg btn-block"  href="register.html">Not a member? Sign up</a>
+                        <a role="button" className="btn btn-secondary btn-lg btn-block"  href="/register">Not a member? Sign up</a>
                     </form>
                 </div>
             </main>
