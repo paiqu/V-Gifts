@@ -40,5 +40,49 @@ Joined gitlab classroom, and created our repo.
 
 Firstly, uploaded README.md and my weekly report.
 
+Get details of proposal done, and submitted proposal.
+
+Including:
+
+    Adding details to flow diagram, adding software architecture,
+
+    Adding showcase diagram for chatbot, Adding discussion against existing e-commerce
+
+    websites, Adding reference.
+
+######################################################################
+
+Week 4:
+
+Distributed work with group members.
+
+Initiate all backend files, including user.py admin.py database.py and etc.
+
+Attempted to use Class for user/admin/product/order/database objects,
+
+attemps are save in /backend/ folder. Due to inconvenience of saving object into
+
+database in json file, I set up /backend_noclass to continue.
+
+Finished epic 2, 3, 4, 6, 7, 8. Including:
+
+    Save to / Load from database file for all items,
+
+    Product management, user info management, 
+
+    Ability to put product into shopping cart, purchase product, creat order, refund,
+
+    Homepage can auto recommend product based on angle betwen product feature
+
+    and user interest (as vectors),
+
+    Implemented sorting algorithm for filtering and recommendation
+
+#######################################################################
+
+Week 5:
+
+Prepare for demo A
+
 
 
