@@ -9,8 +9,18 @@ import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ProductsPage from './pages/ProductsPage';
 
-class App extends React.Component  {
-  render() {
+function App() {
+	const [authDetails, setAuthDetails] = React.useState(
+		localStorage.getItem('token')
+	);
+
+	const setAuth = (token, u_id) => {
+		localStorage.setItem('token', token);
+		localStorage.setItem('u_id', u_id);
+		setAuthDetails(token);
+	}
+	
+
     return (
 		<Router>
 			<Switch>
@@ -23,7 +33,6 @@ class App extends React.Component  {
 			</Switch>
 		</Router>
 	);
-  }
 }
 
 export default App;
