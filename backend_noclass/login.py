@@ -80,7 +80,7 @@ def logout_user(name):
 
 # admin part
 
-def register_admin(name, password):
+def register_admin(name, password, email):
     '''
         this function register admin and initialize their info,
         upon register, webpage should let admin to further
