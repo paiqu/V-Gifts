@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '100%',
         maxHeight: '100%',
     },
+
 }));
 
 export default function Product(props) {

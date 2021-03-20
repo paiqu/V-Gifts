@@ -5,16 +5,18 @@ import Product from '../components/Product';
 import ProductFilter from '../components/ProductFilter';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { sizing } from '@material-ui/system';
+import Pagination from '@material-ui/lab/Pagination';
+import Box from '@material-ui/core/Box';
+import { auto } from '@popperjs/core';
 
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         flexGrow: 1,
-//     },
-// }));
+const useStyles = makeStyles((theme) => ({
+
+}));
 
 function ProductsPage(props) {    
-    // const classes = useStyles();
+    const classes = useStyles();
 
     const products = ["mario-1", "mario-2", "mario-3"];
     const items = [];
@@ -26,36 +28,42 @@ function ProductsPage(props) {
         );
     }
     return (
-        <div >
+        <div className={classes.root}>
             <NavBar />
-            <Grid container xs={12} spacing={10}>
-                <Grid 
-                    container 
-                    item 
-                    xs={3}
-                    direction={'column'} 
-                >
-                    <ProductFilter />
+            <Box display="flex" flexDirection="column" alignContent="center">
+                <Grid container xs={12} spacing={10}>
+                    <Grid
+                        container
+                        item
+                        xs={3}
+                        direction={'column'}
+                    >
+                        <ProductFilter />
+                    </Grid>
+                    <Grid
+                        className={classes.productsGrid}
+                        container
+                        item
+                        xs={9}
+                        direction={'column'}
+                        alignItems="center"
+                        spacing={5}
+                        height="20%"
+                    >
+                        <Grid container item xs={12} spacing={3}>
+                            {items}
+                        </Grid>
+                        <Grid container item xs={12} spacing={3}>
+                            {items}
+                        </Grid>
+                        <Grid container item xs={12} spacing={3}>
+                            {items}
+                        </Grid>
+                        <Pagination item xs={6} m="auto" count={10} color="primary" />
+                    </Grid>
+                    
                 </Grid>
-
-                <Grid
-                    container
-                    item
-                    xs={9}
-                    direction={'column'} 
-                    spacing={5}
-                >
-                    <Grid container item xs={12} spacing={3}>
-                        {items}
-                    </Grid>
-                    <Grid container item xs={12} spacing={3}>
-                        {items}
-                    </Grid>
-                    <Grid container item xs={12} spacing={3}>
-                        {items}
-                    </Grid>
-                </Grid>
-            </Grid>
+            </Box>
 
         </div>
     );

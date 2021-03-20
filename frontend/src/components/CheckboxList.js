@@ -62,11 +62,6 @@ export default function CheckboxList(props) {
                         />
                     </ListItemIcon>
                     <ListItemText id={labelId} primary={value} />
-                    <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="comments">
-                        <CommentIcon />
-                    </IconButton>
-                    </ListItemSecondaryAction>
                 </ListItem>
             );
         })}
