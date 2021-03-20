@@ -2,18 +2,53 @@ import React from 'react';
 import NavBar from '../components/NavBar';
 import '../css/products-page.css';
 import Product from '../components/Product';
-
+import ProductFilter from '../components/ProductFilter';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 
 function ProductsPage(props) {
     const products = ["mario-1", "mario-2", "mario-3"];
     const items = [];
     for (let i = 0; i < 3; i++) {
-        items.push(<Product name={products[i]}/>);
+        items.push(
+            <Grid item xs={4}>
+                <Product name={products[i]}/>
+            </Grid>
+        );
     }
     return (
         <div>
             <NavBar />
-            {items}
+            <Grid container spacing={5} >
+                <Grid 
+                    container 
+                    item 
+                    md={3}
+                    lg={3}
+                    direction={'column'} 
+                >
+                    <ProductFilter />
+                </Grid>
+                <Grid
+                    container
+                    item
+                    md={9}
+                    lg={9}
+                    direction={'column'} 
+                    spacing={5}
+                >
+                    <Grid container item xs={12} spacing={3}>
+                        {items}
+                    </Grid>
+                    <Grid container item xs={12} spacing={3}>
+                        {items}
+                    </Grid>
+                    <Grid container item xs={12} spacing={3}>
+                        {items}
+                    </Grid>
+                </Grid>
+            </Grid>
+
         </div>
     );
 }
