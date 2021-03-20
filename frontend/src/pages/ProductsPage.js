@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBar from '../components/NavBar';
 // import '../css/products-page.css';
 import Product from '../components/Product';
@@ -9,6 +9,7 @@ import { sizing } from '@material-ui/system';
 import Pagination from '@material-ui/lab/Pagination';
 import Box from '@material-ui/core/Box';
 import { auto } from '@popperjs/core';
+import { event } from 'jquery';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductsPage(props) {    
     const classes = useStyles();
+    
+    // Hook for page number
+    const [page, setPage] = React.useState(1);
 
     const products = ["mario-1", "mario-2", "mario-3"];
     const items = [];
@@ -27,6 +31,11 @@ function ProductsPage(props) {
             </Grid>
         );
     }
+
+    const handlePageChange = (event, number) => {
+        setPage(number);
+    };
+
     return (
         <div className={classes.root}>
             <NavBar />
@@ -59,9 +68,19 @@ function ProductsPage(props) {
                         <Grid container item xs={12} spacing={3}>
                             {items}
                         </Grid>
-                        <Pagination item xs={6} m="auto" count={10} color="primary" />
-                    </Grid>
-                    
+                        
+                        <Pagination
+                            item xs={6} 
+                            m="auto"
+                            count={10} 
+                            color="primary" 
+                            variant="outlined"
+                            shape="rounded"
+                            size="large"
+                            onChange={handlePageChange}
+                            page={page}
+                        />
+                    </Grid>    
                 </Grid>
             </Box>
 
