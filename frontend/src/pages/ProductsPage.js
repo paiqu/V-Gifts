@@ -1,12 +1,21 @@
 import React from 'react';
 import NavBar from '../components/NavBar';
-import '../css/products-page.css';
+// import '../css/products-page.css';
 import Product from '../components/Product';
 import ProductFilter from '../components/ProductFilter';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
-function ProductsPage(props) {
+
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         flexGrow: 1,
+//     },
+// }));
+
+function ProductsPage(props) {    
+    // const classes = useStyles();
+
     const products = ["mario-1", "mario-2", "mario-3"];
     const items = [];
     for (let i = 0; i < 3; i++) {
@@ -17,23 +26,22 @@ function ProductsPage(props) {
         );
     }
     return (
-        <div>
+        <div >
             <NavBar />
-            <Grid container spacing={5} >
+            <Grid container xs={12} spacing={10}>
                 <Grid 
                     container 
                     item 
-                    md={3}
-                    lg={3}
+                    xs={3}
                     direction={'column'} 
                 >
                     <ProductFilter />
                 </Grid>
+
                 <Grid
                     container
                     item
-                    md={9}
-                    lg={9}
+                    xs={9}
                     direction={'column'} 
                     spacing={5}
                 >
