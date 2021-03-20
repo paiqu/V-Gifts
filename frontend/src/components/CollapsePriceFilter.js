@@ -22,12 +22,12 @@ export default function CollapsePriceFilter () {
 
     return (
         <List>
-            <ListItem>
+            <ListItem button onClick={handleClick}>
                     <ListItemIcon>
                         <ListIcon />
                     </ListItemIcon>
                     <ListItemText primary="Price Filter"/>
-                    {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+                    {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>

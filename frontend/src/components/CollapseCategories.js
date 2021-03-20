@@ -22,12 +22,12 @@ export default function CollapseCategories () {
 
     return (
         <List>
-            <ListItem onClick={handleClick}>
+            <ListItem button onClick={handleClick}>
                     <ListItemIcon>
                         <ListIcon />
                     </ListItemIcon>
                     <ListItemText primary="Categories"/>
-                    {/* {open ? <ExpandLess /> : <ExpandMore />} */}
+                    {open ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
