@@ -125,7 +125,10 @@ def change_order_state(order_id, new_state):
     temp = db.load_json()
     temp['ORDER_DB'][str(order_id)]['state'] = new_state
     db.to_json(temp)
-    return {}
+    return {
+        'id': order_id,
+        'state': new_state
+    }
 
 
 # def order_history():
