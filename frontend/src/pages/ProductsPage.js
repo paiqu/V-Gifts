@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import Box from "@material-ui/core/Box";
-import NavBar from "../components/NavBarNew";
+import NavBar from "../components/NavBar";
 
 const useStyles = makeStyles((theme) => ({
     main: {
@@ -75,7 +75,7 @@ function ProductsPage(props) {
               sm={6}
               m="auto"
               count={10}
-              color="primary"
+              color="secondary"
               variant="outlined"
               shape="rounded"
               size="large"

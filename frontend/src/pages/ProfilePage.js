@@ -1,6 +1,6 @@
 import React from 'react';
 // import NavBar from '../components/NavBar';
-import NavBar from '../components/NavBarNew';
+import NavBar from '../components/NavBar';
 import '../css/profile-page.css';
 
 function ProfilePage(props) {
