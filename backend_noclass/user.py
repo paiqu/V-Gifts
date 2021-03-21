@@ -25,7 +25,7 @@ def new_user(name, password, email, address):
 def new_order(user_id, product_id, datee, amount):
     '''
         create a new product,
-        feature should be a lst of int with length of
+        category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     '''
     new_id = db.id_generator('order')

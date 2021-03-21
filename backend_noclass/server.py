@@ -96,9 +96,9 @@ def new_product():
     name = data['name']
     price = data['price']
     description = data['description']
-    feature = data['feature']
+    category = data['category']
     deli_days = data['deli_days']
-    result = adm.new_product(name, price, description, feature, deli_days)
+    result = adm.new_product(name, price, description, category, deli_days)
     db.add_prod(result)
     return dumps({
         'id': result['id']
@@ -109,14 +109,14 @@ def edit_product():
     data = request.get_json
     id = data['id']
     name = data['name']
-    feature = data['feature']
+    category = data['category']
     description = data['description']
-    result = adm.edit_product(id, name, feature, description)
+    result = adm.edit_product(id, name, category, description)
     return dumps({
         'id': result['id']
     })
 
-# @app.route("/admin/product/editfeature")
+# @app.route("/admin/product/editcategory")
 
 @app.route("admin/product/delete", methods = ["POST"])
 def delete_product():
