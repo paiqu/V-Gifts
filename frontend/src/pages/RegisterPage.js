@@ -1,4 +1,5 @@
 import React from 'react';
+// import NavBar from '../components/NavBar';
 import NavBar from '../components/NavBar';
 
 function RegisterPage(props) {
