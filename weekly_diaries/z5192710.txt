@@ -23,4 +23,8 @@ Week 4:
 We start coding these week. Two of us are responsible for the frontend and the remaining three
 people are responsible for the backend. 
 I finish the backend part of epic 1 which is user login/register, admin login/register, 
+<<<<<<< HEAD
 and some functions for user, besides I finish the test for all the code. 
+=======
+and some functions for user, besides I finish the test for all the code. 
+>>>>>>> ChenkaiLyu
