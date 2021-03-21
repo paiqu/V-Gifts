@@ -4,6 +4,7 @@
 import database as db
 import datetime as dt
 import admin as ad
+import login as lo
 
 def new_user(name, password, email, address):
     new_id = db.id_generator('user')
@@ -92,7 +93,7 @@ def forget_password(name, email):
     return new_password
 
 # Users change password
-def change_password(name,old_password):
+def change_password(token, old_password, new_password):
     '''
     Check the name and password match
     Reset the password
@@ -103,9 +104,10 @@ def change_password(name,old_password):
         return False
     temp = db.load_json()
     for user_id, user_info in temp['USER_DB'].items():
-        if user_info["password"] == encrypt_password(old_password):
-            user_info["password"] = encrypt_password(new_password)
-            logout_user(user_info["name"], token)
+        if user_info["password"] == lo.encrypt_password(old_password):
+            user_info["password"] = lo.encrypt_password(new_password)
+            db.to_json(temp)
+            lo.logout_user(user_info["name"], token)
             return True
     return False
 
@@ -315,7 +317,7 @@ def show_order_user(u_id):
 def check_token(token):
     temp = db.load_json()
     for name, user_token in temp['TOKEN_DB'].items():
-        if user_token is token:
+        if user_token == token:
             return True
     return False
 

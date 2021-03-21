@@ -18,3 +18,9 @@ Week 3:
 Team work together to finish the proposal. I help make the user story more rich and complete.
 Objectives are make clear and different from epics.
 We are assigned to start coding. And we maybe list all the function needed.
+
+Week 4:
+We start coding these week. Two of us are responsible for the frontend and the remaining three
+people are responsible for the backend. 
+I finish the backend part of epic 1 which is user login/register, admin login/register, 
+and some functions for user, besides I finish the test for all the code. 

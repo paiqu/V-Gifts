@@ -28,5 +28,5 @@ def create_signature(key, unsignedToken):
 def token(name):
     unsignedToken = encodeBase64(toBytes(header)) + toBytes('.') + encodeBase64(get_payload(name))
     signature = create_signature(key,unsignedToken)
-    tokenn=unsignedToken.decode("utf-8")  + '.' + signature.decode("utf-8")
+    token = unsignedToken.decode("utf-8")  + '.' + signature.decode("utf-8")
     return token
