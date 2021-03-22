@@ -151,7 +151,9 @@ def remove_prod_from_cart(user_id, cart_item_pair):
     temp = db.load_json()
     temp['USER_DB'][str(user_id)]['shopping_cart'].remove(cart_item_pair)
     db.to_json(temp)
-    return {}
+    return {
+        'pid': product_id
+    }
 
 def individual_price(product_id, amount):
     temp = db.load_json()
@@ -191,8 +193,10 @@ def purchase(u_id, lst):
         db.to_json(temp)
         for cart_item_pair in lst:
             product_id, amount = cart_item_pair
-            create_order(u_id, product_id, amount)
-    return {}
+            order_id = create_order(u_id, product_id, amount)
+    return {
+        'id': order_id
+    }
 
 def create_order(user_id, product_id, amount):
     '''
@@ -211,6 +215,7 @@ def create_order(user_id, product_id, amount):
     datee = int(dt.datetime.timestamp(dt.datetime.now()))
     order = new_order(user_id, product_id, datee, amount)
     db.add_order(order)
+    order_id = order['id']
     # 4 
     temp = db.load_json()
     cart_item_pair = [product_id, amount]
@@ -220,6 +225,7 @@ def create_order(user_id, product_id, amount):
     # 6
     db.to_json(temp)
     return {
+        'id': order_id
     }
 
 def rate_order(u_id, order_id, rating):
@@ -235,7 +241,6 @@ def rate_order(u_id, order_id, rating):
     temp = db.load_json()
     if u_id != temp['ORDER_DB'][str(order_id)]['user_id']:
         raise KeyError()
-        return {}
     prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
     temp['ORDER_DB'][str(order_id)]['rating'] = rating
     temp['PRODUCT_DB'][str(prod_id)]['ratings'].append([u_id, rating])
@@ -291,23 +296,24 @@ def order_refund(u_id, order_id):
     temp = db.load_json()
     # if refund is applicable
     if temp['ORDER_DB'][str(order_id)]['state'] == 3:
-        print('Order already refunded')
-        return {}
+        # print('Order already refunded')
+        status = "Order already refunded"
     elif temp['ORDER_DB'][str(order_id)]['state'] == 0:
         if int(u_id) != temp['ORDER_DB'][str(order_id)]['user_id']:
-            print('Only user paid for this order can refund')
-            return {}
+            # print('Only user paid for this order can refund')
+            status = "Only user paid for this order can refund"
         ad.change_order_state(order_id, 3)
         prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
         price = temp['PRODUCT_DB'][str(prod_id)]['price']
         amount = temp['ORDER_DB'][str(order_id)]['amount']
         temp = refund_helper(temp, u_id, amount * price)
         db.to_json(temp)
-        print('Refund success')
-        return {}
+        # print('Refund success')
+        status = "Refund success"
     else:
-        print('Already on delivery, refund not applicable')
-        return {}
+        # print('Already on delivery, refund not applicable')
+        status = "Already on delivery, refund not applicable"
+    return status
 
 def show_order_user(u_id):
     '''

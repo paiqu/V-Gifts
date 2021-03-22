@@ -179,7 +179,7 @@ def usr_logout():
     name = data['name']
     result = login.logout_user(name)
     return dumps({
-        'is_success': result
+        'status': result
     })
 
 # @app.route("user/profile/password/forget")
@@ -199,7 +199,7 @@ def change_password():
 @app.route("user/profile/fund/add", methods = ["POST"])
 def add_fund():
     data = request.get_json
-    uid = data['u_id']
+    uid = data['user_id']
     num = data['num']
     result = usr.add_fund(uid, num)
     return dumps({
@@ -227,14 +227,52 @@ def remove_cart():
     uid = data['user_id']
     pid = data['product_id']
     cart = usr.show_user_cart(uid)
+    i = 0
+    while (i < len(cart)):
+        if (cart[i][0] == pid):
+            break
+    result = usr.remove_prod_from_cart(uid, cart[i])
+    return dumps({
+        'pid': result['pid']
+    })
 
-
+@app.rounte("user/cart/cost", methods = ["POST"])
+def cost_cart():
+    data = request.get_json
+    uid = data['user_id']
+    cart = usr.show_user_cart(uid)
+    result = usr.total_price(cart)
+    return dumps({
+        'cost': result
+    })
 
 @app.route("user/order/new", methods = ["POST"])
 def create_order():
     data = request.get_json
     uid = data['user_id']
-    pid = data['product_id']
-    amount = data['amount']
-    result = usr.create_order(uid, pid, amount)
-    return dumps({})
+    cart = usr.show_user_cart(uid)
+    result = usr.purchase(uid, cart)
+    return dumps({
+        'id': result['id']
+    })
+
+@app.route("user/order/rate", methods = ["POST"])
+def rate_order():
+    data = request.get_json
+    uid = data['user_id']
+    oid = data['order_id']
+    rating = data['rating']
+    result = rate_order(uid, oid, rating)
+    return dumps({
+        'status': "success"
+    })
+
+@app.route("user/order/refund", methods = ["POST"])
+def refund_order():
+    data = request.get_json
+    uid = data['user_id']
+    oid = data['order_id']
+    result = usr.order_refund(uid, oid)
+    return dumps({
+        'status': result
+    })
