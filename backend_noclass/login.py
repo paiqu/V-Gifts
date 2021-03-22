@@ -4,12 +4,12 @@
     with similar layout. They are always used in different
     website (user only / admin only).
 '''
-import database as db
-from user import *
-from admin import *
+import user as us
+import database as db 
+import admin as ad
 import hashlib
 import re
-from generate_token import *
+import generate_token as gt
 
 
 # user part
@@ -34,9 +34,11 @@ def register_user(name, password, email):
     # Encrypt password 
     encryption = encrypt_password(password)
     # New user added to db
-    new_user(name, encryption, email, '')
+    new = us.new_user(name, encryption, email, '')
 
-    return new_user
+    db.add_user(new)
+
+    return new
 
 def login_user(name, password):
     '''
@@ -53,23 +55,25 @@ def login_user(name, password):
     temp = db.load_json()
 
     for user_id, user_info in temp['USER_DB'].items():
-        if user_info["name"] is name:
+        if user_info["name"] == name:
             if user_info["password"] == encrypt_password(password):
-                login_token = token(name)
+                login_token = gt.token(name)
                 temp['TOKEN_DB'][str(name)] = login_token
+                db.to_json(temp)
                 return login_token
-    
+
     print("Login fail! Invalid password or name! Please try again.")
     return False
 
-def logout_user(name):
+def logout_user(name,token):
     '''
         this function logout user
         takes user back to login page
     '''
     temp = db.load_json()
-    if check_token(token): 
-        del temp['TOKEN_DB'][name]
+    if us.check_token(token): 
+        temp['TOKEN_DB'].pop(name)
+        db.to_json(temp)
         print("You have been logged out.")
         return True
     else:
@@ -101,9 +105,11 @@ def register_admin(name, password, email):
     # Encrypt password 
     encryption = encrypt_password(password)
     # New user added to db
-    new_admin(name, encryption, email)
+    new = ad.new_admin(name, encryption, email)
+    
+    db.add_admin(new)
 
-    return new_admin
+    return new
 
 def login_admin(name, password):
     '''
@@ -120,23 +126,25 @@ def login_admin(name, password):
     temp = db.load_json()
 
     for admin_id, admin_info in temp['ADMIN_DB'].items():
-        if admin_info["name"] is name:
+        if admin_info["name"] == name:
             if admin_info["password"] == encrypt_password(password):
-                login_token = token(name)
+                login_token = gt.token(name)
                 temp['TOKEN_DB'][str(name)] = login_token
+                db.to_json(temp)
                 return login_token
     
     print("Login fail! Invalid password or name! Please try again.")
     return False
 
-def logout_admin(name):
+def logout_admin(name, token):
     '''
         this function logout admin
         takes admin back to login page
     '''
     temp = db.load_json()
-    if check_token(token):
-        del temp['TOKEN_DB'][name]
+    if us.check_token(token):
+        temp['TOKEN_DB'].pop(name)
+        db.to_json(temp)
         print("You have been logged out.")
         return True
     else:
