@@ -83,6 +83,7 @@ function HomePage(props) {
         <Typography
           style={{
             color: theme.palette.secondary.contrastText,
+            marginTop: "0.5rem",
           }} 
         >
           Already a member? Log in <b>
