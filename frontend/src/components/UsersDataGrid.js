@@ -45,7 +45,7 @@ export default function UsersDataGrid() {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <Typography
-        variant="h3"
+        variant="h5"
       >
         Users in system
       </Typography>
