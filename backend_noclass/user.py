@@ -56,8 +56,11 @@ def add_fund(u_id, num):
     temp = db.load_json()
     db.valid_id('user',u_id)
     temp['USER_DB'][str(u_id)]['fund'] += num
+    new_fund = temp['USER_DB'][str(u_id)]['fund']
     db.to_json(temp)
-    return {}
+    return {
+        'fund': new_fund
+    }
 
 def buy_product_from_cart(self, product):
     '''

@@ -182,16 +182,6 @@ def usr_logout():
         'is_success': result
     })
 
-@app.route("user/profile/fund/add", methods = ["POST"])
-def add_fund():
-    data = request.get_json
-    uid = data['u_id']
-    num = data['num']
-    result = usr.add_fund(uid, num)
-    return dumps({
-        'status': "success"
-    })
-
 # @app.route("user/profile/password/forget")
 
 @app.route("user/profile/password/change", methods = ["POST"])
@@ -205,6 +195,40 @@ def change_password():
     })
 
 # @app.rounte("user/profile/edit")
+
+@app.route("user/profile/fund/add", methods = ["POST"])
+def add_fund():
+    data = request.get_json
+    uid = data['u_id']
+    num = data['num']
+    result = usr.add_fund(uid, num)
+    return dumps({
+        'status': "success",
+        'fund': result['fund']
+    })
+
+@app.route("user/cart/add", methods = ["POST"])
+def add_cart():
+    data = request.get_json
+    uid = data['user_id']
+    pid = data['product_id']
+    amount = data['amount']
+    result = usr.add_product_to_cart(uid, pid, amount)
+    price = usr.individual_price(pid, amount)
+    return dumps({
+        'pid': result['pid'],
+        'amount': result['amount'],
+        'cost': price
+    })
+
+@app.route("user/cart/remove", methods = ["POST"])
+def remove_cart():
+    data = request.get_json
+    uid = data['user_id']
+    pid = data['product_id']
+    cart = usr.show_user_cart(uid)
+
+
 
 @app.route("user/order/new", methods = ["POST"])
 def create_order():
