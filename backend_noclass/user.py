@@ -133,7 +133,10 @@ def add_product_to_cart(user_id, product_id, amount):
     # (product_id, amount)
     temp['USER_DB'][str(user_id)]['shopping_cart'].append(item)
     db.to_json(temp)
-    return {}
+    return {
+        'pid': product_id,
+        'amount': amount
+    }
 
 def remove_prod_from_cart(user_id, cart_item_pair):
     '''
