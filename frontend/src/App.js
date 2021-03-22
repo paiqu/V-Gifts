@@ -13,18 +13,18 @@ import ProductsPage from './pages/ProductsPage';
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&secondary.color=2196F3&secondary.text.color=FAFAFA&primary.color=FFC400
 const theme = createMuiTheme({
 	palette: {
-			primary: {
-				light: '#fff64f',
-				main: '#ffc400',
-				dark: '#ffc400',
-				contrastText: '#000000',
-	  },
-	  secondary: {
-			light: '#718792',
-			main: '#455a64',
-			dark: '#718792',
-			contrastText: '#ffffff',
-	  },
+		primary: {
+			light: '#fff64f',
+			main: '#ffc400',
+			dark: '#c79400',
+			contrastText: '#000000',
+    },
+		secondary: {
+      light: '#6ec6ff',
+      main: '#2196f3',
+      dark: '#0069c0',
+      contrastText: '#fafafa',
+		},
 	},
   });
 

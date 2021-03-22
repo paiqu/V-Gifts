@@ -90,6 +90,9 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  toolBar: {
+    minHeight: "10vh",
+  },
 }));
 
 export default function NavBar() {
@@ -177,7 +180,7 @@ export default function NavBar() {
   return (
     <div className={classes.grow}>
       <AppBar position="static" style={{boxShadow: 'none'}}>
-        <Toolbar>
+        <Toolbar className={classes.toolBar}>
           <IconButton
             edge="start"
             className={classes.menuButton}
