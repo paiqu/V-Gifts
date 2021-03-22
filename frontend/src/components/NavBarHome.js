@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "auto",
     maxHeight: '7vh',
     marginRight: "0.5rem",
-  }
+  },
 }));
 
 export default function ButtonAppBar() {
@@ -57,7 +57,7 @@ export default function ButtonAppBar() {
           <Typography
 						style={{
 							textDecoration: "none",
-              fontWeight: "500",
+              fontWeight: "200",
               color: theme.palette.primary.contrastText
 						}}
 						color="inherit"

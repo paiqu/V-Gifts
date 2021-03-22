@@ -1,5 +1,5 @@
 import React from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { fade, makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -67,6 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
+    width: "50rem",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "100%",
     },
   },
   sectionDesktop: {
@@ -93,10 +94,19 @@ const useStyles = makeStyles((theme) => ({
   toolBar: {
     minHeight: "10vh",
   },
+  logo: {
+    margin: "auto",
+    textAlign: 'center',
+    maxWidth: "auto",
+    maxHeight: '7vh',
+    marginRight: "0.5rem",
+  },
 }));
 
 export default function NavBar() {
   const classes = useStyles();
+  const theme = useTheme();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -181,23 +191,18 @@ export default function NavBar() {
     <div className={classes.grow}>
       <AppBar position="static" style={{boxShadow: 'none'}}>
         <Toolbar className={classes.toolBar}>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
+          <img className={classes.logo} src="img/logo/logo-1.png" />
           <Typography
 						style={{
-							textDecoration: "none"
+							textDecoration: "none",
+              fontWeight: "200",
+              color: theme.palette.primary.contrastText
 						}}
-						color="textPrimary"
+						color="inherit"
 						component={Link}
 						to={'/'}
 						className={classes.title} 
-						variant="h5"
+						variant="h4"
 						noWrap
 					>
             V-Gifts
