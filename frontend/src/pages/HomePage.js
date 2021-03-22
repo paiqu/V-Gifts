@@ -85,7 +85,7 @@ function HomePage(props) {
             color: theme.palette.secondary.contrastText,
           }} 
         >
-          Alreay a member? Log in <b>
+          Already a member? Log in <b>
             <Link to="./login" style={{color: theme.palette.secondary.contrastText}}>
               Here
             </Link>
