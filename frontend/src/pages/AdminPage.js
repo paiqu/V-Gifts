@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from '../components/NavBar';
 import AdminDrawer from '../components/AdminDrawer';
 import { makeStyles } from '@material-ui/core/styles';
 

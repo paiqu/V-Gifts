@@ -16,8 +16,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import NavBar from './NavBar';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
@@ -25,7 +23,9 @@ import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
 import UsersDataGrid from './UsersDataGrid';
+import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
+import AdminHome from './AdminHome';
 
 const drawerWidth = 240;
 
@@ -100,13 +100,26 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function MiniDrawer() {
+export default function AdminDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [display, setDisplay] = React.useState({
+    home: true,
+    orders: false,
+    users: false,
+  });
 
   const renderUsers = (
     <UsersDataGrid />
+  );
+
+  const renderOrders = (
+    <OrdersDataGrid />
+  );
+
+  const renderAdminHome = (
+    <AdminHome />
   );
 
   const handleDrawerOpen = () => {
@@ -116,6 +129,30 @@ export default function MiniDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const displayHome = () => {
+    setDisplay({
+      home: true,
+      orders: false,
+      users: false,
+    });
+  }
+
+  const displayUsers = () => {
+    setDisplay({
+      home: false,
+      orders: false,
+      users: true,
+    });
+  }
+
+  const displayOrders = () => {
+    setDisplay({
+      home: false,
+      orders: true,
+      users: false,
+    });
+  }
 
   return (
     <div className={classes.root}>
@@ -179,7 +216,7 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          <ListItem button key={"Home"}>
+          <ListItem button key={"Home"} onClick={displayHome}>
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary={"Home"} />
           </ListItem>
@@ -191,11 +228,11 @@ export default function MiniDrawer() {
             <ListItemIcon><StoreIcon /></ListItemIcon>
             <ListItemText primary={"Market"} />
           </ListItem>
-          <ListItem button key={"Users"}>
+          <ListItem button key={"Users"} onClick={displayUsers}>
             <ListItemIcon><GroupIcon /></ListItemIcon>
             <ListItemText primary={"Users"} />
           </ListItem>
-          <ListItem button key={"Orders"}>
+          <ListItem button key={"Orders"} onClick={displayOrders}>
             <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
             <ListItemText primary={"Orders"} />
           </ListItem>
@@ -229,7 +266,9 @@ export default function MiniDrawer() {
             }}
           />
         </Box>
-        {renderUsers}
+        {display.home && renderAdminHome}
+        {display.users && renderUsers}
+        {display.orders && renderOrders}
       </main>
     </div>
   );

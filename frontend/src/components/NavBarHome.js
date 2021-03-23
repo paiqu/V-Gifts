@@ -4,10 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import { Link } from 'react-router-dom';
-import Image from 'material-ui-image';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,8 +49,11 @@ export default function ButtonAppBar() {
         }}
       >
         <Toolbar className={classes.toolBar} >
-          <img className={classes.logo} src="img/logo/logo-1.png" />
-
+          <img 
+            className={classes.logo} 
+            src="img/logo/logo-1.png" 
+            alt="V-Gifts logo"
+          />
           <Typography
 						style={{
 							textDecoration: "none",

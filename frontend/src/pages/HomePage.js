@@ -1,15 +1,10 @@
 import React from 'react';
-// import '../css/home-page.css';
 import NavBarHome from '../components/NavBarHome';
-import Image from "material-ui-image";
-import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
-import { spacing } from '@material-ui/system';
 
 const useStyles = makeStyles((theme) => ({
   intro: {

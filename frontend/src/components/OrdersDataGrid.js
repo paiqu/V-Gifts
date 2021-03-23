@@ -41,13 +41,13 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65, country: "China"  },
 ];
 
-export default function UsersDataGrid() {
+export default function OrdersDataGrid() {
   return (
     <div style={{ height: 400, width: '100%' }}>
       <Typography
         variant="h3"
       >
-        Users in system
+        Orders in system
       </Typography>
       <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
     </div>

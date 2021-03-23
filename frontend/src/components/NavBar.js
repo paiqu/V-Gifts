@@ -190,7 +190,11 @@ export default function NavBar() {
     <div className={classes.grow}>
       <AppBar position="static" style={{boxShadow: 'none'}}>
         <Toolbar className={classes.toolBar}>
-          <img className={classes.logo} src="img/logo/logo-1.png" />
+          <img 
+            className={classes.logo} 
+            src="img/logo/logo-1.png" 
+            alt="V-Gifts logo"
+            />
           <Typography
 						style={{
 							textDecoration: "none",
