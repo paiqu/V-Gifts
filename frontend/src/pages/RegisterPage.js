@@ -2,12 +2,12 @@ import React from 'react';
 // import NavBar from '../components/NavBar';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
-import { event } from 'jquery';
 
 function RegisterPage(props) {
     const [infos, setInfos] = React.useState({
         first_name: "",
         last_name: "",
+        name: "", // delete later
         email: "",
         password: "",
         address: "",
@@ -27,26 +27,26 @@ function RegisterPage(props) {
         event.preventDefault();
 
         // validate if all field have been entered
-        if (!infos.email 
-            || !infos.password
-            || !infos.first_name
-            || !infos.last_name
-            || !infos.address
-            || !infos.city
-            || !infos.country) { return; }
+        // if (!infos.email 
+        //     || !infos.password
+        //     || !infos.first_name
+        //     || !infos.last_name
+        //     || !infos.address
+        //     || !infos.city
+        //     || !infos.country) { return; }
         
         // send the infos to backend
-        axios.post('/auth/register', { ...infos }
+        axios.post('user/register', { ...infos })
             .then((response) => {
                 console.log(response);
+                // eslint-disable-next-line
                 const data = response.data;
                 // passed in a function from outside to authorise user later
                 
                 // direct the user to the market page
-                props.history.push('/market');
+                props.history.push('/products');
             })
-            .catch((err) => {})
-        );
+            .catch((err) => {});
     };
 
     return (
@@ -66,7 +66,8 @@ function RegisterPage(props) {
                                 className="form-control"
                                 id="first_name"
                                 name="first_name"
-                                onChange={handleChange('first_name')}
+                                // onChange={handleChange('first_name')}
+                                onChange={handleChange('name')}
                                 required
                              />
                         </div>

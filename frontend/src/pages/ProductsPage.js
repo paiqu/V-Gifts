@@ -24,10 +24,11 @@ function ProductsPage(props) {
 
   const products = ["mario-1", "mario-2", "mario-3"];
   const items = [];
+
   for (let i = 0; i < 3; i++) {
     items.push(
       <Grid item xs={12} sm={4}>
-        <Product name={products[i]} />
+        <Product key={products[i]} name={products[i]} />
       </Grid>
     );
   }
@@ -45,7 +46,7 @@ function ProductsPage(props) {
         flexDirection="column" 
         alignContent="center"
       >
-        <Grid container xs={12} spacing={10}>
+        <Grid container spacing={10}>
           <Grid container item xs={12} sm={3} direction={"column"}>
             <ProductFilter />
           </Grid>
