@@ -74,7 +74,8 @@ def adm_login():
 def adm_logout():
     data = request.get_json()
     name = data['name']
-    result = login.logout_admin(name)
+    token = data['token']
+    result = login.logout_admin(name, token)
     return dumps({
         'is_success': result
     })
@@ -178,7 +179,8 @@ def usr_login():
 def usr_logout():
     data = request.get_json()
     name = data['name']
-    result = login.logout_user(name)
+    token = data['token']
+    result = login.logout_user(name, token)
     return dumps({
         'status': result
     })
