@@ -1,2 +1,14 @@
 __pycache__
 .vscode
+.DS_Store
+
+backend/__pycache__
+backend/.DS_Store
+
+backend_noclass/__pycache__
+backend_noclass/.DS_Store
+
+frontend/.DS_Store
+frontend_OLD/.DS_Store
+
+

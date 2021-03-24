@@ -32,7 +32,7 @@ def prod_recommendation(user_id, num = 10):
     '''
         This function calculates the similarity between
         user_interest vector and
-        product feature
+        product category
         to rank products and recommend
 
         returns a list of product_id, sorted
@@ -51,7 +51,7 @@ def interest_calculator(v_1, v_2, key):
     '''
         for example
         u_interest = [1, 2, 3, 4, 5]
-        it_feature = [6, 7, 8, 9, 10]
+        it_category = [6, 7, 8, 9, 10]
     '''
     return (key, angle_between(v_1, v_2))
     
@@ -66,7 +66,7 @@ def prod_picker(user_id, percent = 100): # percent -> the chance of product is j
     for item in prod_lst:
         rdd = rd.randint(0, 100)
         if rdd > (100-percent):
-            v_1 = prod_lst[item]['feature']
+            v_1 = prod_lst[item]['category']
             lst.append(interest_calculator(v_1, user_v, item))
     return lst
 
@@ -206,7 +206,7 @@ def prod_filter(option_lst, mode = 1):
             "name": name,
             "price": price,
             "description": description,
-            "feature": feature, # [0] * temp['TYPE_OF_PRODUCTS']
+            "category": category, # [0] * temp['TYPE_OF_PRODUCTS']
             "delivery": deli_days,
             "ratings": [],
                         # [(u_id, rating), ...]

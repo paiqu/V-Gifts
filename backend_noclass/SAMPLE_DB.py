@@ -116,11 +116,11 @@ def generate_sample_db_1(prod_num = 50):
     for i in range(prod_num):
         name = 'prod' + str(i)
         price = int(rd.randint(1, 500))
-        feature = [int(rd.randint(-10, 10)), 
+        category = [int(rd.randint(-10, 10)), 
                   int(rd.randint(-10, 10)),
                   int(rd.randint(-10, 10))]
         deli_day = rd.randint(1, 30)
-        prod = ad.new_product(name, price, 'test_use', feature, deli_day)
+        prod = ad.new_product(name, price, 'test_use', category, deli_day)
         db.add_prod(prod)
     # other pre-settings
     interest_1 = [int(rd.randint(-10, 10)), 

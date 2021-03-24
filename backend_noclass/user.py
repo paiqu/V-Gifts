@@ -4,6 +4,7 @@
 import database as db
 import datetime as dt
 import admin as ad
+import login as lo
 
 def new_user(name, password, email, address):
     new_id = db.id_generator('user')
@@ -25,7 +26,7 @@ def new_user(name, password, email, address):
 def new_order(user_id, product_id, datee, amount):
     '''
         create a new product,
-        feature should be a lst of int with length of
+        category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     '''
     new_id = db.id_generator('order')
@@ -56,8 +57,11 @@ def add_fund(u_id, num):
     temp = db.load_json()
     db.valid_id('user',u_id)
     temp['USER_DB'][str(u_id)]['fund'] += num
+    new_fund = temp['USER_DB'][str(u_id)]['fund']
     db.to_json(temp)
-    return {}
+    return {
+        'fund': new_fund
+    }
 
 def buy_product_from_cart(self, product):
     '''
@@ -92,7 +96,7 @@ def forget_password(name, email):
     return new_password
 
 # Users change password
-def change_password(name,old_password):
+def change_password(token, old_password, new_password):
     '''
     Check the name and password match
     Reset the password
@@ -103,9 +107,10 @@ def change_password(name,old_password):
         return False
     temp = db.load_json()
     for user_id, user_info in temp['USER_DB'].items():
-        if user_info["password"] == encrypt_password(old_password):
-            user_info["password"] = encrypt_password(new_password)
-            logout_user(user_info["name"], token)
+        if user_info["password"] == lo.encrypt_password(old_password):
+            user_info["password"] = lo.encrypt_password(new_password)
+            db.to_json(temp)
+            lo.logout_user(user_info["name"], token)
             return True
     return False
 
@@ -130,7 +135,10 @@ def add_product_to_cart(user_id, product_id, amount):
     # (product_id, amount)
     temp['USER_DB'][str(user_id)]['shopping_cart'].append(item)
     db.to_json(temp)
-    return {}
+    return {
+        'pid': product_id,
+        'amount': amount
+    }
 
 def remove_prod_from_cart(user_id, cart_item_pair):
     '''
@@ -143,7 +151,9 @@ def remove_prod_from_cart(user_id, cart_item_pair):
     temp = db.load_json()
     temp['USER_DB'][str(user_id)]['shopping_cart'].remove(cart_item_pair)
     db.to_json(temp)
-    return {}
+    return {
+        'pid': product_id
+    }
 
 def individual_price(product_id, amount):
     temp = db.load_json()
@@ -183,8 +193,10 @@ def purchase(u_id, lst):
         db.to_json(temp)
         for cart_item_pair in lst:
             product_id, amount = cart_item_pair
-            create_order(u_id, product_id, amount)
-    return {}
+            order_id = create_order(u_id, product_id, amount)
+    return {
+        'id': order_id
+    }
 
 def create_order(user_id, product_id, amount):
     '''
@@ -203,6 +215,7 @@ def create_order(user_id, product_id, amount):
     datee = int(dt.datetime.timestamp(dt.datetime.now()))
     order = new_order(user_id, product_id, datee, amount)
     db.add_order(order)
+    order_id = order['id']
     # 4 
     temp = db.load_json()
     cart_item_pair = [product_id, amount]
@@ -212,6 +225,7 @@ def create_order(user_id, product_id, amount):
     # 6
     db.to_json(temp)
     return {
+        'id': order_id
     }
 
 def rate_order(u_id, order_id, rating):
@@ -227,7 +241,6 @@ def rate_order(u_id, order_id, rating):
     temp = db.load_json()
     if u_id != temp['ORDER_DB'][str(order_id)]['user_id']:
         raise KeyError()
-        return {}
     prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
     temp['ORDER_DB'][str(order_id)]['rating'] = rating
     temp['PRODUCT_DB'][str(prod_id)]['ratings'].append([u_id, rating])
@@ -283,23 +296,24 @@ def order_refund(u_id, order_id):
     temp = db.load_json()
     # if refund is applicable
     if temp['ORDER_DB'][str(order_id)]['state'] == 3:
-        print('Order already refunded')
-        return {}
+        # print('Order already refunded')
+        status = "Order already refunded"
     elif temp['ORDER_DB'][str(order_id)]['state'] == 0:
         if int(u_id) != temp['ORDER_DB'][str(order_id)]['user_id']:
-            print('Only user paid for this order can refund')
-            return {}
+            # print('Only user paid for this order can refund')
+            status = "Only user paid for this order can refund"
         ad.change_order_state(order_id, 3)
         prod_id = temp['ORDER_DB'][str(order_id)]['product_id']
         price = temp['PRODUCT_DB'][str(prod_id)]['price']
         amount = temp['ORDER_DB'][str(order_id)]['amount']
         temp = refund_helper(temp, u_id, amount * price)
         db.to_json(temp)
-        print('Refund success')
-        return {}
+        # print('Refund success')
+        status = "Refund success"
     else:
-        print('Already on delivery, refund not applicable')
-        return {}
+        # print('Already on delivery, refund not applicable')
+        status = "Already on delivery, refund not applicable"
+    return status
 
 def show_order_user(u_id):
     '''
@@ -315,7 +329,7 @@ def show_order_user(u_id):
 def check_token(token):
     temp = db.load_json()
     for name, user_token in temp['TOKEN_DB'].items():
-        if user_token is token:
+        if user_token == token:
             return True
     return False
 

@@ -33,20 +33,20 @@ def new_admin(name, password, email):
         "email": email
     }
 
-def new_product(name, price, description, feature, deli_days):
+def new_product(name, price, description, category, deli_days):
     '''
         create a new product,
-        feature should be a lst of int with length of
+        category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     '''
     new_id = db.id_generator('product')
-    assert db.check_interest_dim(feature)
+    assert db.check_interest_dim(category)
     return {
         "id": new_id,
         "name": name,
         "price": price,
         "description": description,
-        "feature": feature, # [0] * temp['TYPE_OF_PRODUCTS']
+        "category": category, # [0] * temp['TYPE_OF_PRODUCTS']
         "delivery": deli_days,
         "ratings": [],
                     # [(u_id, rating), ...]
@@ -71,7 +71,7 @@ def edit_admin(admin_id, name, password, email):
         'id': admin_id
     }
 
-def edit_product(prod_id, prod_name, prod_feature, prod_descrip):
+def edit_product(prod_id, prod_name, prod_category, prod_descrip):
     '''
         This function edits product info with inputs above
         and returns the id of this product
@@ -80,8 +80,8 @@ def edit_product(prod_id, prod_name, prod_feature, prod_descrip):
     if str(prod_id) not in temp['PRODUCT_DB']:
         raise KeyError()
     temp['PRODUCT_DB'][str(prod_id)]["name"] = prod_name
-    assert db.check_interest_dim(prod_feature)
-    temp['PRODUCT_DB'][str(prod_id)]["feature"] = prod_feature
+    assert db.check_interest_dim(prod_category)
+    temp['PRODUCT_DB'][str(prod_id)]["category"] = prod_category
     temp['PRODUCT_DB'][str(prod_id)]["description"] = prod_descrip
     return {
         'id': prod_id
@@ -98,17 +98,17 @@ def delete_product(prod_id):
     else:
         return temp['PRODUCT_DB'].pop(str(prod_id))
 
-def edit_prod_feature(prod_id, feature_lst):
+def edit_prod_category(prod_id, category_lst):
     '''
-        This function can update the feature vector of a product
+        This function can update the category vector of a product
     '''
     db.valid_id('product', prod_id)
     temp = db.load_json()
-    if len(feature_lst) != temp['TYPE_OF_PRODUCTS']:
+    if len(category_lst) != temp['TYPE_OF_PRODUCTS']:
         raise ValueError()
         return {}
     else:
-        temp['PRODUCT_DB'][str(prod_id)]['feature'] = feature_lst
+        temp['PRODUCT_DB'][str(prod_id)]['category'] = category_lst
         db.to_json(temp)
     return {}
 
@@ -125,7 +125,10 @@ def change_order_state(order_id, new_state):
     temp = db.load_json()
     temp['ORDER_DB'][str(order_id)]['state'] = new_state
     db.to_json(temp)
-    return {}
+    return {
+        'id': order_id,
+        'state': new_state
+    }
 
 
 # def order_history():

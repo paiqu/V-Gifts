@@ -158,9 +158,9 @@ def id_generator(option):
         # Temporary
         raise KeyError()
 
-def check_interest_dim(feature):
+def check_interest_dim(category):
     temp = load_json()
-    if len(feature) == temp['TYPE_OF_PRODUCTS']:
+    if len(category) == temp['TYPE_OF_PRODUCTS']:
         return True
     else:
         return False
@@ -169,7 +169,7 @@ def add_product_type():
     temp = load_json()
     temp['TYPE_OF_PRODUCTS'] += 1
     for key in temp['PRODUCT_DB']:
-        temp['PRODUCT_DB'][key]['feature'].append(0)
+        temp['PRODUCT_DB'][key]['category'].append(0)
     for key in temp['USER_DB']:
         temp['USER_DB'][key]['interest'].append(0)
     to_json(temp)
@@ -210,7 +210,7 @@ def prod_rating_calculator(prod_id):
 #             'orders': [list of order ID]
 #                                 # type: list of int
 #             'interests': [('cheap', 1.0), ...]
-#                                 # type: list of tuple, tuple of (feature, weight)
+#                                 # type: list of tuple, tuple of (category, weight)
 #                                 #                                string,  float
 #         }
 #     '''
@@ -244,7 +244,7 @@ def prod_rating_calculator(prod_id):
 #                                 # type: string, website or file name
 #             'description': 'good'
 #                                 # type: string
-#             'feature': ['cheap', 'durable']
+#             'category': ['cheap', 'durable']
 #                                 # type: list of string, adjective words
 #             'delivery': datetime_object
 #                                 # type: leng of time (mm/dd)
