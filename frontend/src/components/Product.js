@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles();
+    const theme = useTheme();
 
     // eslint-disable-next-line
     const [id, setID] = useState(null);
@@ -61,7 +62,7 @@ export default function Product(props) {
                         </Grid>
                         <Grid item>
                             <Button
-                                color="On Primary"
+                                color={theme.palette.primary.contrastText}
                             >
                                 <Typography variant="body2" style={{ cursor: 'pointer' }}>
                                     <ShoppingCartIcon /> Add to Cart

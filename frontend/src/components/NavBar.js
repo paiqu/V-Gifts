@@ -147,6 +147,7 @@ export default function NavBar() {
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
+  // eslint-disable-next-line
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -215,7 +216,7 @@ export default function NavBar() {
 						className={classes.marketButton}
 						component={Link}
 						to={'/products'}
-						color="primaryDark"
+						color={theme.palette.primary.contrastText}
 						variant="outlined"
 					>
 							Market

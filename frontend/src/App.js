@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import './axios';
 
 import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
@@ -30,11 +31,14 @@ const theme = createMuiTheme({
 
 function App() {
 	// using hooks here to set state for the App
+  // eslint-disable-next-line
 	const [authDetails, setAuthDetails] = React.useState(
 		localStorage.getItem('token')
 	);
 
+
 	// define a function to store details into local storage
+  // eslint-disable-next-line
 	const setAuth = (token, u_id) => {
 		localStorage.setItem('token', token);
 		localStorage.setItem('u_id', u_id);
