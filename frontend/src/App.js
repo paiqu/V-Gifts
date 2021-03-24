@@ -26,12 +26,22 @@ const theme = createMuiTheme({
       contrastText: '#fafafa',
 		},
 	},
-  });
+});
 
+function App() {
+	// using hooks here to set state for the App
+	const [authDetails, setAuthDetails] = React.useState(
+		localStorage.getItem('token')
+	);
 
-class App extends React.Component  {
-  render() {
-    return (
+	// define a function to store details into local storage
+	const setAuth = (token, u_id) => {
+		localStorage.setItem('token', token);
+		localStorage.setItem('u_id', u_id);
+		setAuthDetails(token);
+	}
+	
+  return (
 			<ThemeProvider theme={theme}>
 				<Router>
 					<Switch>
@@ -45,7 +55,6 @@ class App extends React.Component  {
 				</Router>
 			</ThemeProvider>
 	);
-  }
 }
 
 export default App;
