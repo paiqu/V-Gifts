@@ -43,7 +43,7 @@ app.register_error_handler(Exception, defaultHandler)
 
 @app.route("/admin/register", methods = ["POST"])
 def adm_register():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     password = data['password']
     email = data['email']
@@ -59,7 +59,7 @@ def adm_register():
 
 @app.route("/admin/login", methods = ["POST"])
 def adm_login():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     password = data['password']
     try:
@@ -72,7 +72,7 @@ def adm_login():
 
 @app.route("/admin/logout", methods = ["POST"])
 def adm_logout():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     result = login.logout_admin(name)
     return dumps({
@@ -81,7 +81,7 @@ def adm_logout():
 
 @app.route("/admin/profile/edit", methods = ["POST"])
 def adm_edit():
-    data = request.get_json
+    data = request.get_json()
     aid = data['admin_id']
     name = data['name']
     password = data['password']
@@ -93,7 +93,7 @@ def adm_edit():
 
 @app.route("/admin/product/new", methods = ["POST"])
 def new_product():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     price = data['price']
     description = data['description']
@@ -107,7 +107,7 @@ def new_product():
 
 @app.route("/admin/product/edit", methods = ["POST"])
 def edit_product():
-    data = request.get_json
+    data = request.get_json()
     id = data['id']
     name = data['name']
     category = data['category']
@@ -121,7 +121,7 @@ def edit_product():
 
 @app.route("/admin/product/delete", methods = ["POST"])
 def delete_product():
-    data = request.get_json
+    data = request.get_json()
     id = data['id']
     result = adm.delete_product(id)
     return dumps({
@@ -130,7 +130,7 @@ def delete_product():
 
 @app.route("/admin/order/statechange", methods = ["POST"])
 def order_state_change():
-    data = request.get_json
+    data = request.get_json()
     id = data['id']
     state = data['state']
     result = adm.change_order_state(id, state)
@@ -146,7 +146,7 @@ def order_state_change():
 
 @app.route("/user/register", methods = ["POST"])
 def usr_register():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     password = data['password']
     email = data['email']
@@ -163,7 +163,7 @@ def usr_register():
 
 @app.route("/user/login", methods = ["POST"])
 def usr_login():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     password = data['password']
     try:
@@ -176,7 +176,7 @@ def usr_login():
 
 @app.route("/user/logout", methods = ["POST"])
 def usr_logout():
-    data = request.get_json
+    data = request.get_json()
     name = data['name']
     result = login.logout_user(name)
     return dumps({
@@ -187,7 +187,7 @@ def usr_logout():
 
 @app.route("/user/profile/password/change", methods = ["POST"])
 def change_password():
-    data = request.get_json
+    data = request.get_json()
     uname = data['name']
     opassword = data['old_password']
     result = usr.change_password(uname, opassword)
@@ -199,7 +199,7 @@ def change_password():
 
 @app.route("/user/profile/fund/add", methods = ["POST"])
 def add_fund():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     num = data['num']
     result = usr.add_fund(uid, num)
@@ -210,7 +210,7 @@ def add_fund():
 
 @app.route("/user/cart/add", methods = ["POST"])
 def add_cart():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     pid = data['product_id']
     amount = data['amount']
@@ -224,7 +224,7 @@ def add_cart():
 
 @app.route("/user/cart/remove", methods = ["POST"])
 def remove_cart():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     pid = data['product_id']
     cart = usr.show_user_cart(uid)
@@ -239,7 +239,7 @@ def remove_cart():
 
 @app.route("/user/cart/cost", methods = ["POST"])
 def cost_cart():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     cart = usr.show_user_cart(uid)
     result = usr.total_price(cart)
@@ -249,7 +249,7 @@ def cost_cart():
 
 @app.route("/user/order/new", methods = ["POST"])
 def create_order():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     cart = usr.show_user_cart(uid)
     result = usr.purchase(uid, cart)
@@ -259,7 +259,7 @@ def create_order():
 
 @app.route("/user/order/rate", methods = ["POST"])
 def rate_order():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     oid = data['order_id']
     rating = data['rating']
@@ -270,7 +270,7 @@ def rate_order():
 
 @app.route("/user/order/refund", methods = ["POST"])
 def refund_order():
-    data = request.get_json
+    data = request.get_json()
     uid = data['user_id']
     oid = data['order_id']
     result = usr.order_refund(uid, oid)
