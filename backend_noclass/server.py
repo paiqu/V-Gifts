@@ -15,6 +15,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from error import InputError, AccessError
 from json import dumps
+import sys
 
 def defaultHandler(err):
     response = err.get_response()
@@ -78,7 +79,7 @@ def adm_logout():
         'is_success': result
     })
 
-@app.rounte("/admin/profile/edit", methods = ["POST"])
+@app.route("/admin/profile/edit", methods = ["POST"])
 def adm_edit():
     data = request.get_json
     aid = data['admin_id']
@@ -118,7 +119,7 @@ def edit_product():
 
 # @app.route("/admin/product/editcategory")
 
-@app.route("admin/product/delete", methods = ["POST"])
+@app.route("/admin/product/delete", methods = ["POST"])
 def delete_product():
     data = request.get_json
     id = data['id']
@@ -127,7 +128,7 @@ def delete_product():
         'status': "success"
     })
 
-@app.route("admin/order/statechange", methods = ["POST"])
+@app.route("/admin/order/statechange", methods = ["POST"])
 def order_state_change():
     data = request.get_json
     id = data['id']
@@ -184,7 +185,7 @@ def usr_logout():
 
 # @app.route("user/profile/password/forget")
 
-@app.route("user/profile/password/change", methods = ["POST"])
+@app.route("/user/profile/password/change", methods = ["POST"])
 def change_password():
     data = request.get_json
     uname = data['name']
@@ -196,7 +197,7 @@ def change_password():
 
 # @app.rounte("user/profile/edit")
 
-@app.route("user/profile/fund/add", methods = ["POST"])
+@app.route("/user/profile/fund/add", methods = ["POST"])
 def add_fund():
     data = request.get_json
     uid = data['user_id']
@@ -207,7 +208,7 @@ def add_fund():
         'fund': result['fund']
     })
 
-@app.route("user/cart/add", methods = ["POST"])
+@app.route("/user/cart/add", methods = ["POST"])
 def add_cart():
     data = request.get_json
     uid = data['user_id']
@@ -221,7 +222,7 @@ def add_cart():
         'cost': price
     })
 
-@app.route("user/cart/remove", methods = ["POST"])
+@app.route("/user/cart/remove", methods = ["POST"])
 def remove_cart():
     data = request.get_json
     uid = data['user_id']
@@ -236,7 +237,7 @@ def remove_cart():
         'pid': result['pid']
     })
 
-@app.rounte("user/cart/cost", methods = ["POST"])
+@app.route("/user/cart/cost", methods = ["POST"])
 def cost_cart():
     data = request.get_json
     uid = data['user_id']
@@ -246,7 +247,7 @@ def cost_cart():
         'cost': result
     })
 
-@app.route("user/order/new", methods = ["POST"])
+@app.route("/user/order/new", methods = ["POST"])
 def create_order():
     data = request.get_json
     uid = data['user_id']
@@ -256,7 +257,7 @@ def create_order():
         'id': result['id']
     })
 
-@app.route("user/order/rate", methods = ["POST"])
+@app.route("/user/order/rate", methods = ["POST"])
 def rate_order():
     data = request.get_json
     uid = data['user_id']
@@ -267,7 +268,7 @@ def rate_order():
         'status': "success"
     })
 
-@app.route("user/order/refund", methods = ["POST"])
+@app.route("/user/order/refund", methods = ["POST"])
 def refund_order():
     data = request.get_json
     uid = data['user_id']
