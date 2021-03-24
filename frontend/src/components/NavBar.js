@@ -26,18 +26,18 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
+    // display: "block",
+    // [theme.breakpoints.up("sm")]: {
+    //   display: "block",
+    // },
 		marginRight: theme.spacing(2),
 
   },
 	marketButton: {
-		display: "none",
-    [theme.breakpoints.up("sm")]: {
-      display: "block",
-    },
+		// display: "none",
+    // [theme.breakpoints.up("sm")]: {
+    //   display: "block",
+    // },
 		marginRight: theme.spacing(2),
 	},
   search: {
@@ -79,17 +79,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
-    },
+    // display: "none",
+    // [theme.breakpoints.up("md")]: {
+    //   display: "flex",
+    // },
+    display: 'flex',
   },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  },
+  // sectionMobile: {
+  //   display: "flex",
+  //   [theme.breakpoints.up("md")]: {
+  //     display: "none",
+  //   },
+  // },
   toolBar: {
     minHeight: "10vh",
   },
@@ -194,7 +195,7 @@ export default function NavBar() {
             className={classes.logo} 
             src="img/logo/logo-1.png" 
             alt="V-Gifts logo"
-            />
+          />
           <Typography
 						style={{
 							textDecoration: "none",
@@ -270,7 +271,7 @@ export default function NavBar() {
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
+      {/* {renderMobileMenu} */}
       {renderMenu}
     </div>
   );
