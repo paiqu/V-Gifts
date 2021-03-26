@@ -13,7 +13,7 @@ import generate_token as gt
 
 
 # user part
-def register_user(name, password, email):
+def register_user(aname, fname, lname, password, email, address, city, country):
     '''
         this function register user and initialize their info,
         upon register, webpage should let user to further
@@ -23,22 +23,29 @@ def register_user(name, password, email):
     '''
     # Filter SQL injection
     pattern = re.compile("[a-zA-Z0-9_]")
-    if pattern.search(name) is None:
-        print("Incorrect syntax! You can only use number, letter and underline.")
-        return False 
+    if pattern.search(aname) is None:
+        raise Exception("Incorrect syntax! You can only use number, letter and underline.")
+
+    email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
+    if email_pattern.search(email) is None:
+        raise Exception("Incorrect email format! Please try again.")
 
     # Check whether the user name has been registered
-    if check_user_exist(name) is True:
+    if check_user_exist(aname) is True:
         raise Exception("Name is already exist! Please try another one.")
 
     # Encrypt password 
     encryption = encrypt_password(password)
     # New user added to db
-    new = us.new_user(name, encryption, email, '')
-
+    new = us.new_user(aname, fname, lname, encryption, email, address, city, country)
     db.add_user(new)
+    info = login_user(aname, password)
+    
 
-    return new
+    return {
+        'id': info['id'],
+        'token':info['token']
+    }
 
 def login_user(name, password):
     '''
@@ -53,26 +60,31 @@ def login_user(name, password):
 
     login_token = ''
     temp = db.load_json()
-
+    uid = 0
     for user_id, user_info in temp['USER_DB'].items():
         if user_info["name"] == name:
             if user_info["password"] == encrypt_password(password):
                 login_token = gt.token(name)
-                temp['TOKEN_DB'][str(name)] = login_token
+                uid = user_id
+                temp['TOKEN_DB'][uid] = login_token
                 db.to_json(temp)
-                return login_token
+                return {
+                    'id': uid,
+                    'token':login_token
+                }
 
     print("Login fail! Invalid password or name! Please try again.")
     return False
 
-def logout_user(name,token):
+def logout_user(iid):
     '''
         this function logout user
         takes user back to login page
     '''
     temp = db.load_json()
-    if us.check_token(token): 
-        temp['TOKEN_DB'].pop(name)
+
+    if us.check_token(iid): 
+        temp['TOKEN_DB'].pop(iid)
         db.to_json(temp)
         print("You have been logged out.")
         return True
@@ -106,10 +118,14 @@ def register_admin(name, password, email):
     encryption = encrypt_password(password)
     # New user added to db
     new = ad.new_admin(name, encryption, email)
-    
     db.add_admin(new)
+    info = login_admin(name, password)
+    
 
-    return new
+    return {
+        'id': info['id'],
+        'token': info['token']
+    }
 
 def login_admin(name, password):
     '''
@@ -124,26 +140,30 @@ def login_admin(name, password):
 
     login_token = ''
     temp = db.load_json()
-
+    aid = 0
     for admin_id, admin_info in temp['ADMIN_DB'].items():
         if admin_info["name"] == name:
             if admin_info["password"] == encrypt_password(password):
                 login_token = gt.token(name)
-                temp['TOKEN_DB'][str(name)] = login_token
+                aid = admin_id
+                temp['TOKEN_DB'][aid] = login_token
                 db.to_json(temp)
-                return login_token
+                return {
+                    'id': aid,
+                    'token':login_token
+                }
     
     print("Login fail! Invalid password or name! Please try again.")
     return False
 
-def logout_admin(name, token):
+def logout_admin(iid):
     '''
         this function logout admin
         takes admin back to login page
     '''
     temp = db.load_json()
-    if us.check_token(token):
-        temp['TOKEN_DB'].pop(name)
+    if us.check_token(iid):
+        temp['TOKEN_DB'].pop(iid)
         db.to_json(temp)
         print("You have been logged out.")
         return True
@@ -159,7 +179,7 @@ def check_user_exist(name):
     if temp['USER_DB'] is None:
         return True
     for user_id, user_info in temp['USER_DB'].items():
-        if user_info['name'] == name: # fixing: user_info['name'] is name
+        if user_info['name'] == name: 
             return True
     return False
     
@@ -169,7 +189,7 @@ def check_admin_exist(name):
     if temp['ADMIN_DB'] is None:
         return True
     for admin_id, admin_info in temp['ADMIN_DB'].items():
-        if admin_info['name'] == name: # fixing: admin_info['name'] is name
+        if admin_info['name'] == name: 
                 return True
     return False
 
@@ -187,7 +207,6 @@ def verify_password(password):
     sha_signature = \
         hashlib.sha256(password.encode()).hexdigest()
     for user_id, user_info in temp['USER_DB']:
-        # fixing: user_info['password'] is sha_signature
         if user_info['password'] == sha_signature:
             return True
     return False

@@ -12,11 +12,11 @@ def test_user_register():
     db.clear_db()
     temp = db.init_db()
     db.to_json(temp)
+    #assert register_user("'", '', '', '123456','123@unsw.com','', '', '') == False
+    #assert register_user("    ",'','', '123456','123@unsw.com','','','') == False
 
-    assert register_user("'", '123456','123@unsw.com') == False
-    assert register_user("    ", '123456','123@unsw.com') == False
+    register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
 
-    register_user('Chenkai', '123456','123@unsw.com')
     temp_2 = db.load_json()
     assert temp_2['USER_ID'] == 1
     assert len(temp_2['USER_DB']) == 1
@@ -25,35 +25,41 @@ def test_user_register():
     assert temp_2['USER_DB']['1']['id'] == 1
     assert temp_2['USER_DB']['1']['email'] == '123@unsw.com'
 
-    register_user('Wang', '111111', 'x@unsw')
+    register_user('Wang', '','','111111', 'x@unsw','','','')
     temp_3 = db.load_json()
     assert temp_3['USER_ID'] == 2
     assert len(temp_3['USER_DB']) == 2
+    assert len(temp_3['TOKEN_DB']) == 2
 
 def test_user_login():
     db.clear_db()
     temp = db.init_db()
     db.to_json(temp)
     
-    register_user('Chenkai', '123456','123@unsw.com')
+    new = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
+    user_id = new['id']
 
     assert login_user('Chenkai', '111') == False
     assert login_user('Chen', '123456') == False
     
-    token = login_user('Chenkai', '123456')
+    
+    logout_user(user_id)
     temp_2 = db.load_json()
-    assert len(temp_2['TOKEN_DB']) == 1 
+    assert len(temp_2['TOKEN_DB']) == 0
+
+    login_user('Chenkai', '123456')
+    temp_3 = db.load_json()
+    assert len(temp_3['TOKEN_DB']) == 1 
 
 def test_user_logout():
     db.clear_db()
     temp = db.init_db()
     db.to_json(temp)
-
-    register_user('Chenkai', '123456','123@unsw.com')
-    token = login_user('Chenkai', '123456')
-    temp_2 = db.load_json()
     
-    assert logout_user('Chenkai', token) == True
+    new = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
+    user_id = new['id']
+    temp_2 = db.load_json()
+    assert logout_user(user_id) == True
     temp_3 = db.load_json()
     assert len(temp_3['TOKEN_DB']) == 0
     
@@ -63,8 +69,8 @@ def test_change_password():
     temp = db.init_db()
     db.to_json(temp)
 
-    register_user('Chenkai', '123456','123@unsw.com')
-    token = login_user('Chenkai', '123456')
+    new = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
+    token = new['token']
     temp_2 = db.load_json()
 
     assert change_password(token, '221313', '000000') == False
@@ -117,11 +123,13 @@ def test_admin_logout():
     temp = db.init_db()
     db.to_json(temp)
     
-    register_admin('God', '123456', 'god@unsw')
-    token = login_admin('God', '123456')
+    new = register_admin('God', '123456', 'god@unsw')
+    admin_id = new['id']
     temp_2 = db.load_json()
-
-    assert logout_admin('God', token) == True
+    print(temp_2['TOKEN_DB'])
+    assert logout_admin(admin_id) == True
     temp_3 = db.load_json()
     assert len(temp_3['TOKEN_DB']) == 0
+
+
     

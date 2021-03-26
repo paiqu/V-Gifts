@@ -6,15 +6,20 @@ import datetime as dt
 import admin as ad
 import login as lo
 
-def new_user(name, password, email, address):
+def new_user(aname, fname, lname, password, email, address, city, country):
     new_id = db.id_generator('user')
     temp = db.load_json()
     return {
         "id": new_id,
-        "name": name,
+        "name": aname,
+                # account name
+        "fname": fname,
+        "lname": lname,
         "password": password,
         "email": email,
         "address": address,
+        "city": city,
+        "country": country,
         "fund": 0,
         "shopping_cart": [],
                 # [[product_id, amount], ...]
@@ -102,7 +107,7 @@ def change_password(token, old_password, new_password):
     Reset the password
     '''
     
-    if check_token(token) is not True:
+    if check_token_token(token) is not True:
         print('Invalid Token!')
         return False
     temp = db.load_json()
@@ -110,7 +115,7 @@ def change_password(token, old_password, new_password):
         if user_info["password"] == lo.encrypt_password(old_password):
             user_info["password"] = lo.encrypt_password(new_password)
             db.to_json(temp)
-            lo.logout_user(user_info["name"], token)
+            lo.logout_user(user_id)
             return True
     return False
 
@@ -326,10 +331,16 @@ def show_order_user(u_id):
 
 
 # Check token is available
-def check_token(token):
+def check_token(iid):
     temp = db.load_json()
-    for name, user_token in temp['TOKEN_DB'].items():
-        if user_token == token:
+    for token_id, user_token in temp['TOKEN_DB'].items():
+        if iid == token_id:
             return True
     return False
 
+def check_token_token(token):
+    temp = db.load_json()
+    for token_id, user_token in temp['TOKEN_DB'].items():
+        if token == user_token:
+            return True
+    return False
