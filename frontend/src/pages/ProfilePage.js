@@ -1,16 +1,35 @@
 import React from 'react';
-// import NavBar from '../components/NavBar';
 import NavBar from '../components/NavBar';
-import '../css/profile-page.css';
+// import '../css/profile-page.css';
+import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import AuthContext from '../AuthContext';
+
 
 function ProfilePage(props) {
-    return (
+  const id = React.useContext(AuthContext);
+
+  const handleLogout = (event) => {
+    axios.post('/user/logout', { id })
+      .then((response) => {
+        console.log(response);
+
+        localStorage.removeItem('id');
+        
+        // after log out, redirect to home page
+        props.history.push('/');
+      })
+      .catch((err) => {});
+
+  };
+
+  return (
         <div>
             <NavBar />
             <main className="d-flex justify-content-center align-items-center flex-column">
                 <div className="row justify-content-center pt-3">
                     <div className="col">
-                        <img className="img-thumbnail" style={{width: "10rem", height: "auto"}} src="img/profile/profile-1.jpg" alt="" />
+                        <img className="img-thumbnail" style={{width: "10rem", height: "auto"}} src="/img/profile/profile-1.jpg" alt="" />
                     </div>
                 </div>
                 <h1 className="mt-3">Hello <span className="text-primary">Pai</span>!</h1>
@@ -35,6 +54,13 @@ function ProfilePage(props) {
                             </button>
                         </div>
                     </div>
+                    <Button 
+                      variant="contained" 
+                      color="primary"
+                      onClick={handleLogout}
+                    >
+                      Log out
+                    </Button>
 
                 </div>
 

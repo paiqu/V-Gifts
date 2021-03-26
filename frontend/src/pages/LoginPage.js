@@ -3,6 +3,10 @@ import '../css/login.css';
 
 
 function LoginPage() {
+		const handleSubmit = (event) => {
+
+		}
+
     return (
         <div>
             <div className="sidenav">
@@ -12,7 +16,7 @@ function LoginPage() {
             </div>
             <main className="main">
                 <div className="col-md-6 col-sm-12">
-                    <form className="login-form d-flex flex-column">
+                    <form className="login-form d-flex flex-column" onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>User Name</label>
                             <input id="login_user_name" type="text" className="form-control" placeholder="User Name" />

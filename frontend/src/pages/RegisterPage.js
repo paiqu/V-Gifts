@@ -3,23 +3,23 @@ import React from 'react';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
 
-function RegisterPage(props) {
+function RegisterPage({ setAuth, ...props }) {
     const [infos, setInfos] = React.useState({
-        first_name: "",
-        last_name: "",
-        name: "", // delete later
-        email: "",
-        password: "",
-        address: "",
-        city: "",
-        country: ""
+      first_name: "",
+      last_name: "",
+      name: "", // delete later
+      email: "",
+      password: "",
+      address: "",
+      city: "",
+      country: ""
     });
 
     const handleChange = name => event => {
-        setInfos({
-            ...infos,
-            [name]: event.target.value
-        });
+      setInfos({
+          ...infos,
+          [name]: event.target.value
+      });
     };
 
     const handleSubmit = (event) => {
@@ -37,16 +37,17 @@ function RegisterPage(props) {
         
         // send the infos to backend
         axios.post('user/register', { ...infos })
-            .then((response) => {
-                console.log(response);
-                // eslint-disable-next-line
-                const data = response.data;
-                // passed in a function from outside to authorise user later
-                
-                // direct the user to the market page
-                props.history.push('/products');
-            })
-            .catch((err) => {});
+          .then((response) => {
+              console.log(response);
+              const data = response.data;
+
+              // mark the user as signed-in in local storage, it will be removed when it is logged out
+              setAuth(data.id);
+
+              // direct the user to the market page
+              props.history.push('/products');
+          })
+          .catch((err) => {});
     };
 
     return (

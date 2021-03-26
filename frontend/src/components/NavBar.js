@@ -16,6 +16,7 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import AuthContext from '../AuthContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -104,6 +105,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar() {
+  const id = React.useContext(AuthContext);
+
   const classes = useStyles();
   const theme = useTheme();
 
@@ -194,7 +197,7 @@ export default function NavBar() {
         <Toolbar className={classes.toolBar}>
           <img 
             className={classes.logo} 
-            src="img/logo/logo-1.png" 
+            src="/img/logo/logo-1.png" 
             alt="V-Gifts logo"
           />
           <Typography
@@ -248,7 +251,7 @@ export default function NavBar() {
             </IconButton>
             <IconButton
 							component={Link}
-							to={"/profile"}
+							to={ id ? `/profile/${id}` : "/login"}
               edge="end"
               aria-label="account of current user"
               // aria-controls={menuId}
