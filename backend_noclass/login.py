@@ -159,7 +159,7 @@ def check_user_exist(name):
     if temp['USER_DB'] is None:
         return True
     for user_id, user_info in temp['USER_DB'].items():
-        if user_info['name'] is name:
+        if user_info['name'] == name: # fixing: user_info['name'] is name
             return True
     return False
     
@@ -169,7 +169,7 @@ def check_admin_exist(name):
     if temp['ADMIN_DB'] is None:
         return True
     for admin_id, admin_info in temp['ADMIN_DB'].items():
-        if admin_info['name'] is name:
+        if admin_info['name'] == name: # fixing: admin_info['name'] is name
                 return True
     return False
 
@@ -187,7 +187,8 @@ def verify_password(password):
     sha_signature = \
         hashlib.sha256(password.encode()).hexdigest()
     for user_id, user_info in temp['USER_DB']:
-        if user_info['password'] is sha_signature:
+        # fixing: user_info['password'] is sha_signature
+        if user_info['password'] == sha_signature:
             return True
     return False
 
