@@ -9,7 +9,8 @@ import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ProductsPage from './pages/ProductsPage';
-
+import { AuthProvider } from './AuthContext';
+import ProtectedRoute from './utils/ProtectedRoute';
 
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&secondary.color=2196F3&secondary.text.color=FAFAFA&primary.color=FFC400
 const theme = createMuiTheme({
@@ -29,34 +30,46 @@ const theme = createMuiTheme({
 	},
 });
 
+
 function App() {
 	// using hooks here to set state for the App
   // eslint-disable-next-line
 	const [authDetails, setAuthDetails] = React.useState(
-		localStorage.getItem('token')
+    // localStorage.getItem('token');
+		localStorage.getItem('id')
 	);
 
 
 	// define a function to store details into local storage
   // eslint-disable-next-line
-	const setAuth = (token, u_id) => {
-		localStorage.setItem('token', token);
-		localStorage.setItem('u_id', u_id);
-		setAuthDetails(token);
+	const setAuth = (id) => {
+		// localStorage.setItem('token', token);
+		localStorage.setItem('id', id);
+
+		// setAuthDetails(token);
+    setAuthDetails(id);
 	}
 	
   return (
 			<ThemeProvider theme={theme}>
-				<Router>
-					<Switch>
-						<Route exact path="/" component={HomePage} />
-						<Route exact path="/login" component={LoginPage} />
-						<Route exact path="/register" component={RegisterPage} />
-						<Route exact path="/products" component={ProductsPage} />
-						<Route exact path="/profile" component={ProfilePage} />
-						<Route exact path="/admin" component={AdminPage} />
-					</Switch>
-				</Router>
+				<AuthProvider value={authDetails}>
+          <Router>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/login" component={LoginPage} />
+              <Route 
+                exact 
+                path="/register" 
+                render={(props) => {
+                  return <RegisterPage {...props} setAuth={setAuth} />;
+                }}  
+              />
+              <Route exact path="/products" component={ProductsPage} />
+              <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
+              <Route exact path="/admin" component={AdminPage} />
+            </Switch>
+          </Router>
+        </AuthProvider>
 			</ThemeProvider>
 	);
 }
