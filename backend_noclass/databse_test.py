@@ -9,6 +9,7 @@ import SAMPLE_DB as samp
 
 # test 0
 def test_0():
+    print("reset Database")
     db.clear_db()
     temp = db.init_db()
     db.to_json(temp)
@@ -111,9 +112,9 @@ def test_5():
     print(recommend)
 
 if __name__ == "__main__":
-    # test_0()
+    test_0()
     # test_1()
     # test_2()
     # test_3()
-    test_4()
+    # test_4()
     # test_5()
