@@ -24,3 +24,7 @@ We start coding these week. Two of us are responsible for the frontend and the r
 people are responsible for the backend. 
 I finish the backend part of epic 1 which is user login/register, admin login/register, 
 and some functions for user, besides I finish the test for all the code. 
+
+Week 5:
+Team prepare for the demo a. In order to connect the backend and frontend, I change the format to fit 
+the database and then pass all tests.

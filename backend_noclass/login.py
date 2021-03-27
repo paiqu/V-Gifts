@@ -120,13 +120,10 @@ def register_admin(name, password, email):
     # New user added to db
     new = ad.new_admin(name, encryption, email)
     db.add_admin(new)
-    info = login_admin(name, password)
+    #info = login_admin(name, password)
     
 
-    return {
-        'id': info['id'],
-        'token': info['token']
-    }
+    return login_admin(name, password)
 
 def login_admin(name, password):
     '''
@@ -147,7 +144,7 @@ def login_admin(name, password):
             if admin_info["password"] == encrypt_password(password):
                 login_token = gt.token(name)
                 aid = admin_id
-                temp['TOKEN_DB'][aid] = login_token
+                temp['TOKEN_DB'][login_token] = aid
                 db.to_json(temp)
                 return {
                     'id': aid,
@@ -157,14 +154,14 @@ def login_admin(name, password):
     print("Login fail! Invalid password or name! Please try again.")
     return False
 
-def logout_admin(iid):
+def logout_admin(token):
     '''
         this function logout admin
         takes admin back to login page
     '''
     temp = db.load_json()
-    if us.check_token(iid):
-        temp['TOKEN_DB'].pop(iid)
+    if us.check_token_token(token):
+        temp['TOKEN_DB'].pop(token)
         db.to_json(temp)
         print("You have been logged out.")
         return True

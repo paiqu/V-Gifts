@@ -37,13 +37,13 @@ def test_user_login():
     db.to_json(temp)
     
     new = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
-    user_id = new['id']
+    user_token = new['token']
 
     assert login_user('Chenkai', '111') == False
     assert login_user('Chen', '123456') == False
     
     
-    logout_user(user_id)
+    logout_user(user_token)
     temp_2 = db.load_json()
     assert len(temp_2['TOKEN_DB']) == 0
 
@@ -57,9 +57,9 @@ def test_user_logout():
     db.to_json(temp)
     
     new = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
-    user_id = new['id']
+    user_token = new['token']
     temp_2 = db.load_json()
-    assert logout_user(user_id) == True
+    assert logout_user(user_token) == True
     temp_3 = db.load_json()
     assert len(temp_3['TOKEN_DB']) == 0
     
@@ -70,13 +70,13 @@ def test_change_password():
     db.to_json(temp)
 
     new = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
-    token = new['token']
+    new_id = new['id']
     temp_2 = db.load_json()
 
-    assert change_password(token, '221313', '000000') == False
-    assert change_password(token, '123456', '000000') == True
+    assert change_password(new_id, '221313', '000000') == False
+    assert change_password(new_id, '123456', '000000') == True
     temp_3 = db.load_json()
-    assert change_password(token, '000000', '999') == False
+    assert change_password(new_id, '000000', '999') == True
     
 # Admin part
 
@@ -114,7 +114,7 @@ def test_admin_login():
     assert login_admin('God', '111') == False
     assert login_admin('GGG', '123456') == False
 
-    token = login_admin('God', '123456')
+    
     temp_2 = db.load_json()
     assert len(temp_2['TOKEN_DB']) == 1 
 
@@ -124,10 +124,10 @@ def test_admin_logout():
     db.to_json(temp)
     
     new = register_admin('God', '123456', 'god@unsw')
-    admin_id = new['id']
+    admin_token = new['token']
     temp_2 = db.load_json()
     print(temp_2['TOKEN_DB'])
-    assert logout_admin(admin_id) == True
+    assert logout_admin(admin_token) == True
     temp_3 = db.load_json()
     assert len(temp_3['TOKEN_DB']) == 0
 
