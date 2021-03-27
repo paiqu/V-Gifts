@@ -29,3 +29,20 @@ Joined the github classroom. Then we have finished the proposal.
 
 Learn some knowledge about react framework and bootstrap. Next week will start coding part.
 
+#######################################################################################
+
+Week 4:
+
+This week I used the bootstrap framework and html to complete the coding of the login and register pages. 
+
+Our team uses google doc to show the detailed information of the front-end and back-end interfaces.
+
+#######################################################################################
+
+Week 5:
+
+Due to the homework of other classes this week, I didn't do more, just completed the demo. 
+
+After the demo, we found that the implementation of the react framework is more advantageous than bootstrap,
+
+then we decided to convert to react for subsequent coding.
