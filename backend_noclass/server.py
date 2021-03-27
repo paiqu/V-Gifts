@@ -166,7 +166,7 @@ def usr_register():
 @app.route("/user/login", methods = ["POST"])
 def usr_login():
     data = request.get_json()
-    name = data['name']
+    name = data['account_name']
     password = data['password']
     try:
         result = login.login_user(name, password)
@@ -174,7 +174,7 @@ def usr_login():
         raise error
     return dumps({
         'user_id': result['id'],
-        'token': result
+        'token': result['token']
     })
 
 @app.route("/user/logout", methods = ["POST"])
