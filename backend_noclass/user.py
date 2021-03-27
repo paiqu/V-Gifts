@@ -101,18 +101,15 @@ def forget_password(name, email):
     return new_password
 
 # Users change password
-def change_password(token, old_password, new_password):
+def change_password(idd, old_password, new_password):
     '''
     Check the name and password match
     Reset the password
     '''
     
-    if check_token_token(token) is not True:
-        print('Invalid Token!')
-        return False
     temp = db.load_json()
     for user_id, user_info in temp['USER_DB'].items():
-        if user_info["password"] == lo.encrypt_password(old_password):
+        if user_info["password"] == lo.encrypt_password(old_password) and user_id == idd:
             user_info["password"] = lo.encrypt_password(new_password)
             db.to_json(temp)
             lo.logout_user(user_id)

@@ -30,3 +30,12 @@ We used a google doc to distribute our work
   * Link: https://docs.google.com/document/d/1521L0bGdORup6tYT4n_iusHdem7Pz0QwBJ5AvpVL9WE/edit?usp=sharing
   
 Next week I will transfer our website to a React app and connect our frontend to the backend.
+
+## Week 5
+This week I transferred our frontend from Bootstrap to React app.
+
+React router is used to navigate among pages.
+
+I also modified the design of the frontend. The main color was switched to yellow and blue.
+
+Admin page done. In admin's portal, admin can manage the messages, orders, users and products of the website.
