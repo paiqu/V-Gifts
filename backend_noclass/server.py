@@ -31,8 +31,8 @@ def defaultHandler(err):
 app = Flask(__name__)
 CORS(app)
 app.config.update(
-    DEBUG = True, ## remeber to change later
-    TESTING = True,
+    # DEBUG = True, ## remeber to change later
+    # TESTING = True,
     TRAP_HTTP_EXCEPTIONS = True
 )
 app.register_error_handler(Exception, defaultHandler)
@@ -49,8 +49,8 @@ def adm_register():
     email = data['email']
     try:
         result = login.register_admin(name, password, email)
-    except InputError:
-        raise InputError()
+    except InputError as error:
+        raise error
     return dumps({
         'admin_id': result['id']
     })
@@ -154,7 +154,10 @@ def usr_register():
     address = data['address']
     city = data['city']
     country = data['country']
-    result = login.register_user(aname, fname, lname, password, email, address, city, country)
+    try: 
+        result = login.register_user(aname, fname, lname, password, email, address, city, country)
+    except InputError as error:
+        raise error
     return dumps({
         'user_id': result['id'],
         'token': result['token']
@@ -167,19 +170,24 @@ def usr_login():
     password = data['password']
     try:
         result = login.login_user(name, password)
-    except InputError:
-        raise InputError()
+    except InputError as error:
+        raise error
     return dumps({
+        'user_id': result['id'],
         'token': result
     })
 
 @app.route("/user/logout", methods = ["POST"])
 def usr_logout():
     data = request.get_json()
-    id = data['user_id']
     token = data['token']
-    result = login.logout_user(id)
+    try:
+        user_id = login.token_to_idd(token)
+    except AccessError as error:
+        raise error
+    result = login.logout_user(token)
     return dumps({
+        'user_id': user_id,
         'status': result
     })
 
