@@ -131,5 +131,17 @@ def test_admin_logout():
     temp_3 = db.load_json()
     assert len(temp_3['TOKEN_DB']) == 0
 
+def test_user_register_0():
+    # Check the format of name
+    db.clear_db()
+    temp = db.init_db()
+    db.to_json(temp)
+    #assert register_user("'", '', '', '123456','123@unsw.com','', '', '') == False
+    #assert register_user("    ",'','', '123456','123@unsw.com','','','') == False
 
+    data = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
+    logout_user(data['token'])
+
+if __name__ == "__main__":
+    test_user_register_0()
     
