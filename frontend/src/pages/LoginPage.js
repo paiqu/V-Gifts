@@ -9,7 +9,7 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 function Copyright() {
     return (
@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        // backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: `url(/img/home/home-1.jpg)`,
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -61,6 +62,8 @@ function LoginPage() {
 		}
 
     const classes = useStyles();
+    const theme = useTheme();
+
 
     return (
         <Grid container component="main" className={classes.root}>
@@ -81,7 +84,7 @@ function LoginPage() {
                             required
                             fullWidth
                             id="email"
-                            label="User Name"
+                            label="Username"
                             name="email"
                             autoComplete="email"
                             autoFocus
@@ -108,12 +111,12 @@ function LoginPage() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="#" variant="body2">
+                                <Link href="#" variant="body2" color={theme.palette.secondary.contrastText}>
                                     Forgot password?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="./register" variant="body2">
+                                <Link href="./register" variant="body2" color={theme.palette.primary.contrastText}>
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
