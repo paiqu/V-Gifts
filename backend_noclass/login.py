@@ -211,3 +211,9 @@ def verify_password(password):
             return True
     return False
 
+def token_to_idd(token):
+    temp = db.load_json()
+    for key, attr in temp['TOKEN_DB'].items():
+        if key == token:
+            return attr
+    return False
