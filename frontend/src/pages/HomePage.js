@@ -30,14 +30,18 @@ function HomePage(props) {
       <NavBarHome className={classes.nav}/>
       <Box
         className={classes.intro}
-        style={{backgroundColor: theme.palette.secondary.main}}
+        style={{
+          // backgroundColor: theme.palette.secondary.main,
+          backgroundImage: `url(/img/home/home-2.jpg)`,
+          backgroundSize: 'cover',
+        }}
       >
         <Typography
           component="h1" 
           variant="h2" 
           align="center" 
           style={{
-            color: theme.palette.secondary.contrastText
+            color: theme.palette.primary.contrastText
           }} 
           gutterBottom>
           Welcome to <b>V-Gifts</b>
@@ -46,7 +50,7 @@ function HomePage(props) {
           variant="h3" 
           align="center" 
           style={{
-            color: theme.palette.secondary.contrastText
+            color: theme.palette.primary.contrastText
           }} 
           paragraph>
           Join us today and explore our range of gifts! 
@@ -67,7 +71,7 @@ function HomePage(props) {
             Join
           </Button>
           <Button
-            color='primary'
+            color='secondary'
             variant='outlined'
             component={Link}
             to={'./products'}
@@ -77,12 +81,12 @@ function HomePage(props) {
         </Box>
         <Typography
           style={{
-            color: theme.palette.secondary.contrastText,
+            color: theme.palette.primary.contrastText,
             marginTop: "0.5rem",
           }} 
         >
           Already a member? Log in <b>
-            <Link to="./login" style={{color: theme.palette.secondary.contrastText}}>
+            <Link to="./login" style={{color: theme.palette.primary.contrastText}}>
               Here
             </Link>
           </b>
