@@ -11,10 +11,9 @@ function AdminPage(props) {
     const classes = useStyles();
 
     return (
-        <div>
-            {/* <NavBar className={classes.navBar} /> */}
-            <AdminDrawer className={classes.drawer} />
-        </div>
+      <div>
+        <AdminDrawer />
+      </div>
     );
 }
 

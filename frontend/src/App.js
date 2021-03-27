@@ -65,7 +65,7 @@ function App() {
                 }}  
               />
               <Route exact path="/products" component={ProductsPage} />
-              <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
+              <Route exact path="/profile/:id" component={ProfilePage} />
               <Route exact path="/admin" component={AdminPage} />
             </Switch>
           </Router>
