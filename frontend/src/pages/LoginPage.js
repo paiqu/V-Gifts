@@ -15,7 +15,7 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="http://localhost:8000">
+            <Link color="inherit" href="/">
                 V-Gift
             </Link>{' '}
             {new Date().getFullYear()}
@@ -113,7 +113,7 @@ function LoginPage() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="http://localhost:8000/register" variant="body2">
+                                <Link href="./register" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
