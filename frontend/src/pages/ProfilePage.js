@@ -7,20 +7,8 @@ import AuthContext from '../AuthContext';
 import UserDrawer from '../components/UserDrawer';
 
 export default function ProfilePage(props) {
-  const id = React.useContext(AuthContext);
-
-  const handleLogout = (event) => {
-    axios.post('/user/logout', { id })
-    .then((response) => {
-      console.log(response);
-     
-      localStorage.removeItem('id');
-
-      // after log out, redirect to home page
-      props.history.push('/');
-    }) 
-    .catch((err) => {});
-  };
+	const { profile } = props.match.params;
+	const token = React.useContext(AuthContext);
 
 	React.useEffect(() => {
 		// axios.get('/user/profile', { params: {id: }})
@@ -28,7 +16,7 @@ export default function ProfilePage(props) {
     
   return (
     <div>
-      <UserDrawer />
+      <UserDrawer profile={profile} history={props.history}/>
     </div>
   );
 

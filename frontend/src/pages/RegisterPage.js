@@ -5,9 +5,9 @@ import axios from 'axios';
 
 function RegisterPage({ setAuth, ...props }) {
     const [infos, setInfos] = React.useState({
+      account_name: "",
       first_name: "",
       last_name: "",
-      name: "", // delete later
       email: "",
       password: "",
       address: "",
@@ -42,7 +42,7 @@ function RegisterPage({ setAuth, ...props }) {
               const data = response.data;
 
               // mark the user as signed-in in local storage, it will be removed when it is logged out
-              setAuth(data.id);
+              setAuth(data.token, data.user_id);
 
               // direct the user to the market page
               props.history.push('/products');
@@ -92,6 +92,17 @@ function RegisterPage({ setAuth, ...props }) {
                             className="form-control" 
                             name="email"
                             onChange={handleChange('email')}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Account Name</label>
+                        <input 
+                            type="text" 
+                            placeholder="Enter your account name here.." 
+                            className="form-control" 
+                            name="account_name"
+                            onChange={handleChange('account_name')}
                             required
                         />
                     </div>

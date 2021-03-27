@@ -45,7 +45,7 @@ function UserHome(props) {
     const theme = useTheme();
 
     return (
-      <React.Fragment classeName={classes.root}>
+      <div classeName={classes.root}>
         <Grid container spacing={3}>
           <Grid item md={3} xs={12}>
             <Card className={classes.gridItem}  variant="outlined">
@@ -120,7 +120,7 @@ function UserHome(props) {
             </Card>
           </Grid> 
         </Grid>
-      </React.Fragment>
+      </div>
     );
 }
 

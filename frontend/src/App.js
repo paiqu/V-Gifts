@@ -36,18 +36,18 @@ function App() {
   // eslint-disable-next-line
 	const [authDetails, setAuthDetails] = React.useState(
     // localStorage.getItem('token');
-		localStorage.getItem('id')
+		localStorage.getItem('token')
 	);
 
 
 	// define a function to store details into local storage
   // eslint-disable-next-line
-	const setAuth = (id) => {
-		// localStorage.setItem('token', token);
+	const setAuth = (token, id) => {
+		localStorage.setItem('token', token);
 		localStorage.setItem('id', id);
 
 		// setAuthDetails(token);
-    setAuthDetails(id);
+    setAuthDetails(token);
 	}
 	
   return (
@@ -56,7 +56,13 @@ function App() {
           <Router>
             <Switch>
               <Route exact path="/" component={HomePage} />
-              <Route exact path="/login" component={LoginPage} />
+              <Route 
+                exact 
+                path="/login"
+                render={(props) => {
+                  return <LoginPage {...props} setAuth={setAuth} />;
+                }} 
+              />
               <Route 
                 exact 
                 path="/register" 
@@ -65,7 +71,7 @@ function App() {
                 }}  
               />
               <Route exact path="/products" component={ProductsPage} />
-              <Route exact path="/profile/:id" component={ProfilePage} />
+              <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <Route exact path="/admin" component={AdminPage} />
             </Switch>
           </Router>

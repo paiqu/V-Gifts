@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import axios from 'axios';
+
 
 function Copyright() {
     return (
@@ -56,10 +58,36 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function LoginPage() {
-		const handleSubmit = (event) => {
+function LoginPage({ setAuth, ...props }) {
+    const [infos, setInfos] = React.useState({
+      account_name: "",
+      password: "",
+    });
 
-		}
+    const handleChange = name => event => {
+      setInfos({
+          ...infos,
+          [name]: event.target.value
+      });
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        axios.post('user/login', { ...infos })
+        .then((response) => {
+            console.log(response);
+            const data = response.data;
+
+            // mark the user as signed-in in local storage, it will be removed when it is logged out
+            setAuth(data.token, data.user_id);
+
+            // direct the user to the market page
+            props.history.push('/products');
+        })
+        .catch((err) => {});
+
+    }
 
     const classes = useStyles();
     const theme = useTheme();
@@ -77,17 +105,18 @@ function LoginPage() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <TextField
                             variant="outlined"
                             margin="normal"
                             required
                             fullWidth
                             id="email"
-                            label="Username"
+                            label="Account Name"
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            onChange={handleChange('account_name')}
                         />
                         <TextField
                             variant="outlined"
@@ -99,6 +128,7 @@ function LoginPage() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={handleChange('password')}
                         />
                         <Button
                             type="submit"

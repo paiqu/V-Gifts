@@ -28,6 +28,9 @@ import HomeIcon from '@material-ui/icons/Home';
 import UserHome from './UserHome';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
+import AuthContext from '../AuthContext';
+
 
 const drawerWidth = 240;
 
@@ -105,9 +108,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function UserDrawer() {
+export default function UserDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
+
+  const token = React.useContext(AuthContext);
+
   const [open, setOpen] = React.useState(false);
   const [display, setDisplay] = React.useState({
     home: true,
@@ -159,6 +165,20 @@ export default function UserDrawer() {
     });
   }
 
+  const handleLogout = (event) => {
+    axios.post('/user/logout', { token })
+      .then((response) => {
+        console.log(response);
+      
+        localStorage.removeItem('id');
+        localStorage.removeItem('token');
+
+        // after log out, redirect to home page
+        props.history.push('/');
+      }) 
+      .catch((err) => {console.log(err)});
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -198,7 +218,7 @@ export default function UserDrawer() {
 					>
             V-Gifts | Admin Page
           </Typography>
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="secondary" onClick={handleLogout}>
             Log out
           </Button>
         </Toolbar>
@@ -243,7 +263,7 @@ export default function UserDrawer() {
             <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
             <ListItemText primary={"Orders"} />
           </ListItem>
-          <ListItem button key={"Logout"} >
+          <ListItem button key={"Logout"} onClick={handleLogout} >
             <ListItemIcon><ExitToAppIcon /></ListItemIcon>
             <ListItemText primary={"Log out"} />
           </ListItem>
