@@ -1,5 +1,5 @@
 import user
-import admin
+import admin as ad
 import database as db
 from login import *
 from user import * 
@@ -139,8 +139,13 @@ def test_user_register_0():
     #assert register_user("'", '', '', '123456','123@unsw.com','', '', '') == False
     #assert register_user("    ",'','', '123456','123@unsw.com','','','') == False
 
-    data = register_user('Chenkai','Chenkai','lyu', '123456','123@unsw.com', '','','')
+    data = register_user('Chenkai0','Chenkai0','lyu0', '123456','123@unsw.com', '','','')
+    data2 = register_user('Chenkai1','Chenkai1','lyu1', '123456','123@unsw.com', '','','')
+    data3 = register_user('Chenkai2','Chenkai2','lyu2', '123456','123@unsw.com', '','','')
     logout_user(data['token'])
+    logout_user(data2['token'])
+    logout_user(data3['token'])
+    print(ad.get_user_list())
 
 if __name__ == "__main__":
     test_user_register_0()

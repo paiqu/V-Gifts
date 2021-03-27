@@ -191,7 +191,12 @@ def prod_rating_calculator(prod_id):
         summ += rating[1]
     return summ / len(rating_lst)
 
-
+def token_to_id(token):
+    temp = load_json()
+    if token not in temp['TOKEN_DB']:
+        raise KeyError("Invalid token")
+    else:
+        return temp['TOKEN_DB'][token]
 
 # USER_DB = {
 #     '''

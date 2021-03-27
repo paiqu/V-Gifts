@@ -279,6 +279,12 @@ def refund_order():
     return dumps({
         'status': result
     })
-    
+
+@app.route("/admin/all_user", methods = ["GET"])
+def admin_get_all_user():
+    # date = request.get_json()
+    result = adm.get_user_list()
+    return dumps(result)
+
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))

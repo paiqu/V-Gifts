@@ -131,6 +131,22 @@ def change_order_state(order_id, new_state):
     }
 
 
+def get_user_list():
+    '''
+        This functions returns all user's basic info for admin
+    '''
+    temp = db.load_json()
+    rt = []
+    for key in temp['USER_DB'].keys():
+        rt.append({
+            'user_id' :temp['USER_DB'][key]['id'],
+            'account_name' :temp['USER_DB'][key]['name'],
+            'first_name' :temp['USER_DB'][key]['fname'],
+            'lst_name' :temp['USER_DB'][key]['lname']
+        })
+    return rt
+
+
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.
