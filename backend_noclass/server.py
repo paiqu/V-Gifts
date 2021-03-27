@@ -52,9 +52,7 @@ def adm_register():
     except InputError:
         raise InputError()
     return dumps({
-        'id': result['id'],
-        'name': result['name'],
-        'email': result['email']
+        'admin_id': result['id']
     })
 
 @app.route("/admin/login", methods = ["POST"])
@@ -148,18 +146,18 @@ def order_state_change():
 @app.route("/user/register", methods = ["POST"])
 def usr_register():
     data = request.get_json()
-    name = data['name']
+    aname = data['account_name']
+    fname = data['first_name']
+    lname = data['last_name']
     password = data['password']
     email = data['email']
     address = data['address']
-    try:
-        result = login.register_user(name, password, email)
-    except InputError:
-        raise InputError()
+    city = data['city']
+    country = data['country']
+    result = login.register_user(aname, fname, lname, password, email, address, city, country)
     return dumps({
-        'id': result['id'],
-        'name': result['name'],
-        'email': result['email']
+        'user_id': result['id'],
+        'token': result['token']
     })
 
 @app.route("/user/login", methods = ["POST"])
@@ -178,9 +176,9 @@ def usr_login():
 @app.route("/user/logout", methods = ["POST"])
 def usr_logout():
     data = request.get_json()
-    name = data['name']
+    id = data['user_id']
     token = data['token']
-    result = login.logout_user(name, token)
+    result = login.logout_user(id)
     return dumps({
         'status': result
     })
