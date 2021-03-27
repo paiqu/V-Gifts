@@ -31,8 +31,8 @@ def defaultHandler(err):
 app = Flask(__name__)
 CORS(app)
 app.config.update(
-    DEBUG = True, ## remeber to change later
-    TESTING = True,
+    # DEBUG = True, ## remeber to change later
+    # TESTING = True,
     TRAP_HTTP_EXCEPTIONS = True
 )
 app.register_error_handler(Exception, defaultHandler)
@@ -49,12 +49,10 @@ def adm_register():
     email = data['email']
     try:
         result = login.register_admin(name, password, email)
-    except InputError:
-        raise InputError()
+    except InputError as error:
+        raise error
     return dumps({
-        'id': result['id'],
-        'name': result['name'],
-        'email': result['email']
+        'admin_id': result['id']
     })
 
 @app.route("/admin/login", methods = ["POST"])
@@ -148,40 +146,48 @@ def order_state_change():
 @app.route("/user/register", methods = ["POST"])
 def usr_register():
     data = request.get_json()
-    name = data['name']
+    aname = data['account_name']
+    fname = data['first_name']
+    lname = data['last_name']
     password = data['password']
     email = data['email']
     address = data['address']
-    try:
-        result = login.register_user(name, password, email)
-    except InputError:
-        raise InputError()
+    city = data['city']
+    country = data['country']
+    try: 
+        result = login.register_user(aname, fname, lname, password, email, address, city, country)
+    except InputError as error:
+        raise error
     return dumps({
-        'id': result['id'],
-        'name': result['name'],
-        'email': result['email']
+        'user_id': result['id'],
+        'token': result['token']
     })
 
 @app.route("/user/login", methods = ["POST"])
 def usr_login():
     data = request.get_json()
-    name = data['name']
+    name = data['account_name']
     password = data['password']
     try:
         result = login.login_user(name, password)
-    except InputError:
-        raise InputError()
+    except InputError as error:
+        raise error
     return dumps({
-        'token': result
+        'user_id': result['id'],
+        'token': result['token']
     })
 
 @app.route("/user/logout", methods = ["POST"])
 def usr_logout():
     data = request.get_json()
-    name = data['name']
     token = data['token']
-    result = login.logout_user(name, token)
+    try:
+        user_id = login.token_to_idd(token)
+    except AccessError as error:
+        raise error
+    result = login.logout_user(token)
     return dumps({
+        'user_id': user_id,
         'status': result
     })
 
