@@ -331,16 +331,16 @@ def show_order_user(u_id):
 
 
 # Check token is available
-def check_token(iid):
-    temp = db.load_json()
-    for token_id, user_token in temp['TOKEN_DB'].items():
-        if iid == token_id:
-            return True
-    return False
+# def check_token(iid):
+#     temp = db.load_json()
+#     for token_id, user_token in temp['TOKEN_DB'].items():
+#         if iid == token_id:
+#             return True
+#     return False
 
 def check_token_token(token):
     temp = db.load_json()
-    for token_id, user_token in temp['TOKEN_DB'].items():
+    for user_token, token_id in temp['TOKEN_DB'].items():
         if token == user_token:
             return True
     return False

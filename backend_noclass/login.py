@@ -39,13 +39,12 @@ def register_user(aname, fname, lname, password, email, address, city, country):
     # New user added to db
     new = us.new_user(aname, fname, lname, encryption, email, address, city, country)
     db.add_user(new)
-    info = login_user(aname, password)
-    
+    return login_user(aname, password)
 
-    return {
-        'id': info['id'],
-        'token':info['token']
-    }
+    # return {
+    #     'id': info['id'],
+    #     'token':info['token']
+    # }
 
 def login_user(name, password):
     '''
@@ -66,7 +65,7 @@ def login_user(name, password):
             if user_info["password"] == encrypt_password(password):
                 login_token = gt.token(name)
                 uid = user_id
-                temp['TOKEN_DB'][uid] = login_token
+                temp['TOKEN_DB'][login_token] = uid
                 db.to_json(temp)
                 return {
                     'id': uid,
@@ -76,15 +75,17 @@ def login_user(name, password):
     print("Login fail! Invalid password or name! Please try again.")
     return False
 
-def logout_user(iid):
+# def logout_user(iid):
+def logout_user(token):
     '''
         this function logout user
         takes user back to login page
     '''
     temp = db.load_json()
 
-    if us.check_token(iid): 
-        temp['TOKEN_DB'].pop(iid)
+    # if us.check_token(iid): 
+    if us.check_token_token(token): 
+        temp['TOKEN_DB'].pop(token)
         db.to_json(temp)
         print("You have been logged out.")
         return True
