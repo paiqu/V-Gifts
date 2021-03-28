@@ -92,17 +92,17 @@ def test_admin_register():
 
     register_admin('God', '123456', 'god@unsw')
     temp_2 = db.load_json()
-    assert temp_2['ADMIN_ID'] == 1
-    assert len(temp_2['ADMIN_DB']) == 1
+    assert temp_2['ADMIN_ID'] == 2
+    assert len(temp_2['ADMIN_DB']) == 2
    
-    assert temp_2['ADMIN_DB']['1']['name'] == 'God'
-    assert temp_2['ADMIN_DB']['1']['id'] == 1
-    assert temp_2['ADMIN_DB']['1']['email'] == 'god@unsw'
+    assert temp_2['ADMIN_DB']['2']['name'] == 'God'
+    assert temp_2['ADMIN_DB']['2']['id'] == 2
+    assert temp_2['ADMIN_DB']['2']['email'] == 'god@unsw'
 
     register_admin('Queen', '111111', 'queen@unsw')
     temp_3 = db.load_json()
-    assert temp_3['ADMIN_ID'] == 2
-    assert len(temp_3['ADMIN_DB']) == 2
+    assert temp_3['ADMIN_ID'] == 3
+    assert len(temp_3['ADMIN_DB']) == 3
 
 def test_admin_login():
     db.clear_db()
