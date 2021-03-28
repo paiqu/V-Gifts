@@ -216,7 +216,7 @@ export default function UserDrawer(props) {
 						variant="h4"
 						noWrap
 					>
-            V-Gifts | Admin Page
+            V-Gifts | My Profile
           </Typography>
           <Button variant="contained" color="secondary" onClick={handleLogout}>
             Log out
@@ -296,6 +296,9 @@ export default function UserDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
+          <Typography>
+            Hello {}
+          </Typography>
         </Box>
         {display.home && renderUserHome}
         {display.users && renderUsers}

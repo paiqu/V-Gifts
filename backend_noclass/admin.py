@@ -141,7 +141,7 @@ def get_user_list():
             'user_id' :temp['USER_DB'][key]['id'],
             'account_name' :temp['USER_DB'][key]['name'],
             'first_name' :temp['USER_DB'][key]['fname'],
-            'lst_name' :temp['USER_DB'][key]['lname']
+            'last_name' :temp['USER_DB'][key]['lname']
         })
     return rt
 
