@@ -208,7 +208,7 @@ export default function NavBar() {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/'}
+						to={'/products'}
 						className={classes.title} 
 						variant="h4"
 						noWrap

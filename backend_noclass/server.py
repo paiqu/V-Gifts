@@ -193,8 +193,11 @@ def usr_logout():
 
 @app.route("/user/profile", methods = ["GET"])
 def usr_profile():
-    data = request.get_json()
-    token = data['token']
+    # data = request.get_json()
+    # token = data['token']
+
+    token = request.args.get('token')
+
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:

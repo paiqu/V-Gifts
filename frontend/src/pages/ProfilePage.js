@@ -7,12 +7,35 @@ import AuthContext from '../AuthContext';
 import UserDrawer from '../components/UserDrawer';
 
 export default function ProfilePage(props) {
-	const { profile } = props.match.params;
+	// const { profile } = props.match.params;
 	const token = React.useContext(AuthContext);
+  const [profile, setProfile] = React.useState({
+    "first_name": "",
+    "last_name": "",
+    "username": "",
+    "email": "",
+    "address": "",
+  });
 
-	React.useEffect(() => {
-		// axios.get('/user/profile', { params: {id: }})
-	});
+	React.useEffect((() => {
+		axios.get('/user/profile', { 
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+
+      setProfile({
+        "first_name": data["first_name"],
+        "last_name": data["last_name"],
+        "username": data["username"],
+        "email": data["email"],
+        "address": data["address"],
+      });
+    })
+    .catch((err) => {});
+	}), [token]);
     
   return (
     <div>

@@ -49,15 +49,20 @@ export default function UsersDataGrid(props) {
     { field: 'account_name', headerName: 'Account name', width: 180 },
     { field: 'first_name', headerName: 'First name', width: 180 },
     { field: 'last_name', headerName: 'Last name', width: 180 },
-    // {
-    //   field: 'fullName',
-    //   headerName: 'Full name',
-    //   description: 'This column has a value getter and is not sortable.',
-    //   sortable: false,
-    //   width: 160,
-    //   valueGetter: (params) =>
-    //     `${params.getValue('first_name') || ''} ${params.getValue('last_name') || ''}`,
-    // },
+    {
+      field: 'fullName',
+      headerName: 'Full name',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+        `${params.getValue('first_name') || ''} ${params.getValue('last_name') || ''}`,
+    },
+    { field: 'email', headerName: 'Email', width: 180 },
+    { field: 'address', headerName: 'Address', width: 250 },
+    { field: 'city', headerName: 'City', width: 180 },
+    { field: 'country', headerName: 'Country', width: 180 },
+
   ];
   
   const rows = props.users.map(x => {
@@ -65,7 +70,11 @@ export default function UsersDataGrid(props) {
       id: x['user_id'],
       account_name: x['account_name'],
       first_name: x['first_name'],
-      last_name: x['last_name']
+      last_name: x['last_name'],
+      email: x['email'],
+      address: x['address'],
+      city: x['city'],
+      country: x['country'],
     };
   });
 
