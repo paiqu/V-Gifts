@@ -137,6 +137,19 @@ function RegisterPage({ setAuth, ...props }) {
                             required   
                         />
                     </div>
+                    <div className="form-group">
+                        <TextField 
+                            style={{margin: 10}}
+                            label="Address"
+                            // type="password" 
+                            placeholder="Enter your Address Here.." 
+                            name="address"
+                            onChange={handleChange('address')} 
+                            variant="outlined"
+                            fullWidth
+                            required   
+                        />
+                    </div>
                     <div className="row">
                         <div className="col-sm-6 form-group">
                             <TextField 
