@@ -325,6 +325,18 @@ def show_order_user(u_id):
     temp = db.load_json()
     return temp['USER_DB'][str(u_id)]['order']
 
+# Function to show user info
+def show_profile(u_id):
+    db.valid_id('user', u_id)
+    temp = db.load_json()
+    return {
+        "first_name": temp['USER_DB'][str(u_id)]['fname'],
+        "last_name": temp['USER_DB'][str(u_id)]['lanme'],
+        "username": temp['USER_DB'][str(u_id)]['name'],
+        "email": temp['USER_DB'][str(u_id)]['email'],
+        "address": temp['USER_DB'][str(u_id)]['address']
+    }
+
 
 
 # Check token is available
