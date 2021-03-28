@@ -24,8 +24,9 @@ const errorHandler = (error) => {
     let message = DEFAULT_ERROR_TEXT;
 
     if (error.response) {
-        console.log(error.response.data)
+        console.log(error.response.data);
         message = _.get(error, 'response.data.message') || DEFAULT_ERROR_TEXT;
+        return error.response;
     }
 
     toast.error(message);
