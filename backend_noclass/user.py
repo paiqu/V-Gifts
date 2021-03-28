@@ -331,7 +331,7 @@ def show_profile(u_id):
     temp = db.load_json()
     return {
         "first_name": temp['USER_DB'][str(u_id)]['fname'],
-        "last_name": temp['USER_DB'][str(u_id)]['lanme'],
+        "last_name": temp['USER_DB'][str(u_id)]['lname'],
         "username": temp['USER_DB'][str(u_id)]['name'],
         "email": temp['USER_DB'][str(u_id)]['email'],
         "address": temp['USER_DB'][str(u_id)]['address']

@@ -111,8 +111,9 @@ const useStyles = makeStyles((theme) => ({
 export default function UserDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
-
+  
   const token = React.useContext(AuthContext);
+  const profile = props.profile;
 
   const [open, setOpen] = React.useState(false);
   const [display, setDisplay] = React.useState({
@@ -297,7 +298,7 @@ export default function UserDrawer(props) {
             }}
           />
           <Typography>
-            Hello {}
+            Hello {`${profile['first_name']} ${profile['last_name']}`}
           </Typography>
         </Box>
         {display.home && renderUserHome}
