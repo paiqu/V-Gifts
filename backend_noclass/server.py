@@ -191,6 +191,17 @@ def usr_logout():
         'status': result
     })
 
+@app.route("/user/profile", methods = ["GET"])
+def usr_profile():
+    data = request.get_json()
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except AccessError as error:
+        raise error
+    result = usr.show_profile(user_id)
+    return dumps(result)
+
 # @app.route("user/profile/password/forget")
 
 @app.route("/user/profile/password/change", methods = ["POST"])
