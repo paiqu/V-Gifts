@@ -146,10 +146,14 @@ def get_user_list():
     rt = []
     for key in temp['USER_DB'].keys():
         rt.append({
-            'user_id' :temp['USER_DB'][key]['id'],
-            'account_name' :temp['USER_DB'][key]['name'],
-            'first_name' :temp['USER_DB'][key]['fname'],
-            'last_name' :temp['USER_DB'][key]['lname']
+            'user_id': temp['USER_DB'][key]['id'],
+            'account_name': temp['USER_DB'][key]['name'],
+            'first_name': temp['USER_DB'][key]['fname'],
+            'last_name': temp['USER_DB'][key]['lname'],
+            'email': temp['USER_DB'][key]['email'],
+            'address': temp['USER_DB'][key]['address'],
+            'city': temp['USER_DB'][key]['city'],
+            'country': temp['USER_DB'][key]['country']
         })
     return rt
 
