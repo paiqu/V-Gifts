@@ -6,6 +6,7 @@
     conflict changes.
 '''
 import json
+import admin as adm
 # main content
 # ID_DB = {
 #     '''
@@ -25,19 +26,25 @@ import json
 # global
 TYPE_OF_PRODUCTS_INIT = 3
 
-def init_db():
+def init_db_withoutadm():
     return {
-    'TYPE_OF_PRODUCTS': TYPE_OF_PRODUCTS_INIT,   # dimension of interests
-    'USER_ID': 0,
-    'ADMIN_ID': 0,
-    'PRODUCT_ID': 0,
-    'ORDER_ID': 0,
-    'USER_DB': {},
-    'ADMIN_DB': {},
-    'PRODUCT_DB': {},
-    'ORDER_DB': {},
-    'TOKEN_DB':{}
-}
+        'TYPE_OF_PRODUCTS': TYPE_OF_PRODUCTS_INIT,   # dimension of interests
+        'USER_ID': 0,
+        'ADMIN_ID': 1,
+        'PRODUCT_ID': 0,
+        'ORDER_ID': 0,
+        'USER_DB': {},
+        'ADMIN_DB': {},
+        'PRODUCT_DB': {},
+        'ORDER_DB': {},
+        'TOKEN_DB':{}
+    }
+
+def init_db():
+    temp = init_db_withoutadm()
+    admin = adm.new_preset_admin("admin", "admin", "VictimsCOMP3900@gmail.com")
+    temp['ADMIN_DB'][str(admin['id'])] = admin
+    return temp
 
 def pretty_print(dct, level = 0, strr = "    "):
     for key in dct.keys():

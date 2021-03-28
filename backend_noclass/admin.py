@@ -24,6 +24,14 @@ import database as db
 
 # init
 
+def new_preset_admin(name, password, email):
+    return {
+        "id": 1,
+        "name": name,
+        "password": password,
+        "email": email
+    }
+
 def new_admin(name, password, email):
     new_id = db.id_generator('admin')
     return {
