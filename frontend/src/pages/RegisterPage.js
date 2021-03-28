@@ -2,6 +2,7 @@ import React from 'react';
 // import NavBar from '../components/NavBar';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
+import TextField from '@material-ui/core/TextField';
 
 function RegisterPage({ setAuth, ...props }) {
     const [infos, setInfos] = React.useState({
@@ -38,9 +39,7 @@ function RegisterPage({ setAuth, ...props }) {
         // send the infos to backend
         axios.post('user/register', { ...infos })
           .then((response) => {
-              console.log(response);
               const data = response.data;
-
               // mark the user as signed-in in local storage, it will be removed when it is logged out
               setAuth(data.token, data.user_id);
 
@@ -58,102 +57,115 @@ function RegisterPage({ setAuth, ...props }) {
             </blockquote>
             <main className="container">
                 <form onSubmit={handleSubmit}>
-                    <div className="row" style={{marginTop: 80}}>
+                    <div className="row" style={{marginTop: 60}}>
                         <div className="col-sm-6 form-group">
-                            <label>First Name</label>
-                            <input 
-                                type="text"
+                            <TextField 
+                                style={{margin: 10}}
+                                label="First name"
                                 placeholder="Enter First Name Here.." 
-                                className="form-control"
                                 id="first_name"
                                 name="first_name"
                                 // onChange={handleChange('first_name')}
                                 onChange={handleChange('first_name')}
+                                variant="outlined"
+                                fullWidth
                                 required
                              />
                         </div>
                         <div className="col-sm-6 form-group">
-                            <label>Last Name</label>
-                            <input
-                                type="text" 
+                            <TextField
+                                style={{margin: 10}}
+                                label="Last name"
                                 placeholder="Enter Last Name Here.." 
-                                className="form-control" 
                                 name="last_name"
                                 onChange={handleChange('last_name')}
+                                variant="outlined"
+                                fullWidth
                                 required
                             />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label>Email Address</label>
-                        <input 
-                            type="text" 
+                        <TextField 
+                            style={{margin: 10}}
+                            label="E-mail"
                             placeholder="Enter Email Address Here.." 
                             className="form-control" 
                             name="email"
                             onChange={handleChange('email')}
+                            variant="outlined"
+                            fullWidth
                             required
                         />
                     </div>
                     <div className="form-group">
-                        <label>Account Name</label>
-                        <input 
-                            type="text" 
+                        <TextField 
+                            style={{margin: 10}}
+                            label="Account name"
                             placeholder="Enter your account name here.." 
-                            className="form-control" 
                             name="account_name"
                             onChange={handleChange('account_name')}
+                            variant="outlined"
+                            fullWidth
                             required
                         />
                     </div>
                     <div className="form-group">
-                        <label>Password</label>
-                        <input 
-                            type="password" 
+                        <TextField 
+                            style={{margin: 10}}
+                            label="Password"
+                            type="password"
                             placeholder="Enter Password Here.." 
-                            className="form-control" 
                             name="password"
                             onChange={handleChange('password')}
+                            variant="outlined"
+                            fullWidth
                             required
                         />
                     </div>
                     {/* add a validation function later here */}
                     <div className="form-group">
-                        <label>Confirmed Password</label>
-                        <input 
+                        <TextField 
+                            style={{margin: 10}}
+                            label="Confirmed Password"
                             type="password" 
-                            placeholder="Enter Password Here.." 
-                            className="form-control" 
+                            placeholder="Enter Confirmed Password Here.." 
                             name="password"
                             onChange={handleChange('password')} 
+                            variant="outlined"
+                            fullWidth
                             required   
                         />
                     </div>
                     <div className="row">
                         <div className="col-sm-6 form-group">
-                            <label>City</label>
-                            <input 
-                                type="text" 
+                            <TextField 
+                                style={{margin: 10}}
+                                label="City"
                                 placeholder="Enter City Name Here.." 
-                                className="form-control" 
                                 name="city"
                                 onChange={handleChange('city')}
+                                variant="outlined"
+                                fullWidth
                                 required    
                             />
                         </div>
                         <div className="col-sm-6 form-group">
-                            <label>Country</label>
-                            <input 
-                                type="text" 
+                            <TextField
+                                style={{margin: 10}}
+                                label="Country"
                                 placeholder="Select Country Name Here.." 
                                 className="form-control" 
                                 name="country"
                                 onChange={handleChange('country')}
-                                required 
+                                variant="outlined"
+                                fullWidth
+                                required  
                             />
                         </div>
                     </div>
-                    <button type="submit" className="btn btn-lg btn-info">Create profile</button>
+                    <button type="submit" style={{margin: 10}} className="btn btn-outline-primary">Create profile</button>
+                
                 </form>
             </main>
         </div>
