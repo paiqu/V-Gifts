@@ -334,7 +334,9 @@ def show_profile(u_id):
         "last_name": temp['USER_DB'][str(u_id)]['lanme'],
         "username": temp['USER_DB'][str(u_id)]['name'],
         "email": temp['USER_DB'][str(u_id)]['email'],
-        "address": temp['USER_DB'][str(u_id)]['address']
+        "address": temp['USER_DB'][str(u_id)]['address'],
+        "city": temp['USER_DB'][str(u_id)]['city'],
+        "country": temp['USER_DB'][str(u_id)]['country']
     }
 
 
