@@ -68,7 +68,7 @@ function RegisterPage({ setAuth, ...props }) {
                                 id="first_name"
                                 name="first_name"
                                 // onChange={handleChange('first_name')}
-                                onChange={handleChange('name')}
+                                onChange={handleChange('first_name')}
                                 required
                              />
                         </div>

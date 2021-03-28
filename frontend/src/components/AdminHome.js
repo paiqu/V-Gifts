@@ -96,7 +96,7 @@ function AdminHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  50 users registered
+                  {props.usersNum} users registered
                 </Typography>
               </CardContent>
             </Card>

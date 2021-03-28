@@ -26,6 +26,9 @@ import UsersDataGrid from './UsersDataGrid';
 import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
+import axios from 'axios';
+import AuthContext from '../AuthContext';
+
 
 const drawerWidth = 240;
 
@@ -103,15 +106,29 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminDrawer() {
   const classes = useStyles();
   const theme = useTheme();
+
+  const admin_token = "";
+
   const [open, setOpen] = React.useState(false);
   const [display, setDisplay] = React.useState({
     home: true,
     orders: false,
     users: false,
   });
+  const [users, setUsers] = React.useState([]);
+
+  React.useEffect((() => {
+    axios.get('admin/all_user')
+      .then((response) => {
+        const data = response.data;
+
+        setUsers(data);
+      })
+      .catch((err) => {});
+  }), []);
 
   const renderUsers = (
-    <UsersDataGrid />
+    <UsersDataGrid users={users} />
   );
 
   const renderOrders = (
@@ -119,7 +136,7 @@ export default function AdminDrawer() {
   );
 
   const renderAdminHome = (
-    <AdminHome />
+    <AdminHome usersNum={users.length}/>
   );
 
   const handleDrawerOpen = () => {
@@ -144,6 +161,7 @@ export default function AdminDrawer() {
       orders: false,
       users: true,
     });
+
   }
 
   const displayOrders = () => {
