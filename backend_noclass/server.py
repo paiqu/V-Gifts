@@ -9,11 +9,11 @@ import admin as adm
 import webpage as wbp
 import SAMPLE_DB as samp
 import login as login
+import error as err
 
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
-from error import InputError, AccessError
 from json import dumps
 import sys
 
@@ -47,10 +47,7 @@ def adm_register():
     name = data['name']
     password = data['password']
     email = data['email']
-    try:
-        result = login.register_admin(name, password, email)
-    except InputError as error:
-        raise error
+    result = login.register_admin(name, password, email)
     return dumps({
         'admin_id': result['id']
     })
@@ -60,10 +57,7 @@ def adm_login():
     data = request.get_json()
     name = data['name']
     password = data['password']
-    try:
-        result = login.login_admin(name, password)
-    except InputError:
-        raise InputError()
+    result = login.login_admin(name, password)
     return dumps({
         'token': result
     })
@@ -156,8 +150,12 @@ def usr_register():
     country = data['country']
     try: 
         result = login.register_user(aname, fname, lname, password, email, address, city, country)
-    except InputError as error:
-        raise error
+    except err.InvalidUsername as iuerr:
+        raise iuerr
+    except err.InvalidEmail as ieerr:
+        raise ieerr
+    except err.UsernameAlreadyExit as uaerr:
+        raise uaerr
     return dumps({
         'user_id': result['id'],
         'token': result['token']
@@ -170,8 +168,10 @@ def usr_login():
     password = data['password']
     try:
         result = login.login_user(name, password)
-    except InputError as error:
-        raise error
+    except err.IncorrectUsername as uerr:
+        raise uerr
+    except err.InvalidPassword as perr:
+        raise perr
     return dumps({
         'user_id': result['id'],
         'token': result['token']
@@ -183,7 +183,7 @@ def usr_logout():
     token = data['token']
     try:
         user_id = login.token_to_idd(token)
-    except AccessError as error:
+    except err.InvalidToken as error:
         raise error
     result = login.logout_user(token)
     return dumps({
@@ -197,7 +197,7 @@ def usr_profile():
     token = data['token']
     try:
         user_id = login.token_to_idd(token)
-    except AccessError as error:
+    except err.InvalidToken as error:
         raise error
     result = usr.show_profile(user_id)
     return dumps(result)

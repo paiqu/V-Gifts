@@ -1,9 +1,25 @@
 from werkzeug.exceptions import HTTPException
 
-class AccessError(HTTPException):
+class InvalidToken(HTTPException):
     code = 400
-    message = 'No message specified'
+    message = 'Invalid token!'
 
-class InputError(HTTPException):
-    code = 400
-    message = 'No message specified'
+class InvalidUsername(HTTPException):
+    code = 401
+    message = 'Incorrect syntax! You can only use number, letter and underline.'
+
+class InvalidEmail(HTTPException):
+    code = 402
+    message = 'Incorrect email format! Please try again.'
+
+class UsernameAlreadyExit(HTTPException):
+    code = 403
+    message = 'Name is already exist! Please try another one.'
+
+class IncorrectUsername(HTTPException):
+    code = 404
+    message = 'Incorrect user name! Please try again.'
+
+class InvalidPassword(HTTPException):
+    code = 405
+    message = 'Login fail! Invalid password or name! Please try again.'

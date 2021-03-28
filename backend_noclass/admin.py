@@ -64,9 +64,9 @@ def edit_admin(admin_id, name, password, email):
     temp = db.load_json()
     if str(admin_id) not in temp['ADMIN_DB']:
         raise KeyError()
-    temp['ADMIN_DB'][str(prod_id)]["name"] = name
-    temp['ADMIN_DB'][str(prod_id)]["password"] = password
-    temp['ADMIN_DB'][str(prod_id)]["email"] = email
+    temp['ADMIN_DB'][str(admin_id)]["name"] = name
+    temp['ADMIN_DB'][str(admin_id)]["password"] = password
+    temp['ADMIN_DB'][str(admin_id)]["email"] = email
     return {
         'id': admin_id
     }

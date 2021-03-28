@@ -10,7 +10,7 @@ import admin as ad
 import hashlib
 import re
 import generate_token as gt
-from error import InputError, AccessError
+import error as err
 
 
 # user part
@@ -25,15 +25,15 @@ def register_user(aname, fname, lname, password, email, address, city, country):
     # Filter SQL injection
     pattern = re.compile("[a-zA-Z0-9_]")
     if pattern.search(aname) is None:
-        raise InputError(description = "Incorrect syntax! You can only use number, letter and underline.")
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
 
     email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
     if email_pattern.search(email) is None:
-        raise InputError(description = "Incorrect email format! Please try again.")
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
 
     # Check whether the user name has been registered
     if check_user_exist(aname) is True:
-        raise InputError(description = "Name is already exist! Please try another one.")
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
 
     # Encrypt password 
     encryption = encrypt_password(password)
@@ -55,7 +55,7 @@ def login_user(name, password):
     pattern = re.compile("[a-zA-Z0-9_]")
     
     if pattern.search(name) is None:
-        raise InputError(description = "Incorrect user name! Please try again.")
+        raise err.IncorrectUsername(description = "Incorrect user name! Please try again.")
 
     login_token = ''
     temp = db.load_json()
@@ -72,7 +72,7 @@ def login_user(name, password):
                     'token':login_token
                 }
 
-    raise InputError(description = "Login fail! Invalid password or name! Please try again.")
+    raise err.InvalidPassword(description = "Login fail! Invalid password or name! Please try again.")
 
 # def logout_user(iid):
 def logout_user(token):
@@ -213,4 +213,4 @@ def token_to_idd(token):
     for key, attr in temp['TOKEN_DB'].items():
         if key == token:
             return attr
-    raise AccessError(description = "Invalid token!")
+    raise err.InvalidToken(description = "Invalid token!")
