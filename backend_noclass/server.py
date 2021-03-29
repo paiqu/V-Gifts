@@ -319,7 +319,7 @@ def get_product_info():
 def get_product_all():
     # data = request.get_json()
     token = request.args.get('token')
-    page = request.args.get('page')
+    page = int(request.args.get('page'))
     if token == "":
         user_id = -1
     else:
