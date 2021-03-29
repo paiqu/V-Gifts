@@ -40,6 +40,9 @@ export default function Product(props) {
         spacing={2}
         direction="row"
         justify="flex-end"
+        style={{
+          marginTop: "1rem",
+        }}
       >
         <Grid
           className={classes.imageContainer}
@@ -51,7 +54,10 @@ export default function Product(props) {
         <Grid item xs={7} className={classes.details}>
           <Typography variant="h3">Mario {infos.id}</Typography>
           <Typography variant="h5">Brand New Mario Figure</Typography>
-          <Rating name={`product-rating`} value={4} readOnly/>
+          <Box display="flex" alignItems="center">
+            <Rating name={`product-rating`} value={4} readOnly/>
+            <Typography variant="caption">100 reviews</Typography>
+          </Box>
           <Typography
             variant='body1'
             style={{
