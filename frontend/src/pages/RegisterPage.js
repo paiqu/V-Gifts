@@ -32,18 +32,40 @@ function RegisterPage({ setAuth, ...props }) {
         password_text: ""
     });
 
-    const handleClick = () => event => {
+    const handle_error = () => event => {
         setState({
             email_error: false,
             account_error: false,
-            password_error: false
+            password_error: false,
+            email_text: "",
+            account_text: "",
+            password_text: ""
         })
+    };
+
+    const handle_error_email = () => event =>{
+        let pattern = /^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$/;
+        if (!pattern.test(event.target.value) && event.target.value !== "") {
+            setState({
+                email_error: true,
+                email_text: "Invalid E-mail format"
+            });
+        }
+    };
+
+    const handle_password = () => event =>{
+        if (infos.password !== event.target.value && event.target.value !== "" && infos.password !== "") {
+            setState({
+                password_error: true,
+                password_text: "Password is not match"
+            });
+        }
     };
 
     const handleSubmit = (event) => {
         // prevent it from submitting a form
         event.preventDefault();
-
+        
         // validate if all field have been entered
         // if (!infos.email 
         //     || !infos.password
@@ -121,6 +143,8 @@ function RegisterPage({ setAuth, ...props }) {
                             className="form-control" 
                             name="email"
                             onChange={handleChange('email')}
+                            onClick={handle_error()}
+                            onBlur={handle_error_email()}
                             variant="outlined"
                             fullWidth
                             required
@@ -135,7 +159,7 @@ function RegisterPage({ setAuth, ...props }) {
                             placeholder="Enter your account name here.." 
                             name="account_name"
                             onChange={handleChange('account_name')}
-                            onClick={handleClick()}
+                            onClick={handle_error()}
                             variant="outlined"
                             fullWidth
                             required
@@ -143,14 +167,13 @@ function RegisterPage({ setAuth, ...props }) {
                     </div>
                     <div className="form-group">
                         <TextField 
-                            error={state.password_error}
-                            helperText={state.password_text}
                             style={{margin: 10}}
                             label="Password"
                             type="password"
                             placeholder="Enter Password Here.." 
                             name="password"
                             onChange={handleChange('password')}
+                            onClick={handle_error()}
                             variant="outlined"
                             fullWidth
                             required
@@ -166,7 +189,8 @@ function RegisterPage({ setAuth, ...props }) {
                             type="password" 
                             placeholder="Enter Confirmed Password Here.." 
                             name="password"
-                            onChange={handleChange('password')} 
+                            onClick={handle_error()}
+                            onBlur={handle_password()}
                             variant="outlined"
                             fullWidth
                             required   

@@ -71,19 +71,39 @@ function LoginPage({ setAuth, ...props }) {
       });
     };
 
+    const [state, setState] = React.useState({
+        error: false,
+        help_text: ""
+    });
+
+    const handle_error = () => event => {
+        setState({
+            error: false,
+            help_text: ""
+        });
+    };
+    
+
     const handleSubmit = (event) => {
         event.preventDefault();
 
         axios.post('user/login', { ...infos })
         .then((response) => {
-            console.log(response);
             const data = response.data;
+            if (data.code === 405) {
+                setState({
+                    error: true,
+                    help_text: "Invalid account name/Password error"
+                });
+            }
+            else {
+                // mark the user as signed-in in local storage, it will be removed when it is logged out
+                setAuth(data.token, data.user_id);
 
-            // mark the user as signed-in in local storage, it will be removed when it is logged out
-            setAuth(data.token, data.user_id);
-
-            // direct the user to the market page
-            props.history.push('/products');
+                // direct the user to the market page
+                props.history.push('/products');
+            }
+            
         })
         .catch((err) => {});
 
@@ -107,6 +127,8 @@ function LoginPage({ setAuth, ...props }) {
                     </Typography>
                     <form className={classes.form} noValidate onSubmit={handleSubmit}>
                         <TextField
+                            error={state.error}
+                            helperText={state.help_text}
                             variant="outlined"
                             margin="normal"
                             required
@@ -117,8 +139,11 @@ function LoginPage({ setAuth, ...props }) {
                             autoComplete="email"
                             autoFocus
                             onChange={handleChange('account_name')}
+                            onClick={handle_error()}
                         />
                         <TextField
+                            error={state.error}
+                            helperText={state.help_text}
                             variant="outlined"
                             margin="normal"
                             required
@@ -129,6 +154,7 @@ function LoginPage({ setAuth, ...props }) {
                             id="password"
                             autoComplete="current-password"
                             onChange={handleChange('password')}
+                            onClick={handle_error()}
                         />
                         <Button
                             type="submit"
