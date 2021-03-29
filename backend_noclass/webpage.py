@@ -121,6 +121,7 @@ def sorting_merge(lst, posi = 1, mode = 0): # lst -> [(id, value), ....]
 def order_filter_sort(order_keys, option = None, mode = 1):
     '''
         This function is used to reorder order_list
+        option => any key of order_db items
         mode = 1  -> decending
         mode = 0  -> ascending
     '''
@@ -279,3 +280,14 @@ def prod_filter_sort(prod_keys, option = None, mode = 1):
     for item in temp_lst:
         rt.append(item[0])
     return rt
+
+def rating_calc(prod_id):
+    temp = db.load_json()
+    ratings = temp['PRODUCT_DB'][str(prod_id)]["ratings"]
+    if len(ratings) == 0:
+        return 0
+    else:
+        rt_lst = []
+        for item in ratings:
+            rt_lst.append(item[1])
+        return sum(rt_lst) / len(rt_lst)

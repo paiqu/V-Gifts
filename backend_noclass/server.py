@@ -306,6 +306,12 @@ def admin_get_all_user():
     result = adm.get_user_list()
     return dumps(result)
 
+@app.route("/product/get_info", methods = ["POST"])
+def get_product_info():
+    data = request.get_json()
+    result = usr.show_product_detail(data['product_id'])
+    return dumps(result)
+
 
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
