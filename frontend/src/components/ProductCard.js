@@ -38,6 +38,7 @@ export default function ProductCard(props) {
     // const [id, setID] = useState(null);
     // const [price, setPrice] = useState(100);
 
+    // eslint-disable-next-line
     const [infos, setInfos] = useState({
       id: props.id,
       price: 200,

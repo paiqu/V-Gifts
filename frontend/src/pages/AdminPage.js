@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function AdminPage(props) {
+    // eslint-disable-next-line
     const classes = useStyles();
 
     return (

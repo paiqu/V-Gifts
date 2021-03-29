@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
   const classes = useStyles();
+  // eslint-disable-next-line
   const theme = useTheme();
 
   const id = props.id;
@@ -75,7 +76,7 @@ export default function Product(props) {
           item 
           xs={5} 
         >
-          <img className={classes.image} src={infos.pic} />
+          <img className={classes.image} src={infos.pic} alt="product"/>
         </Grid>
         <Grid item xs={7} className={classes.details}>
           <Typography variant="h3">{infos.name}</Typography>

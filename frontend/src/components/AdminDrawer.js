@@ -27,7 +27,7 @@ import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
 import axios from 'axios';
-import AuthContext from '../AuthContext';
+// import AuthContext from '../AuthContext';
 
 
 const drawerWidth = 240;
@@ -107,7 +107,7 @@ export default function AdminDrawer() {
   const classes = useStyles();
   const theme = useTheme();
 
-  const admin_token = "";
+  // const admin_token = "";
 
   const [open, setOpen] = React.useState(false);
   const [display, setDisplay] = React.useState({
