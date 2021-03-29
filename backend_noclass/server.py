@@ -92,10 +92,11 @@ def new_product():
     description = data['description']
     category = data['category']
     deli_days = data['deli_days']
-    result = adm.new_product(name, price, description, category, deli_days)
+    pic_link = data['pic_link']
+    result = adm.new_product(name, price, description, category, deli_days, pic_link)
     db.add_prod(result)
     return dumps({
-        'id': result['id']
+        'product_id': result['id']
     })
 
 @app.route("/product/edit", methods = ["POST"])
