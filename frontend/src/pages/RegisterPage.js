@@ -23,6 +23,23 @@ function RegisterPage({ setAuth, ...props }) {
       });
     };
 
+    const [state, setState] = React.useState({
+        email_error: false,
+        account_error: false,
+        password_error: false,
+        email_text: "",
+        account_text: "",
+        password_text: ""
+    });
+
+    const handleClick = () => event => {
+        setState({
+            email_error: false,
+            account_error: false,
+            password_error: false
+        })
+    };
+
     const handleSubmit = (event) => {
         // prevent it from submitting a form
         event.preventDefault();
@@ -40,11 +57,20 @@ function RegisterPage({ setAuth, ...props }) {
         axios.post('user/register', { ...infos })
           .then((response) => {
               const data = response.data;
-              // mark the user as signed-in in local storage, it will be removed when it is logged out
-              setAuth(data.token, data.user_id);
+              if (data.code === 403) {
+                  setState({
+                      account_error: true,
+                      account_text: "Account name exists"
+                  })
+              }
+              else {
+                // mark the user as signed-in in local storage, it will be removed when it is logged out
+                setAuth(data.token, data.user_id);
 
-              // direct the user to the market page
-              props.history.push('/products');
+                // direct the user to the market page
+                props.history.push('/products');
+              }
+              
           })
           .catch((err) => {});
     };
@@ -87,6 +113,8 @@ function RegisterPage({ setAuth, ...props }) {
                     </div>
                     <div className="form-group">
                         <TextField 
+                            error={state.email_error}
+                            helperText={state.email_text}
                             style={{margin: 10}}
                             label="E-mail"
                             placeholder="Enter Email Address Here.." 
@@ -100,11 +128,14 @@ function RegisterPage({ setAuth, ...props }) {
                     </div>
                     <div className="form-group">
                         <TextField 
+                            error={state.account_error}
+                            helperText={state.account_text}
                             style={{margin: 10}}
                             label="Account name"
                             placeholder="Enter your account name here.." 
                             name="account_name"
                             onChange={handleChange('account_name')}
+                            onClick={handleClick()}
                             variant="outlined"
                             fullWidth
                             required
@@ -112,6 +143,8 @@ function RegisterPage({ setAuth, ...props }) {
                     </div>
                     <div className="form-group">
                         <TextField 
+                            error={state.password_error}
+                            helperText={state.password_text}
                             style={{margin: 10}}
                             label="Password"
                             type="password"
@@ -126,6 +159,8 @@ function RegisterPage({ setAuth, ...props }) {
                     {/* add a validation function later here */}
                     <div className="form-group">
                         <TextField 
+                            error={state.password_error}
+                            helperText={state.password_text}
                             style={{margin: 10}}
                             label="Confirmed Password"
                             type="password" 
