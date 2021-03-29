@@ -5,6 +5,7 @@ import database as db
 import datetime as dt
 import admin as ad
 import login as lo
+import webpage as wb
 
 def new_user(aname, fname, lname, password, email, address, city, country):
     new_id = db.id_generator('user')
@@ -278,7 +279,16 @@ def show_product_detail(prod_id):
     '''
     db.valid_id('product', prod_id)
     temp = db.load_json()
-    return temp['PRODUCT_DB'][str(prod_id)]
+    rt = round(wb.rating_calc(prod_id),2)
+    return {
+        "id": temp['PRODUCT_DB'][str(prod_id)]["id"],
+        "name": temp['PRODUCT_DB'][str(prod_id)]["name"],
+        "price": temp['PRODUCT_DB'][str(prod_id)]["price"],
+        "description": temp['PRODUCT_DB'][str(prod_id)]["description"],
+        "delivery": temp['PRODUCT_DB'][str(prod_id)]["delivery"],
+        "rating": rt,
+        "pic": temp['PRODUCT_DB'][str(prod_id)]["pic"],
+    }
 
 def refund_helper(db, u_id, amount):
     '''
