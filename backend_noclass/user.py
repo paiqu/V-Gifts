@@ -290,11 +290,56 @@ def show_product_detail(prod_id):
         "pic": temp['PRODUCT_DB'][str(prod_id)]["pic"],
     }
 
-def show_product_lst(page, num_each_page = 9):
+def show_product_lst(page, user_id = -1, num_each_page = 9):
     '''
         This function shows a lst of product
     '''
-    pass
+    if user_id == -1:
+        lst = []
+        temp = db.load_json()
+        for key in temp["PRODUCT_DB"].keys():
+            rtt = round(wb.rating_calc(temp["PRODUCT_DB"][key]["id"]),2)
+            lst.append({
+                'product_id': temp["PRODUCT_DB"][key]["id"],
+                'name': temp["PRODUCT_DB"][key]["name"],
+                'price': temp["PRODUCT_DB"][key]["price"],
+                'rating': rtt
+            })
+        rt = []
+        for i in range(len(lst)):
+            if i >= (page-1)*num_each_page and i < page*num_each_page:
+                # e.g. page 1 => item 0~8
+                rt.append(lst[i])
+        return {
+            'product_lst': rt,
+            'total_pages': int(len(lst)/num_each_page) + 1
+        }
+    else:
+        # if a user presist, execute recommendation algo
+        lst = wb.prod_recommendation(user_id, 1000) # technically fetchs all product
+        rt0 = []
+        for item in lst:
+            rt0.append(item[0])
+        temp = db.load_json()
+        rt1 = []
+        for prod_id in rt0:
+            rtt = round(wb.rating_calc(prod_id),2)
+            rt1.append({
+                'product_id': prod_id,
+                'name': temp["PRODUCT_DB"][str(prod_id)]["name"],
+                'price': temp["PRODUCT_DB"][str(prod_id)]["price"],
+                'rating': rtt
+            })
+        rt = []
+        for i in range(len(lst)):
+            if i >= (page-1)*num_each_page and i < page*num_each_page:
+                # e.g. page 1 => item 0~8
+                rt.append(rt1[i])
+        return {
+            'product_lst': rt,
+            'total_pages': int(len(lst)/num_each_page) + 1
+        }
+        return {}
 
 def refund_helper(db, u_id, amount):
     '''
