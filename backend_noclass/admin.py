@@ -41,7 +41,7 @@ def new_admin(name, password, email):
         "email": email
     }
 
-def new_product(name, price, description, category, deli_days):
+def new_product(name, price, description, category, deli_days, pic_link):
     '''
         create a new product,
         category should be a lst of int with length of
@@ -58,7 +58,7 @@ def new_product(name, price, description, category, deli_days):
         "delivery": deli_days,
         "ratings": [],
                     # [(u_id, rating), ...]
-        "pic": None
+        "pic": pic_link
     }
 
 
