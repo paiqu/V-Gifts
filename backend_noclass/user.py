@@ -290,6 +290,12 @@ def show_product_detail(prod_id):
         "pic": temp['PRODUCT_DB'][str(prod_id)]["pic"],
     }
 
+def show_product_lst(page, num_each_page = 9):
+    '''
+        This function shows a lst of product
+    '''
+    pass
+
 def refund_helper(db, u_id, amount):
     '''
         This function adds amount to a user
