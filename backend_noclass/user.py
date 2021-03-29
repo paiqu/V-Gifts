@@ -303,7 +303,8 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
                 'product_id': temp["PRODUCT_DB"][key]["id"],
                 'name': temp["PRODUCT_DB"][key]["name"],
                 'price': temp["PRODUCT_DB"][key]["price"],
-                'rating': rtt
+                'rating': rtt,
+                'pic_link': temp["PRODUCT_DB"][key]["pic"]
             })
         rt = []
         for i in range(len(lst)):
@@ -328,7 +329,8 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
                 'product_id': prod_id,
                 'name': temp["PRODUCT_DB"][str(prod_id)]["name"],
                 'price': temp["PRODUCT_DB"][str(prod_id)]["price"],
-                'rating': rtt
+                'rating': rtt,
+                'pic_link': temp["PRODUCT_DB"][str(prod_id)]["pic"]
             })
         rt = []
         for i in range(len(lst)):
@@ -339,7 +341,6 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
             'product_lst': rt,
             'total_pages': int(len(lst)/num_each_page) + 1
         }
-        return {}
 
 def refund_helper(db, u_id, amount):
     '''
