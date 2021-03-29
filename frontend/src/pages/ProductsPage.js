@@ -1,7 +1,7 @@
 import React from "react";
 // import NavBar from "../components/NavBar";
 // import '../css/products-page.css';
-import Product from "../components/Product";
+import ProductCard from "../components/ProductCard";
 import ProductFilter from "../components/ProductFilter";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,7 +28,7 @@ function ProductsPage(props) {
   for (let i = 0; i < 3; i++) {
     items.push(
       <Grid item xs={12} sm={4}>
-        <Product key={products[i]} name={products[i]} />
+        <ProductCard key={products[i]} name={products[i]} />
       </Grid>
     );
   }
