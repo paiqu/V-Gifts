@@ -1,7 +1,4 @@
 import React from 'react';
-import NavBar from '../components/NavBar';
-// import '../css/profile-page.css';
-import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
 import UserDrawer from '../components/UserDrawer';
