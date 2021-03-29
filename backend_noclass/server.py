@@ -84,7 +84,7 @@ def adm_edit():
         'id': result['id']
     })
 
-@app.route("/admin/product/new", methods = ["POST"])
+@app.route("/product/new", methods = ["POST"])
 def new_product():
     data = request.get_json()
     name = data['name']
@@ -98,7 +98,7 @@ def new_product():
         'id': result['id']
     })
 
-@app.route("/admin/product/edit", methods = ["POST"])
+@app.route("/product/edit", methods = ["POST"])
 def edit_product():
     data = request.get_json()
     id = data['id']
@@ -112,7 +112,7 @@ def edit_product():
 
 # @app.route("/admin/product/editcategory")
 
-@app.route("/admin/product/delete", methods = ["POST"])
+@app.route("/product/delete", methods = ["POST"])
 def delete_product():
     data = request.get_json()
     id = data['id']
@@ -121,7 +121,7 @@ def delete_product():
         'status': "success"
     })
 
-@app.route("/admin/order/statechange", methods = ["POST"])
+@app.route("/order/statechange", methods = ["POST"])
 def order_state_change():
     data = request.get_json()
     id = data['id']
@@ -269,7 +269,7 @@ def cost_cart():
         'cost': result
     })
 
-@app.route("/user/order/new", methods = ["POST"])
+@app.route("/order/new", methods = ["POST"])
 def create_order():
     data = request.get_json()
     uid = data['user_id']
@@ -279,7 +279,7 @@ def create_order():
         'id': result['id']
     })
 
-@app.route("/user/order/rate", methods = ["POST"])
+@app.route("/order/rate", methods = ["POST"])
 def rate_order():
     data = request.get_json()
     uid = data['user_id']
@@ -290,7 +290,7 @@ def rate_order():
         'status': "success"
     })
 
-@app.route("/user/order/refund", methods = ["POST"])
+@app.route("/order/refund", methods = ["POST"])
 def refund_order():
     data = request.get_json()
     uid = data['user_id']
