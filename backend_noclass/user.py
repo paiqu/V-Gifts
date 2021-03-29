@@ -287,7 +287,7 @@ def show_product_detail(prod_id):
         "description": temp['PRODUCT_DB'][str(prod_id)]["description"],
         "delivery": temp['PRODUCT_DB'][str(prod_id)]["delivery"],
         "rating": rt,
-        "pic": temp['PRODUCT_DB'][str(prod_id)]["pic"],
+        "pic_link": temp['PRODUCT_DB'][str(prod_id)]["pic"],
     }
 
 def show_product_lst(page, user_id = -1, num_each_page = 9):
