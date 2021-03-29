@@ -22,13 +22,13 @@ function ProductsPage(props) {
   // Hook for page number
   const [page, setPage] = React.useState(1);
 
-  const products = ["mario-1", "mario-2", "mario-3"];
+  const products = {1: "mario-1", 2: "mario-2", 3: "mario-3"};
   const items = [];
 
-  for (let i = 0; i < 3; i++) {
+  for (let [key, value] of Object.entries(products)) {
     items.push(
       <Grid item xs={12} sm={4}>
-        <ProductCard key={products[i]} name={products[i]} />
+        <ProductCard key={value} name={value} id={key}/>
       </Grid>
     );
   }
