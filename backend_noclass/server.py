@@ -306,10 +306,12 @@ def admin_get_all_user():
     result = adm.get_user_list()
     return dumps(result)
 
-@app.route("/product/get_info", methods = ["POST"])
+@app.route("/product/get_info", methods = ["GET"])
 def get_product_info():
-    data = request.get_json()
-    result = usr.show_product_detail(data['product_id'])
+    # data = request.get_json()
+    product_id = request.args.get('id')
+
+    result = usr.show_product_detail(product_id)
     return dumps(result)
 
 
