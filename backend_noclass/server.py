@@ -314,6 +314,21 @@ def get_product_info():
     result = usr.show_product_detail(product_id)
     return dumps(result)
 
+@app.route("/product/get_all", methods = ["GET"])
+def get_product_all():
+    # data = request.get_json()
+    token = request.args.get('token')
+    page = request.args.get('page')
+    if token == "":
+        user_id = -1
+    else:
+        try:
+            user_id = login.token_to_idd(token)
+        except err.InvalidToken as error:
+            raise error
+    result = usr.show_product_lst(page, user_id)
+    return dumps(result)
+
 
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))

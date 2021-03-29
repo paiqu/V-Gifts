@@ -29,6 +29,12 @@ TYPE_OF_PRODUCTS_INIT = 3
 def init_db_withoutadm():
     return {
         'TYPE_OF_PRODUCTS': TYPE_OF_PRODUCTS_INIT,   # dimension of interests
+        'PROD_CATAGORY':['test_cata_01', 
+                        'test_cata_02', 
+                        'test_cata_03', 
+                        # 'test_cata_04', 
+                        # 'test_cata_05'
+                        ],
         'USER_ID': 0,
         'ADMIN_ID': 1,
         'PRODUCT_ID': 0,

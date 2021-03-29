@@ -2,7 +2,7 @@
     "TYPE_OF_PRODUCTS": 3,
     "USER_ID": 1,
     "ADMIN_ID": 2,
-    "PRODUCT_ID": 1,
+    "PRODUCT_ID": 3,
     "ORDER_ID": 3,
     "USER_DB": {
         "1": {
@@ -23,8 +23,8 @@
                 3
             ],
             "interest": [
-                0,
-                0,
+                1,
+                2,
                 0
             ]
         }
@@ -78,7 +78,7 @@
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque orci ut erat dapibus, vitae dapibus lorem dapibus. Nunc consequat mi placerat neque dictum posuere. Maecenas rutrum molestie lorem, sit amet sagittis nunc. Fusce fermentum scelerisque ipsum quis rhoncus. Sed lobortis rhoncus nulla, non commodo enim fermentum a. Maecenas interdum justo ac condimentum cursus. Curabitur dapibus, dui in pretium eleifend, nisl dolor accumsan ante, in euismod ligula elit ac metus. Cras non purus dapibus, tempus est vestibulum, egestas diam. Nunc vestibulum erat id odio viverra, ultricies volutpat ante vulputate. Vestibulum in metus viverra, dictum mauris vitae, ullamcorper mauris.",
             "category": [
                 1,
-                0,
+                2,
                 0
             ],
             "delivery": 5,
@@ -104,9 +104,9 @@
             "price": 500,
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque orci ut erat dapibus, vitae dapibus lorem dapibus. Nunc consequat mi placerat neque dictum posuere. Maecenas rutrum molestie lorem, sit amet sagittis nunc. Fusce fermentum scelerisque ipsum quis rhoncus. Sed lobortis rhoncus nulla, non commodo enim fermentum a. Maecenas interdum justo ac condimentum cursus. Curabitur dapibus, dui in pretium eleifend, nisl dolor accumsan ante, in euismod ligula elit ac metus. Cras non purus dapibus, tempus est vestibulum, egestas diam. Nunc vestibulum erat id odio viverra, ultricies volutpat ante vulputate. Vestibulum in metus viverra, dictum mauris vitae, ullamcorper mauris.",
             "category": [
-                1,
                 0,
-                0
+                0,
+                3
             ],
             "delivery": 5,
             "ratings": [
