@@ -1,81 +1,82 @@
-import React, { useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        margin: 'auto',
-        // maxWidth: 500,
-    },
-    image: {
-        // width: 128,
-        // height: 128,
-    },
-    img: {
-        margin: 'auto',
-        display: 'block',
-        maxWidth: '100%',
-        maxHeight: '100%',
-    },
-
+  image: {
+    width: 550,
+    height: 550,
+  },
+  imageContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  details: {
+    display: "flex",
+    flexDirection: "column",
+  }
 }));
 
 export default function Product(props) {
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  const theme = useTheme();
 
-    // eslint-disable-next-line
-    const [id, setID] = useState(null);
-    // eslint-disable-next-line
-    const [price, setPrice] = useState(100);
+  const id = props.id;
+  const [infos, setInfos] = React.useState({
+    id: props.id,
+    title: "",
+    price: 100,
 
-    return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Grid container spacing={2}>
-                    <Grid item>
-                        <ButtonBase className={classes.image}>
-                            <img className={classes.img} alt="complex" src={`img/products/${props.name}.jpeg`} />
-                        </ButtonBase>
-                    </Grid>
-                    <Grid item xs={12} sm container>
-                        <Grid item xs container direction="column" spacing={2}>
-                        <Grid item xs>
-                            <Typography gutterBottom variant="subtitle1">
-                            {props.name}
-                            </Typography>
-                            <Typography variant="body2" gutterBottom>
-                                A normal Mario
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                            ID: {`${props.name}`}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button
-                                color={theme.palette.primary.contrastText}
-                            >
-                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <ShoppingCartIcon /> Add to Cart
-                                </Typography>
-                            </Button>
-                        </Grid>
-                        </Grid>
-                        <Grid item>
-                        <Typography variant="subtitle1">${price}</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Paper>
-        </div>
-    );
+  });
+
+  return (
+    <div>
+      <Grid
+        container 
+        spacing={2}
+        direction="row"
+        justify="flex-end"
+      >
+        <Grid
+          className={classes.imageContainer}
+          item 
+          xs={5} 
+        >
+          <img className={classes.image} src="/img/products/mario-1.jpeg" />
+        </Grid>
+        <Grid item xs={7} className={classes.details}>
+          <Typography variant="h3">Mario {infos.id}</Typography>
+          <Typography variant="h5">Brand New Mario Figure</Typography>
+          <Rating name={`product-rating`} value={4} readOnly/>
+          <Typography
+            variant='body1'
+            style={{
+              marginTop: "1rem",
+              marginRight: "5rem",
+              marginBottom: "3rem",
+            }}
+          >
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+          </Typography>
+          <Box
+            display="flex"
+            flexDirection="row"
+          >
+            <Button variant="contained" color="primary" style={{marginRight: "1rem"}}>Purchase</Button>
+            <Button variant="outlined" color="secondary">Add to Cart</Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
