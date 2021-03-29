@@ -1,1 +1,159 @@
-{"TYPE_OF_PRODUCTS": 3, "USER_ID": 1, "ADMIN_ID": 2, "PRODUCT_ID": 1, "ORDER_ID": 3, "USER_DB": {"1": {"id": 1, "name": "user_1", "fname": "user_1", "lname": "user_1", "password": "123", "email": "123@unsw", "address": "address", "city": "city", "country": "country", "fund": 50, "shopping_cart": [], "order": [1, 2, 3], "interest": [0, 0, 0]}}, "ADMIN_DB": {"1": {"id": 1, "name": "admin", "password": "admin", "email": "VictimsCOMP3900@gmail.com"}, "2": {"id": 2, "name": "admin", "password": "123456", "email": "123@unsw"}}, "PRODUCT_DB": {"1": {"id": 1, "name": "prod_1", "price": 50, "description": "test_use", "category": [1, 0, 0], "delivery": 5, "ratings": [[1, 5], [1, 0], [1, 3]], "pic": null}}, "ORDER_DB": {"1": {"id": 1, "user_id": 1, "product_id": 1, "purchase_date": 1617000738, "amount": 3, "state": 0, "rating": 0}, "2": {"id": 2, "user_id": 1, "product_id": 1, "purchase_date": 1617000738, "amount": 4, "state": 0, "rating": 5}, "3": {"id": 3, "user_id": 1, "product_id": 1, "purchase_date": 1617000738, "amount": 2, "state": 0, "rating": 3}}, "TOKEN_DB": {}}
+{
+    "TYPE_OF_PRODUCTS": 3,
+    "USER_ID": 1,
+    "ADMIN_ID": 2,
+    "PRODUCT_ID": 1,
+    "ORDER_ID": 3,
+    "USER_DB": {
+        "1": {
+            "id": 1,
+            "name": "user_1",
+            "fname": "user_1",
+            "lname": "user_1",
+            "password": "123",
+            "email": "123@unsw",
+            "address": "address",
+            "city": "city",
+            "country": "country",
+            "fund": 50,
+            "shopping_cart": [],
+            "order": [
+                1,
+                2,
+                3
+            ],
+            "interest": [
+                0,
+                0,
+                0
+            ]
+        }
+    },
+    "ADMIN_DB": {
+        "1": {
+            "id": 1,
+            "name": "admin",
+            "password": "admin",
+            "email": "VictimsCOMP3900@gmail.com"
+        },
+        "2": {
+            "id": 2,
+            "name": "admin",
+            "password": "123456",
+            "email": "123@unsw"
+        }
+    },
+    "PRODUCT_DB": {
+        "1": {
+            "id": 1,
+            "name": "Mario 1",
+            "price": 50,
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque orci ut erat dapibus, vitae dapibus lorem dapibus. Nunc consequat mi placerat neque dictum posuere. Maecenas rutrum molestie lorem, sit amet sagittis nunc. Fusce fermentum scelerisque ipsum quis rhoncus. Sed lobortis rhoncus nulla, non commodo enim fermentum a. Maecenas interdum justo ac condimentum cursus. Curabitur dapibus, dui in pretium eleifend, nisl dolor accumsan ante, in euismod ligula elit ac metus. Cras non purus dapibus, tempus est vestibulum, egestas diam. Nunc vestibulum erat id odio viverra, ultricies volutpat ante vulputate. Vestibulum in metus viverra, dictum mauris vitae, ullamcorper mauris.",
+            "category": [
+                1,
+                0,
+                0
+            ],
+            "delivery": 5,
+            "ratings": [
+                [
+                    1,
+                    5
+                ],
+                [
+                    1,
+                    0
+                ],
+                [
+                    1,
+                    3
+                ]
+            ],
+            "pic": "/img/products/mario-1.jpeg"
+        },
+        "2": {
+            "id": 2,
+            "name": "Mario 2",
+            "price": 250,
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque orci ut erat dapibus, vitae dapibus lorem dapibus. Nunc consequat mi placerat neque dictum posuere. Maecenas rutrum molestie lorem, sit amet sagittis nunc. Fusce fermentum scelerisque ipsum quis rhoncus. Sed lobortis rhoncus nulla, non commodo enim fermentum a. Maecenas interdum justo ac condimentum cursus. Curabitur dapibus, dui in pretium eleifend, nisl dolor accumsan ante, in euismod ligula elit ac metus. Cras non purus dapibus, tempus est vestibulum, egestas diam. Nunc vestibulum erat id odio viverra, ultricies volutpat ante vulputate. Vestibulum in metus viverra, dictum mauris vitae, ullamcorper mauris.",
+            "category": [
+                1,
+                0,
+                0
+            ],
+            "delivery": 5,
+            "ratings": [
+                [
+                    1,
+                    5
+                ],
+                [
+                    1,
+                    3
+                ],
+                [
+                    1,
+                    3
+                ]
+            ],
+            "pic": "/img/products/mario-2.jpeg"
+        },
+        "3": {
+            "id": 3,
+            "name": "Mario 3",
+            "price": 500,
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque orci ut erat dapibus, vitae dapibus lorem dapibus. Nunc consequat mi placerat neque dictum posuere. Maecenas rutrum molestie lorem, sit amet sagittis nunc. Fusce fermentum scelerisque ipsum quis rhoncus. Sed lobortis rhoncus nulla, non commodo enim fermentum a. Maecenas interdum justo ac condimentum cursus. Curabitur dapibus, dui in pretium eleifend, nisl dolor accumsan ante, in euismod ligula elit ac metus. Cras non purus dapibus, tempus est vestibulum, egestas diam. Nunc vestibulum erat id odio viverra, ultricies volutpat ante vulputate. Vestibulum in metus viverra, dictum mauris vitae, ullamcorper mauris.",
+            "category": [
+                1,
+                0,
+                0
+            ],
+            "delivery": 5,
+            "ratings": [
+                [
+                    1,
+                    5
+                ],
+                [
+                    1,
+                    5
+                ],
+                [
+                    1,
+                    5
+                ]
+            ],
+            "pic": "/img/products/mario-3.jpeg"
+        }
+    },
+    "ORDER_DB": {
+        "1": {
+            "id": 1,
+            "user_id": 1,
+            "product_id": 1,
+            "purchase_date": 1617000738,
+            "amount": 3,
+            "state": 0,
+            "rating": 0
+        },
+        "2": {
+            "id": 2,
+            "user_id": 1,
+            "product_id": 1,
+            "purchase_date": 1617000738,
+            "amount": 4,
+            "state": 0,
+            "rating": 5
+        },
+        "3": {
+            "id": 3,
+            "user_id": 1,
+            "product_id": 1,
+            "purchase_date": 1617000738,
+            "amount": 2,
+            "state": 0,
+            "rating": 3
+        }
+    },
+    "TOKEN_DB": {}
+}

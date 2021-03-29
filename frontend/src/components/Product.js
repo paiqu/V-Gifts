@@ -5,6 +5,8 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import axios from 'axios';
+
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -28,10 +30,34 @@ export default function Product(props) {
   const id = props.id;
   const [infos, setInfos] = React.useState({
     id: props.id,
-    title: "",
+    name: "",
     price: 100,
-
+    description: "",
+    delivery: "",
+    rating: "",
+    pic: "",
   });
+
+  React.useEffect((() => {
+    axios.get('/product/get_info', {
+      params: {
+        id,
+      }
+    })
+      .then((response) => {
+        const data = response.data;
+        
+        setInfos({
+          name: data['name'],
+          price: data['price'],
+          description: data['description'],
+          delivery: data['delivery'],
+          rating: data['rating'],
+          pic: data['pic'],
+        });
+      })
+      .catch((err) => {});
+  }), [id]);
 
   return (
     <div>
@@ -40,18 +66,24 @@ export default function Product(props) {
         spacing={2}
         direction="row"
         justify="flex-end"
+        style={{
+          marginTop: "1rem",
+        }}
       >
         <Grid
           className={classes.imageContainer}
           item 
           xs={5} 
         >
-          <img className={classes.image} src="/img/products/mario-1.jpeg" />
+          <img className={classes.image} src={infos.pic} />
         </Grid>
         <Grid item xs={7} className={classes.details}>
-          <Typography variant="h3">Mario {infos.id}</Typography>
-          <Typography variant="h5">Brand New Mario Figure</Typography>
-          <Rating name={`product-rating`} value={4} readOnly/>
+          <Typography variant="h3">{infos.name}</Typography>
+          {/* <Typography variant="h5">Subtitle</Typography> */}
+          <Box display="flex" alignItems="center">
+            <Rating name={`product-rating`} value={infos.rating} readOnly/>
+            <Typography variant="caption">100 reviews</Typography>
+          </Box>
           <Typography
             variant='body1'
             style={{
@@ -60,13 +92,10 @@ export default function Product(props) {
               marginBottom: "3rem",
             }}
           >
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
-            This is a Mario holding a green turtle shell. A great gift for your special ones. 
+            {infos.description}
+            <br />
+            <br />
+            Delivery: {infos.delivery}
           </Typography>
           <Box
             display="flex"

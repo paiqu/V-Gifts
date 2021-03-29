@@ -35,10 +35,13 @@ export default function ProductCard(props) {
     const classes = useStyles();
     const theme = useTheme();
 
-    // eslint-disable-next-line
-    const [id, setID] = useState(null);
-    // eslint-disable-next-line
-    const [price, setPrice] = useState(100);
+    // const [id, setID] = useState(null);
+    // const [price, setPrice] = useState(100);
+
+    const [infos, setInfos] = useState({
+      id: props.id,
+      price: 200,
+    });
 
     return (
         <div className={classes.root}>
@@ -48,7 +51,7 @@ export default function ProductCard(props) {
                         <ButtonBase
                           className={classes.image}
                           component={Link}
-                          to={"/product/1"}
+                          to={`/product/${infos.id}`}
                         >
                             <img className={classes.img} alt="complex" src={`img/products/${props.name}.jpeg`} />
                         </ButtonBase>
@@ -77,7 +80,7 @@ export default function ProductCard(props) {
                         </Grid>
                         </Grid>
                         <Grid item>
-                        <Typography variant="subtitle1">${price}</Typography>
+                        <Typography variant="subtitle1">${infos.price}</Typography>
                         </Grid>
                     </Grid>
                 </Grid>
