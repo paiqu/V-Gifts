@@ -212,7 +212,7 @@ export default function UserDrawer(props) {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/products'}
+						to={'/products/1'}
 						className={classes.title} 
 						variant="h4"
 						noWrap
