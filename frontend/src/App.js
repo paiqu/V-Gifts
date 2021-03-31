@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import './axios';
 
@@ -72,7 +72,7 @@ function App() {
                   return <RegisterPage {...props} setAuth={setAuth} />;
                 }}  
               />
-              <Route path="/products/:page" component={withRouter(ProductsPage)} />
+              <Route exact path="/products" component={ProductsPage} />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <Route exact path="/admin" component={AdminPage} />

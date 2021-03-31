@@ -16,21 +16,25 @@ const useStyles = makeStyles((theme) => ({
   main: {
     marginTop: "2rem"
   },
+  leftContainer: {
 
+  },
+  rightContainer: {
+
+  },
+  pagination: {
+    justifySelf: "end",
+  }
 }));
 
 function ProductsPage(props) {
   const classes = useStyles();
 
-  console.log(`current page is ${props.match.params.page}`);
+  // console.log(`current page param is ${props.match.params.page}`);
 
-  const [infos, setInfos] = React.useState({
-    currPage: props.match.params.page,
-    totalPages: 0,
-    products: [],
-  })
-
-  const [items, setItems] = React.useState([]);
+  const [currPage, setCurrPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [products, setProducts] = React.useState([]);
 
   const token = "";
 
@@ -38,80 +42,92 @@ function ProductsPage(props) {
     axios.get('/product/get_all', {
       params: {
         token,
-        "page": infos.currPage,
+        "page": currPage,
       }
     })
       .then((response) => {
-        const data = response.data;       
-        setInfos({
-          ...infos,
-          products: data['product_lst'],
-          totalPages: data['total_pages'],
-        });
+        const data = response.data;
 
-        setItems(infos.products.map((x) => <Grid item xs={12} sm={4}><ProductCard infos={x} /></Grid>));
+        setTotalPages(data['total_pages']);
+        setProducts(data['product_lst']);
       })
   };
 
-  React.useEffect(retrieveProducts, [infos.currPage]);
+  React.useEffect(retrieveProducts, [currPage]);
 
 
   const handlePageChange = (event, number) => {
-    // setInfos({
-    //   ...infos,
-    //   currPage: number,
-    // });
+    setCurrPage(number);
 
-    props.history.push(`/products/${number}`);
+    // props.history.push(`/products/${number}`);
   };
 
   return (
     <div className={classes.root}>
       <NavBar className={classes.navBar} />
-      <Box 
+      <Box
         className={classes.main}
-        display="flex" 
-        flexDirection="column" 
+        display="flex"
+        flexDirection="column"
         alignContent="center"
       >
-        <Grid container spacing={10}>
-          <Grid container item xs={12} sm={3} direction={"column"}>
+        <Grid container spacing={0}>
+          <Grid className={classes.leftContainer} container item xs={12} sm={3}>
             <ProductFilter />
           </Grid>
-          <Grid
-            className={classes.productsGrid}
-            container
-            item
-            xs={12}
-            sm={9}
-            direction={"column"}
+
+          <Grid 
+            className={classes.rightContainer} 
+            container item xs={12} sm={9} spacing={3}
+            direction="column"
+            //justify="space-between"
             alignItems="center"
-            spacing={5}
-            height="20%"
           >
-            <Grid container item xs={12} spacing={3}>
-              {/* {infos.products.map((x) => <Grid item xs={12} sm={4}><ProductCard infos={x} /></Grid>)} */}
-              {items}
-            </Grid>
-            <Pagination
+            <Grid
+              className={classes.productsGrid}
+              container
               item
-              sm={6}
-              m="auto"
-              count={infos.totalPages}
-              color="secondary"
-              variant="outlined"
-              shape="rounded"
-              size="large"
-              page={infos.currPage}
-              renderItem={(item) => (
-                <PaginationItem 
-                  component={Link}
-                  to={`/products/${item.page}`}
-                  {...item}
-                />
-              )}
-            />
-            <p>page {infos.currPage} of {infos.totalPages}</p>
+              xs={12}
+              spacing={2}
+            >
+              <Grid container item xs={12} spacing={3}>
+                {products.map((x) =>
+                  <Grid item xs={12} sm={4}>
+                    {/* <p>{x['product_id']}</p>
+                    <p>{x['name']}</p>
+                    <p>{x['price']}</p>
+                    <p>{x['rating']}</p> */}
+                    <ProductCard
+                      key={`product-${x['product_id']}`}
+                      id={x['product_id']}
+                      name={x['name']}
+                      price={x['price']}
+                      rating={x['rating']}
+                    />
+                  </Grid>
+                )}
+              </Grid>
+            </Grid>
+            <Grid
+              className={classes.pagination}
+              container
+              item
+              xs={12}
+              // direction="column"
+              // alignItems="center"
+            >
+              <Pagination
+                count={totalPages}
+                color="secondary"
+                variant="outlined"
+                shape="rounded"
+                size="large"
+                page={currPage}
+                onChange={handlePageChange}
+              />
+              <p>page {currPage} of {totalPages}</p>
+            </Grid>
+
           </Grid>
         </Grid>
       </Box>
