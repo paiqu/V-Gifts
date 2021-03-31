@@ -74,7 +74,7 @@ function HomePage(props) {
             color='secondary'
             variant='outlined'
             component={Link}
-            to={'./products'}
+            to={'./products/1'}
           >
             Browse the market
           </Button>

@@ -38,11 +38,21 @@ export default function ProductCard(props) {
     // const [id, setID] = useState(null);
     // const [price, setPrice] = useState(100);
 
-    // eslint-disable-next-line
     const [infos, setInfos] = useState({
-      id: props.id,
-      price: 200,
+      id: props.infos['product_id'],
+      name: props.infos['name'],
+      price: props.infos['price'],
+      rating: props.infos['rating'],
     });
+
+    // React.useEffect((() => {
+    //   setInfos({
+    //     id: props.infos['product_id'],
+    //     name: props.infos['name'],
+    //     price: props.infos['price'],
+    //     rating: props.infos['rating'],
+    //   });
+    // }), [props.infos]);
 
     return (
         <div className={classes.root}>
@@ -54,20 +64,20 @@ export default function ProductCard(props) {
                           component={Link}
                           to={`/product/${infos.id}`}
                         >
-                            <img className={classes.img} alt="complex" src={`img/products/${props.name}.jpeg`} />
+                            <img className={classes.img} alt="complex" src="/img/products/mario-1.jpeg" />
                         </ButtonBase>
                     </Grid>
                     <Grid item xs={12} sm container>
                         <Grid item xs container direction="column" spacing={2}>
                         <Grid item xs>
                             <Typography gutterBottom variant="subtitle1">
-                            {props.name}
+                              {infos.name}
                             </Typography>
                             <Typography variant="body2" gutterBottom>
-                                A normal Mario
+                                A normal product
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                            ID: {`${props.name}`}
+                              ID: {`${infos.id}`}
                             </Typography>
                         </Grid>
                         <Grid item>
