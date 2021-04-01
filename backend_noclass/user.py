@@ -314,7 +314,7 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
                 rt.append(lst[i])
         return {
             'product_lst': rt,
-            'total_pages': int(ceil((len(lst)/num_each_page)))
+            'total_pages': ceil((len(lst)/num_each_page))
         }
     else:
         # if a user presist, execute recommendation algo
@@ -340,7 +340,7 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
                 rt.append(rt1[i])
         return {
             'product_lst': rt,
-            'total_pages': int(ceil((len(lst)/num_each_page)))
+            'total_pages': ceil((len(lst)/num_each_page))
         }
 
 def refund_helper(db, u_id, amount):
