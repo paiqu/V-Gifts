@@ -14,13 +14,14 @@ import { MemoryRouter, Route } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   main: {
-    marginTop: "2rem"
+    padding: 10,
   },
   leftContainer: {
 
   },
   rightContainer: {
-
+    // overflowX: "hidden",
+    padding: 50,
   },
   pagination: {
     justifySelf: "end",
@@ -29,8 +30,6 @@ const useStyles = makeStyles((theme) => ({
 
 function ProductsPage(props) {
   const classes = useStyles();
-
-  // console.log(`current page param is ${props.match.params.page}`);
 
   const [currPage, setCurrPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(0);
@@ -58,8 +57,6 @@ function ProductsPage(props) {
 
   const handlePageChange = (event, number) => {
     setCurrPage(number);
-
-    // props.history.push(`/products/${number}`);
   };
 
   return (
@@ -67,9 +64,6 @@ function ProductsPage(props) {
       <NavBar className={classes.navBar} />
       <Box
         className={classes.main}
-        display="flex"
-        flexDirection="column"
-        alignContent="center"
       >
         <Grid container spacing={0}>
           <Grid className={classes.leftContainer} container item xs={12} sm={3}>
@@ -79,9 +73,9 @@ function ProductsPage(props) {
           <Grid 
             className={classes.rightContainer} 
             container item xs={12} sm={9} spacing={3}
-            direction="column"
-            //justify="space-between"
-            alignItems="center"
+            // direction="column"
+            // justify="space-between"
+            // alignItems="center"
           >
             <Grid
               className={classes.productsGrid}
@@ -90,31 +84,28 @@ function ProductsPage(props) {
               xs={12}
               spacing={2}
             >
-              <Grid container item xs={12} spacing={3}>
-                {products.map((x) =>
-                  <Grid item xs={12} sm={4}>
-                    {/* <p>{x['product_id']}</p>
-                    <p>{x['name']}</p>
-                    <p>{x['price']}</p>
-                    <p>{x['rating']}</p> */}
-                    <ProductCard
-                      key={`product-${x['product_id']}`}
-                      id={x['product_id']}
-                      name={x['name']}
-                      price={x['price']}
-                      rating={x['rating']}
-                    />
-                  </Grid>
-                )}
-              </Grid>
+              {/* <Grid container item xs={12} spacing={3}> */}
+              {products.map((x) =>
+                <Grid key={`product-${x['product_id']}`} item xs={12} sm={4}>
+                  {/* <p>{x['product_id']}</p>
+                  <p>{x['name']}</p>
+                  <p>{x['price']}</p>
+                  <p>{x['rating']}</p> */}
+                  <ProductCard
+                    key={`product-${x['product_id']}`}
+                    id={x['product_id']}
+                    name={x['name']}
+                    price={x['price']}
+                    rating={x['rating']}
+                  />
+                </Grid>
+              )}
+              {/* </Grid> */}
             </Grid>
             <Grid
               className={classes.pagination}
-              container
               item
               xs={12}
-              // direction="column"
-              // alignItems="center"
             >
               <Pagination
                 count={totalPages}
