@@ -101,7 +101,7 @@ function LoginPage({ setAuth, ...props }) {
                 setAuth(data.token, data.user_id);
 
                 // direct the user to the market page
-                props.history.push('/products/1');
+                props.history.push('/products');
             }
             
         })

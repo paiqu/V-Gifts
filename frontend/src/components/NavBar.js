@@ -208,7 +208,7 @@ export default function NavBar() {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/products/1'}
+						to={'/products'}
 						className={classes.title} 
 						variant="h4"
 						noWrap
@@ -218,7 +218,7 @@ export default function NavBar() {
 					<Button
 						className={classes.marketButton}
 						component={Link}
-						to={'/products/1'}
+						to={'/products'}
 						color={theme.palette.primary.contrastText}
 						variant="outlined"
 					>
