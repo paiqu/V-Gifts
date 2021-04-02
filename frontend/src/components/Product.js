@@ -40,6 +40,7 @@ export default function Product(props) {
     rating: "",
     pic: "",
   });
+  const [amount, setAmount] = React.useState(1);
 
   React.useEffect((() => {
     axios.get('/product/get_info', {
@@ -62,7 +63,44 @@ export default function Product(props) {
       .catch((err) => {});
   }), [id]);
 
-  const handlePurchase = (event) => {
+  const handleIncrement = () => {
+    setAmount(amount + 1);
+  };
+
+  const handleDecrement = () => {
+    if (amount - 1 >= 1) {
+      setAmount(amount - 1);
+    } else {
+      setAmount(1);
+    }
+  };
+
+
+  const handlePurchase = () => {
+    if (!token) {
+      return;
+    }
+
+    let info = [
+      [id, amount]
+    ];
+
+    let payload = {
+      token: token,
+      list: info,
+    };
+
+    axios({
+      url: "/order/new",
+      method: "post",
+      data: payload,
+    })
+    .then(response => {
+      console.log(response.data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   };
 
@@ -86,11 +124,13 @@ export default function Product(props) {
         </Grid>
         <Grid item xs={7} className={classes.details}>
           <Typography variant="h3">{infos.name}</Typography>
-          {/* <Typography variant="h5">Subtitle</Typography> */}
           <Box display="flex" alignItems="center">
             <Rating name={`product-rating`} value={infos.rating} readOnly/>
             <Typography variant="caption">100 reviews</Typography>
           </Box>
+          <Typography variant="h4">
+            ${infos.price}
+          </Typography>
           <Typography
             variant='body1'
             style={{
@@ -104,15 +144,23 @@ export default function Product(props) {
             <br />
             Delivery: {infos.delivery}
           </Typography>
-
-          <QuantitySelect />
+          <QuantitySelect
+            amount={amount}
+            handleIncrement={handleIncrement}
+            handleDecrement={handleDecrement}
+          />
 
           <Box
             display="flex"
             flexDirection="row"
             mt={1}
           >
-            <Button variant="contained" color="primary" style={{marginRight: "1rem"}}>Purchase</Button>
+            <Button
+              variant="contained" 
+              color="primary" 
+              style={{marginRight: "1rem"}}
+              onClick={handlePurchase}  
+            >Purchase</Button>
             <Button variant="outlined" color="secondary">Add to Cart</Button>
           </Box>
         </Grid>

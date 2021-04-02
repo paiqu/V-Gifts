@@ -14,29 +14,15 @@ function QuantitySelect(props) {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [count, setCount] = useState(1);
-
-  const handleIncrement = () => {
-    setCount(count + 1);
-  };
-
-  const handleDecrement = () => {
-    if (count - 1 >= 1) {
-      setCount(count - 1);
-    } else {
-      setCount(1);
-    }
-  };
-
   return (
     <ButtonGroup color="secondary" variant="contained" disableElevation>
-      <Button onClick={handleDecrement}>-</Button>
+      <Button onClick={props.handleDecrement}>-</Button>
       <Button
         color="primary"
       >
-        {count}
+        {props.amount}
       </Button>
-      <Button onClick={handleIncrement}>+</Button>
+      <Button onClick={props.handleIncrement}>+</Button>
     </ButtonGroup>
   );
 }

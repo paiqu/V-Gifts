@@ -23,7 +23,7 @@ def new_user(aname, fname, lname, password, email, address, city, country):
         "address": address,
         "city": city,
         "country": country,
-        "fund": 0,
+        "fund": 2000,
         "shopping_cart": [],
                 # [[product_id, amount], ...]
         "order": [],
@@ -391,7 +391,7 @@ def show_profile(u_id):
         "email": temp['USER_DB'][str(u_id)]['email'],
         "address": temp['USER_DB'][str(u_id)]['address'],
         "city": temp['USER_DB'][str(u_id)]['city'],
-        "country": temp['USER_DB'][str(u_id)]['country']
+        "country": temp['USER_DB'][str(u_id)]['country'],
     }
 
 
