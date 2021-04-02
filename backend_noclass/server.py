@@ -229,7 +229,7 @@ def add_fund():
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    num = data['num']
+    num = int(data['num'])
     result = usr.add_fund(user_id, num)
     return dumps({
         'status': "success",
