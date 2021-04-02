@@ -392,6 +392,7 @@ def show_profile(u_id):
         "address": temp['USER_DB'][str(u_id)]['address'],
         "city": temp['USER_DB'][str(u_id)]['city'],
         "country": temp['USER_DB'][str(u_id)]['country'],
+        "fund": temp['USER_DB'][str(u_id)]['fund'],
     }
 
 

@@ -12,6 +12,7 @@ export default function ProfilePage(props) {
     "username": "",
     "email": "",
     "address": "",
+    "fund": 0,
   });
 
 	React.useEffect((() => {
@@ -29,6 +30,7 @@ export default function ProfilePage(props) {
         "username": data["username"],
         "email": data["email"],
         "address": data["address"],
+        "fund": data["fund"],
       });
     })
     .catch((err) => {});

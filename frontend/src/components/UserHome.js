@@ -8,6 +8,7 @@ import StoreIcon from '@material-ui/icons/Store';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 const iconSize = 8;
 
@@ -44,6 +45,8 @@ function UserHome(props) {
     const classes = useStyles();
     const theme = useTheme();
 
+    const profile = props.profile;
+
     return (
       <div classeName={classes.root}>
         <Grid container spacing={3}>
@@ -51,13 +54,13 @@ function UserHome(props) {
             <Card className={classes.gridItem}  variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <InboxIcon className={classes.cardIcon}/>
+                  <AttachMoneyIcon className={classes.cardIcon}/>
                   <Typography variant="h3" classname={classes.cardTitleText}>
-                    Inbox
+                    Balance
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  12 messages in total
+                  ${profile['fund']} left
                   <br />
                   <br />
                   3 unread messages
@@ -105,7 +108,7 @@ function UserHome(props) {
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <AttachMoneyIcon className={classes.cardIcon}/>
+                  <ListAltIcon className={classes.cardIcon}/>
                   <Typography variant="h3" classname={classes.cardTitleText}>
                     Orders
                   </Typography>
