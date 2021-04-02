@@ -23,3 +23,7 @@ class IncorrectUsername(HTTPException):
 class InvalidPassword(HTTPException):
     code = 405
     message = 'Login fail! Invalid password or name! Please try again.'
+
+class NotEoughFund(HTTPException):
+    code = 406
+    message = 'Not enough fund, purchase fail!'

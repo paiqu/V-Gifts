@@ -250,6 +250,7 @@ def add_cart():
     result = usr.add_product_to_cart(user_id, pid, amount)
     price = usr.individual_price(pid, amount)
     return dumps({
+        'product_id': pid,
         'product_name': pname,
         'amount': amount,
         'cost': price
@@ -273,6 +274,7 @@ def remove_cart():
     pname = adm.product_id_to_name(pid)
     return dumps({
         'status': "success",
+        'product_id': pid,
         'product_name': pname
     })
 
@@ -299,11 +301,11 @@ def create_order():
     except err.InvalidToken as error:
         raise error
     cart = usr.show_user_cart(user_id)
-    result = usr.purchase(user_id, cart)
-    return dumps({
-        'status': result['status'],
-        'order_id': result['id']
-    })
+    try:
+        result = usr.purchase(user_id, cart)
+    except err.NotEoughFund as error:
+        raise error
+    return dumps({})
 
 @app.route("/order/rate", methods = ["POST"])
 def rate_order():

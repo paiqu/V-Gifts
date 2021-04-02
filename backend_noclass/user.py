@@ -7,6 +7,7 @@ import datetime as dt
 import admin as ad
 import login as lo
 import webpage as wb
+import error as err
 
 def new_user(aname, fname, lname, password, email, address, city, country):
     new_id = db.id_generator('user')
@@ -184,10 +185,7 @@ def purchase(u_id, lst):
     if user_fund < total_cost:
         # not enough fund
         print('Not enough fund')
-        return {
-            'status': "Not enough fund, purchase fail!",
-            'id': "N/A"
-        }
+        raise err.NotEoughFund(description = "Not enough fund, purchase fail!")
     else:
         # 2
         # enough fund
@@ -195,11 +193,8 @@ def purchase(u_id, lst):
         db.to_json(temp)
         for cart_item_pair in lst:
             product_id, amount = cart_item_pair
-            order_id = create_order(u_id, product_id, amount)
-    return {
-        'status': "success",
-        'id': order_id
-    }
+            result = create_order(u_id, product_id, amount)
+    return {}
 
 def create_order(user_id, product_id, amount):
     '''
@@ -222,14 +217,13 @@ def create_order(user_id, product_id, amount):
     # 4 
     temp = db.load_json()
     cart_item_pair = [product_id, amount]
-    temp['USER_DB'][str(user_id)]['shopping_cart'].remove(cart_item_pair)
+    if cart_item_pair in temp['USER_DB'][str(user_id)]['shopping_cart']:
+        temp['USER_DB'][str(user_id)]['shopping_cart'].remove(cart_item_pair)
     # 5 add order id to user
     temp['USER_DB'][str(user_id)]['order'].append(order['id'])
     # 6
     db.to_json(temp)
-    return {
-        'id': order_id
-    }
+    return {}
 
 def rate_order(u_id, order_id, rating):
     '''
@@ -259,7 +253,6 @@ def edit_user_interest(u_id, interest_lst):
     temp = db.load_json()
     if len(interest_lst) != temp['TYPE_OF_PRODUCTS']:
         raise ValueError()
-        return {}
     else:
         temp['USER_DB'][str(u_id)]['interest'] = interest_lst
         db.to_json(temp)
