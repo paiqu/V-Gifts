@@ -131,7 +131,7 @@ export default function UserDrawer(props) {
   );
 
   const renderUserHome = (
-    <UserHome />
+    <UserHome token={token} profile={profile}/>
   );
 
   const handleDrawerOpen = () => {

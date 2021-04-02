@@ -229,7 +229,7 @@ def add_fund():
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    num = data['num']
+    num = int(data['num'])
     result = usr.add_fund(user_id, num)
     return dumps({
         'status': "success",
@@ -300,9 +300,11 @@ def create_order():
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    cart = usr.show_user_cart(user_id)
+
+    # list : [[product_id, amount]
+    products = data['list']
     try:
-        result = usr.purchase(user_id, cart)
+        result = usr.purchase(user_id, products)
     except err.NotEoughFund as error:
         raise error
     return dumps({})

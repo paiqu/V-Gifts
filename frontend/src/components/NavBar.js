@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar() {
-  const id = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -222,7 +222,7 @@ export default function NavBar() {
 						color={theme.palette.primary.contrastText}
 						variant="outlined"
 					>
-							Market
+            Market
 					</Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -251,7 +251,7 @@ export default function NavBar() {
             </IconButton>
             <IconButton
 							component={Link}
-							to={ id ? `/profile/${id}` : "/login"}
+							to={ token ? `/profile/${token}` : "/login"}
               edge="end"
               aria-label="account of current user"
               // aria-controls={menuId}
