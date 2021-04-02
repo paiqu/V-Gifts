@@ -26,12 +26,14 @@ TEST_KEYWORDS = {
     'toy': 2,
     'toys': 2,
     # for pet
-    'pet': 3,
-    'cat': 3,
-    'dog': 3,
+    # 'pet': 3,
+    # 'cat': 3,
+    # 'dog': 3,
     # descriptive:
     # not yet
 }
+
+NUM_CATA = 3
 
 NEGATION_KEYWORDS = [
     'not',
@@ -63,7 +65,7 @@ def query_analysis_test0(qry):
     '''
     lst = re.split("[,.; ]", qry)
     # print(lst)
-    vec = [0] * 4
+    vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
     for wd in lst:
         if wd in kwds.keys():
@@ -102,7 +104,7 @@ def query_analysis_test1(qry):
     '''
     lst = re.split("[,.; ]", qry)
     # print(lst)
-    vec = [0] * 4
+    vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
     for wd in lst:
         if wd in kwds.keys():
@@ -123,7 +125,7 @@ def query_analysis_test2(qry):
     '''
     # print(lst)
     qrys = qry.split('.')
-    vec = [0] * 4
+    vec = [0] * NUM_CATA
     for qryy in qrys:
         vec = adding_lsts(vec, 
                             query_analysis_test0(qryy))
@@ -139,7 +141,7 @@ def query_analysis_negation_included(qry):
     negation = False 
     lst = re.split("[,.; ]", qry)
     # print(lst)
-    vec = [0] * 4
+    vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
     for wd in lst:
         # dentify negation
@@ -160,7 +162,7 @@ def query_analysis_test3(qry):
     '''
     # print(lst)
     qrys = qry.split('.')
-    vec = [0] * 4
+    vec = [0] * NUM_CATA
     for qryy in qrys:
         vec = adding_lsts(vec, 
                             query_analysis_negation_included(qryy))
