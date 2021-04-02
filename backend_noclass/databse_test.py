@@ -29,7 +29,7 @@ def test_1():
     db.to_json(temp)
     # add some product/user/admin
     admin_1 = ad.new_admin('admin','123456','123@unsw')
-    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5)
+    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5, "")
     db.add_admin(admin_1)
     db.add_prod(prod_1)
     # testing
@@ -50,7 +50,7 @@ def test_2():
     db.to_json(temp)
     # add some product/user/admin
     admin_1 = ad.new_admin('admin','123456','123@unsw')
-    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5)
+    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5, "")
     user_1 = us.new_user('user_1', 'user_1', 'user_1', '123', '123@unsw', 'somewhere', 'city', 'country')
     db.add_admin(admin_1)
     db.add_prod(prod_1)
@@ -69,8 +69,8 @@ def test_3():
     db.to_json(temp)
     # add some product/user/admin
     admin_1 = ad.new_admin('admin','123456','123@unsw')
-    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5)
-    prod_2 = ad.new_product('prod_2', 30, 'test_use', [1, 1, 1], 5)
+    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5, "")
+    prod_2 = ad.new_product('prod_2', 30, 'test_use', [1, 1, 1], 5, "")
     user_1 = us.new_user('user_1', 'user_1', 'user_1', '123', '123@unsw', 'somewhere', 'city', 'country')
     db.add_admin(admin_1)
     db.add_prod(prod_1)
