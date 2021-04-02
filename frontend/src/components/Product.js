@@ -6,7 +6,8 @@ import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import axios from 'axios';
-
+import QuantitySelect from './QuantitySelect';
+import AuthContext from '../AuthContext';
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -27,6 +28,7 @@ export default function Product(props) {
   const classes = useStyles();
   // eslint-disable-next-line
   const theme = useTheme();
+  const token = React.useContext(AuthContext);
 
   const id = props.id;
   const [infos, setInfos] = React.useState({
@@ -59,6 +61,10 @@ export default function Product(props) {
       })
       .catch((err) => {});
   }), [id]);
+
+  const handlePurchase = (event) => {
+
+  };
 
   return (
     <div>
@@ -98,9 +104,13 @@ export default function Product(props) {
             <br />
             Delivery: {infos.delivery}
           </Typography>
+
+          <QuantitySelect />
+
           <Box
             display="flex"
             flexDirection="row"
+            mt={1}
           >
             <Button variant="contained" color="primary" style={{marginRight: "1rem"}}>Purchase</Button>
             <Button variant="outlined" color="secondary">Add to Cart</Button>
