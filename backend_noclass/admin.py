@@ -101,6 +101,12 @@ def edit_product(prod_id, prod_name, prod_category, prod_descrip):
         'id': prod_id
     }
 
+def product_id_to_name(prod_id):
+    temp = db.load_json()
+    if str(prod_id) not in temp['PRODUCT_DB']:
+        raise KeyError()
+    return temp['PRODUCT_DB'][str(prod_id)]["name"]
+
 def delete_product(prod_id):
     '''
         This function deletes a product by id

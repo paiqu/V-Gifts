@@ -100,7 +100,7 @@ def forget_password(name, email):
     Send reset url to the email
     return new password
     '''
-    return new_password
+    pass
 
 # Users change password
 def change_password(idd, old_password, new_password):
@@ -139,10 +139,7 @@ def add_product_to_cart(user_id, product_id, amount):
     # (product_id, amount)
     temp['USER_DB'][str(user_id)]['shopping_cart'].append(item)
     db.to_json(temp)
-    return {
-        'pid': product_id,
-        'amount': amount
-    }
+    return {}
 
 def remove_prod_from_cart(user_id, cart_item_pair):
     '''
@@ -155,9 +152,7 @@ def remove_prod_from_cart(user_id, cart_item_pair):
     temp = db.load_json()
     temp['USER_DB'][str(user_id)]['shopping_cart'].remove(cart_item_pair)
     db.to_json(temp)
-    return {
-        'pid': product_id
-    }
+    return {}
 
 def individual_price(product_id, amount):
     temp = db.load_json()
@@ -189,7 +184,10 @@ def purchase(u_id, lst):
     if user_fund < total_cost:
         # not enough fund
         print('Not enough fund')
-        return {}
+        return {
+            'status': "Not enough fund, purchase fail!",
+            'id': "N/A"
+        }
     else:
         # 2
         # enough fund
@@ -199,6 +197,7 @@ def purchase(u_id, lst):
             product_id, amount = cart_item_pair
             order_id = create_order(u_id, product_id, amount)
     return {
+        'status': "success",
         'id': order_id
     }
 
