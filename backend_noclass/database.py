@@ -67,11 +67,11 @@ def pretty_print(dct, level = 0, strr = "    "):
 
 # check valid
 
-def valid_id(option, idd):
+def valid_id(option, idd, db_name = "database.json"):
     '''
         This func checks if an id exist in DB
     '''
-    temp = load_json()
+    temp = load_json(db_name)
     if option == 'user' or option == 'users':
         if str(idd) in temp['USER_DB']:
             return True
@@ -108,94 +108,94 @@ def load_json(filename = 'database.json'):
         temp = json.load(fp)
     return temp
 
-def add_user(user):
+def add_user(user, db_name = "database.json"):
     '''
         Add user to db
     '''
-    temp = load_json()
+    temp = load_json(db_name)
     temp['USER_DB'][str(user['id'])] = user
-    to_json(temp)
+    to_json(temp, db_name)
     return {}
 
-def add_admin(admin):
+def add_admin(admin, db_name = "database.json"):
     '''
         Add admin to db
     '''
-    temp = load_json()
+    temp = load_json(db_name)
     temp['ADMIN_DB'][str(admin['id'])] = admin
-    to_json(temp)
+    to_json(temp, db_name)
     return {}
 
-def add_prod(prod):
+def add_prod(prod, db_name = "database.json"):
     '''
         Add product to db
     '''
-    temp = load_json()
+    temp = load_json(db_name)
     temp['PRODUCT_DB'][str(prod['id'])] = prod
-    to_json(temp)
+    to_json(temp, db_name)
     return {}
 
-def add_order(order):
+def add_order(order, db_name = "database.json"):
     '''
         Add order to db
     '''
-    temp = load_json()
+    temp = load_json(db_name)
     # add to order db
     temp['ORDER_DB'][str(order['id'])] = order
-    to_json(temp)
+    to_json(temp, db_name)
     return {}
 
-def clear_db():
-    to_json(init_db())
+def clear_db(db_name = "database.json"):
+    to_json(init_db(), db_name)
     return {}
 
-def id_generator(option):
-    temp = load_json()
+def id_generator(option, db_name = "database.json"):
+    temp = load_json(db_name)
     if option == 'user' or option == 'users':
         temp['USER_ID'] += 1
-        to_json(temp)
+        to_json(temp, db_name)
         return temp['USER_ID']
     elif option == 'product' or option == 'products':
         temp['PRODUCT_ID'] += 1
-        to_json(temp)
+        to_json(temp, db_name)
         return temp['PRODUCT_ID']
     elif option == 'admin' or option == 'admins':
         temp['ADMIN_ID'] += 1
-        to_json(temp)
+        to_json(temp, db_name)
         return temp['ADMIN_ID']
     elif option == 'order' or option == 'orders':
         temp['ORDER_ID'] += 1
-        to_json(temp)
+        to_json(temp, db_name)
         return temp['ORDER_ID']
     else:
         # Temporary
         raise KeyError()
 
-def check_interest_dim(category):
-    temp = load_json()
+def check_interest_dim(category, db_name = "database.json"):
+    temp = load_json(db_name)
     if len(category) == temp['TYPE_OF_PRODUCTS']:
         return True
     else:
         return False
 
-def add_product_type():
-    temp = load_json()
+def add_product_type(db_name = "database.json"):
+    temp = load_json(db_name)
     temp['TYPE_OF_PRODUCTS'] += 1
     for key in temp['PRODUCT_DB']:
         temp['PRODUCT_DB'][key]['category'].append(0)
     for key in temp['USER_DB']:
         temp['USER_DB'][key]['interest'].append(0)
-    to_json(temp)
+    to_json(temp, db_name)
     return temp['TYPE_OF_PRODUCTS']
 
-def prod_rating_calculator(prod_id):
+def prod_rating_calculator(prod_id, db_name = "database.json"):
     '''
         This function is used to obtain total 
         rating for a product from individual 
         user ratings
     '''
     valid_id('product', prod_id)
-    temp = load_json()
+    temp = load_json(db_name)
     rating_lst = temp['PRODUCT_DB'][str(prod_id)]['rating']
     if len(rating_lst) == 0:
         return 0

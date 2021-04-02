@@ -194,11 +194,7 @@ def usr_logout():
 
 @app.route("/user/profile", methods = ["GET"])
 def usr_profile():
-    # data = request.get_json()
-    # token = data['token']
-
     token = request.args.get('token')
-
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
@@ -211,9 +207,14 @@ def usr_profile():
 @app.route("/user/profile/password/change", methods = ["POST"])
 def change_password():
     data = request.get_json()
-    uname = data['name']
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     opassword = data['old_password']
-    result = usr.change_password(uname, opassword)
+    npassword = data['new_password']
+    result = usr.change_password(user_id, opassword, npassword)
     return dumps({
         'status': result
     })
@@ -223,9 +224,13 @@ def change_password():
 @app.route("/user/profile/fund/add", methods = ["POST"])
 def add_fund():
     data = request.get_json()
-    uid = data['user_id']
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     num = data['num']
-    result = usr.add_fund(uid, num)
+    result = usr.add_fund(user_id, num)
     return dumps({
         'status': "success",
         'fund': result['fund']
@@ -234,37 +239,54 @@ def add_fund():
 @app.route("/user/cart/add", methods = ["POST"])
 def add_cart():
     data = request.get_json()
-    uid = data['user_id']
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     pid = data['product_id']
     amount = data['amount']
-    result = usr.add_product_to_cart(uid, pid, amount)
+    pname = adm.product_id_to_name(pid)
+    result = usr.add_product_to_cart(user_id, pid, amount)
     price = usr.individual_price(pid, amount)
     return dumps({
-        'pid': result['pid'],
-        'amount': result['amount'],
+        'product_id': pid,
+        'product_name': pname,
+        'amount': amount,
         'cost': price
     })
 
 @app.route("/user/cart/remove", methods = ["POST"])
 def remove_cart():
     data = request.get_json()
-    uid = data['user_id']
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     pid = data['product_id']
-    cart = usr.show_user_cart(uid)
+    cart = usr.show_user_cart(user_id)
     i = 0
     while (i < len(cart)):
         if (cart[i][0] == pid):
             break
-    result = usr.remove_prod_from_cart(uid, cart[i])
+    result = usr.remove_prod_from_cart(user_id, cart[i])
+    pname = adm.product_id_to_name(pid)
     return dumps({
-        'pid': result['pid']
+        'status': "success",
+        'product_id': pid,
+        'product_name': pname
     })
 
 @app.route("/user/cart/cost", methods = ["POST"])
 def cost_cart():
     data = request.get_json()
-    uid = data['user_id']
-    cart = usr.show_user_cart(uid)
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    cart = usr.show_user_cart(user_id)
     result = usr.total_price(cart)
     return dumps({
         'cost': result
@@ -273,20 +295,29 @@ def cost_cart():
 @app.route("/order/new", methods = ["POST"])
 def create_order():
     data = request.get_json()
-    uid = data['user_id']
-    cart = usr.show_user_cart(uid)
-    result = usr.purchase(uid, cart)
-    return dumps({
-        'id': result['id']
-    })
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    cart = usr.show_user_cart(user_id)
+    try:
+        result = usr.purchase(user_id, cart)
+    except err.NotEoughFund as error:
+        raise error
+    return dumps({})
 
 @app.route("/order/rate", methods = ["POST"])
 def rate_order():
     data = request.get_json()
-    uid = data['user_id']
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     oid = data['order_id']
     rating = data['rating']
-    result = rate_order(uid, oid, rating)
+    result = rate_order(user_id, oid, rating)
     return dumps({
         'status': "success"
     })
@@ -294,9 +325,13 @@ def rate_order():
 @app.route("/order/refund", methods = ["POST"])
 def refund_order():
     data = request.get_json()
-    uid = data['user_id']
+    token = data['token']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     oid = data['order_id']
-    result = usr.order_refund(uid, oid)
+    result = usr.order_refund(user_id, oid)
     return dumps({
         'status': result
     })
@@ -311,7 +346,6 @@ def admin_get_all_user():
 def get_product_info():
     # data = request.get_json()
     product_id = request.args.get('id')
-
     result = usr.show_product_detail(product_id)
     return dumps(result)
 

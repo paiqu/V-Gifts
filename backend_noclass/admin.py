@@ -14,6 +14,7 @@ ADMIN_DB = {
 '''
 
 import database as db
+import chatbot as ct
 
 # class Admin:
 #     def __init__(name, password, email):
@@ -48,7 +49,12 @@ def new_product(name, price, description, category, deli_days, pic_link):
         TYPE_OF_PRODUCTS
     '''
     new_id = db.id_generator('product')
-    assert db.check_interest_dim(category)
+    # assert db.check_interest_dim(category)
+    # catagory is now calculated by query_analysis
+    category = None
+    if description == "" or description is None:
+        description = name
+    category = ct.query_analysis_negation_included(description)
     return {
         "id": new_id,
         "name": name,
@@ -94,6 +100,12 @@ def edit_product(prod_id, prod_name, prod_category, prod_descrip):
     return {
         'id': prod_id
     }
+
+def product_id_to_name(prod_id):
+    temp = db.load_json()
+    if str(prod_id) not in temp['PRODUCT_DB']:
+        raise KeyError()
+    return temp['PRODUCT_DB'][str(prod_id)]["name"]
 
 def delete_product(prod_id):
     '''
