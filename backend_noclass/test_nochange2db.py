@@ -9,6 +9,14 @@ def test0():
     print(us.show_product_lst(1,1)) # id: 2, 1, 3
     print(us.show_product_lst(2,1)) # empty
 
+def test1():
+    print(us.show_all_cart(1, 1))
+
+def test2():
+    print(us.show_all_order(1, 1))
+
 
 if __name__ == "__main__":
-    test0()
+    # test0()
+    test1()
+    test2()

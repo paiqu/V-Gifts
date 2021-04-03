@@ -1,7 +1,7 @@
-'''
+"""
     This file includes all functions can be directly called 
     by frontend
-'''
+"""
 
 import database as db
 import user as usr
@@ -19,13 +19,13 @@ import sys
 
 def defaultHandler(err):
     response = err.get_response()
-    print('response', err, err.get_response())
+    print("response", err, err.get_response())
     response.data = dumps({
         "code": err.code,
         "name": "System Error",
         "message": err.get_description(),
     })
-    response.content_type = 'application/json'
+    response.content_type = "application/json"
     return response
 
 app = Flask(__name__)
@@ -44,71 +44,71 @@ app.register_error_handler(Exception, defaultHandler)
 @app.route("/admin/register", methods = ["POST"])
 def adm_register():
     data = request.get_json()
-    name = data['name']
-    password = data['password']
-    email = data['email']
+    name = data["name"]
+    password = data["password"]
+    email = data["email"]
     result = login.register_admin(name, password, email)
     return dumps({
-        'admin_id': result['id']
+        "admin_id": result["id"]
     })
 
 @app.route("/admin/login", methods = ["POST"])
 def adm_login():
     data = request.get_json()
-    name = data['name']
-    password = data['password']
+    name = data["name"]
+    password = data["password"]
     result = login.login_admin(name, password)
     return dumps({
-        'token': result
+        "token": result
     })
 
 @app.route("/admin/logout", methods = ["POST"])
 def adm_logout():
     data = request.get_json()
-    name = data['name']
-    token = data['token']
+    name = data["name"]
+    token = data["token"]
     result = login.logout_admin(name, token)
     return dumps({
-        'is_success': result
+        "is_success": result
     })
 
 @app.route("/admin/profile/edit", methods = ["POST"])
 def adm_edit():
     data = request.get_json()
-    aid = data['admin_id']
-    name = data['name']
-    password = data['password']
-    email = data['email']
+    aid = data["admin_id"]
+    name = data["name"]
+    password = data["password"]
+    email = data["email"]
     result = adm.edit_admin(aid, name, password, email)
     return dumps({
-        'id': result['id']
+        "id": result["id"]
     })
 
 @app.route("/product/new", methods = ["POST"])
 def new_product():
     data = request.get_json()
-    name = data['name']
-    price = data['price']
-    description = data['description']
-    category = data['category']
-    deli_days = data['deli_days']
-    pic_link = data['pic_link']
+    name = data["name"]
+    price = data["price"]
+    description = data["description"]
+    category = data["category"]
+    deli_days = data["deli_days"]
+    pic_link = data["pic_link"]
     result = adm.new_product(name, price, description, category, deli_days, pic_link)
     db.add_prod(result)
     return dumps({
-        'product_id': result['id']
+        "product_id": result["id"]
     })
 
 @app.route("/product/edit", methods = ["POST"])
 def edit_product():
     data = request.get_json()
-    id = data['id']
-    name = data['name']
-    category = data['category']
-    description = data['description']
+    id = data["id"]
+    name = data["name"]
+    category = data["category"]
+    description = data["description"]
     result = adm.edit_product(id, name, category, description)
     return dumps({
-        'id': result['id']
+        "id": result["id"]
     })
 
 # @app.route("/admin/product/editcategory")
@@ -116,22 +116,22 @@ def edit_product():
 @app.route("/product/delete", methods = ["POST"])
 def delete_product():
     data = request.get_json()
-    id = data['id']
+    id = data["id"]
     result = adm.delete_product(id)
     return dumps({
-        'status': "success"
+        "status": "success"
     })
 
 @app.route("/order/statechange", methods = ["POST"])
 def order_state_change():
     data = request.get_json()
-    id = data['id']
-    state = data['state']
+    id = data["id"]
+    state = data["state"]
     result = adm.change_order_state(id, state)
     return dumps({
-        'status': "success",
-        'id': result['id'],
-        'state': result['state']
+        "status": "success",
+        "id": result["id"],
+        "state": result["state"]
     })
 
 ##########################
@@ -141,14 +141,14 @@ def order_state_change():
 @app.route("/user/register", methods = ["POST"])
 def usr_register():
     data = request.get_json()
-    aname = data['account_name']
-    fname = data['first_name']
-    lname = data['last_name']
-    password = data['password']
-    email = data['email']
-    address = data['address']
-    city = data['city']
-    country = data['country']
+    aname = data["account_name"]
+    fname = data["first_name"]
+    lname = data["last_name"]
+    password = data["password"]
+    email = data["email"]
+    address = data["address"]
+    city = data["city"]
+    country = data["country"]
     try: 
         result = login.register_user(aname, fname, lname, password, email, address, city, country)
     except err.InvalidUsername as iuerr:
@@ -158,15 +158,15 @@ def usr_register():
     except err.UsernameAlreadyExit as uaerr:
         raise uaerr
     return dumps({
-        'user_id': result['id'],
-        'token': result['token']
+        "user_id": result["id"],
+        "token": result["token"]
     })
 
 @app.route("/user/login", methods = ["POST"])
 def usr_login():
     data = request.get_json()
-    name = data['account_name']
-    password = data['password']
+    name = data["account_name"]
+    password = data["password"]
     try:
         result = login.login_user(name, password)
     except err.IncorrectUsername as uerr:
@@ -174,27 +174,27 @@ def usr_login():
     except err.InvalidPassword as perr:
         raise perr
     return dumps({
-        'user_id': result['id'],
-        'token': result['token']
+        "user_id": result["id"],
+        "token": result["token"]
     })
 
 @app.route("/user/logout", methods = ["POST"])
 def usr_logout():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
     result = login.logout_user(token)
     return dumps({
-        'user_id': user_id,
-        'status': result
+        "user_id": user_id,
+        "status": result
     })
 
 @app.route("/user/profile", methods = ["GET"])
 def usr_profile():
-    token = request.args.get('token')
+    token = request.args.get("token")
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
@@ -207,16 +207,16 @@ def usr_profile():
 @app.route("/user/profile/password/change", methods = ["POST"])
 def change_password():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    opassword = data['old_password']
-    npassword = data['new_password']
+    opassword = data["old_password"]
+    npassword = data["new_password"]
     result = usr.change_password(user_id, opassword, npassword)
     return dumps({
-        'status': result
+        "status": result
     })
 
 # @app.rounte("user/profile/edit")
@@ -224,47 +224,47 @@ def change_password():
 @app.route("/user/profile/fund/add", methods = ["POST"])
 def add_fund():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    num = int(data['num'])
+    num = int(data["num"])
     result = usr.add_fund(user_id, num)
     return dumps({
-        'status': "success",
-        'fund': result['fund']
+        "status": "success",
+        "fund": result["fund"]
     })
 
 @app.route("/user/cart/add", methods = ["POST"])
 def add_cart():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    pid = data['product_id']
-    amount = data['amount']
+    pid = data["product_id"]
+    amount = data["amount"]
     pname = adm.product_id_to_name(pid)
     result = usr.add_product_to_cart(user_id, pid, amount)
     price = usr.individual_price(pid, amount)
     return dumps({
-        'product_id': pid,
-        'product_name': pname,
-        'amount': amount,
-        'cost': price
+        "product_id": pid,
+        "product_name": pname,
+        "amount": amount,
+        "cost": price
     })
 
 @app.route("/user/cart/remove", methods = ["POST"])
 def remove_cart():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    pid = data['product_id']
+    pid = data["product_id"]
     cart = usr.show_user_cart(user_id)
     i = 0
     while (i < len(cart)):
@@ -273,15 +273,15 @@ def remove_cart():
     result = usr.remove_prod_from_cart(user_id, cart[i])
     pname = adm.product_id_to_name(pid)
     return dumps({
-        'status': "success",
-        'product_id': pid,
-        'product_name': pname
+        "status": "success",
+        "product_id": pid,
+        "product_name": pname
     })
 
 @app.route("/user/cart/cost", methods = ["POST"])
 def cost_cart():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
@@ -289,20 +289,31 @@ def cost_cart():
     cart = usr.show_user_cart(user_id)
     result = usr.total_price(cart)
     return dumps({
-        'cost': result
+        "cost": result
     })
+
+@app.route("/user/cart/list", methods = ["GET"])
+def cart_list():
+    token = request.args.get("token")
+    page = int(request.args.get("page"))
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = usr.show_all_cart(page, user_id)
+    return dumps(result)
 
 @app.route("/order/new", methods = ["POST"])
 def create_order():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
 
     # list : [[product_id, amount]
-    products = data['list']
+    products = data["list"]
     try:
         result = usr.purchase(user_id, products)
     except err.NotEoughFund as error:
@@ -312,31 +323,42 @@ def create_order():
 @app.route("/order/rate", methods = ["POST"])
 def rate_order():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    oid = data['order_id']
-    rating = data['rating']
+    oid = data["order_id"]
+    rating = data["rating"]
     result = rate_order(user_id, oid, rating)
     return dumps({
-        'status': "success"
+        "status": "success"
     })
 
 @app.route("/order/refund", methods = ["POST"])
 def refund_order():
     data = request.get_json()
-    token = data['token']
+    token = data["token"]
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    oid = data['order_id']
+    oid = data["order_id"]
     result = usr.order_refund(user_id, oid)
     return dumps({
-        'status': result
+        "status": result
     })
+
+@app.route("/order/list", methods = ["GET"])
+def order_list():
+    token = request.args.get("token")
+    page = int(request.args.get("page"))
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = usr.show_all_order(page, user_id)
+    return dumps(result)
 
 @app.route("/admin/all_user", methods = ["GET"])
 def admin_get_all_user():
@@ -347,15 +369,15 @@ def admin_get_all_user():
 @app.route("/product/get_info", methods = ["GET"])
 def get_product_info():
     # data = request.get_json()
-    product_id = request.args.get('id')
+    product_id = request.args.get("id")
     result = usr.show_product_detail(product_id)
     return dumps(result)
 
 @app.route("/product/get_all", methods = ["GET"])
 def get_product_all():
     # data = request.get_json()
-    token = request.args.get('token')
-    page = int(request.args.get('page'))
+    token = request.args.get("token")
+    page = int(request.args.get("page"))
     if token == "":
         user_id = -1
     else:
