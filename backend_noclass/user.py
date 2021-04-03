@@ -431,7 +431,7 @@ def show_all_order(page, uid, num_each_page = 9):
             "cost": individual_price(pid, amount),
             "purchase_date": dt.datetime.fromtimestamp(datte).isoformat(),
             "state_in_code": state_in_code,
-            "state_in_test": state_in_text
+            "state_in_text": state_in_text
         })
     rt = []
     for i in range(len(lst)):
