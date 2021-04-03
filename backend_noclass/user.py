@@ -439,7 +439,7 @@ def show_all_order(page, uid, num_each_page = 9):
             # e.g. page 1 => item 0~8
             rt.append(lst[i])
     return {
-        "cart_list": rt,
+        "order_history": rt,
         "total_pages": ceil(len(lst)/num_each_page)
     }
 
