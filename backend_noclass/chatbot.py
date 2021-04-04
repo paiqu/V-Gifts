@@ -135,29 +135,29 @@ def query_analysis_test2(qry):
                             query_analysis_test0(qryy))
     return list(map(deminishing_returns, vec))
 
-def query_analysis_negation_included(qry):
-    '''
-        This function identifies negations inside query
-        Including:[
-            'not', 'don\'t', 'doesn\'t', 'dislike', etc.
-        ]
-    '''
-    negation = False 
-    lst = re.split("[,.; ]", qry)
-    # print(lst)
-    vec = [0] * NUM_CATA
-    kwds = TEST_KEYWORDS
-    for wd in lst:
-        # dentify negation
-        if wd in NEGATION_KEYWORDS:
-            negation = True
-    for wd in lst:
-        # punishing/rewarding values
-        if wd in kwds.keys() and negation == False:
-            vec[kwds[wd]] += 1
-        elif wd in kwds.keys() and negation == True:
-            vec[kwds[wd]] -= 1
-    return vec
+# def query_analysis_negation_included(qry):
+#     '''
+#         This function identifies negations inside query
+#         Including:[
+#             'not', 'don\'t', 'doesn\'t', 'dislike', etc.
+#         ]
+#     '''
+#     negation = False 
+#     lst = re.split("[,.; ]", qry)
+#     # print(lst)
+#     vec = [0] * NUM_CATA
+#     kwds = TEST_KEYWORDS
+#     for wd in lst:
+#         # dentify negation
+#         if wd in NEGATION_KEYWORDS:
+#             negation = True
+#     for wd in lst:
+#         # punishing/rewarding values
+#         if wd in kwds.keys() and negation == False:
+#             vec[kwds[wd]] += 1
+#         elif wd in kwds.keys() and negation == True:
+#             vec[kwds[wd]] -= 1
+#     return vec
 
 def query_analysis_test3(qry):
     '''
@@ -172,7 +172,7 @@ def query_analysis_test3(qry):
     vec = [0] * NUM_CATA
     for qryy in qrys:
         vec = adding_lsts(vec, 
-                            query_analysis_negation_included(qryy.lower()))
+                            query_analysis_test1(qry.lower()))
     return list(map(deminishing_returns, vec))
 
 def query_analysis_test4(qry):
