@@ -55,6 +55,10 @@ TEST_QRY = \
     'I want a toy for children, and my wife. But I don\'t like it for men.\
     My neighbor\'s husband doesn\'t like toy.'
 
+TEST_QRY_UPPER = \
+    'I want a toy for children, and my wife. But I don\'t like it for men.\
+    My neighbor\'s husband doesn\'t like toy.'.upper()
+
 TEST_QRY_1 = \
     'I don\'t want cat toys nor dog toys'
 
@@ -131,41 +135,44 @@ def query_analysis_test2(qry):
                             query_analysis_test0(qryy))
     return list(map(deminishing_returns, vec))
 
-def query_analysis_negation_included(qry):
-    '''
-        This function identifies negations inside query
-        Including:[
-            'not', 'don\'t', 'doesn\'t', 'dislike', etc.
-        ]
-    '''
-    negation = False 
-    lst = re.split("[,.; ]", qry)
-    # print(lst)
-    vec = [0] * NUM_CATA
-    kwds = TEST_KEYWORDS
-    for wd in lst:
-        # dentify negation
-        if wd in NEGATION_KEYWORDS:
-            negation = True
-    for wd in lst:
-        # punishing/rewarding values
-        if wd in kwds.keys() and negation == False:
-            vec[kwds[wd]] += 1
-        elif wd in kwds.keys() and negation == True:
-            vec[kwds[wd]] -= 1
-    return vec
+# def query_analysis_negation_included(qry):
+#     '''
+#         This function identifies negations inside query
+#         Including:[
+#             'not', 'don\'t', 'doesn\'t', 'dislike', etc.
+#         ]
+#     '''
+#     negation = False 
+#     lst = re.split("[,.; ]", qry)
+#     # print(lst)
+#     vec = [0] * NUM_CATA
+#     kwds = TEST_KEYWORDS
+#     for wd in lst:
+#         # dentify negation
+#         if wd in NEGATION_KEYWORDS:
+#             negation = True
+#     for wd in lst:
+#         # punishing/rewarding values
+#         if wd in kwds.keys() and negation == False:
+#             vec[kwds[wd]] += 1
+#         elif wd in kwds.keys() and negation == True:
+#             vec[kwds[wd]] -= 1
+#     return vec
 
 def query_analysis_test3(qry):
     '''
         This function identifies negation in qry,
         and punishes the direction on value negated
+
+        <qry> should include product name if name mentions 
+        important keywords
     '''
     # print(lst)
     qrys = qry.split('.')
     vec = [0] * NUM_CATA
     for qryy in qrys:
         vec = adding_lsts(vec, 
-                            query_analysis_negation_included(qryy))
+                            query_analysis_test1(qry.lower()))
     return list(map(deminishing_returns, vec))
 
 def query_analysis_test4(qry):
@@ -186,3 +193,4 @@ if __name__ == "__main__":
     print(query_analysis_test1(TEST_QRY))
     print(query_analysis_test2(TEST_QRY))
     print(query_analysis_test3(TEST_QRY))
+    print(query_analysis_test3(TEST_QRY_UPPER))

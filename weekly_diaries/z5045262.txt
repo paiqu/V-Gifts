@@ -84,5 +84,22 @@ Week 5:
 
 Prepare for demo A
 
+#######################################################################
+
+Week 6:
+
+Completed recommender algorithm, adding functions to server.py to 
+
+	match frontend with backend
+
+#######################################################################
+
+Week 7:
+
+Adding more products to database for later testing purpose.
+
+Learn how to user google firebase and google dialogflow for chatbot.
+
+
 
 
