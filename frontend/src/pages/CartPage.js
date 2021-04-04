@@ -25,7 +25,7 @@ function CartPage(props) {
   const token = React.useContext(AuthContext);
 
   const [totalItems, setTotalItems] = useState(0);
-  const [totalPayment, setPayment] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
   const [products, setProducts] = useState([]);
 
   useEffect((() => {
@@ -77,7 +77,7 @@ function CartPage(props) {
                 <Typography variant="h5">
                   Total
                 </Typography>
-                {totalItems}
+                {totalPayment}
                 <Button 
                   className={classes.checkoutBtn} 
                   variant="contained" 
