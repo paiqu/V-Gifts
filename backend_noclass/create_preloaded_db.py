@@ -26,10 +26,11 @@ KEYWORDS_LST_haoran = [
 ]
 
 KEYWORDS_LST_yifan = [
-    # targets
-    'example',
+    # tergets
+    'mom', 'dad', 'grandma', 'grandmother', 'grandpa', 'grandfather', 'fandom', 'vegetarianism',
+    'vegan', 
     # types
-    'example'
+    'wine tumbler', 'necklace', 'earrings', 'jewelry', 'mug', 'candle'
 
 ]
 
@@ -265,3 +266,153 @@ if __name__ == "__main__":
         ]
     
     add_product_to_db_special(lst)
+
+    lst_yifan = [
+        {
+            'name': 'Gifts For Grandma - Grandma Birthday Gifts - Best Grandma Gifts For Grandmother, New Grandma, First Time Grandma, Gigi, Mimi, Grammy From Grandchildren, Granddaughter, Grandkids - 12 Oz Wine Tumbler',
+            'price': 20,
+            'description': "A LOVELY PRESENT - Paint a wide smile on your grandmother's face with this tumbler. Made with attention to detail, this durable wine tumbler offers value for your money. The topnotch quality of this tumbler makes it an impressive gift whatever the occasion. FUN, WITTY DESIGN - Poke fun and laugh with your nana with this wine tumbler! Perfect gifts ideal for grandmother, new grandma, first time grandma, gigi, mimi, grammy. DOUBLE WALL VACUUM INSULATION - We use double-wall insulation to help retain hot and cold liquid temperatures, which makes our wine tumbler also great for water, coffee, cola, beer, juice, tea, ice cream, cocktails and more BPA FREE AND DURABLE - These tumblers also come with a convenient reusable drink straw, straw cleaning brush, and BPA-free drink lid. Crafted with 18/8 food grade stainless steel these tumblers are durable, unbreakable, sweat proof, rust resistant and perfect for backyard barbecues, hanging out at the pool, or enjoying a hot day at the beach with friends. GIFTS FOR GRANDMA, GRANDMA BIRTHDAY GIFTS - Complete with a convenient gift giving box these drink cups make a fun and personal gift choice for birthdays, holidays, Christmas or just because.",
+            'delivery_days': 3,
+            'pic_link': '/img/products/y001.jpg'
+        },
+        {
+            'name': "Gifts for Grandma - Grandma Gifts Set Includes Sterling Silver Necklace，Earrings, Pink Marble Jewelry Trays,Pink Marble Mug, Scented Candle and Flower – Best Mother's Day Birthday Gift Set",
+            'price': 47,
+            'description': "♥GRANDMA GIFTS SET PACK🎁-'Best Gandma Ever' Pink Marble Mug and a gold spoon, Pink Marble Jewelry Trays with 925 sterling silver necklace and a pair of Earrings,a scented candle and a bunch of carnations. Packaged with CUTE box and gift card. ♥MOTHERS DAY GIFTS FOR NANA-Perfect gift for the fabulous people in your life! Individually gift boxed that is sure to bring a smile. ♥BEST GRANDMA GIFT IDEAS-All the gifts are beautifully assorted, your grandma will love it. Heavy box with very cute and great presentation. ♥NANA GIFTS SET READY-Our gifts box is designed to provide the best experience. No need to repackage. ♥THE BEST VALUE-If any other issue, Please feel free to contact us for solution, we’ll reply you in 24 hours, we will try our 200% effort to make you 100% satisfy. SO HURRY UP! BUY NOW!",
+            'delivery_days': 5,
+            'pic_link': '/img/products/y002.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        },
+        {
+            'name': 'sample',
+            'price': 3,
+            'description': None,
+            'delivery_days': 15,
+            'pic_link': '/img/products/001.jpg'
+        }
+    ]

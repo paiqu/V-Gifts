@@ -335,7 +335,7 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
             "total_pages": ceil((len(lst)/num_each_page))
         }
 
-def show_all_cart(page, uid, num_each_page = 9):
+def show_all_cart(uid):
     lst = []
     temp = db.load_json()
     cart = show_user_cart(uid)
@@ -348,15 +348,7 @@ def show_all_cart(page, uid, num_each_page = 9):
             "amount": amount,
             "cost": individual_price(pid, amount)
         })
-    rt = []
-    for i in range(len(lst)):
-        if i >= (page-1)*num_each_page and i < page*num_each_page:
-            # e.g. page 1 => item 0~8
-            rt.append(lst[i])
-    return {
-        "cart_list": rt,
-        "total_pages": ceil(len(lst)/num_each_page)
-    }
+    return lst
 
 def refund_helper(db, u_id, amount):
     """

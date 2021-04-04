@@ -295,12 +295,11 @@ def cost_cart():
 @app.route("/user/cart/list", methods = ["GET"])
 def cart_list():
     token = request.args.get("token")
-    page = int(request.args.get("page"))
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    result = usr.show_all_cart(page, user_id)
+    result = usr.show_all_cart(user_id)
     return dumps(result)
 
 @app.route("/order/new", methods = ["POST"])
