@@ -135,10 +135,21 @@ def add_product_to_cart(user_id, product_id, amount):
     """
     db.valid_id("user",user_id)
     db.valid_id("product",product_id)
+    cart = show_user_cart(user_id)
+    i = 0
+    while (i < len(cart)):
+        if (cart[i][0] == product_id):
+            break
+        i = i + 1
     temp = db.load_json()
-    item = [product_id, amount]
-    # (product_id, amount)
-    temp["USER_DB"][str(user_id)]["shopping_cart"].append(item)
+    if i == len(cart):
+        item = [product_id, amount]
+        # (product_id, amount)
+        temp["USER_DB"][str(user_id)]["shopping_cart"].append(item)
+    else:
+        pid, old_amount = cart[i]
+        pair = [product_id, amount + old_amount]
+        temp["USER_DB"][str(user_id)]["shopping_cart"][i] = pair
     db.to_json(temp)
     return {}
 
