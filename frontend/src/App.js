@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
 
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
@@ -76,6 +77,7 @@ function App() {
               <Route exact path="/products" component={ProductsPage} />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
+              <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />
               <Route exact path="/admin" component={AdminPage} />
             </Switch>
           </Router>
