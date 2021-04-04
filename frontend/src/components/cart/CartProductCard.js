@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import AuthContext from '../../AuthContext';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -8,6 +9,7 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button'
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
   grid: {
     //height: "10rem",
   },
-  // item: {
-  //   height: "100%",
-  // },
   img: {
     //width: "10rem",
     height: "10rem",
@@ -33,7 +32,9 @@ const useStyles = makeStyles((theme) => ({
 function CartProductCard(props) {
   const classes = useStyles();
   const theme = useTheme();
+	const token = React.useContext(AuthContext);
 
+  const [id, setID] = useState(0);
   const [img, setImg] = useState("/img/products/h001.jpg");
   const [name, setName] = useState("Product name");
   const [amount, setAmount] = useState(1);
@@ -48,6 +49,14 @@ function CartProductCard(props) {
   const handleIncrement = () => {
     setAmount(amount + 1);
   };
+
+  useEffect((() => {
+    axios.get("/user/cart/list", {
+      params: {
+        token,
+      }
+    })
+  }), []);
 
   return (
     <div
