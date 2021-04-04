@@ -37,6 +37,7 @@ function ProductsPage(props) {
 
   const token = "";
 
+
   const retrieveProducts = () => {
     axios.get('/product/get_all', {
       params: {
