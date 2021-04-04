@@ -350,6 +350,19 @@ def show_all_cart(uid):
         })
     return lst
 
+def change_cart_amount(uid, cart_index, new_amount):
+    db.valid_id("user", uid)
+    temp = db.load_json()
+    pair = temp["USER_DB"][str(uid)]["shopping_cart"][cart_index]
+    if new_amount == 0:
+        temp["USER_DB"][str(uid)]["shopping_cart"].pop(cart_index)
+    else:
+        pid, amount = pair
+        pair = [pid, new_amount]
+        temp["USER_DB"][str(uid)]["shopping_cart"][cart_index] = pair
+    db.to_json(temp)
+    return {}
+
 def refund_helper(db, u_id, amount):
     """
         This function adds amount to a user
