@@ -219,7 +219,7 @@ export default function NavBar() {
 						className={classes.marketButton}
 						component={Link}
 						to={'/products'}
-						color={theme.palette.primary.contrastText}
+						style={{color: theme.palette.primary.contrastText}}
 						variant="outlined"
 					>
             Market
