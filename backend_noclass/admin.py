@@ -54,9 +54,9 @@ def new_product(name, price, description, category, deli_days, pic_link):
     category = None
     if description == "" or description is None:
         description = name
-        category = ct.query_analysis_negation_included(name)
+        category = ct.query_analysis_test3(name)
     else:
-        category = ct.query_analysis_negation_included(name + '. ' + description)
+        category = ct.query_analysis_test3(name + '. ' + description)
     return {
         "id": new_id,
         "name": name,
