@@ -239,8 +239,13 @@ export default function NavBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 2 items in cart" color="inherit">
-              <Badge badgeContent={2} color="secondary">
+            <IconButton 
+              aria-label="cart" 
+              color="inherit"
+              component={Link}
+              to={ `/profile/${token}/cart`}
+            >
+              <Badge badgeContent={0} color="secondary">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

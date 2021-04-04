@@ -33,11 +33,12 @@ function CartProductCard(props) {
   const classes = useStyles();
   const theme = useTheme();
 	const token = React.useContext(AuthContext);
+  const item = props.item;
 
-  const [id, setID] = useState(0);
-  const [img, setImg] = useState("/img/products/h001.jpg");
-  const [name, setName] = useState("Product name");
-  const [amount, setAmount] = useState(1);
+  const [id, setID] = useState(item["product_id"]);
+  const [img, setImg] = useState(item["pic_link"]);
+  const [name, setName] = useState(item["product_name"]);
+  const [amount, setAmount] = useState(item["amount"]);
 
   const handleDecrement = () => {
     if (amount - 1 == 0) {
