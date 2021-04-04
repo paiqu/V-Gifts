@@ -39,6 +39,7 @@ function CartProductCard(props) {
   const [img, setImg] = useState(item["pic_link"]);
   const [name, setName] = useState(item["product_name"]);
   const [amount, setAmount] = useState(item["amount"]);
+  const [cost, setCost] = useState(item["cost"]);
 
   const handleDecrement = () => {
     if (amount - 1 == 0) {
@@ -84,7 +85,9 @@ function CartProductCard(props) {
           {name}
         </Grid>
         <Grid item xs={3}>
-          Quantity: {amount}
+          <p>Quantity: {amount}</p>
+
+          <p>${cost}</p>
         </Grid>
         <Grid item xs={3}>
           <ButtonGroup>

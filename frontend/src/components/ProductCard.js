@@ -7,6 +7,9 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
+import AuthContext from '../AuthContext';
+import axios from 'axios';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductCard(props) {
     const classes = useStyles();
     const theme = useTheme();
+    const token = React.useContext(AuthContext);
 
     const [id, setId] = useState(props.id);
     const [name, setName] = useState(props.name);
@@ -42,6 +46,19 @@ export default function ProductCard(props) {
     const [rating, setRating] = useState(props.rating);
     const [img, setImg] = useState("/img/products/mario-1.jpeg");
 
+    const handleAddToCart = () => {
+      axios.post("/user/cart/add",
+        {
+          token: token,
+          product_id: id,
+          amount: 1,
+        }
+      )
+      .then((response) => {
+
+      })
+      .catch((err) => {});
+    };
 
     return (
         <div className={classes.root}>
@@ -72,6 +89,7 @@ export default function ProductCard(props) {
                         <Grid item>
                             <Button
                               color={theme.palette.primary.contrastText}
+                              onClick={handleAddToCart}
                             >
                               <Typography variant="body2" style={{ cursor: 'pointer' }}>
                                   <ShoppingCartIcon /> Add to Cart

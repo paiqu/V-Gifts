@@ -73,7 +73,7 @@ function CartPage(props) {
                 <Typography variant="h5">
                   Items
                 </Typography>
-                {totalItems}
+                {products.length}
                 <Typography variant="h5">
                   Total
                 </Typography>
