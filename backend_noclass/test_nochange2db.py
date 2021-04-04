@@ -10,7 +10,7 @@ def test0():
     print(us.show_product_lst(2,1)) # empty
 
 def test1():
-    print(us.show_all_cart(1, 1))
+    print(us.show_all_cart(1))
 
 def test2():
     print(us.show_all_order(1, 1))
