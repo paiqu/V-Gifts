@@ -39,3 +39,31 @@ React router is used to navigate among pages.
 I also modified the design of the frontend. The main color was switched to yellow and blue.
 
 Admin page done. In admin's portal, admin can manage the messages, orders, users and products of the website.
+
+## Week 6
+This week I added axios to our frontend so now the client can communicate with the server.
+
+What I've implemented: 
+    1. Users can
+        1. register
+        2. login
+        3. view profile page
+    2. Admins can 
+        1. View all orders in system
+        2. view all users in the system
+    3. token based authentication
+    4. All products now can be loaded from the backend
+    5. Some modifications to current page layout
+
+What I'm stuck on:
+    1. 
+
+
+## Week 7
+This week I implement the purchase functions in frontend.
+
+Users now will be able to 
+    1. purchase directly
+    2. add items into cart
+    3. add fund into account in profile page
+
