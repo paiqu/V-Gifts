@@ -23,14 +23,15 @@ const useStyles = makeStyles((theme) => ({
     image: {
         // width: 128,
         // height: 128,
-        width: '100%',
-        height: '100%',
+        width: '9rem',
+        height: '9rem',
     },
     img: {
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%',
+        padding: 9,
     },
 
 }));

@@ -101,23 +101,25 @@ function CartProductCard(props) {
         <Grid item xs={3}>
           {name} id: {id}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <p>Quantity: {amount}</p>
 
           <p>${cost}</p>
         </Grid>
-        <Grid item xs={3}>
-          <ButtonGroup>
-            <IconButton color="secondary" onClick={handleDecrement} >
-              <RemoveCircleOutlineIcon />
-            </IconButton>
-            <IconButton color="secondary" onClick={handleIncrement} >
-              <AddCircleOutlineIcon />
-            </IconButton>
-            <Button variant="contained" color="primary">
-              PURCHASE
-            </Button>
-          </ButtonGroup>
+        <Grid container item xs={4} justify="flex-end">
+          <Grid item xs={12}>
+              <ButtonGroup>
+                <IconButton color="secondary" onClick={handleDecrement} >
+                  <RemoveCircleOutlineIcon />
+                </IconButton>
+                <IconButton color="secondary" onClick={handleIncrement} >
+                  <AddCircleOutlineIcon />
+                </IconButton>
+                <Button variant="contained" color="primary">
+                  Buy
+                </Button>
+              </ButtonGroup>
+          </Grid>
         </Grid>
         <div>
         </div>
