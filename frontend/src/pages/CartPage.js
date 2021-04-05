@@ -7,8 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import CartProductCard from '../components/cart/CartProductCard';
 import Box from '@material-ui/core/Box';
-import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button'
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,8 +23,11 @@ function CartPage(props) {
   const classes = useStyles();
   const theme = useTheme();
   const token = React.useContext(AuthContext);
+  const history = useHistory()
 
+  // eslint-disable-next-line
   const [totalItems, setTotalItems] = useState(0);
+  // eslint-disable-next-line
   const [totalPayment, setTotalPayment] = useState(0);
   const [products, setProducts] = useState([]);
 
@@ -40,12 +43,14 @@ function CartPage(props) {
       setProducts(data);
     })
     .catch((err) => {});
-  }), [])
+  }), [token])
 
   return (
     <div>
       <NavBar />
-      <Box ml={theme.spacing(3)} mr={theme.spacing(3)}>
+      <Box 
+        ml={theme.spacing(1)} mr={theme.spacing(1)}
+      >
         <Grid
           container
           spacing={2}
@@ -58,8 +63,8 @@ function CartPage(props) {
           <Grid container item xs={12} spacing={2}>
             <Grid container item xs={9} spacing={2}>
               {products.map((x) => 
-                <Grid item xs={12}>
-                  <CartProductCard item={x} />
+                <Grid key={`${x["product_id"]}-${x["product_name"]}-${x["amount"]}`} item xs={12}>
+                  <CartProductCard item={x} history={history} />
                 </Grid>
               )}
             </Grid>

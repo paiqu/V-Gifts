@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@material-ui/core/Box';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AuthContext from '../../AuthContext';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +6,6 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button'
 import axios from 'axios';
 
@@ -43,23 +41,41 @@ function CartProductCard(props) {
   const [cost, setCost] = useState(item["cost"]);
 
   const handleDecrement = () => {
-    if (amount - 1 == 0) {
-      // remove the product from cart in database
-    }
     setAmount(amount - 1);
+
+    axios.post("/user/cart/change", {
+      token: token,
+      "product_id": id,
+      amount: amount-1,
+    })
+    .then((response) => {
+      if (amount - 1 == 0) {
+        props.history.go(0);
+      }
+    })
+    .catch((err) => {});
   };
 
   const handleIncrement = () => {
+    if (amount - 1 <= 0) {
+      setAmount(0);
+    }
     setAmount(amount + 1);
+
+    axios.post("/user/cart/change", {
+      token: token,
+      "product_id": id,
+      amount: amount,
+    })
+    .then((response) => {
+
+    })
+    .catch((err) => {});
   };
 
-  useEffect((() => {
-    axios.get("/user/cart/list", {
-      params: {
-        token,
-      }
-    })
-  }), []);
+  const handlePurchase = () => {
+
+  }
 
   return (
     <div
@@ -83,7 +99,7 @@ function CartProductCard(props) {
         </Grid>
         
         <Grid item xs={3}>
-          {name}
+          {name} id: {id}
         </Grid>
         <Grid item xs={3}>
           <p>Quantity: {amount}</p>
