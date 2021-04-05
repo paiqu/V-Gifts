@@ -293,10 +293,11 @@ def cart_change():
     result = usr.change_cart_amount(user_id, i, amount)
     return dumps({})
 
-@app.route("/user/cart/cost", methods = ["POST"])
+@app.route("/user/cart/cost", methods = ["GET"])
 def cost_cart():
-    data = request.get_json()
-    token = data["token"]
+    # data = request.get_json()
+    # token = data["token"]
+    token = request.args.get("token")
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:

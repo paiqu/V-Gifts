@@ -38,7 +38,7 @@ export default function Product(props) {
     description: "",
     delivery: "",
     rating: "",
-    pic: "",
+    img: "",
   });
   const [amount, setAmount] = React.useState(1);
 
@@ -57,7 +57,7 @@ export default function Product(props) {
           description: data['description'],
           delivery: data['delivery'],
           rating: data['rating'],
-          pic: data['pic'],
+          img: data['pic_link'],
         });
       })
       .catch((err) => {});
@@ -96,19 +96,32 @@ export default function Product(props) {
       data: payload,
     })
     .then(response => {
-      console.log(response.data)
+      console.log(response.data);
     })
     .catch((err) => {
       console.log(err);
     });
+  };
 
+  const handleAddToCart = () => {
+    axios.post("/user/cart/add",
+      {
+        token: token,
+        product_id: id,
+        amount: amount,
+      }
+    )
+    .then((response) => {
+
+    })
+    .catch((err) => {});
   };
 
   return (
     <div>
       <Grid
         container 
-        spacing={2}
+        spacing={5}
         direction="row"
         justify="flex-end"
         style={{
@@ -120,7 +133,7 @@ export default function Product(props) {
           item 
           xs={5} 
         >
-          <img className={classes.image} src={infos.pic} alt="product"/>
+          <img className={classes.image} src={infos.img} alt="product"/>
         </Grid>
         <Grid item xs={7} className={classes.details}>
           <Typography variant="h3">{infos.name}</Typography>
@@ -160,8 +173,10 @@ export default function Product(props) {
               color="primary" 
               style={{marginRight: "1rem"}}
               onClick={handlePurchase}  
-            >Purchase</Button>
-            <Button variant="outlined" color="secondary">Add to Cart</Button>
+            >
+              Purchase
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleAddToCart}>Add to Cart</Button>
           </Box>
         </Grid>
       </Grid>

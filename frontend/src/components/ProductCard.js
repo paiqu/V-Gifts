@@ -23,14 +23,15 @@ const useStyles = makeStyles((theme) => ({
     image: {
         // width: 128,
         // height: 128,
-        width: '100%',
-        height: '100%',
+        width: '9rem',
+        height: '9rem',
     },
     img: {
         margin: 'auto',
         display: 'block',
         maxWidth: '100%',
         maxHeight: '100%',
+        padding: 9,
     },
 
 }));
@@ -44,7 +45,7 @@ export default function ProductCard(props) {
     const [name, setName] = useState(props.name);
     const [price, setPrice] = useState(props.price);
     const [rating, setRating] = useState(props.rating);
-    const [img, setImg] = useState("/img/products/mario-1.jpeg");
+    const [img, setImg] = useState(props.img);
 
     const handleAddToCart = () => {
       axios.post("/user/cart/add",

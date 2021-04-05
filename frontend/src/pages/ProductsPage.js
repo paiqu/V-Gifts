@@ -98,6 +98,7 @@ function ProductsPage(props) {
                     name={x['name']}
                     price={x['price']}
                     rating={x['rating']}
+                    img={x['pic_link']}
                   />
                 </Grid>
               )}
