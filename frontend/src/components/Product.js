@@ -38,7 +38,7 @@ export default function Product(props) {
     description: "",
     delivery: "",
     rating: "",
-    pic: "",
+    img: "",
   });
   const [amount, setAmount] = React.useState(1);
 
@@ -57,7 +57,7 @@ export default function Product(props) {
           description: data['description'],
           delivery: data['delivery'],
           rating: data['rating'],
-          pic: data['pic'],
+          img: data['pic_link'],
         });
       })
       .catch((err) => {});
@@ -120,7 +120,7 @@ export default function Product(props) {
           item 
           xs={5} 
         >
-          <img className={classes.image} src={infos.pic} alt="product"/>
+          <img className={classes.image} src={infos.img} alt="product"/>
         </Grid>
         <Grid item xs={7} className={classes.details}>
           <Typography variant="h3">{infos.name}</Typography>

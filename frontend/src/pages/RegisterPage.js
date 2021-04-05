@@ -57,7 +57,7 @@ function RegisterPage({ setAuth, ...props }) {
         if (infos.password !== event.target.value && event.target.value !== "" && infos.password !== "") {
             setState({
                 password_error: true,
-                password_text: "Password is not match"
+                password_text: "Password does not match"
             });
         }
     };

@@ -44,7 +44,7 @@ export default function ProductCard(props) {
     const [name, setName] = useState(props.name);
     const [price, setPrice] = useState(props.price);
     const [rating, setRating] = useState(props.rating);
-    const [img, setImg] = useState("/img/products/mario-1.jpeg");
+    const [img, setImg] = useState(props.img);
 
     const handleAddToCart = () => {
       axios.post("/user/cart/add",
