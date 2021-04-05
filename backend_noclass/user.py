@@ -357,6 +357,7 @@ def show_all_cart(uid):
             "product_name": ad.product_id_to_name(pid),
             "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
             "amount": amount,
+            "price": temp["PRODUCT_DB"][str(pid)]["price"],
             "cost": individual_price(pid, amount)
         })
     return lst
