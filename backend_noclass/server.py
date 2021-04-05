@@ -270,13 +270,28 @@ def remove_cart():
     while (i < len(cart)):
         if (cart[i][0] == pid):
             break
+        i = i + 1
     result = usr.remove_prod_from_cart(user_id, cart[i])
-    pname = adm.product_id_to_name(pid)
-    return dumps({
-        "status": "success",
-        "product_id": pid,
-        "product_name": pname
-    })
+    return dumps({})
+
+@app.route("/user/cart/change", methods = ["POST"])
+def cart_change():
+    data = request.get_json()
+    token = data["token"]
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    pid = data["product_id"]
+    amount = data["amount"]
+    cart = usr.show_user_cart(user_id)
+    i = 0
+    while (i < len(cart)):
+        if (cart[i][0] == pid):
+            break
+        i = i + 1
+    result = usr.change_cart_amount(user_id, i, amount)
+    return dumps({})
 
 @app.route("/user/cart/cost", methods = ["POST"])
 def cost_cart():
@@ -310,7 +325,6 @@ def create_order():
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-
     # list : [[product_id, amount]
     products = data["list"]
     try:
