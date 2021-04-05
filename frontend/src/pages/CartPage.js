@@ -43,6 +43,19 @@ function CartPage(props) {
       setProducts(data);
     })
     .catch((err) => {});
+
+    axios.get('/user/cart/cost', {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const cost = response.data.cost;
+
+      setTotalPayment(cost);
+    })
+    .catch((err) => {});
+
   }), [token])
 
   // const totalPayment = () => {
@@ -50,6 +63,28 @@ function CartPage(props) {
 
   //   return products.reduce((sum, x) => sum + x[] * x[])
   // }
+
+  const handleCheckout = () => {
+    let cartProducts = products.map((x) => [x["product_id"], x["amount"]]);
+
+    let payload = {
+      token: token,
+      list: cartProducts,
+    };
+
+    axios({
+      url: "/order/new",
+      method: "post",
+      data: payload,
+    })
+    .then(response => {
+      console.log(response.data);
+      history.go(0);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
 
   return (
     <div>
@@ -96,6 +131,7 @@ function CartPage(props) {
                   style={{
                     marginTop: "2rem",
                   }}
+                  onClick={handleCheckout}
                 >
                   CHECKOUT
                 </Button>

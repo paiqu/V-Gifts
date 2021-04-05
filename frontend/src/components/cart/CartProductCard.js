@@ -41,7 +41,11 @@ function CartProductCard(props) {
   const [cost, setCost] = useState(item["cost"]);
 
   const handleDecrement = () => {
-    setAmount(amount - 1);
+    if (amount - 1 <= 0) {
+      setAmount(0);
+    } else {
+      setAmount(amount - 1);
+    }
 
     axios.post("/user/cart/change", {
       token: token,
@@ -57,15 +61,12 @@ function CartProductCard(props) {
   };
 
   const handleIncrement = () => {
-    if (amount - 1 <= 0) {
-      setAmount(0);
-    }
     setAmount(amount + 1);
 
     axios.post("/user/cart/change", {
       token: token,
       "product_id": id,
-      amount: amount,
+      amount: amount+1,
     })
     .then((response) => {
 
@@ -74,7 +75,27 @@ function CartProductCard(props) {
   };
 
   const handlePurchase = () => {
+    let info = [
+      [id, amount]
+    ];
 
+    let payload = {
+      token: token,
+      list: info,
+    };
+
+    axios({
+      url: "/order/new",
+      method: "post",
+      data: payload,
+    })
+    .then(response => {
+      console.log(response.data);
+      props.history.go(0);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   return (
@@ -115,7 +136,7 @@ function CartProductCard(props) {
                 <IconButton color="secondary" onClick={handleIncrement} >
                   <AddCircleOutlineIcon />
                 </IconButton>
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" onClick={handlePurchase}>
                   Buy
                 </Button>
               </ButtonGroup>
