@@ -366,12 +366,11 @@ def refund_order():
 @app.route("/order/list", methods = ["GET"])
 def order_list():
     token = request.args.get("token")
-    page = int(request.args.get("page"))
     try:
         user_id = login.token_to_idd(token)
     except err.InvalidToken as error:
         raise error
-    result = usr.show_all_order(page, user_id)
+    result = usr.show_all_order(user_id)
     return dumps(result)
 
 @app.route("/admin/all_user", methods = ["GET"])
