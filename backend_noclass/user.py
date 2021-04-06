@@ -9,9 +9,10 @@ import login as lo
 import webpage as wb
 import error as err
 
-def new_user(aname, fname, lname, password, email, address, city, country):
+def new_user(aname, fname, lname, password, email, address, city, \
+            country, db_name = 'database.json'):
     new_id = db.id_generator("user")
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     return {
         "id": new_id,
         "name": aname,
@@ -31,13 +32,13 @@ def new_user(aname, fname, lname, password, email, address, city, country):
         "interest": [0] * temp["TYPE_OF_PRODUCTS"]
     }
 
-def new_order(user_id, product_id, datee, amount):
+def new_order(user_id, product_id, datee, amount, db_name = 'database.json'):
     """
         create a new product,
         category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     """
-    new_id = db.id_generator("order")
+    new_id = db.id_generator("order", db_name)
     return {
         "id": new_id,
         "user_id": user_id,

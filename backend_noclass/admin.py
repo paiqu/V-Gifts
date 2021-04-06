@@ -33,8 +33,8 @@ def new_preset_admin(name, password, email):
         "email": email
     }
 
-def new_admin(name, password, email):
-    new_id = db.id_generator('admin')
+def new_admin(name, password, email, db_name = 'database.json'):
+    new_id = db.id_generator('admin', db_name)
     return {
         "id": new_id,
         "name": name,
