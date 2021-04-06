@@ -171,12 +171,12 @@ function LoginPage({ setAuth, ...props }) {
               className={classes.submit}
             >
               Sign In
-                      </Button>
+            </Button>
             <Grid container>
               <Grid item xs>
                 <Link to="#" variant="body2" color={theme.palette.secondary.contrastText}>
                   Forgot password?
-                              </Link>
+                </Link>
               </Grid>
               <Grid item>
                 <Link to="/register" variant="body2" color={theme.palette.primary.contrastText}>
@@ -197,7 +197,7 @@ function LoginPage({ setAuth, ...props }) {
           to={'/admin/login'}
         >
           Admin Login
-              </Button>
+        </Button>
       </Grid>
     </Grid>
   );

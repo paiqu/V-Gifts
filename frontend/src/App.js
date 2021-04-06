@@ -41,31 +41,31 @@ function App() {
 	// using hooks here to set state for the App
   // eslint-disable-next-line
 	const [authDetails, setAuthDetails] = React.useState(
-    // localStorage.getItem('token');
+    // localStorage.getItem('token')
 		localStorage.getItem('token')
 	);
 
+  // eslint-disable-next-line
   const [adminDetails, setAdminDetails] = React.useState(
     localStorage.getItem('admin_token')
   );
 
 
 	// define a function to store details into local storage
-  // eslint-disable-next-line
 	const setAuth = (token, id) => {
 		localStorage.setItem('token', token);
 		localStorage.setItem('id', id);
 
 		// setAuthDetails(token);
     setAuthDetails(token);
-	}
+	};
 
   const setAdminAuth = (token, id) => {
     localStorage.setItem('admin_token', token);
 		localStorage.setItem('admin_id', id);
 
     setAdminDetails(token);
-  }
+  };
 	
   return (
 			<ThemeProvider theme={theme}>
@@ -91,14 +91,14 @@ function App() {
                 exact 
                 path="/admin/login" 
                 render={(props) => {
-                  return <AdminLoginPage {...props} setAuth={setAdminAuth} />;
+                  return <AdminLoginPage {...props} setAdminAuth={setAdminAuth} />;
                 }} 
               />
               <Route exact path="/products" component={ProductsPage} />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />
-              <ProtectedRoute exact path="/admin/:token" component={AdminPage} />
+              <Route exact path="/admin/:token" component={AdminPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Router>
