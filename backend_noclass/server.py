@@ -75,6 +75,16 @@ def adm_logout():
         "is_success": result
     })
 
+@app.route("/admin/profile", methods = ["GET"])
+def adm_profile():
+    token = request.args.get("token")
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = adm.show_profile(aid)
+    return dumps(result)
+
 @app.route("/admin/profile/edit", methods = ["POST"])
 def adm_edit():
     data = request.get_json()
