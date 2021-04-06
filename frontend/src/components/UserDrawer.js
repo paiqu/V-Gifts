@@ -69,7 +69,7 @@ export default function UserDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
   const profile = props.profile;
 
   const [open, setOpen] = React.useState(false);

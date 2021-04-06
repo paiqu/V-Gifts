@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 function CartProductCard(props) {
   const classes = useStyles();
   const theme = useTheme();
-	const token = React.useContext(AuthContext);
+	const token = React.useContext(AuthContext).user;
   const item = props.item;
 
   const [id, setID] = useState(item["product_id"]);

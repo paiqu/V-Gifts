@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductCard(props) {
     const classes = useStyles();
     const theme = useTheme();
-    const token = React.useContext(AuthContext);
+    const token = React.useContext(AuthContext).user;
 
     const [id, setId] = useState(props.id);
     const [name, setName] = useState(props.name);

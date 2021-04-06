@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 function CartPage(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
   const history = useHistory()
 
   // eslint-disable-next-line

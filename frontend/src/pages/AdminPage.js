@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
 
-  }));
+}));
 
 
 function AdminPage(props) {
@@ -13,7 +13,7 @@ function AdminPage(props) {
 
     return (
       <div>
-        <AdminDrawer />
+        <AdminDrawer history={props.history}/>
       </div>
     );
 }

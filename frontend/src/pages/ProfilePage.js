@@ -5,7 +5,7 @@ import UserDrawer from '../components/UserDrawer';
 
 export default function ProfilePage(props) {
 	// const { profile } = props.match.params;
-	const token = React.useContext(AuthContext);
+	const token = React.useContext(AuthContext).user;
   const [profile, setProfile] = React.useState({
     "first_name": "",
     "last_name": "",

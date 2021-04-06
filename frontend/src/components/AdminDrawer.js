@@ -7,11 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -27,7 +22,8 @@ import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
 import axios from 'axios';
-// import AuthContext from '../AuthContext';
+import AuthContext from '../AuthContext';
+import Button from '@material-ui/core/Button';
 
 
 const drawerWidth = 240;
@@ -38,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
+    display: "flex",
   },
   drawer: {
     width: drawerWidth,
@@ -61,15 +58,21 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '7vh',
     marginRight: "0.5rem",
   },
+  title: {
+    flexGrow: 1,
+  },
+  logoutButton: {
+
+  }
 }));
 
 
 
-export default function AdminDrawer() {
+export default function AdminDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
 
-  // const admin_token = "";
+  const token = React.useContext(AuthContext).admin;
 
   const [open, setOpen] = React.useState(false);
   const [display, setDisplay] = React.useState({
@@ -126,6 +129,20 @@ export default function AdminDrawer() {
     });
   }
 
+  const handleLogout = (event) => {
+    axios.post('/admin/logout', { token })
+      .then((response) => {
+        console.log(response);
+      
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_id');
+
+        // after log out, redirect to home page
+        props.history.push('/');
+      }) 
+      .catch((err) => {console.log(err)});
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -146,7 +163,9 @@ export default function AdminDrawer() {
 					>
             V-Gifts | Admin Page
           </Typography>
-
+          <Button className={classes.logoutButton} variant="contained" color="secondary" onClick={handleLogout}>
+            Log out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer

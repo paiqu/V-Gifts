@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar() {
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
 
   const classes = useStyles();
   const theme = useTheme();

@@ -124,7 +124,7 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
         });
       } else {
         console.log(data);
-        setAdminAuth(data.token, data.user_id);
+        setAdminAuth(data.token, data.id);
         props.history.push(`/admin/${data.token}`);
       }
     })
