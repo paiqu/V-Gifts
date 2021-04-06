@@ -11,10 +11,12 @@ import RegisterPage from './pages/RegisterPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
+import AdminLoginPage from './pages/AdminLoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
+import AdminRoute from './utils/AdminRoute';
 
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&secondary.color=2196F3&secondary.text.color=FAFAFA&primary.color=FFC400
 const theme = createMuiTheme({
@@ -40,24 +42,35 @@ function App() {
 	// using hooks here to set state for the App
   // eslint-disable-next-line
 	const [authDetails, setAuthDetails] = React.useState(
-    // localStorage.getItem('token');
+    // localStorage.getItem('token')
 		localStorage.getItem('token')
 	);
 
+  // eslint-disable-next-line
+  const [adminDetails, setAdminDetails] = React.useState(
+    localStorage.getItem('admin_token')
+  );
+
 
 	// define a function to store details into local storage
-  // eslint-disable-next-line
 	const setAuth = (token, id) => {
 		localStorage.setItem('token', token);
 		localStorage.setItem('id', id);
 
 		// setAuthDetails(token);
     setAuthDetails(token);
-	}
+	};
+
+  const setAdminAuth = (token, id) => {
+    localStorage.setItem('admin_token', token);
+		localStorage.setItem('admin_id', id);
+
+    setAdminDetails(token);
+  };
 	
   return (
 			<ThemeProvider theme={theme}>
-				<AuthProvider value={authDetails}>
+				<AuthProvider value={{user: authDetails, admin: adminDetails}}>
           <Router>
             <Switch>
               <Route exact path="/" component={HomePage} />
@@ -75,11 +88,18 @@ function App() {
                   return <RegisterPage {...props} setAuth={setAuth} />;
                 }}  
               />
+              <Route 
+                exact 
+                path="/admin/login" 
+                render={(props) => {
+                  return <AdminLoginPage {...props} setAdminAuth={setAdminAuth} />;
+                }} 
+              />
               <Route exact path="/products" component={ProductsPage} />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />
-              <Route exact path="/admin" component={AdminPage} />
+              <AdminRoute exact path="/admin/:token" component={AdminPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Router>

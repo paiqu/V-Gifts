@@ -3,23 +3,21 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-
-
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" to="/">
+      <Link color="inherit" href="/">
         V-Gift
             </Link>{' '}
       {new Date().getFullYear()}
@@ -33,8 +31,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
   },
   image: {
-    // backgroundImage: 'url(https://source.unsplash.com/random)',
-    backgroundImage: `url(/img/home/home-1.jpg)`,
+    backgroundImage: `url(/img/home/home-4.jpeg)`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -46,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+
   },
   avatar: {
     margin: theme.spacing(1),
@@ -65,9 +63,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function LoginPage({ setAuth, ...props }) {
+function AdminLoginPage({ setAdminAuth, ...props }) {
   const [infos, setInfos] = React.useState({
-    account_name: "",
+    name: "",
     password: "",
   });
 
@@ -79,13 +77,15 @@ function LoginPage({ setAuth, ...props }) {
   };
 
   const [state, setState] = React.useState({
-    error: false,
+    nameError: false,
+    passwordError: false,
     help_text: ""
   });
 
   const handle_error = () => event => {
     setState({
-      error: false,
+      nameError: false,
+      passwordError: false,
       help_text: ""
     });
   };
@@ -94,26 +94,41 @@ function LoginPage({ setAuth, ...props }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    axios.post('user/login', { ...infos })
-      .then((response) => {
-        const data = response.data;
-        if (data.code === 405) {
-          setState({
-            error: true,
-            help_text: "Invalid account name/Password error"
-          });
-        }
-        else {
-          // mark the user as signed-in in local storage, it will be removed when it is logged out
-          setAuth(data.token, data.user_id);
+    if (!infos.name || !infos.password) {
+      setState({
+        // error: true,
+        nameError: true,
+        passwordError: true,
+        help_text: "All fields have to be finished before logging you in"
+      });
+      return;
+    }
 
-          // direct the user to the market page
-          props.history.push('/products');
-        }
-
-      })
-      .catch((err) => { });
-
+    axios.post('admin/login', { 
+      name: infos.name,
+      password: infos.password,
+     })
+    .then((response) => {
+      const data = response.data;
+      if (data.code == 404) {
+        // admin name does not exist
+        setState({
+          nameError: true,
+          help_text: "The entered admin name does not exist"
+        });
+      } else if (data.code == 405) {
+        // wrong password
+        setState({
+          passwordError: true,
+          help_text: "The password entered is incorrect"
+        });
+      } else {
+        console.log(data);
+        setAdminAuth(data["token"], data["admin_id"]);
+        props.history.push(`/admin/${data.token}`);
+      }
+    })
+    .catch((err) => { });
   }
 
   const classes = useStyles();
@@ -127,36 +142,33 @@ function LoginPage({ setAuth, ...props }) {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <SupervisorAccountIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
-                  </Typography>
+            V-Gifts Admin Sign in
+          </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
-              error={state.error}
+              error={state.nameError}
               helperText={state.help_text}
               variant="outlined"
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Account Name"
-              name="email"
-              autoComplete="email"
+              label="Admin Account Name"
               autoFocus
-              onChange={handleChange('account_name')}
+              onChange={handleChange('name')}
               onClick={handle_error()}
             />
             <TextField
-              error={state.error}
+              error={state.passwordError}
               helperText={state.help_text}
               variant="outlined"
               margin="normal"
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Admin Password"
               type="password"
               id="password"
               autoComplete="current-password"
@@ -172,35 +184,14 @@ function LoginPage({ setAuth, ...props }) {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link to="#" variant="body2" color={theme.palette.secondary.contrastText}>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link to="/register" variant="body2" color={theme.palette.primary.contrastText}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
             <Box mt={5}>
               <Copyright />
             </Box>
           </form>
         </div>
-        <Button
-          className={classes.adminButton}
-          color='secondary'
-          variant='outlined'
-          component={Link}
-          to={'/admin/login'}
-        >
-          Admin Login
-        </Button>
       </Grid>
     </Grid>
   );
 }
 
-export default LoginPage;
+export default AdminLoginPage;

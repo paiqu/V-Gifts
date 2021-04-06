@@ -15,10 +15,12 @@ import axios from 'axios';
 const useStyles = makeStyles((theme) => ({
     root: {
         // flexGrow: 1,
+        height: "100%",
     },
     paper: {
         padding: theme.spacing(2),
         margin: 'auto',
+        height: "100%",
     },
     image: {
         // width: 128,
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductCard(props) {
     const classes = useStyles();
     const theme = useTheme();
-    const token = React.useContext(AuthContext);
+    const token = React.useContext(AuthContext).user;
 
     const [id, setId] = useState(props.id);
     const [name, setName] = useState(props.name);
@@ -71,14 +73,14 @@ export default function ProductCard(props) {
                           component={Link}
                           to={`/product/${id}`}
                         >
-                            <img className={classes.img} alt="complex" src={img} />
+                            <img className={classes.img} alt="product image" src={img} />
                         </ButtonBase>
                     </Grid>
                     <Grid item xs={12} sm container>
                         <Grid item xs container direction="column" spacing={2}>
                         <Grid item xs>
                             <Typography gutterBottom variant="subtitle1">
-                              {name}
+                              {`${name.split(" ").splice(0, 11).join(" ")} ...`}
                             </Typography>
                             <Typography variant="body2" gutterBottom>
                               A normal product

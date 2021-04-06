@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar() {
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -208,7 +208,7 @@ export default function NavBar() {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/products'}
+						to={'/'}
 						className={classes.title} 
 						variant="h4"
 						noWrap

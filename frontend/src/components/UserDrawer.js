@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,11 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -23,7 +17,6 @@ import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
 import UsersDataGrid from './UsersDataGrid';
-import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import UserHome from './UserHome';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -31,6 +24,8 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
 import OrderCard from './OrderCard';
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+
 
 const drawerWidth = 240;
 
@@ -40,25 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    // transition: theme.transitions.create(['width', 'margin'], {
-    //   easing: theme.transitions.easing.sharp,
-    //   duration: theme.transitions.duration.leavingScreen,
-    // }),
   },
-  // appBarShift: {
-  //   marginLeft: drawerWidth,
-  //   width: `calc(100% - ${drawerWidth}px)`,
-  //   transition: theme.transitions.create(['width', 'margin'], {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.enteringScreen,
-  //   }),
-  // },
-  // menuButton: {
-  //   marginRight: 36,
-  // },
-  // hide: {
-  //   display: 'none',
-  // },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -70,32 +47,6 @@ const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: 'auto',
   },
-  // drawerOpen: {
-  //   width: drawerWidth,
-  //   transition: theme.transitions.create('width', {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.enteringScreen,
-  //   }),
-  // },
-  // drawerClose: {
-  //   transition: theme.transitions.create('width', {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.leavingScreen,
-  //   }),
-  //   overflowX: 'hidden',
-  //   width: theme.spacing(7) + 1,
-  //   [theme.breakpoints.up('sm')]: {
-  //     width: theme.spacing(9) + 1,
-  //   },
-  // },
-  // toolbar: {
-  //   display: 'flex',
-  //   alignItems: 'center',
-  //   justifyContent: 'flex-end',
-  //   padding: theme.spacing(0, 1),
-  //   // necessary for content to be below app bar
-  //   ...theme.mixins.toolbar,
-  // },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -118,7 +69,7 @@ export default function UserDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
   const profile = props.profile;
 
   const [open, setOpen] = React.useState(false);
@@ -198,53 +149,7 @@ export default function UserDrawer(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {/* <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-        style={{
-          boxShadow: 'none',
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-						style={{
-							textDecoration: "none",
-              fontWeight: "200",
-              color: theme.palette.primary.contrastText
-						}}
-						color="inherit"
-						component={Link}
-						to={'/products'}
-						className={classes.title} 
-						variant="h4"
-						noWrap
-					>
-            V-Gifts | My Profile
-          </Typography>
-          <Button variant="contained" color="secondary" onClick={handleLogout}>
-            Log out
-          </Button>
-        </Toolbar>
-      </AppBar> */}
       <AppBar position="fixed" className={classes.appBar} elevation={0}>
-        {/* <Toolbar>
-          <Typography variant="h6" noWrap>
-            Clipped drawer
-          </Typography>
-        </Toolbar> */}
         <Toolbar>
           <Typography
 						style={{
@@ -272,24 +177,7 @@ export default function UserDrawer(props) {
         classes={{
           paper: classes.drawerPaper,
         }}
-        // variant="permanent"
-        // className={clsx(classes.drawer, {
-        //   [classes.drawerOpen]: open,
-        //   [classes.drawerClose]: !open,
-        // })}
-        // classes={{
-        //   paper: clsx({
-        //     [classes.drawerOpen]: open,
-        //     [classes.drawerClose]: !open,
-        //   }),
-        // }}
       >
-        {/* <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div> */}
-        {/* <Divider /> */}
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>
@@ -297,17 +185,13 @@ export default function UserDrawer(props) {
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
-            <ListItem button key={"Inbox"}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
-              <ListItemText primary={"Inbox"} />
+            <ListItem button key={"Cart"} component={Link} to={ `/profile/${token}/cart`}>
+              <ListItemIcon><ShoppingCartIcon /></ListItemIcon>
+              <ListItemText primary={"Cart"} />
             </ListItem>
-            <ListItem button key={"Market"}>
+            <ListItem button key={"Market"} component={Link} to={"/products"}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
               <ListItemText primary={"Market"} />
-            </ListItem>
-            <ListItem button key={"Users"} onClick={displayUsers}>
-              <ListItemIcon><GroupIcon /></ListItemIcon>
-              <ListItemText primary={"Users"} />
             </ListItem>
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
@@ -319,15 +203,6 @@ export default function UserDrawer(props) {
             </ListItem>
           </List>
         </div>
-        {/* <Divider /> */}
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <main className={classes.content}>
         {/* <div className={classes.toolbar} /> */}
@@ -348,9 +223,7 @@ export default function UserDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
-          <Typography>
-            Hello {`${profile['first_name']} ${profile['last_name']}`}
-          </Typography>
+
         </Box>
         {display.home && renderUserHome}
         {display.users && renderUsers}

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 function CartPage(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
   const history = useHistory()
 
   // eslint-disable-next-line
@@ -63,6 +63,10 @@ function CartPage(props) {
 
   //   return products.reduce((sum, x) => sum + x[] * x[])
   // }
+
+  const handleTotalPaymentChange = (change) => {
+    setTotalPayment(totalPayment + change);
+  };
 
   const handleCheckout = () => {
     let cartProducts = products.map((x) => [x["product_id"], x["amount"]]);
@@ -105,7 +109,11 @@ function CartPage(props) {
             <Grid container item xs={9} spacing={2}>
               {products.map((x) => 
                 <Grid key={`${x["product_id"]}-${x["product_name"]}-${x["amount"]}`} item xs={12}>
-                  <CartProductCard item={x} history={history} />
+                  <CartProductCard 
+                    item={x} 
+                    history={history} 
+                    handleTotalPaymentChange={handleTotalPaymentChange}
+                  />
                 </Grid>
               )}
             </Grid>
@@ -117,13 +125,13 @@ function CartPage(props) {
                 borderRadius={5}
               >
                 <Typography variant="h5">
-                  Items
+                  Total Products in Cart
                 </Typography>
                 {products.length}
                 <Typography variant="h5">
-                  Total
+                  Total Payment
                 </Typography>
-                {totalPayment}
+                <b>{`\$${totalPayment}`}</b>
                 <Button 
                   className={classes.checkoutBtn} 
                   variant="contained" 

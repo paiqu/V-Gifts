@@ -31,12 +31,13 @@ const useStyles = makeStyles((theme) => ({
 function CartProductCard(props) {
   const classes = useStyles();
   const theme = useTheme();
-	const token = React.useContext(AuthContext);
+	const token = React.useContext(AuthContext).user;
   const item = props.item;
 
   const [id, setID] = useState(item["product_id"]);
   const [img, setImg] = useState(item["pic_link"]);
   const [name, setName] = useState(item["product_name"]);
+  const [price, setPrice] = useState(item["price"]);
   const [amount, setAmount] = useState(item["amount"]);
   const [cost, setCost] = useState(item["cost"]);
 
@@ -53,7 +54,11 @@ function CartProductCard(props) {
       amount: amount-1,
     })
     .then((response) => {
+      setCost(cost-price);
       if (amount - 1 == 0) {
+        props.handleTotalPaymentChange(-price);
+        
+
         props.history.go(0);
       }
     })
@@ -69,7 +74,8 @@ function CartProductCard(props) {
       amount: amount+1,
     })
     .then((response) => {
-
+      props.handleTotalPaymentChange(price);
+      setCost(cost + price);
     })
     .catch((err) => {});
   };
@@ -120,12 +126,12 @@ function CartProductCard(props) {
         </Grid>
         
         <Grid item xs={3}>
-          {name} id: {id}
+          {name}
         </Grid>
         <Grid item xs={2}>
           <p>Quantity: {amount}</p>
-
-          <p>${cost}</p>
+          <p>{`Item price: \$${price}`}</p>
+          <p>{`Total price: \$${cost}`}</p>
         </Grid>
         <Grid container item xs={4} justify="flex-end">
           <Grid item xs={12}>

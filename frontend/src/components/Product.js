@@ -28,7 +28,7 @@ export default function Product(props) {
   const classes = useStyles();
   // eslint-disable-next-line
   const theme = useTheme();
-  const token = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
 
   const id = props.id;
   const [infos, setInfos] = React.useState({
