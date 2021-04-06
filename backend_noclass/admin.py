@@ -42,13 +42,13 @@ def new_admin(name, password, email):
         "email": email
     }
 
-def new_product(name, price, description, category, deli_days, pic_link):
+def new_product(name, price, description, category, deli_days, pic_link, db_name = 'database.json'):
     '''
         create a new product,
         category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     '''
-    new_id = db.id_generator('product')
+    new_id = db.id_generator('product', db_name)
     # assert db.check_interest_dim(category)
     # catagory is now calculated by query_analysis
     category = None
@@ -72,7 +72,7 @@ def new_product(name, price, description, category, deli_days, pic_link):
 
 # editors
 
-def edit_admin(admin_id, name, password, email):
+def edit_admin(admin_id, name, password, email, db_name = 'database.json'):
     '''
         This function edits admin info with inputs above
         and returns the id of this admin
@@ -83,22 +83,24 @@ def edit_admin(admin_id, name, password, email):
     temp['ADMIN_DB'][str(admin_id)]["name"] = name
     temp['ADMIN_DB'][str(admin_id)]["password"] = password
     temp['ADMIN_DB'][str(admin_id)]["email"] = email
+    db.to_json(temp, db_name)
     return {
         'id': admin_id
     }
 
-def edit_product(prod_id, prod_name, prod_category, prod_descrip):
+def edit_product(prod_id, prod_name, prod_category, prod_descrip, db_name = 'database.json'):
     '''
         This function edits product info with inputs above
         and returns the id of this product
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     if str(prod_id) not in temp['PRODUCT_DB']:
         raise KeyError()
     temp['PRODUCT_DB'][str(prod_id)]["name"] = prod_name
-    assert db.check_interest_dim(prod_category)
+    # assert db.check_interest_dim(prod_category)
     temp['PRODUCT_DB'][str(prod_id)]["category"] = prod_category
     temp['PRODUCT_DB'][str(prod_id)]["description"] = prod_descrip
+    db.to_json(temp, db_name)
     return {
         'id': prod_id
     }

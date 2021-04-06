@@ -291,3 +291,42 @@ def rating_calc(prod_id):
         for item in ratings:
             rt_lst.append(item[1])
         return sum(rt_lst) / len(rt_lst)
+
+def prod_filter_type(ctgry = [], price_rg = [0, 99999999], db_name = 'database.json'):
+    '''
+        This function filters product by category
+        and price range
+    '''
+    temp = db.load_json()
+    all_prod = list(temp["PRODUCT_DB"].keys())
+    # filter catagory
+    rt1 = []
+    rt2 = []
+    # if category is chosen
+    if ctgry != [] or ctgry != None:
+        for prod in all_prod:
+            prod_summ = 1
+            # for all choson category, product has a positive direction on that category
+            for i in range(len(ctgry)):
+                if ctgry[i] > 0:
+                    prod_summ *= ctgry[i] * temp["PRODUCT_DB"][prod]['category'][i]
+            if prod_summ > 0:
+                rt1.append(prod)
+    else:
+        rt1 = all_prod
+    # filter price
+    rt2 = []
+    for prod in rt1:
+        print()
+        if temp["PRODUCT_DB"][prod]['price'] >= price_rg[0] \
+            and temp["PRODUCT_DB"][prod]['price'] <= price_rg[-1]:
+            rt2.append(prod)
+    return rt2
+
+if __name__ == "__main__":
+    print(prod_filter_type(ctgry = [], price_rg = [0, 99999999], \
+        db_name = 'database_manual.json'))
+    print(prod_filter_type(ctgry = [0, 1, 0], price_rg = [0, 99999999], \
+        db_name = 'database_manual.json'))
+    print(prod_filter_type(ctgry = [], price_rg = [100, 200], \
+        db_name = 'database_manual.json'))

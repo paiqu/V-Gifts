@@ -38,8 +38,9 @@ KEYWORDS_LST_yifan = [
 ]
 
 def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
-    temp = db.init_db()
+    # temp = db.init_db()
     # file_name = 'database_manual.json'
+    temp = db.load_json(file_name)
     db.to_json(temp, file_name)
     # lst = [
     #     {
@@ -56,11 +57,13 @@ def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     # load products into db
     for prod in lst:
         db.add_prod(ad.new_product(prod['name'], prod['price'], prod['description'],\
-                            None, prod['delivery_days'], prod['pic_link']), file_name)
+                            None, prod['delivery_days'], prod['pic_link'], file_name), file_name)
     # show db
     # db.pretty_print(db.load_json(file_name))
 
 if __name__ == "__main__":
+    db.to_json(db.init_db(), 'database_manual.json')
+
     lst = [
             {
                 'name': 'A N KINGPiiN Inspirational Bracelets for Women Inspirational Gift for Women Girls Men Motivational Birthday Cuff Bangle Friendship Personalized Mantra Jewelry Come Gift Box',
@@ -268,8 +271,6 @@ if __name__ == "__main__":
             
         ]
     
-    add_product_to_db_special(lst)
-
     lst_yifan = [
         {
             'name': 'Gifts For Grandma - Grandma Birthday Gifts - Best Grandma Gifts For Grandmother, New Grandma, First Time Grandma, Gigi, Mimi, Grammy From Grandchildren, Granddaughter, Grandkids - 12 Oz Wine Tumbler',
@@ -419,3 +420,6 @@ if __name__ == "__main__":
             'pic_link': '/img/products/001.jpg'
         }
     ]
+
+    add_product_to_db_special(lst)
+    add_product_to_db_special(lst_yifan)
