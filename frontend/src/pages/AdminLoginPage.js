@@ -11,6 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 
 function Copyright() {
@@ -141,7 +142,7 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <SupervisorAccountIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             V-Gifts Admin Sign in
