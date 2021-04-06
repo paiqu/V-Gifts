@@ -23,13 +23,13 @@ def test1():
     print(us.show_all_cart(1))
 
 def test2():
-    print(us.show_all_order(1, 1))
+    print(us.show_all_order(1))
 
 
 if __name__ == "__main__":
     # test0()
-    test1()
+    # test1()
     # test2()
     # print("===============================")
-    # temp = db.load_json()
-    # db.pretty_print(temp)
+    temp = db.load_json()
+    db.pretty_print(temp)

@@ -65,9 +65,12 @@ def adm_login():
 @app.route("/admin/logout", methods = ["POST"])
 def adm_logout():
     data = request.get_json()
-    name = data["name"]
     token = data["token"]
-    result = login.logout_admin(name, token)
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = login.logout_admin(token)
     return dumps({
         "is_success": result
     })
@@ -75,7 +78,11 @@ def adm_logout():
 @app.route("/admin/profile/edit", methods = ["POST"])
 def adm_edit():
     data = request.get_json()
-    aid = data["admin_id"]
+    token = data["token"]
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     name = data["name"]
     password = data["password"]
     email = data["email"]
@@ -87,6 +94,11 @@ def adm_edit():
 @app.route("/product/new", methods = ["POST"])
 def new_product():
     data = request.get_json()
+    token = data["token"]
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     name = data["name"]
     price = data["price"]
     description = data["description"]
@@ -102,6 +114,11 @@ def new_product():
 @app.route("/product/edit", methods = ["POST"])
 def edit_product():
     data = request.get_json()
+    token = data["token"]
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     id = data["id"]
     name = data["name"]
     category = data["category"]
@@ -376,6 +393,11 @@ def order_list():
 @app.route("/admin/all_user", methods = ["GET"])
 def admin_get_all_user():
     # date = request.get_json()
+    token = request.args.get("token")
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
     result = adm.get_user_list()
     return dumps(result)
 
