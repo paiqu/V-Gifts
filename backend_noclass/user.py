@@ -9,9 +9,10 @@ import login as lo
 import webpage as wb
 import error as err
 
-def new_user(aname, fname, lname, password, email, address, city, country):
+def new_user(aname, fname, lname, password, email, address, city, \
+            country, db_name = 'database.json'):
     new_id = db.id_generator("user")
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     return {
         "id": new_id,
         "name": aname,
@@ -31,13 +32,13 @@ def new_user(aname, fname, lname, password, email, address, city, country):
         "interest": [0] * temp["TYPE_OF_PRODUCTS"]
     }
 
-def new_order(user_id, product_id, datee, amount):
+def new_order(user_id, product_id, datee, amount, db_name = 'database.json'):
     """
         create a new product,
         category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     """
-    new_id = db.id_generator("order")
+    new_id = db.id_generator("order", db_name)
     return {
         "id": new_id,
         "user_id": user_id,
@@ -357,6 +358,7 @@ def show_all_cart(uid):
             "product_name": ad.product_id_to_name(pid),
             "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
             "amount": amount,
+            "price": temp["PRODUCT_DB"][str(pid)]["price"],
             "cost": individual_price(pid, amount)
         })
     return lst
@@ -419,7 +421,7 @@ def show_order_user(u_id):
     temp = db.load_json()
     return temp["USER_DB"][str(u_id)]["order"]
 
-def show_all_order(page, uid, num_each_page = 9):
+def show_all_order(uid):
     lst = []
     temp = db.load_json()
     orders = show_order_user(uid)
@@ -449,15 +451,7 @@ def show_all_order(page, uid, num_each_page = 9):
             "state_in_code": state_in_code,
             "state_in_text": state_in_text
         })
-    rt = []
-    for i in range(len(lst)):
-        if i >= (page-1)*num_each_page and i < page*num_each_page:
-            # e.g. page 1 => item 0~8
-            rt.append(lst[i])
-    return {
-        "order_history": rt,
-        "total_pages": ceil(len(lst)/num_each_page)
-    }
+    return lst
 
 # Function to show user info
 def show_profile(u_id):

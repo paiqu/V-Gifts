@@ -28,15 +28,19 @@ KEYWORDS_LST_haoran = [
 KEYWORDS_LST_yifan = [
     # tergets
     'mom', 'dad', 'grandma', 'grandmother', 'grandpa', 'grandfather', 'fandom', 'vegetarianism',
-    'vegan', 
+    'vegan', 'religion', 'teen', 'tennage', 'kid', 'kids', 'musicion', 'music',
     # types
-    'wine tumbler', 'necklace', 'earrings', 'jewelry', 'mug', 'candle'
+    'wine tumbler', 'necklace', 'earrings', 'jewelry', 'mug', 'candle', 'cushion', 'glass', 
+    'whiskey', 'cocktail', 'music', 'music box', 'cross', 'metal', 'pendant', 'star war',
+    'flash', 'notebook', 'cookbook', 'book', 'survival gear', 'gadget', 'lego', 'brick', 'toy',
+    'water', 'piano', 'player', 'bluetooth', 'bag'
 
 ]
 
 def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
-    temp = db.init_db()
+    # temp = db.init_db()
     # file_name = 'database_manual.json'
+    temp = db.load_json(file_name)
     db.to_json(temp, file_name)
     # lst = [
     #     {
@@ -53,11 +57,13 @@ def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     # load products into db
     for prod in lst:
         db.add_prod(ad.new_product(prod['name'], prod['price'], prod['description'],\
-                            None, prod['delivery_days'], prod['pic_link']), file_name)
+                            None, prod['delivery_days'], prod['pic_link'], file_name), file_name)
     # show db
     # db.pretty_print(db.load_json(file_name))
 
 if __name__ == "__main__":
+    db.to_json(db.init_db(), 'database_manual.json')
+
     lst = [
             {
                 'name': 'A N KINGPiiN Inspirational Bracelets for Women Inspirational Gift for Women Girls Men Motivational Birthday Cuff Bangle Friendship Personalized Mantra Jewelry Come Gift Box',
@@ -265,141 +271,139 @@ if __name__ == "__main__":
             
         ]
     
-    add_product_to_db_special(lst)
-
     lst_yifan = [
         {
             'name': 'Gifts For Grandma - Grandma Birthday Gifts - Best Grandma Gifts For Grandmother, New Grandma, First Time Grandma, Gigi, Mimi, Grammy From Grandchildren, Granddaughter, Grandkids - 12 Oz Wine Tumbler',
             'price': 20,
             'description': "A LOVELY PRESENT - Paint a wide smile on your grandmother's face with this tumbler. Made with attention to detail, this durable wine tumbler offers value for your money. The topnotch quality of this tumbler makes it an impressive gift whatever the occasion. FUN, WITTY DESIGN - Poke fun and laugh with your nana with this wine tumbler! Perfect gifts ideal for grandmother, new grandma, first time grandma, gigi, mimi, grammy. DOUBLE WALL VACUUM INSULATION - We use double-wall insulation to help retain hot and cold liquid temperatures, which makes our wine tumbler also great for water, coffee, cola, beer, juice, tea, ice cream, cocktails and more BPA FREE AND DURABLE - These tumblers also come with a convenient reusable drink straw, straw cleaning brush, and BPA-free drink lid. Crafted with 18/8 food grade stainless steel these tumblers are durable, unbreakable, sweat proof, rust resistant and perfect for backyard barbecues, hanging out at the pool, or enjoying a hot day at the beach with friends. GIFTS FOR GRANDMA, GRANDMA BIRTHDAY GIFTS - Complete with a convenient gift giving box these drink cups make a fun and personal gift choice for birthdays, holidays, Christmas or just because.",
-            'delivery_days': 3,
+            'delivery_days': 5,
             'pic_link': '/img/products/y001.jpg'
         },
         {
             'name': "Gifts for Grandma - Grandma Gifts Set Includes Sterling Silver Necklace，Earrings, Pink Marble Jewelry Trays,Pink Marble Mug, Scented Candle and Flower – Best Mother's Day Birthday Gift Set",
             'price': 47,
             'description': "♥GRANDMA GIFTS SET PACK🎁-'Best Gandma Ever' Pink Marble Mug and a gold spoon, Pink Marble Jewelry Trays with 925 sterling silver necklace and a pair of Earrings,a scented candle and a bunch of carnations. Packaged with CUTE box and gift card. ♥MOTHERS DAY GIFTS FOR NANA-Perfect gift for the fabulous people in your life! Individually gift boxed that is sure to bring a smile. ♥BEST GRANDMA GIFT IDEAS-All the gifts are beautifully assorted, your grandma will love it. Heavy box with very cute and great presentation. ♥NANA GIFTS SET READY-Our gifts box is designed to provide the best experience. No need to repackage. ♥THE BEST VALUE-If any other issue, Please feel free to contact us for solution, we’ll reply you in 24 hours, we will try our 200% effort to make you 100% satisfy. SO HURRY UP! BUY NOW!",
-            'delivery_days': 5,
+            'delivery_days': 7,
             'pic_link': '/img/products/y002.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Best Gift Grandma I Love You More Than The Stars in The Sky You Mean The World to Me Blessing Cotton Linen Throw Pillow Case Cushion Cover Home Office Decorative Square 18',
+            'price': 9,
+            'description': "1：Best Gifts Grandma I Love You More Than The Stars In The Sky You Mean The World To Me Blessing. 2：Measures 18 inches square, 45 x 45 cm，1-2cm deviation is allowed, because of manual measurement. 3：This cushion cover has an invisible zipper, Safe to machine wash. Print just On ONE side. 4：Durable and environmentally friendly Cotton linen Materials.QTY:1 Piece (not include filler,only the pillowcase) weight:120g. 5：i have a factory ,I have a variety of styles, can provide custom",
+            'delivery_days': 3,
+            'pic_link': '/img/products/y003.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
+            'name': 'Gifts for Grandpa - "Grandpa Juice" - 11oz Funny Whiskey/Cocktail Glass- Idea From Daughter, Fathers Day, Papa, New, For Birthday, Grandson, Granddaughter, Grandkids',
+            'price': 16,
+            'description': "Gifts for Grandpa - 'Grandpa Juice' - 11oz Funny Whiskey/Cocktail Glass- Gift idea From Son, Daughter, New, For Birthday, Grandson, Granddaughter. THICK heavy base for a balanced grip QUALITY product made from the highest standard glass material in the U.S.A. MODERN/SLEEK cylindrical glass design. PERMANENT writing that will not fade or peel GUARANTEED",
             'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'pic_link': '/img/products/y004.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Lastsummer You are My Sunshine Music Box – Gift for Grandpa – 1 Set（Black）',
+            'price': 13,
+            'description': "NOVEL DESIGN: This Delicate Laser Engraved Music Box is made of Natural Wood, No harmful substance, Odorless, it will be the perfect gift for Birthday, Graduation, Anniversary, Holiday, Valentine’s Day, Christmas, New year, Thanksgiving Day, Black Friday, Father’s Day, Mother’s Day... PERFECT SIZE: The Music Box Measuring: 2.55'×2.16'×1.57' and 1 Music Box each package, you can easily hold this Cute and Tiny Music box in your Palm, It’s a great gift for your son, daughter, grandkids, niece, nephew, grandparent, aunt, uncle, mom, dad, sister, brother. EASY OPERATE: No Battery, all you have to do is Keep cranking the handle to play the Music and the beautiful melody 'You Are My Sunshine' will come out. MEMORABLE GIFT: The Clear and Meaningful Message was engraved on the music box: “I LOVE YOU More Than The Stars In The Sky, More Than The Trees In The Forest. Grandpa, You Mean The World To Me.”",
+            'delivery_days': 7,
+            'pic_link': '/img/products/y005.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Grandpa Handmade Glass Cross: Sentimental Gift for Grandpa',
+            'price': 18,
+            'description': "Uniquely handmade in the USA 4' Blue Glass Cross Loving Grandpa sentiment printed of 100# gloss paper for keeping. Packaged in 5.5'x5.5' White Gift Box with Clear Lid Great idea for Grandpa's birthday, Christmas, or any day you are thinking of him. Proudly display on ornament stand, knob, mirror or tree. Perfect for year round giving as a gift for grandpa from a grandson, granddaughter or grandchildren. All crosses are individually made and no two will be alike, just like Grandpas!",
+            'delivery_days': 7,
+            'pic_link': '/img/products/y006.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Fandom Emporium Millenium Falcon Ornament Gift Christmas Tree Winter Holiday Fandom Teen Adult Present Fan Pendant Durable',
+            'price': 6,
+            'description': "An absolutely gorgeous, beautifully crafted ornament, designed by us, for you! The holiday season is all about showing appreciation for what you love, displaying your love and care for the world, and what better way to do that than an ornament like this? While glass and ceramic ornaments are all lovely, they're also extremely fragile and breakable, leaving their lifetimes only as long as their handlers don't manage to trip while carrying them. That's why we make all our ornaments out of metal, leaving them durable and more than capable of handling being dropped a few times. They'll withstand the test of time, so you can have your peace of mind. This ornament makes for the perfect gift and a wonderful decoration. The super fan in your life- whether it's your sibling, parent, significant other, coworker, best friend, or even yourself- is sure to love it.",
+            'delivery_days': 3,
+            'pic_link': '/img/products/y007.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Universe of Fandoms TV Movies Show Original Design Quality Anime Cosplay Superhero flash ring Gifts for Men Woman',
+            'price': 15,
+            'description': "Great For Super hero TV Movies Show Original Design Quality Anime Cosplay Fans! We know you're a fan of Super hero TV Movies Show Original Design Quality Anime Cosplay, because we are too! And we absolutely love being able to show off our passion with flair and elegance. And when we struggled to find the right way to do so, we decided to just make the stuff ourself! That's why we're doing our best to help you flash your fandom pride with these gorgeous Ring! I deal Gift for Any Occasion! Struggling to find the perfect gift for a friend or loved one on a special day? Well worry not! These Ring are perfect for that fantastic fan in your life for every occasion Birthdays, Mother's Day, Valentine's Day, or even 'Just Because', it's always nice to receive a little special something, especially when the special something is something as special as one of these Ring! Quality Goods! All of our products are made while keeping you as our highest priority. That's why we make all our goods with a High Quality Alloy and gorgeous finish, all of it Hypoallergenic and Nickel Free! They'll last you years without tarnishing without any need for polishing or cleaning! Designed By Us,Packaged in a Free Gift Box! FREE SHIPPING!",
+            'delivery_days': 3,
+            'pic_link': '/img/products/y008.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Bitch Peas Journal Notebook: Funny Vegan Gift 100 Page College Ruled Diary Lined Journal Notebook Lined Notes Blank Paper Write Composition Back To School Gift Large (8.5 x 11 inch) ',
+            'price': 9,
+            'description': "Funny Vegan Christmas Gift Ideas for Men WomenBe kind to every kind and reject animal cruelty! Perfect gift idea for vegan Christmas present, Thanksgiving present, anniversary present or birthday present with funny vegan vegetarian humor saying or food pun. Protest and march for animal rights.If you believe animals are friends and not food, this is for you. Designed for cow lover, pig lover, fish lovers, pet lover, vegan or friend who wants to proudly show their passion for vegetarianism, dieting, fitness, veganism, healthy eating and diet.Perfect gift idea for vegan Christmas present, Thanksgiving present, anniversary present or birthday present with funny vegan vegetarian humor saying or food pun. Protest and march for animal rights. If you believe animals are friends not food, this one is for you. Designed for animal lovers, pet lover, vegan or friend who wants to proudly show their passion for vegetarianism, dieting, fitness, veganism, healthy eating and animal rights. Be kind to every kind and reject animal cruelty!",
+            'delivery_days': 3,
+            'pic_link': '/img/products/y009.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Ladytree S925 Sterling Silver Vegan Necklace Cubic Zirconia Green Symbol Necklace for Vegetarian Women,18 inches',
+            'price': 29,
+            'description': "Both 'V'and Green Leaf are the official symbol of vegetarianism.The modern vegan can compliment their ethical and vegan lifestyle with it and also a perfect conversation starter Share this necklace with all of you fierce vegans out there! Show your love and admiration for these vegan friends who celebrate and respect all animals live free right. Material:925 Sterling Silver with White Cubic Zirconia, Tarnish Resistant, Nickel-free, Lead-free, Cadmium-free; Plating: Rhodium; Finish: High Polish. It Won't Change Color Or Get Dark. Pendant size: 0.91*0.72*0.13 inch; Chain length: 18 inch; Total weight: 2.08 g. Exquisite Gift Wrap: Comes with the charm gift box, perfect for any gift giving occasion, great graduation gift, birthday gift, congratulation gift, vocation gift, anniversary gift, wedding gift, business gift, Thanksgiving gift, Halloween gift, Valentine's day gift, Mother's day gift, Easter day gift ,Christmas gift for vegetarian, teens, girls, women, grandma, mother, daughter, niece, granddaughter, wife, girlfriend, lover, business partner.Suitable for any occasion, easy to match any clothes. Our product has strict quality inspection. Should you have quality problems, please kindly contact us any time, we will be glad to find a resolution for you.",
+            'delivery_days': 7,
+            'pic_link': '/img/products/y010.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
+            'name': "Plenty: Vibrant Vegetable Recipes from London's Ottolenghi",
+            'price': 8,
+            'description': "A vegetarian cookbook from the author of Jerusalem A Cookbook  and other Ottolenghi cookbooks: A must-have collection of 120 vegetarian recipes from Yotam Ottolenghi featuring exciting flavors and fresh combinations that will become mainstays for readers and eaters looking for a brilliant take on vegetables. Mastering the art of French cooking the Yotam Ottolenghi way: One of the most exciting talents in the cooking world, Yotam Ottolenghi's food inspiration comes from his Cordon Bleu training, Mediterranean background, and his unapologetic love of ingredients. 'My approach can be the opposite to traditional French cooking, where everything is a little bit uniform and you work hard to process a sauce into the most fine and homogenous thing. I go the other way and use spices, herbs and other ingredients to create a sense of surprise.' Not a vegetarian himself, his approach to vegetable dishes is wholly original and innovative, based on freshness and seasonality, and drawn from the diverse food cultures represented in London. The Plenty cookbook: Plenty is the cookbook that launched Yotam Ottolenghi from a fabulous chef, London restaurant owner, and British newspaper columnist to an international food celebrity. In Plenty , Yotam puts a spotlight on vegetarian restaurant-caliber recipes that every home cook can make. A vibrant photo accompanies every recipe in this visually stunning Ottolenghi cookbook. Essential for meat-eaters and vegetarians alike! Plenty is an indispensable cookbook for every home library.",
             'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'pic_link': '/img/products/y011.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': "elegantmedical HANDMADE 10MM Tiger Eye Beads ROSARY CROSS Catholic Necklace Men's Womens Religion GIFT BOX",
+            'price': 46,
+            'description': "Made in USA or Imported, elegantmedical HANDMADE 10MM Tiger Eye Beads ROSARY CROSS Catholic Necklace Men's Womens Religion GIFT BOX. Pardon cross size : 2.1' (5.5 cm) , mary and jesus medal : 2.0cm , material：Metal Plated Silver , FROM ITALY. ROSARY SIZE: 25' (65CM) Length from the cross to the end, the lenght of the rosary Necklace circumference: 78cm/30'-88cm/35'. 10MM Tiger Eye Jade BEADS",
+            'delivery_days': 20,
+            'pic_link': '/img/products/y012.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
+            'name': 'The Gift of Death, Second Edition & Literature in Secret (Religion and Postmodernism)',
+            'price': 100,
+            'description': "The Gift of Death, Jacques Derridas most sustained consideration of religion, explores questions first introduced in his bookGiven Time about the limits of the rational and responsible that one reaches in granting or accepting death, whether by sacrifice, murder, execution, or suicide. Derrida analyzes Czech philosopher Jan PatockasHeretical Essays in the Philosophy of History and develops and compares his ideas to the works of Heidegger, Lévinas, and Kierkegaard. One of Derridas major works,The Gift of Death resonates with much of his earlier writing, and this highly anticipated second edition is greatly enhanced by David Willss updated translation. This new edition also features the first-ever English translation of DerridasLiterature in Secret. In it, Derrida continues his discussion of the sacrifice of Isaac, which leads to bracing meditations on secrecy, forgiveness, literature, and democracy. He also offers a reading of KafkasLetter to His Father and uses the story of the flood in Genesis as an embarkation point for a consideration of divine sovereignty. An important contribution to the critical study of ethics that commends itself to philosophers, social scientists, scholars of religion . . . [and those] made curious by the controversy that so often attends Derrida.Booklist, on the first edition",
             'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'pic_link': '/img/products/y013.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Gifts for Men Dad, Survival Gear and Equipment 14 in 1, Fishing Hunting Christmas Birthday Valentines Day Gift Ideas for Him Husband Boyfriend Teenage Boy, Cool Gadget, Survival Kit Emergency Camping',
+            'price': 50,
+            'description': "Cool Unique Christmas Gifts: Does your dad love spending all the time in the outdoors he can? Get him a gift or few that will show him you care about his favorite activities! Look no further! This Survial Gear and Equipment is ideal for all outdoor hunter lovers. Must Have Camping Gear: 14 in 1 Emergency Survival Kit contains: Upgrade Survival Knife, Pocket Bellow, Wire Saw, Emergency Blanket, Flint stone Scraper, Flashlight, Credit Card Knife, Compass, Waterproof Box. Prepared for Any Emergency: This Camping Accessories is the perfect companion to help keep you safe and have peace of mind while you're Hiking, Camping, Hunting, Fishing, backpacking, travel or adventures. Dad Gifts Ideas: Cool Gadget for men, Birthdays Top Best gifts for him father best friend brother hunter and even who has everything. A stocking stuffer, Fishing Gift Hunting Accessories for teen boys scouts or family who interested in adventure. SERVICE: Your satisfaction is our top priority. If for any reason, father's day gifts for husband doesn't live up your expectations, contact us and we will solve it for you as soon as possible.",
+            'delivery_days': 8,
+            'pic_link': '/img/products/y014.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
+            'name': 'LEGO Star Wars at-at vs. Tauntaun Microfighters 75298 Building Kit; Awesome Buildable Toy Playset for Kids Featuring Luke Skywalker and at-at Driver Minifigures, New 2021 (205 Pieces)',
+            'price': 77,
+            'description': "Kids can recreate the Battle of Hoth from Star Wars: The Empire Strikes Back and role-play their own stories with these quick-build, LEGO brick AT-AT Walker and Tauntaun Microfighters This AT-AT vs. Tauntaun Microfighters (75298) set features 2 LEGO minifigures: Luke Skywalker, with a lightsaber, and an AT-AT Driver Each has a stud shooter and an electrobinoculars element The Tauntaun and the posable AT-AT each have a seat for a LEGO minifigure, and the set combines brilliantly with the Millennium Falcon Microfighter (75295) for extra battle action This awesome 205-piece construction toy makes the best birthday present, holiday gift or unexpected treat for kids aged 6 and up to introduce them to the fun, creative LEGO Star Wars universe. The Tauntaun measures over 2.5 in. (7 cm) high, 3.5 in. (9 cm) long and 2 in. (5 cm) wide. Along with the AT-AT and LEGO minifigures, the set fits in a child's backpack for play on their travels",
             'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'pic_link': '/img/products/y016.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'TROJOY Sprinkler for Kids and Toddler, Sprinklers for Yard Kids Outdoor Water Toys Gifts for 3 4 5 Year Old Boys Girls Backyard Splash Water Play Outside Summer Activities - High-Attach to Garden Hose',
+            'price': 20,
+            'description': "COOL YOUR KIDS & YARD OFF - No better place to enjoy summer water fun than your own water park! This crazy turtle sprinkler is constructed from durable materials for outdoor use and attaches easily to a hose. Splashing fun for the entire family, as well an adorable way to water your lawn. An extra hose connector included for your convenience. SAFE WATER SPLASH TOY - Thanks for the many outlets design, the water pressure coming out of the rubber tubes and the spinning dome on the turtle’s back is perfectly safe for your children and your pets. Great performance for an extra wide spraying range. Spray height and strength can go high or low by adjusting your water pressure. EXCITING SCREEN-FREE OUTDOOR ACTIVITY - Outdoor water toys for kids have never been so exciting. All for one and fun for all! Twirls and Whirls are created as the water is released via the spinning back of the turtle as well as the attached wiggle tubes. All tubes always work together--especially when they are squirting you with water! GREAT GIFT FOR AGES 3 4 5 6 - It will be an absolute blast for kids aged 3+ to receive this cool and energetic, fun game for outside activities! Perfect addition to your next birthday party or gathering of friends and family. Made of Eco-friendly ABS material & CPC certified which guarantees it will last for years! HAPPINESS GUARANTEE - The water sprinkler encourages outdoor active play, helps develop coordination, and teaches nurturing and responsibility. We design every toy to the highest quality standards, and to nurture minds and hearts. If your child is not inspired, please reach our customer service and we'll make it right.",
+            'delivery_days': 7,
+            'pic_link': '/img/products/y017.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': 'Kalimba Thumb Piano, 17 Key Kalimba Finger Piano with Protective Box, Tune Hammer, Study Instruction, Portable Mbira instruments for Adults, Gifts for Musicians Beginners Kids',
+            'price': 20,
+            'description': "Handmade with high quality mahogany and ore steel bars, gives you an excellent using experience. The keys are engraved with letters and notes, 17 keys / notes: 1(D), 2(B), 3(G), 4(E), 5(C5), 6(A), 7(F), 8(D), 9(C4), 10(E), 11(G), 12(B), 13(D), 14(F), 15(A), 16(C6), 17(E). All seventeen keys / tines sound perfect, suitable for a very wide range of music: pop, folk, rock, African, classical, carols. Make it a gift choice for both beginners and enthusiast. A manual book helps you play and tune this finger piano easily. If you are not 100 persent satisfied with this product, we offer a 30-day money back. Also, permanent customer service for you.",
+            'delivery_days': 9,
+            'pic_link': '/img/products/y018.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': "Victrola's 4-in-1 Highland Bluetooth Record Player with 3-Speed Turntable with FM Radio, Farmhouse Walnut (VTA-330B-FNT)",
+            'price': 100,
+            'description': "Belt driven, 3-speed turntable (33 1/3, 45, 78 RPM) plays all of your favorite vinyl records. Classic FM radio with analog tuner and 'around the dial' LED lighting. Wirelessly stream music from your Bluetooth enabled device, up to 33 feet away. Features 3. 5mm Aux-In and RCA output connection. Built-in stereo speakers. Included components: Manual, Power Adaptor. Power source type: Corded Electric",
+            'delivery_days': 20,
+            'pic_link': '/img/products/y019.jpg'
         },
         {
-            'name': 'sample',
-            'price': 3,
-            'description': None,
-            'delivery_days': 15,
-            'pic_link': '/img/products/001.jpg'
+            'name': "Mad Design/ Lunchifier, Amplifier Print Insulated Lunch Bag Cooler Tote, Gift for Men, Women, Kids, Musicians, Rock 'n Roll Electric Guitar Lovers and Rockstars",
+            'price': 25,
+            'description': "Unique Look: Music Lovers of all ages will appreciate this cool unisex guitar amplifier printed design. Generous size: Made deeper than most lunch bags to accommodate 6 canned drinks or larger lunches. Multi Use Bag: A great everyday school lunch bag for kids, or for adults to take their lunch to work, or as a cooler tote for cold drinks on a long trip. Features: Double zippers, top handle and adjustable, detachable shoulder strap for easy carrying and opening options. Size: Approximately dimensions: 9.5 in(H) x 7.5 in(W) x 4.5 in(D) Spot clean only, do not machine wash.",
+            'delivery_days': 5,
+            'pic_link': '/img/products/y020.jpg'
         },
         {
             'name': 'sample',
@@ -416,3 +420,6 @@ if __name__ == "__main__":
             'pic_link': '/img/products/001.jpg'
         }
     ]
+
+    add_product_to_db_special(lst)
+    add_product_to_db_special(lst_yifan)
