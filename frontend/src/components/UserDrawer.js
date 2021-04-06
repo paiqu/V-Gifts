@@ -30,7 +30,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
-
+import OrderCard from './OrderCard';
 
 const drawerWidth = 240;
 
@@ -128,12 +128,21 @@ export default function UserDrawer(props) {
     users: false,
   });
 
+  const [order, setOrder] = React.useState([]);
+  
+  React.useEffect(() => {
+    axios.get('/order/list',{
+      params: {
+        token: token
+      }
+    }).then(res => {
+      console.log(res.data);
+      setOrder(res.data);
+    })
+  }, [token])
+  
   const renderUsers = (
     <UsersDataGrid />
-  );
-
-  const renderOrders = (
-    <OrdersDataGrid />
   );
 
   const renderUserHome = (
@@ -345,7 +354,9 @@ export default function UserDrawer(props) {
         </Box>
         {display.home && renderUserHome}
         {display.users && renderUsers}
-        {display.orders && renderOrders}
+        {display.orders && order.map((item, index) => 
+          <OrderCard key={index} {...item}/> 
+        )}
       </main>
     </div>
   );
