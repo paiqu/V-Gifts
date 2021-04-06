@@ -15,6 +15,7 @@ ADMIN_DB = {
 
 import database as db
 import chatbot as ct
+import login
 
 # class Admin:
 #     def __init__(name, password, email):
@@ -87,6 +88,12 @@ def edit_admin(admin_id, name, password, email, db_name = 'database.json'):
     return {
         'id': admin_id
     }
+
+def temp_use():
+    temp = db.load_json()
+    passw = login.encrypt_password("admin")
+    print(passw)
+    temp['ADMIN_DB']["1"]["password"] = passw
 
 def edit_product(prod_id, prod_name, prod_category, prod_descrip, db_name = 'database.json'):
     '''
@@ -186,3 +193,6 @@ def show_profile(aid):
 #         This function doen't have a purpose yet.
 #     '''
 #     return {}
+
+if __name__ == "__main__":
+    temp_use()
