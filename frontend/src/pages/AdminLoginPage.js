@@ -77,13 +77,15 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
   };
 
   const [state, setState] = React.useState({
-    error: false,
+    nameError: false,
+    passwordError: false,
     help_text: ""
   });
 
   const handle_error = () => event => {
     setState({
-      error: false,
+      nameError: false,
+      passwordError: false,
       help_text: ""
     });
   };
@@ -92,17 +94,40 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!infos.name || !infos.password) {
+      setState({
+        // error: true,
+        nameError: true,
+        passwordError: true,
+        help_text: "All fields have to be finished before logging you in"
+      });
+      return;
+    }
+
     axios.post('admin/login', { 
       name: infos.name,
       password: infos.password,
      })
-      .then((response) => {
-        const data = response.data;
+    .then((response) => {
+      const data = response.data;
+      if (data.code == 404) {
+        // admin name does not exist
+        setState({
+          nameError: true,
+          help_text: "The entered admin name does not exist"
+        });
+      } else if (data.code == 405) {
+        // wrong password
+        setState({
+          passwordError: true,
+          help_text: "The password entered is incorrect"
+        });
+      } else {
         setAdminAuth(data.token, data.user_id);
-        // direct the user to the market page
         props.history.push(`/admin/${data.token}`);
-      })
-      .catch((err) => { });
+      }
+    })
+    .catch((err) => { });
   }
 
   const classes = useStyles();
@@ -123,7 +148,7 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
-              error={state.error}
+              error={state.nameError}
               helperText={state.help_text}
               variant="outlined"
               margin="normal"
@@ -135,7 +160,7 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
               onClick={handle_error()}
             />
             <TextField
-              error={state.error}
+              error={state.passwordError}
               helperText={state.help_text}
               variant="outlined"
               margin="normal"

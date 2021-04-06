@@ -55,7 +55,7 @@ def adm_register():
 @app.route("/admin/login", methods = ["POST"])
 def adm_login():
     data = request.get_json()
-    name = data["account_name"]
+    name = data["name"]
     password = data["password"]
     try:
         result = login.login_admin(name, password)
