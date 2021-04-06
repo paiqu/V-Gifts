@@ -297,7 +297,7 @@ def prod_filter_type(ctgry = [], price_rg = [0, 99999999], db_name = 'database.j
         This function filters product by category
         and price range
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     all_prod = list(temp["PRODUCT_DB"].keys())
     # filter catagory
     rt1 = []
@@ -317,7 +317,6 @@ def prod_filter_type(ctgry = [], price_rg = [0, 99999999], db_name = 'database.j
     # filter price
     rt2 = []
     for prod in rt1:
-        print()
         if temp["PRODUCT_DB"][prod]['price'] >= price_rg[0] \
             and temp["PRODUCT_DB"][prod]['price'] <= price_rg[-1]:
             rt2.append(prod)
@@ -326,7 +325,7 @@ def prod_filter_type(ctgry = [], price_rg = [0, 99999999], db_name = 'database.j
 if __name__ == "__main__":
     print(prod_filter_type(ctgry = [], price_rg = [0, 99999999], \
         db_name = 'database_manual.json'))
-    print(prod_filter_type(ctgry = [0, 1, 0], price_rg = [0, 99999999], \
+    print(prod_filter_type(ctgry = [1, 0, 0], price_rg = [0, 99999999], \
         db_name = 'database_manual.json'))
-    print(prod_filter_type(ctgry = [], price_rg = [100, 200], \
+    print(prod_filter_type(ctgry = [], price_rg = [50, 999999], \
         db_name = 'database_manual.json'))
