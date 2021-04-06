@@ -125,13 +125,13 @@ function CartPage(props) {
                 borderRadius={5}
               >
                 <Typography variant="h5">
-                  Items
+                  Total Products in Cart
                 </Typography>
                 {products.length}
                 <Typography variant="h5">
-                  Total
+                  Total Payment
                 </Typography>
-                {`\$${totalPayment}`}
+                <b>{`\$${totalPayment}`}</b>
                 <Button 
                   className={classes.checkoutBtn} 
                   variant="contained" 

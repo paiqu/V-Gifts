@@ -54,8 +54,11 @@ function CartProductCard(props) {
       amount: amount-1,
     })
     .then((response) => {
+      setCost(cost-price);
       if (amount - 1 == 0) {
         props.handleTotalPaymentChange(-price);
+        
+
         props.history.go(0);
       }
     })
@@ -72,6 +75,7 @@ function CartProductCard(props) {
     })
     .then((response) => {
       props.handleTotalPaymentChange(price);
+      setCost(cost + price);
     })
     .catch((err) => {});
   };
