@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
+import AdminLoginPage from './pages/AdminLoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import { AuthProvider } from './AuthContext';
@@ -44,6 +45,10 @@ function App() {
 		localStorage.getItem('token')
 	);
 
+  const [adminDetails, setAdminDetails] = React.useState(
+    localStorage.getItem('admin_token')
+  );
+
 
 	// define a function to store details into local storage
   // eslint-disable-next-line
@@ -54,6 +59,13 @@ function App() {
 		// setAuthDetails(token);
     setAuthDetails(token);
 	}
+
+  const setAdminAuth = (token, id) => {
+    localStorage.setItem('admin_token', token);
+		localStorage.setItem('admin_id', id);
+
+    setAdminDetails(token);
+  }
 	
   return (
 			<ThemeProvider theme={theme}>
@@ -75,11 +87,18 @@ function App() {
                   return <RegisterPage {...props} setAuth={setAuth} />;
                 }}  
               />
+              <Route 
+                exact 
+                path="/admin/login" 
+                render={(props) => {
+                  return <AdminLoginPage {...props} setAuth={setAdminAuth} />;
+                }} 
+              />
               <Route exact path="/products" component={ProductsPage} />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />
-              <Route exact path="/admin" component={AdminPage} />
+              <ProtectedRoute exact path="/admin/:token" component={AdminPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Router>

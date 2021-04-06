@@ -66,7 +66,7 @@ function HomePage(props) {
             variant="contained"
             className={classes.joinButton}
             component={Link}
-            to={'./register'}
+            to={'/register'}
           >
             Join
           </Button>
@@ -74,7 +74,7 @@ function HomePage(props) {
             color='secondary'
             variant='outlined'
             component={Link}
-            to={'./products'}
+            to={'/products'}
           >
             Browse the market
           </Button>
