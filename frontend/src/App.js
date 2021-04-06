@@ -16,6 +16,7 @@ import NotFoundPage from './pages/NotFoundPage';
 
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
+import AdminRoute from './utils/AdminRoute';
 
 // https://material.io/resources/color/#!/?view.left=0&view.right=0&secondary.color=2196F3&secondary.text.color=FAFAFA&primary.color=FFC400
 const theme = createMuiTheme({
@@ -69,7 +70,7 @@ function App() {
 	
   return (
 			<ThemeProvider theme={theme}>
-				<AuthProvider value={authDetails}>
+				<AuthProvider value={{user: authDetails, admin: adminDetails}}>
           <Router>
             <Switch>
               <Route exact path="/" component={HomePage} />
@@ -98,7 +99,7 @@ function App() {
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />
-              <Route exact path="/admin/:token" component={AdminPage} />
+              <AdminRoute exact path="/admin/:token" component={AdminPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Router>

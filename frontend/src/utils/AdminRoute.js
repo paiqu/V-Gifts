@@ -2,11 +2,11 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 
-export default function ProtectedRoute(props) {
-  const token = React.useContext(AuthContext).user;
+export default function AdminRoute(props) {
+  const token = React.useContext(AuthContext).admin;
   console.log(token);
   if (!token) {
-    return <Redirect to="/login" />;
+    return <Redirect to="/admin/login" />;
   }
   return <Route {...props} />;
 }
