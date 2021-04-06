@@ -94,6 +94,7 @@ def temp_use():
     passw = login.encrypt_password("admin")
     print(passw)
     temp['ADMIN_DB']["1"]["password"] = passw
+    db.to_json(temp)
 
 def edit_product(prod_id, prod_name, prod_category, prod_descrip, db_name = 'database.json'):
     '''
