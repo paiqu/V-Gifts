@@ -173,6 +173,14 @@ def get_user_list():
         })
     return rt
 
+def show_profile(aid):
+    db.valid_id("admin", aid)
+    temp = db.load_json()
+    return {
+        "username": temp["ADMIN_DB"][str(aid)]["name"],
+        "email": temp["ADMIN_DB"][str(aid)]["email"]
+    }
+
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.

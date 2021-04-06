@@ -55,7 +55,7 @@ def login_user(name, password):
     pattern = re.compile("[a-zA-Z0-9_]")
     
     if pattern.search(name) is None:
-        raise err.IncorrectUsername(description = "Incorrect user name! Please try again.")
+        raise err.IncorrectUsername(description = "Incorrect account name! Please try again.")
 
     login_token = ''
     temp = db.load_json()
@@ -72,7 +72,7 @@ def login_user(name, password):
                     'token':login_token
                 }
 
-    raise err.InvalidPassword(description = "Login fail! Invalid password or name! Please try again.")
+    raise err.InvalidPassword(description = "Login fail! Invalid password or account name! Please try again.")
 
 # def logout_user(iid):
 def logout_user(token):
@@ -132,8 +132,7 @@ def login_admin(name, password):
     pattern = re.compile("[a-zA-Z0-9_]")
     
     if pattern.search(name) is None:
-        print("Incorrect admin name! Please try again.")
-        return False
+        raise err.IncorrectUsername(description = "Incorrect account name! Please try again.")
 
     login_token = ''
     temp = db.load_json()
@@ -150,8 +149,7 @@ def login_admin(name, password):
                     'token':login_token
                 }
     
-    print("Login fail! Invalid password or name! Please try again.")
-    return False
+    raise err.InvalidPassword(description = "Login fail! Invalid password or account name! Please try again.")
 
 def logout_admin(token):
     '''
