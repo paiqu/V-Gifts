@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './utils/ProtectedRoute';
@@ -79,6 +80,7 @@ function App() {
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />
               <Route exact path="/admin" component={AdminPage} />
+              <Route component={NotFoundPage} />
             </Switch>
           </Router>
         </AuthProvider>
