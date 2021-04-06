@@ -44,6 +44,9 @@ function AdminHome(props) {
     const classes = useStyles();
     const theme = useTheme();
 
+    const token = props.token;
+    const profile = props.profile;
+
     return (
       <div classeName={classes.root}>
         <Grid container spacing={3}>

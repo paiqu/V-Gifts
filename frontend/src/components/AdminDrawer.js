@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -73,24 +73,26 @@ export default function AdminDrawer(props) {
   const theme = useTheme();
 
   const token = React.useContext(AuthContext).admin;
+  const profile = props.profile;
 
-  const [open, setOpen] = React.useState(false);
-  const [display, setDisplay] = React.useState({
+
+  const [open, setOpen] = useState(false);
+  const [display, setDisplay] = useState({
     home: true,
     orders: false,
     users: false,
   });
-  const [users, setUsers] = React.useState([]);
+  const [users, setUsers] = useState([]);
 
-  React.useEffect((() => {
-    axios.get('admin/all_user')
-      .then((response) => {
-        const data = response.data;
+  // React.useEffect((() => {
+  //   axios.get('admin/all_user')
+  //   .then((response) => {
+  //     const data = response.data;
 
-        setUsers(data);
-      })
-      .catch((err) => {});
-  }), []);
+  //     setUsers(data);
+  //   })
+  //   .catch((err) => {});
+  // }), []);
 
   const renderUsers = (
     <UsersDataGrid users={users} />
@@ -101,7 +103,7 @@ export default function AdminDrawer(props) {
   );
 
   const renderAdminHome = (
-    <AdminHome usersNum={users.length}/>
+    <AdminHome usersNum={users.length} profile={profile} token={token}/>
   );
 
   const displayHome = () => {
@@ -219,6 +221,9 @@ export default function AdminDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
+          <Typography>
+            {`Hello Admin ${profile['name']}(${profile['email']})`}
+          </Typography>
         </Box>
         {display.home && renderAdminHome}
         {display.users && renderUsers}

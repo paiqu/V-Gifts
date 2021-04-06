@@ -223,9 +223,7 @@ export default function UserDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
-          <Typography>
-            Hello {`${profile['first_name']} ${profile['last_name']}`}
-          </Typography>
+
         </Box>
         {display.home && renderUserHome}
         {display.users && renderUsers}
