@@ -55,7 +55,7 @@ function UserHome(props) {
 
     const token = props.token;
     const profile = props.profile;
-    const [fundToAdd, setFundToAdd] = React.useState(0);
+    const [fundToAdd, setFundToAdd] = React.useState(profile['fund']);
 
     const handleFundToAddChange = (e) => {
       setFundToAdd(e.target.value);
@@ -87,7 +87,7 @@ function UserHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  ${profile['fund']} left
+                  {`\$${profile['fund']} left`} 
                 </Typography>
 
                 <Typography variant="h5" color={theme.palette.primary.contrastText} style={{marginTop: "1rem"}}>

@@ -64,6 +64,10 @@ function CartPage(props) {
   //   return products.reduce((sum, x) => sum + x[] * x[])
   // }
 
+  const handleTotalPaymentChange = (change) => {
+    setTotalPayment(totalPayment + change);
+  };
+
   const handleCheckout = () => {
     let cartProducts = products.map((x) => [x["product_id"], x["amount"]]);
 
@@ -105,7 +109,11 @@ function CartPage(props) {
             <Grid container item xs={9} spacing={2}>
               {products.map((x) => 
                 <Grid key={`${x["product_id"]}-${x["product_name"]}-${x["amount"]}`} item xs={12}>
-                  <CartProductCard item={x} history={history} />
+                  <CartProductCard 
+                    item={x} 
+                    history={history} 
+                    handleTotalPaymentChange={handleTotalPaymentChange}
+                  />
                 </Grid>
               )}
             </Grid>
@@ -123,7 +131,7 @@ function CartPage(props) {
                 <Typography variant="h5">
                   Total
                 </Typography>
-                {totalPayment}
+                {`\$${totalPayment}`}
                 <Button 
                   className={classes.checkoutBtn} 
                   variant="contained" 

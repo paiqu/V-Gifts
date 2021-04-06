@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -7,11 +6,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -23,7 +17,6 @@ import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
 import UsersDataGrid from './UsersDataGrid';
-import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import UserHome from './UserHome';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -31,6 +24,8 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
 import OrderCard from './OrderCard';
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+
 
 const drawerWidth = 240;
 
@@ -297,17 +292,13 @@ export default function UserDrawer(props) {
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
-            <ListItem button key={"Inbox"}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
-              <ListItemText primary={"Inbox"} />
+            <ListItem button key={"Cart"} component={Link} to={ `/profile/${token}/cart`}>
+              <ListItemIcon><ShoppingCartIcon /></ListItemIcon>
+              <ListItemText primary={"Cart"} />
             </ListItem>
-            <ListItem button key={"Market"}>
+            <ListItem button key={"Market"} component={Link} to={"/products"}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
               <ListItemText primary={"Market"} />
-            </ListItem>
-            <ListItem button key={"Users"} onClick={displayUsers}>
-              <ListItemIcon><GroupIcon /></ListItemIcon>
-              <ListItemText primary={"Users"} />
             </ListItem>
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
