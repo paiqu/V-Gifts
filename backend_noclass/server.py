@@ -55,11 +55,17 @@ def adm_register():
 @app.route("/admin/login", methods = ["POST"])
 def adm_login():
     data = request.get_json()
-    name = data["name"]
+    name = data["account_name"]
     password = data["password"]
-    result = login.login_admin(name, password)
+    try:
+        result = login.login_admin(name, password)
+    except err.IncorrectUsername as uerr:
+        raise uerr
+    except err.InvalidPassword as perr:
+        raise perr
     return dumps({
-        "token": result
+        "admin_id": result["id"],
+        "token": result["token"]
     })
 
 @app.route("/admin/logout", methods = ["POST"])
