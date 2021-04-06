@@ -38,55 +38,17 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
   },
-  drawerOpen: {
+  drawerPaper: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+  drawerContainer: {
+    overflow: 'auto',
   },
   content: {
     flexGrow: 1,
@@ -139,14 +101,6 @@ export default function AdminDrawer() {
     <AdminHome usersNum={users.length}/>
   );
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
   const displayHome = () => {
     setDisplay({
       home: true,
@@ -175,27 +129,8 @@ export default function AdminDrawer() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-        style={{
-          boxShadow: 'none',
-        }}
-      >
+      <AppBar position="fixed" className={classes.appBar} elevation={0}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
 						style={{
 							textDecoration: "none",
@@ -215,58 +150,40 @@ export default function AdminDrawer() {
         </Toolbar>
       </AppBar>
       <Drawer
+        className={classes.drawer}
         variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
         classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
+          paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListItem button key={"Home"} onClick={displayHome}>
-            <ListItemIcon><HomeIcon /></ListItemIcon>
-            <ListItemText primary={"Home"} />
-          </ListItem>
-          <ListItem button key={"Inbox"}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={"Inbox"} />
-          </ListItem>
-          <ListItem button key={"Market"}>
-            <ListItemIcon><StoreIcon /></ListItemIcon>
-            <ListItemText primary={"Market"} />
-          </ListItem>
-          <ListItem button key={"Users"} onClick={displayUsers}>
-            <ListItemIcon><GroupIcon /></ListItemIcon>
-            <ListItemText primary={"Users"} />
-          </ListItem>
-          <ListItem button key={"Orders"} onClick={displayOrders}>
-            <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
-            <ListItemText primary={"Orders"} />
-          </ListItem>
-        </List>
-        <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+          <List>
+            <ListItem button key={"Home"} onClick={displayHome}>
+              <ListItemIcon><HomeIcon /></ListItemIcon>
+              <ListItemText primary={"Home"} />
             </ListItem>
-          ))}
-        </List> */}
+            <ListItem button key={"Inbox"}>
+              <ListItemIcon><InboxIcon /></ListItemIcon>
+              <ListItemText primary={"Inbox"} />
+            </ListItem>
+            <ListItem button key={"Market"}>
+              <ListItemIcon><StoreIcon /></ListItemIcon>
+              <ListItemText primary={"Market"} />
+            </ListItem>
+            <ListItem button key={"Users"} onClick={displayUsers}>
+              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemText primary={"Users"} />
+            </ListItem>
+            <ListItem button key={"Orders"} onClick={displayOrders}>
+              <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
+              <ListItemText primary={"Orders"} />
+            </ListItem>
+          </List>
+        </div>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
+        <Toolbar />
         <Box
           display="flex" 
           flexDirection="column"
