@@ -133,7 +133,7 @@ if __name__ == "__main__":
                 'price': 39,
                 'description': 'PREMIUM SALT COLLECTION: From the beautiful turquoise waters off the coast of Mexico to France, this premium salt collection features six distinctly different flavors from around the world. THE PERFECT GIFT: Harvested from different regions of the world, this set of gourmet sea salts makes a great gift for someone special or yourself. SERIOUS ABOUT SALT: Perfect for cooking and grilling, SaltWorks offers a wide range of traditional salts, finishing salts, delicious smoked salts and organic peppercorns. COMMITTED TO QUALITY: SaltWorks is passionate about producing all-natural salts that are OU Kosher certified, organic compliant, non-GMO, chemical free, allergen free and gluten free',
                 'delivery_days': 30,
-                'pic_link': '/img/products/010.jpg'
+                'pic_link': '/img/products/h010.jpg'
             },
             {
                 'name': 'Jack Links Jack Link\'s Beef Jerky, Sweet & Hot, 9 Oz (Pack of 2)',
