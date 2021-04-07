@@ -77,7 +77,6 @@ export default function AdminsManagement(props) {
         });
       } else if (data.code == 403) {
         // username exist
-        setErrorText("The admin name is already existed");
         setState({
           nameError: true,
           help_text: "The admin name is already existed"
