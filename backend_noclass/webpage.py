@@ -8,6 +8,7 @@
 import random as rd
 import numpy as np
 import database as db
+import user as us
 
 def unit_vector(vector):
     '''
@@ -38,7 +39,7 @@ def prod_recommendation(user_id, prod_lst = [], db_name = 'database.json', num =
         returns a list of product_id, sorted
     '''
     # item & value calculator
-    lst = prod_picker(user_id, prod_lst = [], db_name = 'database.json')
+    lst = prod_picker(user_id, prod_lst, db_name)
     # return sorted result (descending)
     rt = sorting_merge(lst, 1)
     if len(rt) <= num:
@@ -59,12 +60,12 @@ def interest_calculator(v_1, v_2, key):
 def prod_picker(user_id, prod_lst = [], db_name = 'database.json'): # percent -> the chance of product is joining the recommendation
     # prod_lst = DB
     temp = db.load_json(db_name)
-    prod_lst = temp['PRODUCT_DB'] if prod_lst == [] else prod_lst
+    prod_lst = temp['PRODUCT_DB'].keys() if prod_lst == [] else prod_lst
     user_v = temp['USER_DB'][str(int(user_id))]['interest']
     # append to lst
     lst = []
     for item in prod_lst:
-        v_1 = prod_lst[item]['category']
+        v_1 = temp['PRODUCT_DB'][item]['category']
         lst.append(interest_calculator(v_1, user_v, item))
     return lst
 
@@ -334,8 +335,8 @@ def keyword_searcher(keyword = "", db_name = 'database.json'):
                 rt.append(prod)
     return rt
 
-def search_filter_recommendation(keyword = "", db_name = 'database.json', ctgry = [], \
-            price_rg = [0, 99999999], user_id = -1):
+def search_filter_recommendation(keyword = "", ctgry = [], \
+            price_rg = [0, 99999999], user_id = -1, page = -1, db_name = 'database.json'):
     '''
         This function searches with a keyword, filter with selection,
         and rank product based on recommendation
@@ -346,12 +347,30 @@ def search_filter_recommendation(keyword = "", db_name = 'database.json', ctgry 
             'database.json', num = 100) -> list
     '''
     rt0 = keyword_searcher(keyword, db_name)
+    if len(rt0) == 0:
+        rt0 = []
     rt1 = prod_filter_type(rt0, ctgry, price_rg, db_name)
     if user_id != -1:
         rt2 = prod_recommendation(user_id, rt1, db_name)
-        return rt2 
+        rt3 = []
+        for item in rt2:
+            rt3.append(item[0])
     else:
-        return rt1
+        rt3 = rt1
+    # deal with page number
+    if page != -1:
+        rt4 = []
+        for i in range(len(rt3)):
+            if i >= (page-1)*9 and i < page*9:
+                # e.g. page 1 => item 0~8
+                rt4.append(rt3[i])
+    else: # return all prods
+        rt4 = rt3
+    return {
+        "product_lst": rt4,
+        "total_pages": us.ceil((len(rt3)/9))
+    }
+
 
 
 if __name__ == "__main__":
@@ -361,5 +380,5 @@ if __name__ == "__main__":
     #     db_name = 'database_manual.json'))
     # print(prod_filter_type(ctgry = [], price_rg = [50, 999999], \
     #     db_name = 'database_manual.json'))
-    print(search_filter_recommendation("mother", 'database_manual.json', ctgry = [], \
-            price_rg = [0, 99999999], user_id = -1))
+    print(search_filter_recommendation("mother", ctgry = [], \
+            price_rg = [0, 99999999], user_id = -1, page = -1, db_name = 'database.json'))

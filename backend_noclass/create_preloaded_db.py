@@ -6,6 +6,7 @@ import json
 import database as db
 import admin as ad
 import user as us
+import webpage as wb
 
 # KEYWORDS_LST_haoran = [
 #     # targets
@@ -425,9 +426,14 @@ if __name__ == "__main__":
     us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
     us.add_product_to_cart(sample_user['id'], 5, 6, 'database_manual.json')
     us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
-    print(us.individual_price(1, 1, 'database_manual.json'))
-    print(us.individual_price(3, 1, 'database_manual.json'))
-    print(us.total_price([[1,2], [3,8]], 'database_manual.json'))
     us.purchase(sample_user['id'], [[1,2], [3,8]], 'database_manual.json')
-    temp = db.load_json('database_manual.json')
-    db.pretty_print(temp)
+    all_prod = wb.keyword_searcher("", 'database_manual.json')
+    print(wb.keyword_searcher("honey", 'database_manual.json'))
+    print(wb.prod_filter_type(all_prod, [], [50, 9999999], 'database_manual.json'))
+    # print(wb.prod_recommendation(sample_user['id'], all_prod, 'database_manual.json'))
+    print(wb.search_filter_recommendation("", ctgry = [], price_rg = [0, 99999999], 
+            user_id = sample_user['id'], page = -1, db_name = 'database_manual.json'))
+    print(wb.search_filter_recommendation("", ctgry = [], price_rg = [0, 99999999], 
+            user_id = sample_user['id'], page = 2, db_name = 'database_manual.json'))
+    # temp = db.load_json('database_manual.json')
+    # db.pretty_print(temp)
