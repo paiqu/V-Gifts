@@ -8,34 +8,26 @@ import admin as ad
 
 KEYWORDS_LST_haoran = [
     # targets
-    'men', 'man', 'women', 'woman', 'couple', 'mother', 'bride', 'groom', 'bridegroom',
-    'father', 'love', 'friendship', 'friend', 'friends', 'girls', 'lady', 'ladies',
-    'girl', 'boys', 'boy', 'birthday', 'family', 'mother\'s', 'father\'s', 
-    'men\'s', 'man\'s', 'women\'s', 'woman\'s',
+    
+    
 
     # types
-    'cloth', 'cotton', 'polyester', 'hoodies', 'hoody', 'food',
-    'chocolate', 'speaker', 'music', 'bluetooth', 'cooking', 'organic',
-    'grilling', 'grill', 'cook', 'pork', 'beef', 'snack', 'sweet', 'hot',
-    'spicy', 'protein', 'health', 'healthy', 'candle', 'honey', 'wellness',
-    'bag', 'travel', 'cute', 'outdoor', 'gluten-free', 'luxury',
-    'office', 'pen', 'pens', 'professional', 'gold', 'necklace',
-    'ring', 'jewelry'
-
-
+     'cotton', 'polyester', 'speaker', 'music', 'bluetooth', 
+    
+    'necklace',
+    'jewelry'
 ]
 
 KEYWORDS_LST_yifan = [
     # tergets
-    'mom', 'dad', 'grandma', 'grandmother', 'grandpa', 'grandfather', 'fandom', 'vegetarianism',
-    'vegan', 'religion', 'teen', 'tennage', 'kid', 'kids', 'musicion', 'music',
+    'fandom', 'religion', 'tennage', 'musicion', 
     # types
-    'wine tumbler', 'necklace', 'earrings', 'jewelry', 'mug', 'candle', 'cushion', 'glass', 
-    'whiskey', 'cocktail', 'music', 'music box', 'cross', 'metal', 'pendant', 'star war',
-    'flash', 'notebook', 'cookbook', 'book', 'survival gear', 'gadget', 'lego', 'brick', 'toy',
-    'water', 'piano', 'player', 'bluetooth', 'bag'
-
+    'wine tumbler', 'mug', 'candle', 'cushion', 'glass', 
+    'cross', 'metal', 'star war',
+    'cookbook', 'book',  'gadget', 'brick', 
+    'water', 'player', 
 ]
+
 
 def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     # temp = db.init_db()

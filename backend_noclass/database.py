@@ -24,7 +24,7 @@ import admin as adm
 # }
 
 # global
-TYPE_OF_PRODUCTS_INIT = 3
+TYPE_OF_PRODUCTS_INIT = 11
 
 def init_db_withoutadm():
     return {
