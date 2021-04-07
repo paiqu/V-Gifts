@@ -245,7 +245,7 @@ export default function NavBar() {
               component={Link}
               to={ `/profile/${token}/cart`}
             >
-              <Badge badgeContent={0} color="secondary">
+            <Badge badgeContent={0} color="secondary">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
@@ -267,17 +267,6 @@ export default function NavBar() {
               <AccountCircle />
             </IconButton>
           </div>
-          {/* <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div> */}
         </Toolbar>
       </AppBar>
       {/* {renderMobileMenu} */}
