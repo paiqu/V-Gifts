@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Rating from '@material-ui/lab/Rating';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import axios from 'axios';
+import AuthContext from '../AuthContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,8 +32,31 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderCard(props) {
     const classes = useStyles();
     const theme = useTheme();
+    const token = React.useContext(AuthContext).user;
     const date = moment(parseFloat(props.purchase_date*1000)).format("YYYY-MM-DD HH:mm:ss");
-    const [value, setValue] = React.useState(0);
+    const [rating, setRating] = useState({
+      disabled: false,
+      value: 0
+    });
+
+    const handleChange = () => event => {
+      console.log(event.target.value);
+      console.log(props.order_id);
+      console.log(token);
+      /**
+        axios.post('/order/rate',{
+        token: token,
+        order_id: id,
+        rating: rating
+      }).then(res => {
+        console.log(res);
+      })
+       */
+      setRating({
+        disabled: true,
+        value: event.target.value
+      })
+    }
 
     return (
         <div
@@ -77,8 +99,9 @@ export default function OrderCard(props) {
         <Grid item xs={2}>
           <Box component="fieldset" mb={3} borderColor="transparent">
             <Rating
-              name="customized-empty"
-              defaultValue={0}
+              onChange={handleChange()}
+              disabled={rating.disabled}
+              value={rating.value}
               precision={0.5}
               emptyIcon={<StarBorderIcon fontSize="inherit" />}
             />
