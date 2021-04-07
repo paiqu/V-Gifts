@@ -114,10 +114,7 @@ function AdminHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  50 orders in total
-                  <br />
-                  <br />
-                  4 orders placed today
+                  {props.ordersNum} orders in total
                 </Typography>
               </CardContent>
             </Card>

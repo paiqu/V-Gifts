@@ -89,6 +89,8 @@ export default function AdminDrawer(props) {
     admins: false,
   });
   const [users, setUsers] = useState([]);
+  const [orders, SetOrders] = useState([]);
+
 
   React.useEffect((() => {
     axios.get('admin/all_user', {
@@ -102,6 +104,18 @@ export default function AdminDrawer(props) {
       setUsers(data);
     })
     .catch((err) => {});
+
+    axios.get("/admin/all_order", {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+
+      SetOrders(data);
+    })
+    .catch((err) => {});
   }), []);
 
   const renderUsers = (
@@ -110,11 +124,16 @@ export default function AdminDrawer(props) {
 
   const renderOrders = (
     // <OrdersDataGrid />
-    <OrdersManagement />
+    <OrdersManagement token={token} orders={orders}/>
   );
 
   const renderAdminHome = (
-    <AdminHome usersNum={users.length} profile={profile} token={token}/>
+    <AdminHome 
+      usersNum={users.length}
+      ordersNum={orders.length}
+      profile={profile} 
+      token={token}
+    />
   );
 
   const renderProducts = (
@@ -229,10 +248,6 @@ export default function AdminDrawer(props) {
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
-            {/* <ListItem button key={"Inbox"}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
-              <ListItemText primary={"Inbox"} />
-            </ListItem> */}
             <ListItem button key={"Market"} onClick={displayProducts}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
               <ListItemText primary={"Market"} />
@@ -271,8 +286,8 @@ export default function AdminDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
-          <Typography>
-            {`Hello Admin ${profile['name']}(${profile['email']})`}
+          <Typography variant="h5">
+            {`Admin: ${profile['name']}(${profile['email']})`}
           </Typography>
         </Box>
         {display.home && renderAdminHome}
