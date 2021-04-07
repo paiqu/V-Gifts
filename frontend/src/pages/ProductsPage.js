@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import ProductCard from "../components/ProductCard";
 import ProductFilter from "../components/ProductFilter";
 import Grid from "@material-ui/core/Grid";
@@ -7,6 +7,10 @@ import Pagination from "@material-ui/lab/Pagination";
 import Box from "@material-ui/core/Box";
 import NavBar from "../components/NavBar";
 import axios from 'axios';
+import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
+import NotLoginModal from '../components/modals/NotLoginModal';
+// import AuthContext from '../AuthContext';
+import AuthContext from '../AuthContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,13 +36,31 @@ function ProductsPage(props) {
   const [totalPages, setTotalPages] = React.useState(0);
   const [products, setProducts] = React.useState([]);
 
-  const token = "";
+  const token = React.useContext(AuthContext).user;
+  // const token = "";
+  const [psModalOpen, setPsModalOpen] = useState(false);
+  const [nlModalOpen, setNlModalOpen] = useState(false);
+
+  const handlePsModalOpen = () => {
+    setPsModalOpen(true);
+  };
+
+  const handlePsModalClose = () => {
+    setPsModalOpen(false);
+  };
+  const handleNlModalOpen = () => {
+    setNlModalOpen(true);
+  };
+
+  const handleNlModalClose = () => {
+    setNlModalOpen(false);
+  };
 
 
   const retrieveProducts = () => {
     axios.get('/product/get_all', {
       params: {
-        token,
+        token: "",
         "page": currPage,
       }
     })
@@ -71,9 +93,6 @@ function ProductsPage(props) {
           <Grid 
             className={classes.rightContainer} 
             container item xs={12} sm={9} spacing={3}
-            // direction="column"
-            // justify="space-between"
-            // alignItems="center"
           >
             <Grid
               className={classes.productsGrid}
@@ -82,13 +101,8 @@ function ProductsPage(props) {
               xs={12}
               spacing={2}
             >
-              {/* <Grid container item xs={12} spacing={3}> */}
               {products.map((x) =>
                 <Grid key={`product-${x['product_id']}`} item xs={12} sm={4}>
-                  {/* <p>{x['product_id']}</p>
-                  <p>{x['name']}</p>
-                  <p>{x['price']}</p>
-                  <p>{x['rating']}</p> */}
                   <ProductCard
                     key={`product-${x['product_id']}`}
                     id={x['product_id']}
@@ -96,6 +110,10 @@ function ProductsPage(props) {
                     price={x['price']}
                     rating={x['rating']}
                     img={x['pic_link']}
+                    handlePsModalOpen={handlePsModalOpen}
+                    handlePsModalClose={handlePsModalClose}
+                    handleNlModalOpen={handleNlModalOpen}
+                    handleNlModalClose={handleNlModalClose}
                   />
                 </Grid>
               )}
@@ -121,6 +139,16 @@ function ProductsPage(props) {
           </Grid>
         </Grid>
       </Box>
+      <PurchaseSucessModal
+        handleClose={handlePsModalClose}
+        open={psModalOpen}
+        token={token}
+      />
+      <NotLoginModal
+        handleClose={handleNlModalClose}
+        open={nlModalOpen}
+        token={token}
+      />
     </div>
   );
 }
