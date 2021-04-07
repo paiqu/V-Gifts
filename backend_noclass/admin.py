@@ -220,7 +220,8 @@ def get_all_order():
             "cost": us.individual_price(pid, amount),
             "purchase_date": int(datte),
             "state_in_code": state_in_code,
-            "state_in_text": state_in_text
+            "state_in_text": state_in_text,
+            "rating": temp["ORDER_DB"][key]["rating"]
         })
     return lst
 

@@ -243,8 +243,8 @@ def rate_order(u_id, order_id, rating):
     """
     db.valid_id("user", u_id)
     db.valid_id("order", order_id)
-    if rating <= 0:
-        rating = 0
+    if rating <= 0.5:
+        rating = 0.5
     elif rating >= 5:
         rating = 5
     temp = db.load_json()
@@ -455,7 +455,8 @@ def show_all_order(uid):
             "cost": individual_price(pid, amount),
             "purchase_date": int(datte),
             "state_in_code": state_in_code,
-            "state_in_text": state_in_text
+            "state_in_text": state_in_text,
+            "rating": temp["ORDER_DB"][str(oid)]["rating"]
         })
     return lst
 
