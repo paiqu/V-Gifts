@@ -55,10 +55,6 @@ What I've implemented:
     4. All products now can be loaded from the backend
     5. Some modifications to current page layout
 
-What I'm stuck on:
-    1. 
-
-
 ## Week 7
 This week I implement the purchase functions in frontend.
 
@@ -66,4 +62,22 @@ Users now will be able to
     1. purchase directly
     2. add items into cart
     3. add fund into account in profile page
+
+## Week 8
+What I've done this week
+1. Finish Admin page basic functions
+    * display orders in the system
+    * display users in the system
+    * display products in the system
+    * display admins in the system & add new admin
+2. Finish User page basic functions
+    * Jump to cart page
+    * View orders history
+    * View & Edit balance
+3. Product purchasing or adding the product into the cart
+4. Notifications when
+    * User trying to buy a product when not logged in
+    * User successfully bought a product
+5. Modify products layout design
+    * Utlitized grid system more
 
