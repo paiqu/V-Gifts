@@ -46,7 +46,7 @@ def adm_register():
     data = request.get_json()
     name = data["name"]
     password = data["password"]
-    email = data["email"]
+    email = data["email"].lower()
     try:
         result = login.register_admin(name, password, email)
     except err.InvalidUsername as iuerr:
@@ -110,7 +110,7 @@ def adm_edit():
         raise error
     name = data["name"]
     password = data["password"]
-    email = data["email"]
+    email = data["email"].lower()
     result = adm.edit_admin(aid, name, password, email)
     return dumps({
         "id": result["id"]
@@ -187,7 +187,7 @@ def usr_register():
     fname = data["first_name"]
     lname = data["last_name"]
     password = data["password"]
-    email = data["email"]
+    email = data["email"].lower()
     address = data["address"]
     city = data["city"]
     country = data["country"]
@@ -458,7 +458,7 @@ def admin_regesiter_admin():
         raise error
     name = data["name"]
     password = data["password"]
-    email = data["email"]
+    email = data["email"].lower()
     try:
         result = login.register_adm_nologin(name, password, email)
     except err.InvalidUsername as iuerr:
