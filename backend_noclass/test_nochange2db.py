@@ -3,6 +3,7 @@
 '''
 
 import user as us
+import admin as ad
 import database as db
 
 def test0():
@@ -25,11 +26,15 @@ def test1():
 def test2():
     print(us.show_all_order(1))
 
+def test3():
+    print(ad.get_all_order())
+
 
 if __name__ == "__main__":
     # test0()
     # test1()
     # test2()
+    test3()
     # print("===============================")
-    temp = db.load_json()
-    db.pretty_print(temp)
+    # temp = db.load_json()
+    # db.pretty_print(temp)
