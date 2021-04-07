@@ -388,7 +388,7 @@ def rate_order():
         raise error
     oid = data["order_id"]
     rating = data["rating"]
-    result = rate_order(user_id, oid, rating)
+    result = usr.rate_order(user_id, oid, rating)
     return dumps({
         "status": "success"
     })
