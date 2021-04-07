@@ -71,7 +71,6 @@ export default function AdminsManagement(props) {
       } else if (data.code == 404) {
         // invalid user name
         setState({
-          ...state,
           nameError: true,
           help_text: "The admin name is invalid"
         });
@@ -81,8 +80,7 @@ export default function AdminsManagement(props) {
           nameError: true,
           help_text: "The admin name is already existed"
         });
-        console.log(data);
-      } else if (data.code == 407) {
+      } else if (data.code == 408) {
         // email existed
         setState({
           ...state,

@@ -29,5 +29,5 @@ class NotEoughFund(HTTPException):
     message = 'Not enough fund, purchase fail!'
 
 class EmailAlreadyExit(HTTPException):
-    code = 407
+    code = 408
     message = 'Email already used by another account, try another one.'
