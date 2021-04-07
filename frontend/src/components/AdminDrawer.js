@@ -89,12 +89,26 @@ export default function AdminDrawer(props) {
     orders: false,
     admins: false,
   });
+
+  const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
   const [orders, SetOrders] = useState([]);
   const [admins, setAdmins] = useState([]);
-  const [products, setProducts] = useState([]);
 
   React.useEffect((() => {
+    axios.get('/product/get_all', {
+      params: {
+        token: "",
+        page: -1,
+      }
+    })
+    .then((response) => {
+      const data = response.data["product_lst"];
+
+      setProducts(data);
+    })
+    .catch((err) => {});
+    
     axios.get('admin/all_user', {
       params: {
         token,

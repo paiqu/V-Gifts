@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from "@material-ui/core/Typography";
-import axios from 'axios';
 import { DataGrid } from '@material-ui/data-grid';
+import moment from 'moment';
 
 
 
 export default function OrdersManagement(props) {
-  const token = props.token;
 
   const columns = [
     { field: 'id', headerName: 'Order ID', width: 150},
@@ -26,7 +25,7 @@ export default function OrdersManagement(props) {
       "product_name": x['product_name'],
       "amount": x['amount'],
       "cost": x['cost'],
-      "purchase_date": x['purchase_date'],
+      "purchase_date": moment(parseFloat( x['purchase_date']*1000)).format("YYYY-MM-DD HH:mm:ss"),
     };
   });
 
@@ -37,6 +36,7 @@ export default function OrdersManagement(props) {
         rows={rows} 
         columns={columns} 
         pageSize={7} 
+        autoHeight
         // checkboxSelection 
       />
     </div>

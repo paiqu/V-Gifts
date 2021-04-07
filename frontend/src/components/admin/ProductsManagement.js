@@ -1,31 +1,39 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import axios from 'axios';
+import { DataGrid } from '@material-ui/data-grid';
+
 
 export default function ProductsManagement(props) {
-  const [currPage, setCurrPage] = React.useState(1);
-  const [totalPages, setTotalPages] = React.useState(0);
-  const [products, setProducts] = React.useState([]);
+  const token = props.token;
 
-  // const retrieveProducts = () => {
-  //   axios.get('/product/get_all', {
-  //     params: {
-  //       token,
-  //       "page": currPage,
-  //     }
-  //   })
-  //     .then((response) => {
-  //       const data = response.data;
+  const columns = [
+    { field: 'id', headerName: 'Product ID', width: 150},
+    { field: "name", headerName: 'Product Name', width: 350 },
+    { field: "price", headerName: 'Price', width: 180 },
+    { field: "rating", headerName: 'Rating', width: 250 },
+    // { field: "pic_link", headerName: 'Amount', width: 100 },
+  ];
 
-  //       setTotalPages(data['total_pages']);
-  //       setProducts(data['product_lst']);
-  //     })
-  // };
+  const rows = props.products.map(x => {
+    return {
+      "id": x["product_id"],
+      "name": x["name"],
+      "price": `\$${x["price"]}`,
+      "rating": `${x["rating"]}/5`,
+    };
+  });
+
 
   return (
-    <div>
-      Products
+    <div style={{width: '100%'}}>
+      <Typography variant="h5">Products in the system</Typography>
+      <DataGrid 
+        rows={rows} 
+        columns={columns} 
+        pageSize={7} 
+        checkboxSelection 
+        autoHeight
+      />
     </div>
   );
 }
