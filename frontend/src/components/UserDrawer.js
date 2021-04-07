@@ -222,6 +222,7 @@ export default function UserDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
+          {display.orders && <h1>Order history</h1>}
 
         </Box>
         {display.home && renderUserHome}
