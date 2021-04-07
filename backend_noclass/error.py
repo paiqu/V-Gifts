@@ -27,3 +27,7 @@ class InvalidPassword(HTTPException):
 class NotEoughFund(HTTPException):
     code = 406
     message = 'Not enough fund, purchase fail!'
+
+class EmailAlreadyExit(HTTPException):
+    code = 407
+    message = 'Email already used by another account, try another one.'
