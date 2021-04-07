@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-
+import ButtonBase from '@material-ui/core/ButtonBase';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
+      margin: 5,
       borderRadius: 5,
       overflow: "hidden",
       // height: "10rem",
@@ -40,11 +42,17 @@ export default function OrderCard(props) {
         alignItems="center"
       >
         <Grid item xs={3}>
-          <img className={classes.img} src={props.pic_link} alt='' />
+          <ButtonBase
+            className={classes.image}
+            component={Link}
+            to={`/product/${props.product_id}`}
+          >
+            <img className={classes.img} src={props.pic_link} alt='props.product_id' />
+          </ButtonBase>
         </Grid>
 
-        <Grid item xs={3}>
-          {props.product_name} id: {props.product_id}
+        <Grid item xs={4}>
+          {props.product_name}
         </Grid>
         <Grid item xs={2}>
           <p>Quantity: {props.amount}</p>
@@ -53,7 +61,7 @@ export default function OrderCard(props) {
             <p>${props.cost}</p>
         </Grid>
         <Grid item xs={2}>
-            <p>${props.purchase_date}</p>
+            <p>{props.purchase_date}</p>
         </Grid>
       </Grid>
     </div>
