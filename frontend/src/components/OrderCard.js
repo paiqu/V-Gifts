@@ -7,6 +7,9 @@ import Box from '@material-ui/core/Box';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
+import { Link } from 'react-router-dom';
+import ButtonBase from '@material-ui/core/ButtonBase';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,18 +75,13 @@ export default function OrderCard(props) {
         alignItems="center"
       >
         <Grid item xs={3}>
-          {/* <ButtonBase
+          <ButtonBase
             className={classes.image}
             component={Link}
             to={`/product/${props.product_id}`}
           >
             <img className={classes.img} src={props.pic_link} alt='props.product_id' />
-          </ButtonBase> */}
-          <img className={classes.img} src={props.pic_link} alt='props.product_id'
-            // style={{
-            //   border: `1px solid ${theme.palette.primary.contrastText}`
-            // }}
-          />
+          </ButtonBase>
         </Grid>
 
         <Grid item xs={4}>
