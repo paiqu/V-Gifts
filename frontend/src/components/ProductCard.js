@@ -108,7 +108,7 @@ export default function ProductCard(props) {
                           <ButtonBase
                             className={classes.image}
                             component={Link}
-                            to={`/product/`}
+                            to={`/product/${id}`}
                           >
                               <img className={classes.img} alt="product image" src={img} />
                           </ButtonBase>
