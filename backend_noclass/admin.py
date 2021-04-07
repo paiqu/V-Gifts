@@ -218,7 +218,7 @@ def get_all_order():
             "amount": amount,
             "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
             "cost": us.individual_price(pid, amount),
-            "purchase_date": dt.datetime.fromtimestamp(datte).isoformat(),
+            "purchase_date": int(datte),
             "state_in_code": state_in_code,
             "state_in_text": state_in_text
         })

@@ -447,7 +447,7 @@ def show_all_order(uid):
             "amount": amount,
             "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
             "cost": individual_price(pid, amount),
-            "purchase_date": dt.datetime.fromtimestamp(datte).isoformat(),
+            "purchase_date": int(datte),
             "state_in_code": state_in_code,
             "state_in_text": state_in_text
         })
