@@ -155,7 +155,7 @@ export default function Product(props) {
             {infos.description}
             <br />
             <br />
-            Delivery: {infos.delivery}
+            Delivery: ${infos.delivery}
           </Typography>
           <QuantitySelect
             amount={amount}

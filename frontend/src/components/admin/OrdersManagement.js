@@ -30,7 +30,7 @@ export default function OrdersManagement(props) {
   });
 
   return (
-    <div style={{ height: "100%", width: '100%'}}>
+    <div style={{ width: '100%'}}>
       <Typography variant="h5">Orders in the system</Typography>
       <DataGrid 
         rows={rows} 
