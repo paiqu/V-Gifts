@@ -218,9 +218,20 @@ def get_all_order():
             "amount": amount,
             "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
             "cost": us.individual_price(pid, amount),
-            "purchase_date": dt.datetime.fromtimestamp(datte).isoformat(),
+            "purchase_date": int(datte),
             "state_in_code": state_in_code,
             "state_in_text": state_in_text
+        })
+    return lst
+
+def get_all_admin():
+    temp = db.load_json()
+    lst = []
+    for key in temp["ADMIN_DB"].keys():
+        lst.append({
+            "admin_id": key,
+            "username": temp["ADMIN_DB"][key]["name"],
+            "email": temp["ADMIN_DB"][key]["email"]
         })
     return lst
 

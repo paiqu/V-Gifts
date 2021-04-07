@@ -29,12 +29,16 @@ def test2():
 def test3():
     print(ad.get_all_order())
 
+def test4():
+    print(ad.get_all_admin())
+
 
 if __name__ == "__main__":
     # test0()
     # test1()
     # test2()
-    test3()
+    # test3()
+    test4()
     # print("===============================")
     # temp = db.load_json()
     # db.pretty_print(temp)
