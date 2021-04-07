@@ -54,9 +54,9 @@ def test3():
     db.to_json(temp)
     # add some product/user/admin
     admin_1 = ad.new_admin('admin','123456','123@unsw')
-    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5)
-    prod_2 = ad.new_product('prod_2', 100, 'test_use', [1, 1, 0], 20)
-    user_1 = us.new_user('user_1', '123', '123@unsw', 'somewhere')
+    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5, "")
+    prod_2 = ad.new_product('prod_2', 100, 'test_use', [1, 1, 0], 20, "")
+    user_1 = us.new_user('user_1', 'user_1', 'user_1', '123', '123@unsw', 'address', 'city', 'country')
     db.add_admin(admin_1)
     db.add_prod(prod_1)
     db.add_prod(prod_2)
@@ -83,8 +83,34 @@ def test3():
     # print(db.load_json())
     print(wb.prod_filter([['price', 40, 60]]))
 
+def test4():
+    db.clear_db()
+    temp = db.init_db()
+    db.to_json(temp)
+    # add some product/user/admin
+    admin_1 = ad.new_admin('admin','123456','123@unsw')
+    prod_1 = ad.new_product('prod_1', 50, 'test_use', [1, 0, 0], 5, "")
+    user_1 = us.new_user('user_1', 'user_1', 'user_1', '123', '123@unsw', 'address', 'city', 'country')
+    db.add_admin(admin_1)
+    db.add_prod(prod_1)
+    db.add_user(user_1)
+    us.add_fund(user_1['id'], 500)
+    us.add_product_to_cart(user_1['id'], prod_1['id'], 3)
+    us.add_product_to_cart(user_1['id'], prod_1['id'], 4)
+    us.add_product_to_cart(user_1['id'], prod_1['id'], 2)
+    us.purchase(user_1['id'], [[prod_1['id'],3], [prod_1['id'],4], [prod_1['id'],2]])
+    # testing
+    temp_2 = db.load_json()
+    print(wb.order_filter_sort(['1','2','3']))
+    us.rate_order(user_1['id'], 2, 10)
+    us.rate_order(user_1['id'], 1, -5)
+    us.rate_order(user_1['id'], 3, 3)
+    assert wb.rating_calc(prod_1['id']) == (10 - 5 + 3) / 3
+    print(wb.rating_calc(prod_1['id']))
+
 if __name__ == '__main__':
     # test0()
     # test1()
     # test2()
-    test3()
+    # test3()
+    test4()

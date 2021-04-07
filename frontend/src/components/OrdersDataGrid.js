@@ -2,7 +2,6 @@ import * as React from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import Typography from "@material-ui/core/Typography";
 
-
 const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
   { field: 'firstName', headerName: 'First name', width: 180 },
@@ -30,7 +29,7 @@ const columns = [
 ];
 
 const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35, country: 'Australia' },
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35, country: 'Australia'  },
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42, country: "Brazil" },
   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45, country: "China" },
   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16, country: 'Australia' },

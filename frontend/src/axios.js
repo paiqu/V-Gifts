@@ -16,7 +16,7 @@ axios.interceptors.request.use((request) => {
 });
 
 const errorHandler = (error) => {
-    // great gist https://gist.github.com/saqueib/a495af17d7c0e2fd5c2316b0822ebac3
+    // https://gist.github.com/saqueib/a495af17d7c0e2fd5c2316b0822ebac3
 
     // if has response show the error
     console.error(error);
@@ -24,8 +24,9 @@ const errorHandler = (error) => {
     let message = DEFAULT_ERROR_TEXT;
 
     if (error.response) {
-        console.log(error.response.data)
+        console.log(error.response.data);
         message = _.get(error, 'response.data.message') || DEFAULT_ERROR_TEXT;
+        return error.response;
     }
 
     toast.error(message);

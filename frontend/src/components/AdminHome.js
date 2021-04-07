@@ -44,8 +44,11 @@ function AdminHome(props) {
     const classes = useStyles();
     const theme = useTheme();
 
+    const token = props.token;
+    const profile = props.profile;
+
     return (
-      <React.Fragment classeName={classes.root}>
+      <div classeName={classes.root}>
         <Grid container spacing={3}>
           <Grid item md={3} xs={12}>
             <Card className={classes.gridItem}  variant="outlined">
@@ -96,7 +99,7 @@ function AdminHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  50 users registered
+                  {props.usersNum} users registered
                 </Typography>
               </CardContent>
             </Card>
@@ -120,7 +123,7 @@ function AdminHome(props) {
             </Card>
           </Grid> 
         </Grid>
-      </React.Fragment>
+      </div>
     );
 }
 

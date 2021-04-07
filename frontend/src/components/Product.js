@@ -1,81 +1,185 @@
-import React, { useState } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
+import axios from 'axios';
+import QuantitySelect from './QuantitySelect';
+import AuthContext from '../AuthContext';
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        margin: 'auto',
-        // maxWidth: 500,
-    },
-    image: {
-        // width: 128,
-        // height: 128,
-    },
-    img: {
-        margin: 'auto',
-        display: 'block',
-        maxWidth: '100%',
-        maxHeight: '100%',
-    },
-
+  image: {
+    width: 550,
+    height: 550,
+  },
+  imageContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  details: {
+    display: "flex",
+    flexDirection: "column",
+  }
 }));
 
 export default function Product(props) {
-    const classes = useStyles();
-    const theme = useTheme();
+  const classes = useStyles();
+  // eslint-disable-next-line
+  const theme = useTheme();
+  const token = React.useContext(AuthContext).user;
 
-    // eslint-disable-next-line
-    const [id, setID] = useState(null);
-    // eslint-disable-next-line
-    const [price, setPrice] = useState(100);
+  const id = props.id;
+  const [infos, setInfos] = React.useState({
+    id: props.id,
+    name: "",
+    price: 100,
+    description: "",
+    delivery: "",
+    rating: "",
+    img: "",
+  });
+  const [amount, setAmount] = React.useState(1);
 
-    return (
-        <div className={classes.root}>
-            <Paper className={classes.paper}>
-                <Grid container spacing={2}>
-                    <Grid item>
-                        <ButtonBase className={classes.image}>
-                            <img className={classes.img} alt="complex" src={`img/products/${props.name}.jpeg`} />
-                        </ButtonBase>
-                    </Grid>
-                    <Grid item xs={12} sm container>
-                        <Grid item xs container direction="column" spacing={2}>
-                        <Grid item xs>
-                            <Typography gutterBottom variant="subtitle1">
-                            {props.name}
-                            </Typography>
-                            <Typography variant="body2" gutterBottom>
-                                A normal Mario
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
-                            ID: {`${props.name}`}
-                            </Typography>
-                        </Grid>
-                        <Grid item>
-                            <Button
-                                color={theme.palette.primary.contrastText}
-                            >
-                                <Typography variant="body2" style={{ cursor: 'pointer' }}>
-                                    <ShoppingCartIcon /> Add to Cart
-                                </Typography>
-                            </Button>
-                        </Grid>
-                        </Grid>
-                        <Grid item>
-                        <Typography variant="subtitle1">${price}</Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Paper>
-        </div>
-    );
+  React.useEffect((() => {
+    axios.get('/product/get_info', {
+      params: {
+        id,
+      }
+    })
+      .then((response) => {
+        const data = response.data;
+        
+        setInfos({
+          name: data['name'],
+          price: data['price'],
+          description: data['description'],
+          delivery: data['delivery'],
+          rating: data['rating'],
+          img: data['pic_link'],
+        });
+      })
+      .catch((err) => {});
+  }), [id]);
+
+  const handleIncrement = () => {
+    setAmount(amount + 1);
+  };
+
+  const handleDecrement = () => {
+    if (amount - 1 >= 1) {
+      setAmount(amount - 1);
+    } else {
+      setAmount(1);
+    }
+  };
+
+
+  const handlePurchase = () => {
+    if (!token) {
+      return;
+    }
+
+    let info = [
+      [id, amount]
+    ];
+
+    let payload = {
+      token: token,
+      list: info,
+    };
+
+    axios({
+      url: "/order/new",
+      method: "post",
+      data: payload,
+    })
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
+
+  const handleAddToCart = () => {
+    axios.post("/user/cart/add",
+      {
+        token: token,
+        product_id: id,
+        amount: amount,
+      }
+    )
+    .then((response) => {
+
+    })
+    .catch((err) => {});
+  };
+
+  return (
+    <div>
+      <Grid
+        container 
+        spacing={5}
+        direction="row"
+        justify="flex-end"
+        style={{
+          marginTop: "1rem",
+        }}
+      >
+        <Grid
+          className={classes.imageContainer}
+          item 
+          xs={5} 
+        >
+          <img className={classes.image} src={infos.img} alt="product"/>
+        </Grid>
+        <Grid item xs={7} className={classes.details}>
+          <Typography variant="h3">{infos.name}</Typography>
+          <Box display="flex" alignItems="center">
+            <Rating name={`product-rating`} value={infos.rating} readOnly/>
+            <Typography variant="caption">100 reviews</Typography>
+          </Box>
+          <Typography variant="h4">
+            ${infos.price}
+          </Typography>
+          <Typography
+            variant='body1'
+            style={{
+              marginTop: "1rem",
+              marginRight: "5rem",
+              marginBottom: "3rem",
+            }}
+          >
+            {infos.description}
+            <br />
+            <br />
+            Delivery: {infos.delivery}
+          </Typography>
+          <QuantitySelect
+            amount={amount}
+            handleIncrement={handleIncrement}
+            handleDecrement={handleDecrement}
+          />
+
+          <Box
+            display="flex"
+            flexDirection="row"
+            mt={1}
+          >
+            <Button
+              variant="contained" 
+              color="primary" 
+              style={{marginRight: "1rem"}}
+              onClick={handlePurchase}  
+            >
+              Purchase
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleAddToCart}>Add to Cart</Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }

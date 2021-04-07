@@ -28,7 +28,7 @@ def angle_between(v1, v2):
     v2_u = unit_vector(v2)
     return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
 
-def prod_recommendation(user_id, num = 10):
+def prod_recommendation(user_id, prod_lst = [], db_name = 'database.json', num = 100):
     '''
         This function calculates the similarity between
         user_interest vector and
@@ -38,7 +38,7 @@ def prod_recommendation(user_id, num = 10):
         returns a list of product_id, sorted
     '''
     # item & value calculator
-    lst = prod_picker(user_id)
+    lst = prod_picker(user_id, prod_lst = [], db_name = 'database.json')
     # return sorted result (descending)
     rt = sorting_merge(lst, 1)
     if len(rt) <= num:
@@ -56,18 +56,16 @@ def interest_calculator(v_1, v_2, key):
     return (key, angle_between(v_1, v_2))
     
 
-def prod_picker(user_id, percent = 100): # percent -> the chance of product is joining the recommendation
+def prod_picker(user_id, prod_lst = [], db_name = 'database.json'): # percent -> the chance of product is joining the recommendation
     # prod_lst = DB
-    temp = db.load_json()
-    prod_lst = temp['PRODUCT_DB']
+    temp = db.load_json(db_name)
+    prod_lst = temp['PRODUCT_DB'] if prod_lst == [] else prod_lst
     user_v = temp['USER_DB'][str(int(user_id))]['interest']
     # append to lst
     lst = []
     for item in prod_lst:
-        rdd = rd.randint(0, 100)
-        if rdd > (100-percent):
-            v_1 = prod_lst[item]['category']
-            lst.append(interest_calculator(v_1, user_v, item))
+        v_1 = prod_lst[item]['category']
+        lst.append(interest_calculator(v_1, user_v, item))
     return lst
 
 def sorting_helper(lst1, lst2, posi, mode = 0):
@@ -121,6 +119,7 @@ def sorting_merge(lst, posi = 1, mode = 0): # lst -> [(id, value), ....]
 def order_filter_sort(order_keys, option = None, mode = 1):
     '''
         This function is used to reorder order_list
+        option => any key of order_db items
         mode = 1  -> decending
         mode = 0  -> ascending
     '''
@@ -279,3 +278,88 @@ def prod_filter_sort(prod_keys, option = None, mode = 1):
     for item in temp_lst:
         rt.append(item[0])
     return rt
+
+def rating_calc(prod_id):
+    temp = db.load_json()
+    ratings = temp['PRODUCT_DB'][str(prod_id)]["ratings"]
+    if len(ratings) == 0:
+        return 0
+    else:
+        rt_lst = []
+        for item in ratings:
+            rt_lst.append(item[1])
+        return sum(rt_lst) / len(rt_lst)
+
+def prod_filter_type(prod_lst = [], ctgry = [], \
+        price_rg = [0, 99999999], db_name = 'database.json'):
+    '''
+        This function filters product by category
+        and price range
+    '''
+    temp = db.load_json(db_name)
+    all_prod = prod_lst if prod_lst != [] else list(temp["PRODUCT_DB"].keys())
+    # filter catagory
+    rt1 = []
+    rt2 = []
+    # if category is chosen
+    if ctgry != [] or ctgry != None:
+        for prod in all_prod:
+            prod_summ = 1
+            # for all choson category, product has a positive direction on that category
+            for i in range(len(ctgry)):
+                if ctgry[i] > 0:
+                    prod_summ *= ctgry[i] * temp["PRODUCT_DB"][prod]['category'][i]
+            if prod_summ > 0:
+                rt1.append(prod)
+    else:
+        rt1 = all_prod
+    # filter price
+    rt2 = []
+    for prod in rt1:
+        if temp["PRODUCT_DB"][prod]['price'] >= price_rg[0] \
+            and temp["PRODUCT_DB"][prod]['price'] <= price_rg[-1]:
+            rt2.append(prod)
+    return rt2
+
+def keyword_searcher(keyword = "", db_name = 'database.json'):
+    temp = db.load_json(db_name)
+    if keyword == "":
+        return list(temp["PRODUCT_DB"].keys())
+    else:
+        rt = []
+        keyword = keyword.lower()
+        for prod in list(temp["PRODUCT_DB"].keys()):
+            if keyword in temp["PRODUCT_DB"][prod]['name'].lower() \
+                or keyword in temp["PRODUCT_DB"][prod]['description'].lower():
+                rt.append(prod)
+    return rt
+
+def search_filter_recommendation(keyword = "", db_name = 'database.json', ctgry = [], \
+            price_rg = [0, 99999999], user_id = -1):
+    '''
+        This function searches with a keyword, filter with selection,
+        and rank product based on recommendation
+        keyword_searcher(keyword = "", db_name = 'database.json') -> list
+        prod_filter_type(prod_lst = [], ctgry = [], \
+            price_rg = [0, 99999999], db_name = 'database.json') -> list
+        prod_recommendation(user_id, prod_lst = [], db_name = \
+            'database.json', num = 100) -> list
+    '''
+    rt0 = keyword_searcher(keyword, db_name)
+    rt1 = prod_filter_type(rt0, ctgry, price_rg, db_name)
+    if user_id != -1:
+        rt2 = prod_recommendation(user_id, rt1, db_name)
+        return rt2 
+    else:
+        return rt1
+
+
+if __name__ == "__main__":
+    # print(prod_filter_type(ctgry = [], price_rg = [0, 99999999], \
+    #     db_name = 'database_manual.json'))
+    # print(prod_filter_type(ctgry = [1, 0, 0], price_rg = [0, 99999999], \
+    #     db_name = 'database_manual.json'))
+    # print(prod_filter_type(ctgry = [], price_rg = [50, 999999], \
+    #     db_name = 'database_manual.json'))
+    print(search_filter_recommendation("mother", 'database_manual.json', ctgry = [], \
+            price_rg = [0, 99999999], user_id = -1))

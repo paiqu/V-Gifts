@@ -62,3 +62,22 @@ Next week I will learn flask and help QP to connect frontend
 and backend, and also help my team members to prepare demo 1.
 
 
+############################################################
+Week 5
+############################################################
+Finished most part of server.py for user and admin part due
+to imagination of what needed.
+
+Check the sprint 1 process and made a sketchy plan for sprint
+2.
+
+Made Progression Demo A with my team.
+
+############################################################
+Week 6
+############################################################
+Flexible week, didn't do much work. Had a Retrospective A 
+meeting with my team, also write the report of Retrospective
+A and upload to Github.
+
+

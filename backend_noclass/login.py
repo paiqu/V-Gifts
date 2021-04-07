@@ -10,6 +10,7 @@ import admin as ad
 import hashlib
 import re
 import generate_token as gt
+import error as err
 
 
 # user part
@@ -24,15 +25,15 @@ def register_user(aname, fname, lname, password, email, address, city, country):
     # Filter SQL injection
     pattern = re.compile("[a-zA-Z0-9_]")
     if pattern.search(aname) is None:
-        raise Exception("Incorrect syntax! You can only use number, letter and underline.")
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
 
     email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
     if email_pattern.search(email) is None:
-        raise Exception("Incorrect email format! Please try again.")
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
 
     # Check whether the user name has been registered
     if check_user_exist(aname) is True:
-        raise Exception("Name is already exist! Please try another one.")
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
 
     # Encrypt password 
     encryption = encrypt_password(password)
@@ -54,8 +55,7 @@ def login_user(name, password):
     pattern = re.compile("[a-zA-Z0-9_]")
     
     if pattern.search(name) is None:
-        print("Incorrect user name! Please try again.")
-        return False
+        raise err.IncorrectUsername(description = "Incorrect account name! Please try again.")
 
     login_token = ''
     temp = db.load_json()
@@ -72,8 +72,7 @@ def login_user(name, password):
                     'token':login_token
                 }
 
-    print("Login fail! Invalid password or name! Please try again.")
-    return False
+    raise err.InvalidPassword(description = "Login fail! Invalid password or account name! Please try again.")
 
 # def logout_user(iid):
 def logout_user(token):
@@ -108,12 +107,15 @@ def register_admin(name, password, email):
     # Filter SQL injection
     pattern = re.compile("[a-zA-Z0-9_]")
     if pattern.search(name) is None:
-        print("Incorrect syntax! You can only use number, letter and underline.")
-        return False 
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+
+    email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
 
     # Check whether the user name has been registered
     if check_admin_exist(name) is True:
-        raise Exception("Name is already exist! Please try another one.")
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
 
     # Encrypt password 
     encryption = encrypt_password(password)
@@ -125,6 +127,27 @@ def register_admin(name, password, email):
 
     return login_admin(name, password)
 
+def register_adm_nologin(name, password, email):
+    # Filter SQL injection
+    pattern = re.compile("[a-zA-Z0-9_]")
+    if pattern.search(name) is None:
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+
+    email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
+
+    # Check whether the user name has been registered
+    if check_admin_exist(name) is True:
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
+
+    # Encrypt password 
+    encryption = encrypt_password(password)
+    # New user added to db
+    new = ad.new_admin(name, encryption, email)
+    db.add_admin(new)
+    return {}
+
 def login_admin(name, password):
     '''
         this function login admin
@@ -133,8 +156,7 @@ def login_admin(name, password):
     pattern = re.compile("[a-zA-Z0-9_]")
     
     if pattern.search(name) is None:
-        print("Incorrect admin name! Please try again.")
-        return False
+        raise err.IncorrectUsername(description = "Incorrect account name! Please try again.")
 
     login_token = ''
     temp = db.load_json()
@@ -151,8 +173,7 @@ def login_admin(name, password):
                     'token':login_token
                 }
     
-    print("Login fail! Invalid password or name! Please try again.")
-    return False
+    raise err.InvalidPassword(description = "Login fail! Invalid password or account name! Please try again.")
 
 def logout_admin(token):
     '''
@@ -214,4 +235,4 @@ def token_to_idd(token):
     for key, attr in temp['TOKEN_DB'].items():
         if key == token:
             return attr
-    return False
+    raise err.InvalidToken(description = "Invalid token!")

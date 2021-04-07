@@ -1,88 +1,126 @@
 import React from "react";
-// import NavBar from "../components/NavBar";
-// import '../css/products-page.css';
-import Product from "../components/Product";
+import ProductCard from "../components/ProductCard";
 import ProductFilter from "../components/ProductFilter";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import Box from "@material-ui/core/Box";
 import NavBar from "../components/NavBar";
+import axios from 'axios';
+import { Link, Redirect } from 'react-router-dom';
+import PaginationItem from '@material-ui/lab/PaginationItem';
+import { MemoryRouter, Route } from 'react-router';
+
 
 const useStyles = makeStyles((theme) => ({
-    main: {
-        marginTop: "2rem"
-    },
+  main: {
+    padding: 10,
+  },
+  leftContainer: {
 
+  },
+  rightContainer: {
+    // overflowX: "hidden",
+    padding: 50,
+  },
+  pagination: {
+    justifySelf: "end",
+  }
 }));
 
 function ProductsPage(props) {
   const classes = useStyles();
 
-  // Hook for page number
-  const [page, setPage] = React.useState(1);
+  const [currPage, setCurrPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(0);
+  const [products, setProducts] = React.useState([]);
 
-  const products = ["mario-1", "mario-2", "mario-3"];
-  const items = [];
+  const token = "";
 
-  for (let i = 0; i < 3; i++) {
-    items.push(
-      <Grid item xs={12} sm={4}>
-        <Product key={products[i]} name={products[i]} />
-      </Grid>
-    );
-  }
+
+  const retrieveProducts = () => {
+    axios.get('/product/get_all', {
+      params: {
+        token,
+        "page": currPage,
+      }
+    })
+      .then((response) => {
+        const data = response.data;
+
+        setTotalPages(data['total_pages']);
+        setProducts(data['product_lst']);
+      })
+  };
+
+  React.useEffect(retrieveProducts, [currPage]);
+
 
   const handlePageChange = (event, number) => {
-    setPage(number);
+    setCurrPage(number);
   };
 
   return (
     <div className={classes.root}>
       <NavBar className={classes.navBar} />
-      <Box 
+      <Box
         className={classes.main}
-        display="flex" 
-        flexDirection="column" 
-        alignContent="center"
       >
-        <Grid container spacing={10}>
-          <Grid container item xs={12} sm={3} direction={"column"}>
+        <Grid container spacing={0}>
+          <Grid className={classes.leftContainer} container item xs={12} sm={3}>
             <ProductFilter />
           </Grid>
-          <Grid
-            className={classes.productsGrid}
-            container
-            item
-            xs={12}
-            sm={9}
-            direction={"column"}
-            alignItems="center"
-            spacing={5}
-            height="20%"
+
+          <Grid 
+            className={classes.rightContainer} 
+            container item xs={12} sm={9} spacing={3}
+            // direction="column"
+            // justify="space-between"
+            // alignItems="center"
           >
-            <Grid container item xs={12} spacing={3}>
-              {items}
+            <Grid
+              className={classes.productsGrid}
+              container
+              item
+              xs={12}
+              spacing={2}
+            >
+              {/* <Grid container item xs={12} spacing={3}> */}
+              {products.map((x) =>
+                <Grid key={`product-${x['product_id']}`} item xs={12} sm={4}>
+                  {/* <p>{x['product_id']}</p>
+                  <p>{x['name']}</p>
+                  <p>{x['price']}</p>
+                  <p>{x['rating']}</p> */}
+                  <ProductCard
+                    key={`product-${x['product_id']}`}
+                    id={x['product_id']}
+                    name={x['name']}
+                    price={x['price']}
+                    rating={x['rating']}
+                    img={x['pic_link']}
+                  />
+                </Grid>
+              )}
+              {/* </Grid> */}
             </Grid>
-            <Grid container item xs={12} spacing={3}>
-              {items}
-            </Grid>
-            <Grid container item xs={12} spacing={3}>
-              {items}
+            <Grid
+              className={classes.pagination}
+              item
+              xs={12}
+            >
+              <Pagination
+                count={totalPages}
+                color="secondary"
+                variant="outlined"
+                shape="rounded"
+                size="large"
+                page={currPage}
+                onChange={handlePageChange}
+              />
+              <p>page {currPage} of {totalPages}</p>
             </Grid>
 
-            <Pagination
-              item
-              sm={6}
-              m="auto"
-              count={10}
-              color="secondary"
-              variant="outlined"
-              shape="rounded"
-              size="large"
-              onChange={handlePageChange}
-              page={page}
-            />
           </Grid>
         </Grid>
       </Box>

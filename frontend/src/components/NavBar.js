@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar() {
-  const id = React.useContext(AuthContext);
+  const token = React.useContext(AuthContext).user;
 
   const classes = useStyles();
   const theme = useTheme();
@@ -219,10 +219,10 @@ export default function NavBar() {
 						className={classes.marketButton}
 						component={Link}
 						to={'/products'}
-						color={theme.palette.primary.contrastText}
+						style={{color: theme.palette.primary.contrastText}}
 						variant="outlined"
 					>
-							Market
+            Market
 					</Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -239,8 +239,13 @@ export default function NavBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 2 items in cart" color="inherit">
-              <Badge badgeContent={2} color="secondary">
+            <IconButton 
+              aria-label="cart" 
+              color="inherit"
+              component={Link}
+              to={ `/profile/${token}/cart`}
+            >
+              <Badge badgeContent={0} color="secondary">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
@@ -251,7 +256,7 @@ export default function NavBar() {
             </IconButton>
             <IconButton
 							component={Link}
-							to={ id ? `/profile/${id}` : "/login"}
+							to={ token ? `/profile/${token}` : "/login"}
               edge="end"
               aria-label="account of current user"
               // aria-controls={menuId}

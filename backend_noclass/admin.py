@@ -14,6 +14,10 @@ ADMIN_DB = {
 '''
 
 import database as db
+import datetime as dt
+import user as us
+import chatbot as ct
+import login
 
 # class Admin:
 #     def __init__(name, password, email):
@@ -24,8 +28,16 @@ import database as db
 
 # init
 
-def new_admin(name, password, email):
-    new_id = db.id_generator('admin')
+def new_preset_admin(name, password, email):
+    return {
+        "id": 1,
+        "name": name,
+        "password": password,
+        "email": email
+    }
+
+def new_admin(name, password, email, db_name = 'database.json'):
+    new_id = db.id_generator('admin', db_name)
     return {
         "id": new_id,
         "name": name,
@@ -33,14 +45,21 @@ def new_admin(name, password, email):
         "email": email
     }
 
-def new_product(name, price, description, category, deli_days):
+def new_product(name, price, description, category, deli_days, pic_link, db_name = 'database.json'):
     '''
         create a new product,
         category should be a lst of int with length of
         TYPE_OF_PRODUCTS
     '''
-    new_id = db.id_generator('product')
-    assert db.check_interest_dim(category)
+    new_id = db.id_generator('product', db_name)
+    # assert db.check_interest_dim(category)
+    # catagory is now calculated by query_analysis
+    category = None
+    if description == "" or description is None:
+        description = name
+        category = ct.query_analysis_test3(name)
+    else:
+        category = ct.query_analysis_test3(name + '. ' + description)
     return {
         "id": new_id,
         "name": name,
@@ -50,13 +69,13 @@ def new_product(name, price, description, category, deli_days):
         "delivery": deli_days,
         "ratings": [],
                     # [(u_id, rating), ...]
-        "pic": None
+        "pic": pic_link
     }
 
 
 # editors
 
-def edit_admin(admin_id, name, password, email):
+def edit_admin(admin_id, name, password, email, db_name = 'database.json'):
     '''
         This function edits admin info with inputs above
         and returns the id of this admin
@@ -64,28 +83,43 @@ def edit_admin(admin_id, name, password, email):
     temp = db.load_json()
     if str(admin_id) not in temp['ADMIN_DB']:
         raise KeyError()
-    temp['ADMIN_DB'][str(prod_id)]["name"] = name
-    temp['ADMIN_DB'][str(prod_id)]["password"] = password
-    temp['ADMIN_DB'][str(prod_id)]["email"] = email
+    temp['ADMIN_DB'][str(admin_id)]["name"] = name
+    temp['ADMIN_DB'][str(admin_id)]["password"] = password
+    temp['ADMIN_DB'][str(admin_id)]["email"] = email
+    db.to_json(temp, db_name)
     return {
         'id': admin_id
     }
 
-def edit_product(prod_id, prod_name, prod_category, prod_descrip):
+def temp_use():
+    temp = db.load_json()
+    passw = login.encrypt_password("admin")
+    print(passw)
+    temp['ADMIN_DB']["1"]["password"] = passw
+    db.to_json(temp)
+
+def edit_product(prod_id, prod_name, prod_category, prod_descrip, db_name = 'database.json'):
     '''
         This function edits product info with inputs above
         and returns the id of this product
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     if str(prod_id) not in temp['PRODUCT_DB']:
         raise KeyError()
     temp['PRODUCT_DB'][str(prod_id)]["name"] = prod_name
-    assert db.check_interest_dim(prod_category)
+    # assert db.check_interest_dim(prod_category)
     temp['PRODUCT_DB'][str(prod_id)]["category"] = prod_category
     temp['PRODUCT_DB'][str(prod_id)]["description"] = prod_descrip
+    db.to_json(temp, db_name)
     return {
         'id': prod_id
     }
+
+def product_id_to_name(prod_id):
+    temp = db.load_json()
+    if str(prod_id) not in temp['PRODUCT_DB']:
+        raise KeyError()
+    return temp['PRODUCT_DB'][str(prod_id)]["name"]
 
 def delete_product(prod_id):
     '''
@@ -130,9 +164,82 @@ def change_order_state(order_id, new_state):
         'state': new_state
     }
 
+def get_user_list():
+    '''
+        This functions returns all user's basic info for admin
+    '''
+    temp = db.load_json()
+    rt = []
+    for key in temp['USER_DB'].keys():
+        rt.append({
+            'user_id': temp['USER_DB'][key]['id'],
+            'account_name': temp['USER_DB'][key]['name'],
+            'first_name': temp['USER_DB'][key]['fname'],
+            'last_name': temp['USER_DB'][key]['lname'],
+            'email': temp['USER_DB'][key]['email'],
+            'address': temp['USER_DB'][key]['address'],
+            'city': temp['USER_DB'][key]['city'],
+            'country': temp['USER_DB'][key]['country']
+        })
+    return rt
+
+def show_profile(aid):
+    db.valid_id("admin", aid)
+    temp = db.load_json()
+    return {
+        "username": temp["ADMIN_DB"][str(aid)]["name"],
+        "email": temp["ADMIN_DB"][str(aid)]["email"]
+    }
+
+def get_all_order():
+    temp = db.load_json()
+    lst = []
+    for key in temp["ORDER_DB"].keys():
+        uid = temp["ORDER_DB"][key]["user_id"]
+        pid = temp["ORDER_DB"][key]["product_id"]
+        amount = temp["ORDER_DB"][key]["amount"]
+        datte = temp["ORDER_DB"][key]["purchase_date"]
+        state_in_code = temp["ORDER_DB"][key]["state"]
+        if state_in_code == 0:
+            state_in_text = "Just purchase"
+        elif state_in_code == 1:
+            state_in_text = "Delivering"
+        elif state_in_code == 2:
+            state_in_text = "Done"
+        elif state_in_code == 3:
+            state_in_text = "Cancelled / Refunded"
+        else:
+            state_in_text = "Invalid state"
+        lst.append({
+            "order_id": key,
+            "user_id": uid,
+            "product_id": pid,
+            "product_name": product_id_to_name(pid),
+            "amount": amount,
+            "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
+            "cost": us.individual_price(pid, amount),
+            "purchase_date": int(datte),
+            "state_in_code": state_in_code,
+            "state_in_text": state_in_text
+        })
+    return lst
+
+def get_all_admin():
+    temp = db.load_json()
+    lst = []
+    for key in temp["ADMIN_DB"].keys():
+        lst.append({
+            "admin_id": key,
+            "username": temp["ADMIN_DB"][key]["name"],
+            "email": temp["ADMIN_DB"][key]["email"]
+        })
+    return lst
 
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.
 #     '''
 #     return {}
+
+if __name__ == "__main__":
+    temp_use()

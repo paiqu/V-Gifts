@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -7,11 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -26,6 +21,10 @@ import UsersDataGrid from './UsersDataGrid';
 import OrdersDataGrid from './OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
+import axios from 'axios';
+import AuthContext from '../AuthContext';
+import Button from '@material-ui/core/Button';
+
 
 const drawerWidth = 240;
 
@@ -35,55 +34,18 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
+    display: "flex",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
   },
-  drawerOpen: {
+  drawerPaper: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+  drawerContainer: {
+    overflow: 'auto',
   },
   content: {
     flexGrow: 1,
@@ -96,22 +58,44 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: '7vh',
     marginRight: "0.5rem",
   },
+  title: {
+    flexGrow: 1,
+  },
+  logoutButton: {
+
+  }
 }));
 
 
 
-export default function AdminDrawer() {
+export default function AdminDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [display, setDisplay] = React.useState({
+
+  const token = React.useContext(AuthContext).admin;
+  const profile = props.profile;
+
+
+  const [open, setOpen] = useState(false);
+  const [display, setDisplay] = useState({
     home: true,
     orders: false,
     users: false,
   });
+  const [users, setUsers] = useState([]);
+
+  // React.useEffect((() => {
+  //   axios.get('admin/all_user')
+  //   .then((response) => {
+  //     const data = response.data;
+
+  //     setUsers(data);
+  //   })
+  //   .catch((err) => {});
+  // }), []);
 
   const renderUsers = (
-    <UsersDataGrid />
+    <UsersDataGrid users={users} />
   );
 
   const renderOrders = (
@@ -119,16 +103,8 @@ export default function AdminDrawer() {
   );
 
   const renderAdminHome = (
-    <AdminHome />
+    <AdminHome usersNum={users.length} profile={profile} token={token}/>
   );
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   const displayHome = () => {
     setDisplay({
@@ -144,6 +120,7 @@ export default function AdminDrawer() {
       orders: false,
       users: true,
     });
+
   }
 
   const displayOrders = () => {
@@ -154,30 +131,25 @@ export default function AdminDrawer() {
     });
   }
 
+  const handleLogout = (event) => {
+    axios.post('/admin/logout', { token })
+      .then((response) => {
+        console.log(response);
+      
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_id');
+
+        // after log out, redirect to home page
+        props.history.push('/');
+      }) 
+      .catch((err) => {console.log(err)});
+  };
+
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-        style={{
-          boxShadow: 'none',
-        }}
-      >
+      <AppBar position="fixed" className={classes.appBar} elevation={0}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography
 						style={{
 							textDecoration: "none",
@@ -193,62 +165,46 @@ export default function AdminDrawer() {
 					>
             V-Gifts | Admin Page
           </Typography>
-
+          <Button className={classes.logoutButton} variant="contained" color="secondary" onClick={handleLogout}>
+            Log out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer
+        className={classes.drawer}
         variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
         classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
+          paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListItem button key={"Home"} onClick={displayHome}>
-            <ListItemIcon><HomeIcon /></ListItemIcon>
-            <ListItemText primary={"Home"} />
-          </ListItem>
-          <ListItem button key={"Inbox"}>
-            <ListItemIcon><InboxIcon /></ListItemIcon>
-            <ListItemText primary={"Inbox"} />
-          </ListItem>
-          <ListItem button key={"Market"}>
-            <ListItemIcon><StoreIcon /></ListItemIcon>
-            <ListItemText primary={"Market"} />
-          </ListItem>
-          <ListItem button key={"Users"} onClick={displayUsers}>
-            <ListItemIcon><GroupIcon /></ListItemIcon>
-            <ListItemText primary={"Users"} />
-          </ListItem>
-          <ListItem button key={"Orders"} onClick={displayOrders}>
-            <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
-            <ListItemText primary={"Orders"} />
-          </ListItem>
-        </List>
-        <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+          <List>
+            <ListItem button key={"Home"} onClick={displayHome}>
+              <ListItemIcon><HomeIcon /></ListItemIcon>
+              <ListItemText primary={"Home"} />
             </ListItem>
-          ))}
-        </List> */}
+            <ListItem button key={"Inbox"}>
+              <ListItemIcon><InboxIcon /></ListItemIcon>
+              <ListItemText primary={"Inbox"} />
+            </ListItem>
+            <ListItem button key={"Market"}>
+              <ListItemIcon><StoreIcon /></ListItemIcon>
+              <ListItemText primary={"Market"} />
+            </ListItem>
+            <ListItem button key={"Users"} onClick={displayUsers}>
+              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemText primary={"Users"} />
+            </ListItem>
+            <ListItem button key={"Orders"} onClick={displayOrders}>
+              <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
+              <ListItemText primary={"Orders"} />
+            </ListItem>
+          </List>
+        </div>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
+        <Toolbar />
         <Box
           display="flex" 
           flexDirection="column"
@@ -265,6 +221,9 @@ export default function AdminDrawer() {
               marginBottom: theme.spacing(5),
             }}
           />
+          <Typography>
+            {`Hello Admin ${profile['name']}(${profile['email']})`}
+          </Typography>
         </Box>
         {display.home && renderAdminHome}
         {display.users && renderUsers}
