@@ -107,12 +107,15 @@ def register_admin(name, password, email):
     # Filter SQL injection
     pattern = re.compile("[a-zA-Z0-9_]")
     if pattern.search(name) is None:
-        print("Incorrect syntax! You can only use number, letter and underline.")
-        return False 
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+
+    email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
 
     # Check whether the user name has been registered
     if check_admin_exist(name) is True:
-        raise Exception("Name is already exist! Please try another one.")
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
 
     # Encrypt password 
     encryption = encrypt_password(password)
@@ -123,6 +126,27 @@ def register_admin(name, password, email):
     
 
     return login_admin(name, password)
+
+def register_adm_nologin(name, password, email):
+    # Filter SQL injection
+    pattern = re.compile("[a-zA-Z0-9_]")
+    if pattern.search(name) is None:
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+
+    email_pattern = re.compile('^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$')
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
+
+    # Check whether the user name has been registered
+    if check_admin_exist(name) is True:
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
+
+    # Encrypt password 
+    encryption = encrypt_password(password)
+    # New user added to db
+    new = ad.new_admin(name, encryption, email)
+    db.add_admin(new)
+    return {}
 
 def login_admin(name, password):
     '''

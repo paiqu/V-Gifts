@@ -224,6 +224,17 @@ def get_all_order():
         })
     return lst
 
+def get_all_admin():
+    temp = db.load_json()
+    lst = []
+    for key in temp["ADMIN_DB"].keys():
+        lst.append({
+            "admin_id": key,
+            "username": temp["ADMIN_DB"][key]["name"],
+            "email": temp["ADMIN_DB"][key]["email"]
+        })
+    return lst
+
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.

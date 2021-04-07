@@ -47,7 +47,14 @@ def adm_register():
     name = data["name"]
     password = data["password"]
     email = data["email"]
-    result = login.register_admin(name, password, email)
+    try:
+        result = login.register_admin(name, password, email)
+    except err.InvalidUsername as iuerr:
+        raise iuerr
+    except err.InvalidEmail as ieerr:
+        raise ieerr
+    except err.UsernameAlreadyExit as uaerr:
+        raise uaerr
     return dumps({
         "admin_id": result["id"]
     })
@@ -426,6 +433,37 @@ def admin_get_all_order():
         raise error
     result = adm.get_all_order()
     return dumps(result)
+
+@app.route("/admin/all_admin", methods = ["GET"])
+def all_admin():
+    token = request.args.get("token")
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = adm.get_all_admin()
+    return dumps(result)
+
+@app.route("/admin/add_admin", methods = ["POST"])
+def admin_regesiter_admin():
+    data = request.get_json()
+    token = data["token"]
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    name = data["name"]
+    password = data["password"]
+    email = data["email"]
+    try:
+        result = login.register_adm_nologin(name, password, email)
+    except err.InvalidUsername as iuerr:
+        raise iuerr
+    except err.InvalidEmail as ieerr:
+        raise ieerr
+    except err.UsernameAlreadyExit as uaerr:
+        raise uaerr
+    return dumps({})
 
 @app.route("/product/get_info", methods = ["GET"])
 def get_product_info():
