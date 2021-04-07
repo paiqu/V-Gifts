@@ -147,6 +147,9 @@ def register_adm_nologin(name, password, email):
     if check_admin_exist(name) is True:
         raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
 
+    if check_email_exist(email, 'ADMIN_DB'):
+        raise err.EmailAlreadyExit(description = "Email is already exist! Please try another one.")
+
     # Encrypt password 
     encryption = encrypt_password(password)
     # New user added to db

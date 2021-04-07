@@ -55,6 +55,8 @@ def adm_register():
         raise ieerr
     except err.UsernameAlreadyExit as uaerr:
         raise uaerr
+    except err.EmailAlreadyExit as eaerr:
+        raise eaerr
     return dumps({
         "admin_id": result["id"]
     })
