@@ -29,6 +29,7 @@ import Divider from '@material-ui/core/Divider';
 import ProductsManagement from './admin/ProductsManagement';
 import OrdersManagement from './admin/OrdersManagement';
 import AdminsManagement from './admin/AdminsManagement';
+import FaceIcon from '@material-ui/icons/Face';
 
 const drawerWidth = 240;
 
@@ -90,7 +91,8 @@ export default function AdminDrawer(props) {
   });
   const [users, setUsers] = useState([]);
   const [orders, SetOrders] = useState([]);
-
+  const [admins, setAdmins] = useState([]);
+  const [products, setProducts] = useState([]);
 
   React.useEffect((() => {
     axios.get('admin/all_user', {
@@ -116,32 +118,48 @@ export default function AdminDrawer(props) {
       SetOrders(data);
     })
     .catch((err) => {});
+
+    axios.get("/admin/all_admin", {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+
+      setAdmins(data);
+    })
+    .catch((err) => {});
+
+
   }), []);
 
   const renderUsers = (
-    <UsersDataGrid users={users} />
+    <UsersDataGrid token={token} users={users} />
   );
 
   const renderOrders = (
     // <OrdersDataGrid />
-    <OrdersManagement token={token} orders={orders}/>
+    <OrdersManagement token={token} orders={orders} />
   );
 
   const renderAdminHome = (
     <AdminHome 
       usersNum={users.length}
       ordersNum={orders.length}
+      adminsNum={admins.length}
+      productsNum={products.length}
       profile={profile} 
       token={token}
     />
   );
 
   const renderProducts = (
-    <ProductsManagement />
+    <ProductsManagement token={token} products={products} />
   );
 
   const renderAdmins = (
-    <h2>admins</h2>
+    <AdminsManagement token={token} admins={admins} />
   );
 
   const displayHome = () => {
@@ -253,7 +271,7 @@ export default function AdminDrawer(props) {
               <ListItemText primary={"Market"} />
             </ListItem>
             <ListItem button key={"Users"} onClick={displayUsers}>
-              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemIcon><FaceIcon /></ListItemIcon>
               <ListItemText primary={"Users"} />
             </ListItem>
             <ListItem button key={"Orders"} onClick={displayOrders}>
