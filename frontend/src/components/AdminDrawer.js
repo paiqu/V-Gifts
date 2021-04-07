@@ -17,14 +17,19 @@ import Box from '@material-ui/core/Box';
 import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
-import UsersDataGrid from './UsersDataGrid';
-import OrdersDataGrid from './OrdersDataGrid';
+import UsersDataGrid from './admin/UsersDataGrid';
+import OrdersDataGrid from './admin/OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
 import Button from '@material-ui/core/Button';
-
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import Divider from '@material-ui/core/Divider';
+import ProductsManagement from './admin/ProductsManagement';
+import OrdersManagement from './admin/OrdersManagement';
+import AdminsManagement from './admin/AdminsManagement';
+import FaceIcon from '@material-ui/icons/Face';
 
 const drawerWidth = 240;
 
@@ -79,55 +84,146 @@ export default function AdminDrawer(props) {
   const [open, setOpen] = useState(false);
   const [display, setDisplay] = useState({
     home: true,
-    orders: false,
+    products: false,
     users: false,
+    orders: false,
+    admins: false,
   });
+
+  const [products, setProducts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [orders, SetOrders] = useState([]);
+  const [admins, setAdmins] = useState([]);
 
-  // React.useEffect((() => {
-  //   axios.get('admin/all_user')
-  //   .then((response) => {
-  //     const data = response.data;
+  React.useEffect((() => {
+    axios.get('/product/get_all', {
+      params: {
+        token: "",
+        page: -1,
+      }
+    })
+    .then((response) => {
+      const data = response.data["product_lst"];
 
-  //     setUsers(data);
-  //   })
-  //   .catch((err) => {});
-  // }), []);
+      setProducts(data);
+    })
+    .catch((err) => {});
+    
+    axios.get('admin/all_user', {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+
+      setUsers(data);
+    })
+    .catch((err) => {});
+
+    axios.get("/admin/all_order", {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+
+      SetOrders(data);
+    })
+    .catch((err) => {});
+
+    axios.get("/admin/all_admin", {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
+
+      setAdmins(data);
+    })
+    .catch((err) => {});
+
+
+  }), []);
 
   const renderUsers = (
-    <UsersDataGrid users={users} />
+    <UsersDataGrid token={token} users={users} />
   );
 
   const renderOrders = (
-    <OrdersDataGrid />
+    // <OrdersDataGrid />
+    <OrdersManagement token={token} orders={orders} />
   );
 
   const renderAdminHome = (
-    <AdminHome usersNum={users.length} profile={profile} token={token}/>
+    <AdminHome 
+      usersNum={users.length}
+      ordersNum={orders.length}
+      adminsNum={admins.length}
+      productsNum={products.length}
+      profile={profile} 
+      token={token}
+    />
+  );
+
+  const renderProducts = (
+    <ProductsManagement token={token} products={products} />
+  );
+
+  const renderAdmins = (
+    <AdminsManagement token={token} admins={admins} />
   );
 
   const displayHome = () => {
     setDisplay({
       home: true,
-      orders: false,
+      products: false,
       users: false,
+      orders: false,
+      admins: false,
     });
-  }
+  };
 
   const displayUsers = () => {
     setDisplay({
       home: false,
-      orders: false,
+      products: false,
       users: true,
+      orders: false,
+      admins: false,
     });
 
-  }
+  };
 
   const displayOrders = () => {
     setDisplay({
       home: false,
-      orders: true,
+      products: false,
       users: false,
+      orders: true,
+      admins: false,
+    });
+  };
+
+  const displayProducts = () => {
+    setDisplay({
+      home: false,
+      products: true,
+      users: false,
+      orders: false,
+      admins: false,
+    });
+  }
+
+  const displayAdmins = () => {
+    setDisplay({
+      home: false,
+      products: false,
+      users: false,
+      orders: false,
+      admins: true,
     });
   }
 
@@ -184,21 +280,22 @@ export default function AdminDrawer(props) {
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
-            <ListItem button key={"Inbox"}>
-              <ListItemIcon><InboxIcon /></ListItemIcon>
-              <ListItemText primary={"Inbox"} />
-            </ListItem>
-            <ListItem button key={"Market"}>
+            <ListItem button key={"Market"} onClick={displayProducts}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
               <ListItemText primary={"Market"} />
             </ListItem>
             <ListItem button key={"Users"} onClick={displayUsers}>
-              <ListItemIcon><GroupIcon /></ListItemIcon>
+              <ListItemIcon><FaceIcon /></ListItemIcon>
               <ListItemText primary={"Users"} />
             </ListItem>
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
               <ListItemText primary={"Orders"} />
+            </ListItem>
+            <Divider />
+            <ListItem button key={"Admins"} onClick={displayAdmins}>
+              <ListItemIcon><SupervisorAccountIcon /></ListItemIcon>
+              <ListItemText primary={"Admins"} />
             </ListItem>
           </List>
         </div>
@@ -221,13 +318,15 @@ export default function AdminDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
-          <Typography>
-            {`Hello Admin ${profile['name']}(${profile['email']})`}
+          <Typography variant="h5">
+            {`Admin: ${profile['name']}(${profile['email']})`}
           </Typography>
         </Box>
         {display.home && renderAdminHome}
+        {display.products && renderProducts}
         {display.users && renderUsers}
         {display.orders && renderOrders}
+        {display.admins && renderAdmins}
       </main>
     </div>
   );

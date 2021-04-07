@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
     img: {
       //width: "10rem",
       height: "10rem",
-      maxWidth: "100%",
+      width: "10rem",
+      // maxWidth: "100%",
       // margin: 10,
       padding: 10,
     },
@@ -49,13 +50,18 @@ export default function OrderCard(props) {
         alignItems="center"
       >
         <Grid item xs={3}>
-          <ButtonBase
+          {/* <ButtonBase
             className={classes.image}
             component={Link}
             to={`/product/${props.product_id}`}
           >
             <img className={classes.img} src={props.pic_link} alt='props.product_id' />
-          </ButtonBase>
+          </ButtonBase> */}
+          <img className={classes.img} src={props.pic_link} alt='props.product_id'
+            // style={{
+            //   border: `1px solid ${theme.palette.primary.contrastText}`
+            // }}
+          />
         </Grid>
 
         <Grid item xs={4}>

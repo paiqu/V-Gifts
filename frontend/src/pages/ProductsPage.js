@@ -7,9 +7,6 @@ import Pagination from "@material-ui/lab/Pagination";
 import Box from "@material-ui/core/Box";
 import NavBar from "../components/NavBar";
 import axios from 'axios';
-import { Link, Redirect } from 'react-router-dom';
-import PaginationItem from '@material-ui/lab/PaginationItem';
-import { MemoryRouter, Route } from 'react-router';
 
 
 const useStyles = makeStyles((theme) => ({

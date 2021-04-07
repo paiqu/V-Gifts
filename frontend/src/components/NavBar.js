@@ -249,11 +249,11 @@ export default function NavBar() {
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 5 new notifications" color="inherit">
+            {/* <IconButton aria-label="show 5 new notifications" color="inherit">
               <Badge badgeContent={5} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
 							component={Link}
 							to={ token ? `/profile/${token}` : "/login"}
@@ -267,7 +267,7 @@ export default function NavBar() {
               <AccountCircle />
             </IconButton>
           </div>
-          <div className={classes.sectionMobile}>
+          {/* <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
               aria-controls={mobileMenuId}
@@ -277,7 +277,7 @@ export default function NavBar() {
             >
               <MoreIcon />
             </IconButton>
-          </div>
+          </div> */}
         </Toolbar>
       </AppBar>
       {/* {renderMobileMenu} */}

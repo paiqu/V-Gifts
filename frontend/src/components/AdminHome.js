@@ -8,6 +8,8 @@ import StoreIcon from '@material-ui/icons/Store';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import FaceIcon from '@material-ui/icons/Face';
 
 const iconSize = 8;
 
@@ -51,24 +53,6 @@ function AdminHome(props) {
       <div classeName={classes.root}>
         <Grid container spacing={3}>
           <Grid item md={3} xs={12}>
-            <Card className={classes.gridItem}  variant="outlined">
-              <CardContent className={classes.cardContent}>
-                <div className={classes.cardTitle}>
-                  <InboxIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
-                    Inbox
-                  </Typography>
-                </div>
-                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  12 messages in total
-                  <br />
-                  <br />
-                  3 unread messages
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid> 
-          <Grid item md={3} xs={12}>
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
@@ -78,10 +62,7 @@ function AdminHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  12 messages in total
-                  <br />
-                  <br />
-                  3 unread messages
+                  {props.productsNum} products in total
                 </Typography>
               </CardContent>
             </Card>
@@ -90,7 +71,7 @@ function AdminHome(props) {
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <GroupIcon className={classes.cardIcon}/>
+                  <FaceIcon className={classes.cardIcon}/>
                   <Typography
                     variant="h3"
                     classname={classes.cardTitleText}
@@ -114,10 +95,22 @@ function AdminHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  50 orders in total
-                  <br />
-                  <br />
-                  4 orders placed today
+                  {props.ordersNum} orders in total
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid> 
+          <Grid item md={3} xs={12}>
+            <Card className={classes.gridItem}  variant="outlined">
+              <CardContent className={classes.cardContent}>
+                <div className={classes.cardTitle}>
+                  <SupervisorAccountIcon className={classes.cardIcon}/>
+                  <Typography variant="h3" classname={classes.cardTitleText}>
+                    Admins
+                  </Typography>
+                </div>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  {props.adminsNum} Admins in total
                 </Typography>
               </CardContent>
             </Card>
