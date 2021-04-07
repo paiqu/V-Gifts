@@ -136,7 +136,7 @@ export default function Product(props) {
           <img className={classes.image} src={infos.img} alt="product"/>
         </Grid>
         <Grid item xs={7} className={classes.details}>
-          <Typography variant="h3">{infos.name}</Typography>
+          <Typography variant="h4">{infos.name}</Typography>
           <Box display="flex" alignItems="center">
             <Rating name={`product-rating`} value={infos.rating} readOnly/>
             <Typography variant="caption">100 reviews</Typography>

@@ -1,11 +1,10 @@
 import React from 'react';
 import Typography from "@material-ui/core/Typography";
 
-export default function ProductsManagement(props) {
+export default function AdminsManagement(props) {
   return (
     <div>
-      <Typography>Products listed in the Market</Typography>
+      <Typography>Admins in the system</Typography>
     </div>
   );
 }
-

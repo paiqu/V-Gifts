@@ -16,7 +16,6 @@ import Box from '@material-ui/core/Box';
 import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
-import UsersDataGrid from './UsersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import UserHome from './UserHome';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -92,9 +91,9 @@ export default function UserDrawer(props) {
     })
   }, [token])
   
-  const renderUsers = (
-    <UsersDataGrid />
-  );
+  // const renderUsers = (
+  //   <UsersDataGrid />
+  // );
 
   const renderUserHome = (
     <UserHome token={token} profile={profile}/>
@@ -191,7 +190,7 @@ export default function UserDrawer(props) {
             </ListItem>
             <ListItem button key={"Market"} component={Link} to={"/products"}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
-              <ListItemText primary={"Market"} />
+              <ListItemText primary={"Back to Market"} />
             </ListItem>
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
@@ -226,7 +225,7 @@ export default function UserDrawer(props) {
 
         </Box>
         {display.home && renderUserHome}
-        {display.users && renderUsers}
+        {/* {display.users && renderUsers} */}
         {display.orders && order.map((item, index) => 
           <OrderCard key={index} {...item}/> 
         )}

@@ -17,8 +17,8 @@ import Box from '@material-ui/core/Box';
 import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
-import UsersDataGrid from './UsersDataGrid';
-import OrdersDataGrid from './OrdersDataGrid';
+import UsersDataGrid from './admin/UsersDataGrid';
+import OrdersDataGrid from './admin/OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
 import axios from 'axios';
@@ -26,8 +26,9 @@ import AuthContext from '../AuthContext';
 import Button from '@material-ui/core/Button';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import Divider from '@material-ui/core/Divider';
-import ProductsManagement from './ProductsManagement';
-
+import ProductsManagement from './admin/ProductsManagement';
+import OrdersManagement from './admin/OrdersManagement';
+import AdminsManagement from './admin/AdminsManagement';
 
 const drawerWidth = 240;
 
@@ -108,7 +109,8 @@ export default function AdminDrawer(props) {
   );
 
   const renderOrders = (
-    <OrdersDataGrid />
+    // <OrdersDataGrid />
+    <OrdersManagement />
   );
 
   const renderAdminHome = (
