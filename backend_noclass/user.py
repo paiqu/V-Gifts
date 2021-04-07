@@ -103,7 +103,12 @@ def forget_password(name, email):
     return new password
     """
     pass
-
+def reset_passowrd(email):
+    temp = db.load_json()
+    for user_id, user_info in temp["USER_DB"].items():
+         if user_info["email"] == email:
+             return user_info
+             
 # Users change password
 def change_password(idd, old_password, new_password):
     """

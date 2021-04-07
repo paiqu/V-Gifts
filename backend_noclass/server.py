@@ -14,6 +14,7 @@ import error as err
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
+from flask_mail import Mail
 from json import dumps
 import sys
 
@@ -33,9 +34,33 @@ CORS(app)
 app.config.update(
     # DEBUG = True, ## remeber to change later
     # TESTING = True,
-    TRAP_HTTP_EXCEPTIONS = True
+    TRAP_HTTP_EXCEPTIONS = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 465,
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = 'oldjeffspectator@gmail.com',
+    MAIL_PASSWORD = 'jeffLHR123'
 )
+
 app.register_error_handler(Exception, defaultHandler)
+
+mail = Mail(app)
+
+@app.route("/user/login/send_mail/", methods = ["POST"])
+def send_mail():
+    data = request.get_json()
+    email = data["email"]
+    num_str = ''.join(str(random.choice(range(10))) for i in range(6))
+    user = usr.reset_password(email)
+    usr.change_password(user["id"], user["password"], num_str)
+    msg = mail.send_message(
+        'Send Mail for reset password',
+        sender=MAIL_USERNAME,
+        recipients=[email],
+        body="This is your temporary passowrd, please change it as soon as possible! Password: " + num_str 
+    )
+    mail.send(msg)
+    return 'Mail sent'
 
 ##########################
 # admin related routes
