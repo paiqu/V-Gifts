@@ -295,7 +295,7 @@ def show_product_detail(prod_id):
         "pic_link": temp["PRODUCT_DB"][str(prod_id)]["pic"],
     }
 
-def show_product_lst(page, user_id = -1, num_each_page = 9):
+def show_product_lst(page = -1, user_id = -1, num_each_page = 9):
     """
         This function shows a lst of product
     """
@@ -312,10 +312,13 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
                 "pic_link": temp["PRODUCT_DB"][key]["pic"]
             })
         rt = []
-        for i in range(len(lst)):
-            if i >= (page-1)*num_each_page and i < page*num_each_page:
-                # e.g. page 1 => item 0~8
-                rt.append(lst[i])
+        if page != -1:
+            for i in range(len(lst)):
+                if i >= (page-1)*num_each_page and i < page*num_each_page:
+                    # e.g. page 1 => item 0~8
+                    rt.append(lst[i])
+        else: # return all prods
+            rt = lst
         return {
             "product_lst": rt,
             "total_pages": ceil((len(lst)/num_each_page))
@@ -338,10 +341,13 @@ def show_product_lst(page, user_id = -1, num_each_page = 9):
                 "pic_link": temp["PRODUCT_DB"][str(prod_id)]["pic"]
             })
         rt = []
-        for i in range(len(lst)):
-            if i >= (page-1)*num_each_page and i < page*num_each_page:
-                # e.g. page 1 => item 0~8
-                rt.append(rt1[i])
+        if page != -1:
+            for i in range(len(lst)):
+                if i >= (page-1)*num_each_page and i < page*num_each_page:
+                    # e.g. page 1 => item 0~8
+                    rt.append(lst[i])
+        else: # return all prods
+            rt = lst
         return {
             "product_lst": rt,
             "total_pages": ceil((len(lst)/num_each_page))
