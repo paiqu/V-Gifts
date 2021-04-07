@@ -5,28 +5,29 @@
 import json
 import database as db
 import admin as ad
+import user as us
 
-KEYWORDS_LST_haoran = [
-    # targets
+# KEYWORDS_LST_haoran = [
+#     # targets
     
     
 
-    # types
-     'cotton', 'polyester', 'speaker', 'music', 'bluetooth', 
+#     # types
+#      'cotton', 'polyester', 'speaker', 'music', 'bluetooth', 
     
-    'necklace',
-    'jewelry'
-]
+#     'necklace',
+#     'jewelry'
+# ]
 
-KEYWORDS_LST_yifan = [
-    # tergets
-    'fandom', 'religion', 'tennage', 'musicion', 
-    # types
-    'wine tumbler', 'mug', 'candle', 'cushion', 'glass', 
-    'cross', 'metal', 'star war',
-    'cookbook', 'book',  'gadget', 'brick', 
-    'water', 'player', 
-]
+# KEYWORDS_LST_yifan = [
+#     # tergets
+#     'fandom', 'religion', 'tennage', 'musicion', 
+#     # types
+#     'wine tumbler', 'mug', 'candle', 'cushion', 'glass', 
+#     'cross', 'metal', 'star war',
+#     'cookbook', 'book',  'gadget', 'brick', 
+#     'water', 'player', 
+# ]
 
 
 def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
@@ -415,3 +416,18 @@ if __name__ == "__main__":
 
     add_product_to_db_special(lst)
     add_product_to_db_special(lst_yifan)
+    sample_user = us.new_user('u_test_1', 'u_test_1', 'u_test_1', 'password', 'email@em.com', \
+            'u_test_1', 'u_test_1', 'u_test_1', 'database_manual.json')
+    db.add_user(sample_user, 'database_manual.json')
+    vec = [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0]
+    us.setup_interest(sample_user['id'], vec, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 1, 2, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 5, 6, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
+    print(us.individual_price(1, 1, 'database_manual.json'))
+    print(us.individual_price(3, 1, 'database_manual.json'))
+    print(us.total_price([[1,2], [3,8]], 'database_manual.json'))
+    us.purchase(sample_user['id'], [[1,2], [3,8]], 'database_manual.json')
+    temp = db.load_json('database_manual.json')
+    db.pretty_print(temp)

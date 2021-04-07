@@ -7,18 +7,20 @@
         chatbot AI should (??? not decided yet)
 '''
 import re
+import database as db
 
 TEST_KEYWORDS = {
-    "men": [1], "man": [1], "dad": [1], "groom": [1], "bridegroom": [1], 
-    "father's": [1], "men's": [1], "man's": [1], "family": [1, 2, 3, 5], 
-    "women": [2], "woman": [2], "mom": [2], "bride": [2], "mother": [2], 
-    "women's": [2], "woman's": [2], "mother's": [2], "lady": [2], "ladies": [2], 
-    "lego": [3], "toy": [3], "piano": [3], "bag": [3, 4, 8], "teen": [3], 
-    "kid": [3], "kids": [3], "girls": [3], "girl": [3], "boys": [3], 
-    "boy": [3], "birthday": [3], "whiskey": [4], "cocktail": [4], 
-    "music": [4, 10], "music box": [4], "bluetooth": [4], "friendship": [4], "friend": [4], "friends": [4], "grandma": [5], "grandmother": [5], "grandpa": [5], "grandfather": [5], "couple": [6], "love": [6], "candle": [6], "cooking": [7], "organic": [7], "grilling": [7], "grill": [7], "cook": [7], "pork": [7], "beef": [7], "snack": [7], "sweet": [7], "hot": [7], "spicy": [7], "protein": [7], "health": [7], "healthy": [7], "food": [7, 7], "chocolate": [7], "honey": [7], "wellness": [7], "gluten-free": [7], "vegetarianism": [7], "vegan": [7], 
-    "foods": [7], "survival": [8], "gear": [8], "tool": [8], "tools": [8], "flash": [8], "necklace": [9], "earrings": [9], "jewelry": [9], "ring": [9], "gold": [9], "luxury": [9], "pendant": [9], "cloth": [10], "hoodies": [10], "hoody": [10], "travel": [10], 
-    "outdoor": [10], "entertainment": [10], "office": [11], "pen": [11], "pens": [11], "professional": [11], "working": [11], "work": [11], "notebook": [11],
+    "men": [0], "man": [0], "dad": [0], "groom": [0], "bridegroom": [0], 
+    "father's": [0], "men's": [0], "man's": [0], "family": [0, 1, 2, 4], 
+    "women": [1], "woman": [1], "mom": [1], "bride": [1], "mother": [1], 
+    "women's": [1], "woman's": [1], "mother's": [1], "lady": [1], "ladies": [1], 
+    "lego": [2], "toy": [2], "piano": [2], "bag": [2, 3, 7], "teen": [2], 
+    "kid": [2], "kids": [2], "girls": [2], "girl": [2], "boys": [2], "boy": [2], 
+    "birthday": [2], "whiskey": [3], "cocktail": [3], "music": [3, 9], "music box": [3], "bluetooth": [3], "friendship": [3], "friend": [3], "friends": [3], "grandma": [4], "grandmother": [4], "grandpa": [4], "grandfather": [4], "couple": [5], "love": [5], "candle": [5], "cooking": [6], "organic": [6], "grilling": [6], "grill": [6], "cook": [6], "pork": [6], "beef": [6], "snack": [6], "sweet": [6], "hot": [6], "spicy": [6], "protein": [6], 
+    "health": [6], "healthy": [6], "food": [6, 6], "chocolate": [6], "honey": [6], 
+    "wellness": [6], "gluten-free": [6], "vegetarianism": [6], "vegan": [6], "foods": [6], "survival": [7], "gear": [7], "tool": [7], "tools": [7], "flash": [7], "necklace": [8], "earrings": [8], "jewelry": [8], "ring": [8], "gold": [8], "luxury": [8], "pendant": [8], "cloth": [9], "hoodies": [9], "hoody": [9], "travel": [9], "outdoor": [9], "entertainment": [9], 
+    "office": [10], "pen": [10], "pens": [10], "professional": [10], "working": [10], 
+    "work": [10], "notebook": [10]
 }
 
 NUM_CATA = 11
