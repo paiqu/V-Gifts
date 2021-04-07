@@ -3,6 +3,11 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
+import Rating from '@material-ui/lab/Rating';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
 export default function OrderCard(props) {
     const classes = useStyles();
     const theme = useTheme();
+    const date = moment(parseFloat(props.purchase_date*1000)).format("YYYY-MM-DD HH:mm:ss");
+    const [value, setValue] = React.useState(0);
 
     return (
         <div
@@ -54,14 +61,22 @@ export default function OrderCard(props) {
         <Grid item xs={4}>
           {props.product_name}
         </Grid>
-        <Grid item xs={2}>
-          <p>Quantity: {props.amount}</p>
-        </Grid>
         <Grid item xs={1}>
-            <p>${props.cost}</p>
+          <p>Quantity: {props.amount}</p>
+          <p>${props.cost}</p>
         </Grid>
         <Grid item xs={2}>
-            <p>{props.purchase_date}</p>
+            <p>{date}</p>
+        </Grid>
+        <Grid item xs={2}>
+          <Box component="fieldset" mb={3} borderColor="transparent">
+            <Rating
+              name="customized-empty"
+              defaultValue={0}
+              precision={0.5}
+              emptyIcon={<StarBorderIcon fontSize="inherit" />}
+            />
+      </Box>
         </Grid>
       </Grid>
     </div>
