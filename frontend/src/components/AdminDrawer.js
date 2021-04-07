@@ -24,6 +24,9 @@ import AdminHome from './AdminHome';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
 import Button from '@material-ui/core/Button';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import Divider from '@material-ui/core/Divider';
+import ProductsManagement from './ProductsManagement';
 
 
 const drawerWidth = 240;
@@ -79,20 +82,26 @@ export default function AdminDrawer(props) {
   const [open, setOpen] = useState(false);
   const [display, setDisplay] = useState({
     home: true,
-    orders: false,
+    products: false,
     users: false,
+    orders: false,
+    admins: false,
   });
   const [users, setUsers] = useState([]);
 
-  // React.useEffect((() => {
-  //   axios.get('admin/all_user')
-  //   .then((response) => {
-  //     const data = response.data;
+  React.useEffect((() => {
+    axios.get('admin/all_user', {
+      params: {
+        token,
+      }
+    })
+    .then((response) => {
+      const data = response.data;
 
-  //     setUsers(data);
-  //   })
-  //   .catch((err) => {});
-  // }), []);
+      setUsers(data);
+    })
+    .catch((err) => {});
+  }), []);
 
   const renderUsers = (
     <UsersDataGrid users={users} />
@@ -106,28 +115,62 @@ export default function AdminDrawer(props) {
     <AdminHome usersNum={users.length} profile={profile} token={token}/>
   );
 
+  const renderProducts = (
+    <ProductsManagement />
+  );
+
+  const renderAdmins = (
+    <h2>admins</h2>
+  );
+
   const displayHome = () => {
     setDisplay({
       home: true,
-      orders: false,
+      products: false,
       users: false,
+      orders: false,
+      admins: false,
     });
-  }
+  };
 
   const displayUsers = () => {
     setDisplay({
       home: false,
-      orders: false,
+      products: false,
       users: true,
+      orders: false,
+      admins: false,
     });
 
-  }
+  };
 
   const displayOrders = () => {
     setDisplay({
       home: false,
-      orders: true,
+      products: false,
       users: false,
+      orders: true,
+      admins: false,
+    });
+  };
+
+  const displayProducts = () => {
+    setDisplay({
+      home: false,
+      products: true,
+      users: false,
+      orders: false,
+      admins: false,
+    });
+  }
+
+  const displayAdmins = () => {
+    setDisplay({
+      home: false,
+      products: false,
+      users: false,
+      orders: false,
+      admins: true,
     });
   }
 
@@ -184,11 +227,11 @@ export default function AdminDrawer(props) {
               <ListItemIcon><HomeIcon /></ListItemIcon>
               <ListItemText primary={"Home"} />
             </ListItem>
-            <ListItem button key={"Inbox"}>
+            {/* <ListItem button key={"Inbox"}>
               <ListItemIcon><InboxIcon /></ListItemIcon>
               <ListItemText primary={"Inbox"} />
-            </ListItem>
-            <ListItem button key={"Market"}>
+            </ListItem> */}
+            <ListItem button key={"Market"} onClick={displayProducts}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
               <ListItemText primary={"Market"} />
             </ListItem>
@@ -199,6 +242,11 @@ export default function AdminDrawer(props) {
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
               <ListItemText primary={"Orders"} />
+            </ListItem>
+            <Divider />
+            <ListItem button key={"Admins"} onClick={displayAdmins}>
+              <ListItemIcon><SupervisorAccountIcon /></ListItemIcon>
+              <ListItemText primary={"Admins"} />
             </ListItem>
           </List>
         </div>
@@ -226,8 +274,10 @@ export default function AdminDrawer(props) {
           </Typography>
         </Box>
         {display.home && renderAdminHome}
+        {display.products && renderProducts}
         {display.users && renderUsers}
         {display.orders && renderOrders}
+        {display.admins && renderAdmins}
       </main>
     </div>
   );
