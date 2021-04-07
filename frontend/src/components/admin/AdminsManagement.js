@@ -27,6 +27,21 @@ export default function AdminsManagement(props) {
     email: "",
   })
   const [loading, setLoading] = useState(false);
+  const [state, setState] = useState({
+    nameError: false,
+    emailError: false,
+    passwordError: false,
+    help_text: ""
+  });
+
+  const handle_error = () => event => {
+    setState({
+      nameError: false,
+      emailError: false,
+      passwordError: false,
+      help_text: ""
+    });
+  };
 
   const handleChange = name => event => {
     setNewAdmin({
@@ -45,7 +60,40 @@ export default function AdminsManagement(props) {
       email: newAdmin.email,
     })
     .then((response) => {
-      setLoading(true);
+      const data = response.data;
+      if (data.code == 402) {
+        // invalid email
+        setState({
+          ...state,
+          emailError: true,
+          help_text: "The entered email is invalid"
+        });
+      } else if (data.code == 404) {
+        // invalid user name
+        setState({
+          ...state,
+          nameError: true,
+          help_text: "The admin name is invalid"
+        });
+      } else if (data.code == 403) {
+        // username exist
+        setErrorText("The admin name is already existed");
+        setState({
+          nameError: true,
+          help_text: "The admin name is already existed"
+        });
+        console.log(data);
+      } else if (data.code == 407) {
+        // email existed
+        setState({
+          ...state,
+          emailError: true,
+          help_text: "The admin email is already existed"
+        });
+      } else {
+        setLoading(true);
+      }
+      
     })
     .catch((err) => {});
   }
@@ -103,7 +151,10 @@ export default function AdminsManagement(props) {
             label="Admin Name"
             placeholder="Admin Name"
             variant="outlined"
+            error={state.nameError}
+            helperText={state.help_text}
             onChange={handleChange('name')}
+            onClick={handle_error()}
             style={{
               marginRight: "1rem",
             }}
@@ -114,7 +165,10 @@ export default function AdminsManagement(props) {
             label="Admin Email"
             placeholder="Admin Email"
             variant="outlined"
+            error={state.emailError}
+            helperText={state.help_text}
             onChange={handleChange('email')}
+            onClick={handle_error()}
             style={{
               marginRight: "1rem",
             }}
@@ -125,7 +179,10 @@ export default function AdminsManagement(props) {
             label="Admin Password"
             placeholder="Admin Password"
             variant="outlined"
+            error={state.passwordError}
+            helperText={state.help_text}
             onChange={handleChange('password')}
+            onClick={handle_error()}
           />
           <Button 
             type="submit"

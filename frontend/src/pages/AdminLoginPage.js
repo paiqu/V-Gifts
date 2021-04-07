@@ -113,12 +113,14 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
       if (data.code == 404) {
         // admin name does not exist
         setState({
+          ...state,
           nameError: true,
           help_text: "The entered admin name does not exist"
         });
       } else if (data.code == 405) {
         // wrong password
         setState({
+          ...state,
           passwordError: true,
           help_text: "The password entered is incorrect"
         });
