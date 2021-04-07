@@ -55,6 +55,8 @@ def adm_register():
         raise ieerr
     except err.UsernameAlreadyExit as uaerr:
         raise uaerr
+    except err.EmailAlreadyExit as eaerr:
+        raise eaerr
     return dumps({
         "admin_id": result["id"]
     })
@@ -386,7 +388,7 @@ def rate_order():
         raise error
     oid = data["order_id"]
     rating = data["rating"]
-    result = rate_order(user_id, oid, rating)
+    result = usr.rate_order(user_id, oid, rating)
     return dumps({
         "status": "success"
     })
