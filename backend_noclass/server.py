@@ -197,6 +197,8 @@ def usr_register():
         raise ieerr
     except err.UsernameAlreadyExit as uaerr:
         raise uaerr
+    except err.EmailAlreadyExit as eaerr:
+        raise eaerr
     return dumps({
         "user_id": result["id"],
         "token": result["token"]
@@ -463,6 +465,8 @@ def admin_regesiter_admin():
         raise ieerr
     except err.UsernameAlreadyExit as uaerr:
         raise uaerr
+    except err.EmailAlreadyExit as eaerr:
+        raise eaerr
     return dumps({})
 
 @app.route("/product/get_info", methods = ["GET"])

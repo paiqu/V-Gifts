@@ -35,6 +35,9 @@ def register_user(aname, fname, lname, password, email, address, city, country):
     if check_user_exist(aname) is True:
         raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
 
+    if check_email_exist(email, 'USER_DB'):
+        raise err.EmailAlreadyExit(description = "Email is already exist! Please try another one.")
+
     # Encrypt password 
     encryption = encrypt_password(password)
     # New user added to db
@@ -116,6 +119,9 @@ def register_admin(name, password, email):
     # Check whether the user name has been registered
     if check_admin_exist(name) is True:
         raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
+
+    if check_email_exist(email, 'ADMIN_DB'):
+        raise err.EmailAlreadyExit(description = "Email is already exist! Please try another one.")
 
     # Encrypt password 
     encryption = encrypt_password(password)
@@ -210,6 +216,16 @@ def check_admin_exist(name):
     for admin_id, admin_info in temp['ADMIN_DB'].items():
         if admin_info['name'] == name: 
                 return True
+    return False
+
+def check_email_exist(email, option):
+    '''
+        option in ["ADMIN_DB", "USER_DB"]
+    '''
+    temp = db.load_json()
+    for idd, info in temp[option].items():
+        if info['email'] == email: 
+            return True
     return False
 
 # Encrypt the password with sha256 and store in database
