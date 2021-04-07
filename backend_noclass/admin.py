@@ -14,6 +14,8 @@ ADMIN_DB = {
 '''
 
 import database as db
+import datetime as dt
+import user as us
 import chatbot as ct
 import login
 
@@ -188,6 +190,39 @@ def show_profile(aid):
         "username": temp["ADMIN_DB"][str(aid)]["name"],
         "email": temp["ADMIN_DB"][str(aid)]["email"]
     }
+
+def get_all_order():
+    temp = db.load_json()
+    lst = []
+    for key in temp["ORDER_DB"].keys():
+        uid = temp["ORDER_DB"][key]["user_id"]
+        pid = temp["ORDER_DB"][key]["product_id"]
+        amount = temp["ORDER_DB"][key]["amount"]
+        datte = temp["ORDER_DB"][key]["purchase_date"]
+        state_in_code = temp["ORDER_DB"][key]["state"]
+        if state_in_code == 0:
+            state_in_text = "Just purchase"
+        elif state_in_code == 1:
+            state_in_text = "Delivering"
+        elif state_in_code == 2:
+            state_in_text = "Done"
+        elif state_in_code == 3:
+            state_in_text = "Cancelled / Refunded"
+        else:
+            state_in_text = "Invalid state"
+        lst.append({
+            "order_id": key,
+            "user_id": uid,
+            "product_id": pid,
+            "product_name": product_id_to_name(pid),
+            "amount": amount,
+            "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
+            "cost": us.individual_price(pid, amount),
+            "purchase_date": dt.datetime.fromtimestamp(datte).isoformat(),
+            "state_in_code": state_in_code,
+            "state_in_text": state_in_text
+        })
+    return lst
 
 # def order_history():
 #     '''

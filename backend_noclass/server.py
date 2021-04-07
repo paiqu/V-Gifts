@@ -417,6 +417,16 @@ def admin_get_all_user():
     result = adm.get_user_list()
     return dumps(result)
 
+@app.route("/admin/all_order", methods = ["GET"])
+def admin_get_all_order():
+    token = request.args.get("token")
+    try:
+        aid = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = adm.get_all_order()
+    return dumps(result)
+
 @app.route("/product/get_info", methods = ["GET"])
 def get_product_info():
     # data = request.get_json()
