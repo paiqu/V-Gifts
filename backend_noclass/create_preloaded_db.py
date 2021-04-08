@@ -5,37 +5,31 @@
 import json
 import database as db
 import admin as ad
+import user as us
+import webpage as wb
 
-KEYWORDS_LST_haoran = [
-    # targets
-    'men', 'man', 'women', 'woman', 'couple', 'mother', 'bride', 'groom', 'bridegroom',
-    'father', 'love', 'friendship', 'friend', 'friends', 'girls', 'lady', 'ladies',
-    'girl', 'boys', 'boy', 'birthday', 'family', 'mother\'s', 'father\'s', 
-    'men\'s', 'man\'s', 'women\'s', 'woman\'s',
+# KEYWORDS_LST_haoran = [
+#     # targets
+    
+    
 
-    # types
-    'cloth', 'cotton', 'polyester', 'hoodies', 'hoody', 'food',
-    'chocolate', 'speaker', 'music', 'bluetooth', 'cooking', 'organic',
-    'grilling', 'grill', 'cook', 'pork', 'beef', 'snack', 'sweet', 'hot',
-    'spicy', 'protein', 'health', 'healthy', 'candle', 'honey', 'wellness',
-    'bag', 'travel', 'cute', 'outdoor', 'gluten-free', 'luxury',
-    'office', 'pen', 'pens', 'professional', 'gold', 'necklace',
-    'ring', 'jewelry'
+#     # types
+#      'cotton', 'polyester', 'speaker', 'music', 'bluetooth', 
+    
+#     'necklace',
+#     'jewelry'
+# ]
 
+# KEYWORDS_LST_yifan = [
+#     # tergets
+#     'fandom', 'religion', 'tennage', 'musicion', 
+#     # types
+#     'wine tumbler', 'mug', 'candle', 'cushion', 'glass', 
+#     'cross', 'metal', 'star war',
+#     'cookbook', 'book',  'gadget', 'brick', 
+#     'water', 'player', 
+# ]
 
-]
-
-KEYWORDS_LST_yifan = [
-    # tergets
-    'mom', 'dad', 'grandma', 'grandmother', 'grandpa', 'grandfather', 'fandom', 'vegetarianism',
-    'vegan', 'religion', 'teen', 'tennage', 'kid', 'kids', 'musicion', 'music',
-    # types
-    'wine tumbler', 'necklace', 'earrings', 'jewelry', 'mug', 'candle', 'cushion', 'glass', 
-    'whiskey', 'cocktail', 'music', 'music box', 'cross', 'metal', 'pendant', 'star war',
-    'flash', 'notebook', 'cookbook', 'book', 'survival gear', 'gadget', 'lego', 'brick', 'toy',
-    'water', 'piano', 'player', 'bluetooth', 'bag'
-
-]
 
 def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     # temp = db.init_db()
@@ -423,3 +417,23 @@ if __name__ == "__main__":
 
     add_product_to_db_special(lst)
     add_product_to_db_special(lst_yifan)
+    sample_user = us.new_user('u_test_1', 'u_test_1', 'u_test_1', 'password', 'email@em.com', \
+            'u_test_1', 'u_test_1', 'u_test_1', 'database_manual.json')
+    db.add_user(sample_user, 'database_manual.json')
+    vec = [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0]
+    us.setup_interest(sample_user['id'], vec, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 1, 2, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 5, 6, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
+    us.purchase(sample_user['id'], [[1,2], [3,8]], 'database_manual.json')
+    all_prod = wb.keyword_searcher("", 'database_manual.json')
+    print(wb.keyword_searcher("honey", 'database_manual.json'))
+    print(wb.prod_filter_type(all_prod, [], [50, 9999999], 'database_manual.json'))
+    # print(wb.prod_recommendation(sample_user['id'], all_prod, 'database_manual.json'))
+    print(wb.search_filter_recommendation("", ctgry = [], price_rg = [0, 99999999], 
+            user_id = sample_user['id'], page = -1, db_name = 'database_manual.json'))
+    print(wb.search_filter_recommendation("", ctgry = [], price_rg = [0, 99999999], 
+            user_id = sample_user['id'], page = 2, db_name = 'database_manual.json'))
+    # temp = db.load_json('database_manual.json')
+    # db.pretty_print(temp)
