@@ -346,9 +346,11 @@ def search_filter_recommendation(keyword = "", ctgry = [], \
         prod_recommendation(user_id, prod_lst = [], db_name = \
             'database.json', num = 100) -> list
     '''
+    flag = True
     rt0 = keyword_searcher(keyword, db_name)
     if len(rt0) == 0:
         rt0 = []
+        flag = False
     rt1 = prod_filter_type(rt0, ctgry, price_rg, db_name)
     if user_id != -1:
         rt2 = prod_recommendation(user_id, rt1, db_name)
@@ -380,7 +382,8 @@ def search_filter_recommendation(keyword = "", ctgry = [], \
         })
     return {
         "product_lst": lst,
-        "total_pages": us.ceil((len(rt3)/9))
+        "total_pages": us.ceil((len(rt3)/9)),
+        "flag": flag
     }
 
 
