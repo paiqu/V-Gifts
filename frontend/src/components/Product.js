@@ -80,6 +80,8 @@ export default function Product(props) {
 
   const [psModalOpen, setPsModalOpen] = useState(false);
   const [nlModalOpen, setNlModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(1);
+
 
   const handlePsModalOpen = () => {
     setPsModalOpen(true);
@@ -119,6 +121,7 @@ export default function Product(props) {
     })
     .then(response => {
       console.log(response.data);
+      setModalType(1);
       handlePsModalOpen();
     })
     .catch((err) => {
@@ -135,10 +138,12 @@ export default function Product(props) {
       }
     )
     .then((response) => {
-
+      setModalType(2);
+      handlePsModalOpen();
     })
     .catch((err) => {});
   };
+
 
   return (
     <div>
@@ -207,6 +212,7 @@ export default function Product(props) {
         handleClose={handlePsModalClose}
         open={psModalOpen}
         token={token}
+        type={modalType}
       />
       <NotLoginModal
         handleClose={handleNlModalClose}

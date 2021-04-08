@@ -20,10 +20,61 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  leftButton: {
+    width: "100%",
+    height: "4rem",
+  },
+  rightButton: {
+    width: "100%",
+    height: "4rem",
+  }
 }));
 
 export default function PurchaseSuccessModal(props) {
   const classes = useStyles();
+
+
+  const renderTitle = (type) => {
+    switch(type) {
+      case 1:
+        return <h2>Thanks for your purchase!</h2>;
+      case 2:
+        return <h2>Item added to Cart!</h2>;
+    }
+  ;}
+
+  const renderButtonRight = (type) => {
+    switch(type) {
+      case 1: // purchase success
+        return (
+          <Button
+            variant="outlined"
+            component={Link}
+            to={{
+              pathname: `/profile/${props.token}`, 
+            }}
+            className={classes.rightButton}
+          >
+            My orders history
+          </Button>
+        );
+        break;
+      case 2: // add to cart
+        return (
+          <Button
+            variant="outlined"
+            component={Link}
+            to={{
+              pathname: `/profile/${props.token}/cart`, 
+            }}
+            className={classes.rightButton}
+          >
+            View my cart
+          </Button>
+        );
+        break;
+    }
+  }
 
   return (
     <div>
@@ -41,19 +92,23 @@ export default function PurchaseSuccessModal(props) {
       >
         <Fade in={props.open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">Thanks for your purchase!</h2>
+            {/* <h2 id="transition-modal-title">Thanks for your purchase!</h2> */}
+            {renderTitle(props.type)}
             <Grid container spacing={1}>
               <Grid item xs={6}>
                 <Button
                   variant="contained"
                   color="secondary"
                   onClick={props.handleClose}
+                  className={classes.leftButton}
                 >
                   Continue Shopping
                 </Button>
               </Grid>
+              
               <Grid item xs={6}>
-                <Button
+                {renderButtonRight(props.type)}
+                {/* <Button
                   variant="outlined"
                   component={Link}
                   to={{
@@ -61,7 +116,7 @@ export default function PurchaseSuccessModal(props) {
                   }}
                 >
                   My orders history
-                </Button>
+                </Button> */}
               </Grid>
             </Grid>
           </div>

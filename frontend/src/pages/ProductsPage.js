@@ -36,7 +36,7 @@ function ProductsPage(props) {
   const [totalPages, setTotalPages] = React.useState(0);
   const [products, setProducts] = React.useState([]);
   const [result, setResult] = React.useState(true);
-  const token = "";
+  // const token = "";
 
   const token = React.useContext(AuthContext).user;
   // const token = "";
@@ -79,7 +79,7 @@ function ProductsPage(props) {
     if (keyword == null || keyword == "") {    
       axios.get('/product/get_all', {
         params: {
-          token: token == null ? "" : token,
+          token: "",
           "page": currPage,
         }
       })
@@ -130,6 +130,8 @@ function ProductsPage(props) {
       : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
   );
 
+  const [modalType, setModalType] = useState(1);
+
   return (
     <div className={classes.root}>
       <NavBar className={classes.navBar} />
@@ -170,6 +172,7 @@ function ProductsPage(props) {
                     handlePsModalClose={handlePsModalClose}
                     handleNlModalOpen={handleNlModalOpen}
                     handleNlModalClose={handleNlModalClose}
+                    setModalType={setModalType}
                   />
                 </Grid>
               )}
@@ -199,6 +202,7 @@ function ProductsPage(props) {
         handleClose={handlePsModalClose}
         open={psModalOpen}
         token={token}
+        type={modalType}
       />
       <NotLoginModal
         handleClose={handleNlModalClose}

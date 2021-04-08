@@ -55,6 +55,12 @@ export default function ProductCard(props) {
 
 
     const handleAddToCart = () => {
+      if (!token) {
+        // alert later!
+        props.handleNlModalOpen();
+        return;
+      }
+
       axios.post("/user/cart/add",
         {
           token: token,
@@ -63,7 +69,8 @@ export default function ProductCard(props) {
         }
       )
       .then((response) => {
-
+        props.setModalType(2);
+        props.handlePsModalOpen();
       })
       .catch((err) => {});
     };
@@ -91,6 +98,7 @@ export default function ProductCard(props) {
       })
       .then(response => {
         console.log(response.data);
+        props.setModalType(1);
         props.handlePsModalOpen();
       })
       .catch((err) => {
