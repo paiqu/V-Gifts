@@ -34,23 +34,43 @@ function ProductsPage(props) {
 
   const token = "";
 
+  const query = new URLSearchParams(props.location.search);
+  // const token = query.get('token');
+  const keyword = query.get('keyword');
+  const page = query.get('page');
+  // const category = query.get('category');
 
   const retrieveProducts = () => {
-    axios.get('/product/get_all', {
-      params: {
-        token,
-        "page": currPage,
-      }
-    })
+    if (keyword == null || keyword == "") {    
+      axios.get('/product/get_all', {
+        params: {
+          token,
+          "page": currPage,
+        }
+      })
       .then((response) => {
         const data = response.data;
 
         setTotalPages(data['total_pages']);
         setProducts(data['product_lst']);
       })
+    } else {
+      axios.get('/product/search', {
+        params: {
+          token: "",
+          "page": (page == null || page == "") ? 1 : page,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+
+        setTotalPages(data['total_pages']);
+        setProducts(data['product_lst']);
+      })
+    }
   };
 
-  React.useEffect(retrieveProducts, [currPage]);
+  React.useEffect(retrieveProducts, [currPage, keyword]);
 
 
   const handlePageChange = (event, number) => {

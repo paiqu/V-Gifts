@@ -95,7 +95,7 @@ function App() {
                   return <AdminLoginPage {...props} setAdminAuth={setAdminAuth} />;
                 }} 
               />
-              <Route exact path="/products" component={ProductsPage} />
+              <Route path="/products" component={ProductsPage} />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />
               <ProtectedRoute exact path="/profile/:id/cart" component={CartPage} />

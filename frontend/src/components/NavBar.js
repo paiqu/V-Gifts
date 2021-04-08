@@ -12,11 +12,12 @@ import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
+import axios from "axios";
+import { useHistory } from 'react-router'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -109,12 +110,22 @@ export default function NavBar() {
 
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [searchInput, setSearchInput] = React.useState("");
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleSearchChange = event => {
+    setSearchInput(event.target.value);
+  }
+
+  const handleSearch = () => {
+    history.push(`/products?keyword=${searchInput}`);
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -235,6 +246,12 @@ export default function NavBar() {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              onChange={handleSearchChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </div>
           <div className={classes.grow} />
@@ -249,38 +266,18 @@ export default function NavBar() {
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            {/* <IconButton aria-label="show 5 new notifications" color="inherit">
-              <Badge badgeContent={5} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
             <IconButton
 							component={Link}
 							to={ token ? `/profile/${token}` : "/login"}
               edge="end"
               aria-label="account of current user"
-              // aria-controls={menuId}
-              // aria-haspopup="true"
-              // onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <AccountCircle />
             </IconButton>
           </div>
-          {/* <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div> */}
         </Toolbar>
       </AppBar>
-      {/* {renderMobileMenu} */}
       {renderMenu}
     </div>
   );
