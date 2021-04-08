@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import ProductFilter from "../components/ProductFilter";
 import Grid from "@material-ui/core/Grid";
@@ -35,6 +35,8 @@ function ProductsPage(props) {
   const [currPage, setCurrPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(0);
   const [products, setProducts] = React.useState([]);
+  const [result, setResult] = React.useState(true);
+  // const token = "";
 
   const token = React.useContext(AuthContext).user;
   // const token = "";
@@ -56,28 +58,79 @@ function ProductsPage(props) {
     setNlModalOpen(false);
   };
 
+  const query = new URLSearchParams(props.location.search);
+  // const token = query.get('token');
+  const keyword = query.get('keyword');
+  // const page = query.get('page');
+  // const category = query.get('category');
+
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
+  const prevKeyword = usePrevious(keyword);
+  const prevPage = usePrevious(currPage);
 
   const retrieveProducts = () => {
-    axios.get('/product/get_all', {
-      params: {
-        token: "",
-        "page": currPage,
-      }
-    })
+    if (keyword == null || keyword == "") {    
+      axios.get('/product/get_all', {
+        params: {
+          token: "",
+          "page": currPage,
+        }
+      })
       .then((response) => {
         const data = response.data;
 
         setTotalPages(data['total_pages']);
         setProducts(data['product_lst']);
       })
+    } else {
+      axios.post('/product/search', {
+        token: "",
+        // "page": (page == null || page == "") ? 1 : page,
+        page: prevKeyword !== keyword ? 1 : currPage, 
+        keyword: keyword,
+        category: [],
+        price_range: [],
+      })
+      .then((response) => {
+        const data = response.data;
+        const flag = data.flag;
+        if (!flag) {
+          setResult(false);
+        } else {
+          setResult(true);
+        }
+
+        setTotalPages(data['total_pages']);
+        setProducts(data['product_lst']);
+        if (prevKeyword !== keyword) {
+          setCurrPage(1);
+        }
+      })
+    }
   };
 
-  React.useEffect(retrieveProducts, [currPage]);
+  React.useEffect(retrieveProducts, [currPage, keyword]);
 
 
   const handlePageChange = (event, number) => {
     setCurrPage(number);
   };
+
+  const renderSearchTitle = (
+    result ? 
+      ((keyword == null || keyword == "") ?
+        <h3 /> : <h3>Search result of "{keyword}"</h3>)
+      : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
+  );
+
+  const [modalType, setModalType] = useState(1);
 
   return (
     <div className={classes.root}>
@@ -101,6 +154,11 @@ function ProductsPage(props) {
               xs={12}
               spacing={2}
             >
+              {/* <Grid container item xs={12} spacing={3}> */}
+              <Grid item xs={12}>
+                {/* <h3>Search result of {keyword}</h3> */}
+                {renderSearchTitle}
+              </Grid>
               {products.map((x) =>
                 <Grid key={`product-${x['product_id']}`} item xs={12} sm={4}>
                   <ProductCard
@@ -114,6 +172,7 @@ function ProductsPage(props) {
                     handlePsModalClose={handlePsModalClose}
                     handleNlModalOpen={handleNlModalOpen}
                     handleNlModalClose={handleNlModalClose}
+                    setModalType={setModalType}
                   />
                 </Grid>
               )}
@@ -143,6 +202,7 @@ function ProductsPage(props) {
         handleClose={handlePsModalClose}
         open={psModalOpen}
         token={token}
+        type={modalType}
       />
       <NotLoginModal
         handleClose={handleNlModalClose}

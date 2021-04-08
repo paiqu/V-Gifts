@@ -8,6 +8,7 @@
 import random as rd
 import numpy as np
 import database as db
+import user as us
 
 def unit_vector(vector):
     '''
@@ -38,7 +39,7 @@ def prod_recommendation(user_id, prod_lst = [], db_name = 'database.json', num =
         returns a list of product_id, sorted
     '''
     # item & value calculator
-    lst = prod_picker(user_id, prod_lst = [], db_name = 'database.json')
+    lst = prod_picker(user_id, prod_lst, db_name)
     # return sorted result (descending)
     rt = sorting_merge(lst, 1)
     if len(rt) <= num:
@@ -59,12 +60,12 @@ def interest_calculator(v_1, v_2, key):
 def prod_picker(user_id, prod_lst = [], db_name = 'database.json'): # percent -> the chance of product is joining the recommendation
     # prod_lst = DB
     temp = db.load_json(db_name)
-    prod_lst = temp['PRODUCT_DB'] if prod_lst == [] else prod_lst
+    prod_lst = temp['PRODUCT_DB'].keys() if prod_lst == [] else prod_lst
     user_v = temp['USER_DB'][str(int(user_id))]['interest']
     # append to lst
     lst = []
     for item in prod_lst:
-        v_1 = prod_lst[item]['category']
+        v_1 = temp['PRODUCT_DB'][item]['category']
         lst.append(interest_calculator(v_1, user_v, item))
     return lst
 
@@ -116,14 +117,14 @@ def sorting_merge(lst, posi = 1, mode = 0): # lst -> [(id, value), ....]
     new = sorting_helper(left, right, posi, mode)
     return new
 
-def order_filter_sort(order_keys, option = None, mode = 1):
+def order_filter_sort(order_keys, option = None, mode = 1, db_name = 'database.json'):
     '''
         This function is used to reorder order_list
         option => any key of order_db items
         mode = 1  -> decending
         mode = 0  -> ascending
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     order_keys = list(temp['ORDER_DB'].keys())
     rt = []
     temp_lst = [] # [[key, <option>], ...]
@@ -144,7 +145,7 @@ def order_filter_sort(order_keys, option = None, mode = 1):
         rt.append(item[0])
     return rt
 
-def order_filter_switch(order_keys, option, minn = None, maxx = None):
+def order_filter_switch(order_keys, option, minn = None, maxx = None, db_name = 'database.json'):
     '''
         This function filters order based on
         option and the value of the option
@@ -152,7 +153,7 @@ def order_filter_switch(order_keys, option, minn = None, maxx = None):
         Only allows option with values in range 
         to be returned
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     # order_keys = list(temp['ORDER_DB'].keys())
     rt = []
     # sort list for all options
@@ -173,7 +174,7 @@ def order_filter_switch(order_keys, option, minn = None, maxx = None):
         rt.append(item[0])
     return rt
 
-def order_filter(option_lst, mode = 1, permission = 'admin', u_id = -1):
+def order_filter(option_lst, mode = 1, permission = 'admin', u_id = -1, db_name = 'database.json'):
     '''
         option_lst => [[option, min, max], ...]
         A combination of
@@ -181,7 +182,7 @@ def order_filter(option_lst, mode = 1, permission = 'admin', u_id = -1):
         and
         order_filter_sort
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     if permission == 'admin':
         order_keys = list(temp['ORDER_DB'].keys())
     elif permission == 'user':
@@ -196,7 +197,7 @@ def order_filter(option_lst, mode = 1, permission = 'admin', u_id = -1):
     
     return order_keys
 
-def prod_filter(option_lst, mode = 1):
+def prod_filter(option_lst, mode = 1, db_name = 'database.json'):
     '''
         This function is used to filter/reorder product_list
         option_lst => [[option, min, max], ...]
@@ -212,7 +213,7 @@ def prod_filter(option_lst, mode = 1):
             "pic": None
         }
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     prod_keys = list(temp['PRODUCT_DB'].keys())
     for options in option_lst:
         option, minn, maxx = options
@@ -222,7 +223,7 @@ def prod_filter(option_lst, mode = 1):
     return prod_keys
 
 
-def prod_filter_switch(prod_keys, option, minn = None, maxx = None):
+def prod_filter_switch(prod_keys, option, minn = None, maxx = None, db_name = 'database.json'):
     '''
         This function filters order based on
         option and the value of the option (['price', 'delivery'])
@@ -234,7 +235,7 @@ def prod_filter_switch(prod_keys, option, minn = None, maxx = None):
             1. price
             2. delivery days
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     # order_keys = list(temp['ORDER_DB'].keys())
     rt = []
     # sort list for all options
@@ -253,13 +254,13 @@ def prod_filter_switch(prod_keys, option, minn = None, maxx = None):
         rt.append(item[0])
     return rt
 
-def prod_filter_sort(prod_keys, option = None, mode = 1):
+def prod_filter_sort(prod_keys, option = None, mode = 1, db_name = 'database.json'):
     '''
         This function is used to reorder order_list
         mode = 1  -> decending
         mode = 0  -> ascending
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     rt = []
     temp_lst = [] # [[key, <option>], ...]
     for item in prod_keys:
@@ -279,8 +280,8 @@ def prod_filter_sort(prod_keys, option = None, mode = 1):
         rt.append(item[0])
     return rt
 
-def rating_calc(prod_id):
-    temp = db.load_json()
+def rating_calc(prod_id, db_name = 'database.json'):
+    temp = db.load_json(db_name)
     ratings = temp['PRODUCT_DB'][str(prod_id)]["ratings"]
     if len(ratings) == 0:
         return 0
@@ -327,15 +328,17 @@ def keyword_searcher(keyword = "", db_name = 'database.json'):
         return list(temp["PRODUCT_DB"].keys())
     else:
         rt = []
-        keyword = keyword.lower()
-        for prod in list(temp["PRODUCT_DB"].keys()):
-            if keyword in temp["PRODUCT_DB"][prod]['name'].lower() \
-                or keyword in temp["PRODUCT_DB"][prod]['description'].lower():
-                rt.append(prod)
-    return rt
+        keywords = keyword.lower().split(' ')
+        for kwd in keywords:
+            for prod in list(temp["PRODUCT_DB"].keys()):
+                if kwd in temp["PRODUCT_DB"][prod]['name'].lower() \
+                    or kwd in temp["PRODUCT_DB"][prod]['description'].lower():
+                    rt.append(prod)
+        rt = list(set(rt))
+        return rt
 
-def search_filter_recommendation(keyword = "", db_name = 'database.json', ctgry = [], \
-            price_rg = [0, 99999999], user_id = -1):
+def search_filter_recommendation(keyword = "", ctgry = [], \
+            price_rg = [0, 99999999], user_id = -1, page = -1, db_name = 'database.json'):
     '''
         This function searches with a keyword, filter with selection,
         and rank product based on recommendation
@@ -345,13 +348,46 @@ def search_filter_recommendation(keyword = "", db_name = 'database.json', ctgry 
         prod_recommendation(user_id, prod_lst = [], db_name = \
             'database.json', num = 100) -> list
     '''
+    flag = True
     rt0 = keyword_searcher(keyword, db_name)
+    if len(rt0) == 0:
+        rt0 = []
+        flag = False
     rt1 = prod_filter_type(rt0, ctgry, price_rg, db_name)
     if user_id != -1:
         rt2 = prod_recommendation(user_id, rt1, db_name)
-        return rt2 
+        rt3 = []
+        for item in rt2:
+            rt3.append(item[0])
     else:
-        return rt1
+        rt3 = rt1
+    # deal with page number
+    if page != -1:
+        rt4 = []
+        for i in range(len(rt3)):
+            if i >= (page-1)*9 and i < page*9:
+                # e.g. page 1 => item 0~8
+                rt4.append(rt3[i])
+    else: # return all prods
+        rt4 = rt3
+    # append prod info
+    temp = db.load_json(db_name)
+    lst = []
+    for key in rt4:
+        rtt = round(rating_calc(temp["PRODUCT_DB"][key]["id"]),2)
+        lst.append({
+            "product_id": temp["PRODUCT_DB"][key]["id"],
+            "name": temp["PRODUCT_DB"][key]["name"],
+            "price": temp["PRODUCT_DB"][key]["price"],
+            "rating": rtt,
+            "pic_link": temp["PRODUCT_DB"][key]["pic"]
+        })
+    return {
+        "product_lst": lst,
+        "total_pages": us.ceil((len(rt3)/9)),
+        "flag": flag
+    }
+
 
 
 if __name__ == "__main__":
@@ -361,5 +397,5 @@ if __name__ == "__main__":
     #     db_name = 'database_manual.json'))
     # print(prod_filter_type(ctgry = [], price_rg = [50, 999999], \
     #     db_name = 'database_manual.json'))
-    print(search_filter_recommendation("mother", 'database_manual.json', ctgry = [], \
-            price_rg = [0, 99999999], user_id = -1))
+    print(search_filter_recommendation("mother", ctgry = [], \
+            price_rg = [0, 99999999], user_id = -1, page = -1, db_name = 'database.json'))

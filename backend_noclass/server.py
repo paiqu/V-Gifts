@@ -493,6 +493,26 @@ def get_product_all():
     result = usr.show_product_lst(page, user_id)
     return dumps(result)
 
+@app.route("/product/search", methods = ["POST"])
+def get_product_by_search():
+    data = request.get_json()
+    token = data["token"]
+    page = int(data["page"])
+    keyword = data["keyword"]
+    ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
+    price_rg = data["price_range"] # [min_price, max_price]
+    if token == "":
+        user_id = -1
+    else:
+        try:
+            user_id = login.token_to_idd(token)
+        except err.InvalidToken as error:
+            raise error
+    if price_rg == []:
+        result = wbp.search_filter_recommendation(keyword, ctgry, [0, 999999], user_id, page)
+    else:
+        result = wbp.search_filter_recommendation(keyword, ctgry, price_rg, user_id, page)
+    return dumps(result)
 
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))

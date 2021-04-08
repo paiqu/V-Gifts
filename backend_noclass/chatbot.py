@@ -7,49 +7,39 @@
         chatbot AI should (??? not decided yet)
 '''
 import re
+import database as db
 
 TEST_KEYWORDS = {
-    # This TEST KEYWORD is used to analyse
-    # user query, following has format of:
-    #     'keywords': <position of catagory in catagoty list (product)
-    #                            / interest in interest list (user)>
-
-    # for men
-    'men': 0,
-    'husband': 0,
-    # for women
-    'wowen': 1,
-    'wife': 1,
-    # for kids
-    'children': 2,
-    'child': 2,
-    'toy': 2,
-    'toys': 2,
-    # for pet
-    # 'pet': 3,
-    # 'cat': 3,
-    # 'dog': 3,
-    # descriptive:
-    # not yet
+    "men": [0], "man": [0], "dad": [0], "groom": [0], "bridegroom": [0], 
+    "father's": [0], "men's": [0], "man's": [0], "family": [0, 1, 2, 4], 
+    "women": [1], "woman": [1], "mom": [1], "bride": [1], "mother": [1], 
+    "women's": [1], "woman's": [1], "mother's": [1], "lady": [1], "ladies": [1], 
+    "lego": [2], "toy": [2], "piano": [2], "bag": [2, 3, 7], "teen": [2], 
+    "kid": [2], "kids": [2], "girls": [2], "girl": [2], "boys": [2], "boy": [2], 
+    "birthday": [2], "whiskey": [3], "cocktail": [3], "music": [3, 9], "music box": [3], "bluetooth": [3], "friendship": [3], "friend": [3], "friends": [3], "grandma": [4], "grandmother": [4], "grandpa": [4], "grandfather": [4], "couple": [5], "love": [5], "candle": [5], "cooking": [6], "organic": [6], "grilling": [6], "grill": [6], "cook": [6], "pork": [6], "beef": [6], "snack": [6], "sweet": [6], "hot": [6], "spicy": [6], "protein": [6], 
+    "health": [6], "healthy": [6], "food": [6, 6], "chocolate": [6], "honey": [6], 
+    "wellness": [6], "gluten-free": [6], "vegetarianism": [6], "vegan": [6], "foods": [6], "survival": [7], "gear": [7], "tool": [7], "tools": [7], "flash": [7], "necklace": [8], "earrings": [8], "jewelry": [8], "ring": [8], "gold": [8], "luxury": [8], "pendant": [8], "cloth": [9], "hoodies": [9], "hoody": [9], "travel": [9], "outdoor": [9], "entertainment": [9], 
+    "office": [10], "pen": [10], "pens": [10], "professional": [10], "working": [10], 
+    "work": [10], "notebook": [10]
 }
 
-NUM_CATA = 3
+NUM_CATA = 11
 
-NEGATION_KEYWORDS = [
-    'not',
-    'don\'t',
-    'doesn\'t',
-    'dislike',
-    'hate',
-    'bad',
-]
+# NEGATION_KEYWORDS = [
+#     'not',
+#     'don\'t',
+#     'doesn\'t',
+#     'dislike',
+#     'hate',
+#     'bad',
+# ]
 
-CONTRARY_KEYWORDS = [
-    'but',
-    'although',
-    'though',
-    'instead',
-]
+# CONTRARY_KEYWORDS = [
+#     'but',
+#     'although',
+#     'though',
+#     'instead',
+# ]
 
 TEST_QRY = \
     'I want a toy for children, and my wife. But I don\'t like it for men.\
@@ -73,7 +63,8 @@ def query_analysis_test0(qry):
     kwds = TEST_KEYWORDS
     for wd in lst:
         if wd in kwds.keys():
-            vec[kwds[wd]] += 1
+            for cate in kwds[wd]:
+                vec[cate] += 1
     return vec
 
 def deminishing_returns(num):
@@ -112,7 +103,8 @@ def query_analysis_test1(qry):
     kwds = TEST_KEYWORDS
     for wd in lst:
         if wd in kwds.keys():
-            vec[kwds[wd]] += 1
+            for cate in kwds[wd]:
+                vec[cate] += 1
     return list(map(deminishing_returns, vec))
 
 def adding_lsts(lst1, lst2): # -> lst
