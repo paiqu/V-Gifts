@@ -328,12 +328,14 @@ def keyword_searcher(keyword = "", db_name = 'database.json'):
         return list(temp["PRODUCT_DB"].keys())
     else:
         rt = []
-        keyword = keyword.lower()
-        for prod in list(temp["PRODUCT_DB"].keys()):
-            if keyword in temp["PRODUCT_DB"][prod]['name'].lower() \
-                or keyword in temp["PRODUCT_DB"][prod]['description'].lower():
-                rt.append(prod)
-    return rt
+        keywords = keyword.lower().split(' ')
+        for kwd in keywords:
+            for prod in list(temp["PRODUCT_DB"].keys()):
+                if kwd in temp["PRODUCT_DB"][prod]['name'].lower() \
+                    or kwd in temp["PRODUCT_DB"][prod]['description'].lower():
+                    rt.append(prod)
+        rt = list(set(rt))
+        return rt
 
 def search_filter_recommendation(keyword = "", ctgry = [], \
             price_rg = [0, 99999999], user_id = -1, page = -1, db_name = 'database.json'):
