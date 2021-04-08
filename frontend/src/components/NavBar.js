@@ -229,7 +229,9 @@ export default function NavBar() {
 					<Button
 						className={classes.marketButton}
 						component={Link}
-						to={'/products'}
+						to={{
+              pathname: '/products',
+            }}
 						style={{color: theme.palette.primary.contrastText}}
 						variant="outlined"
 					>

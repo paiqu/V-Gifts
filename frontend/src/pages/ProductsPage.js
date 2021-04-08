@@ -37,7 +37,7 @@ function ProductsPage(props) {
   const query = new URLSearchParams(props.location.search);
   // const token = query.get('token');
   const keyword = query.get('keyword');
-  const page = query.get('page');
+  // const page = query.get('page');
   // const category = query.get('category');
 
   function usePrevious(value) {
@@ -93,6 +93,11 @@ function ProductsPage(props) {
     setCurrPage(number);
   };
 
+  const renderSearchTitle = (
+    (keyword == null || keyword == "") ?
+      <h3 /> : <h3>Search result of "{keyword}"</h3>
+  );
+
   return (
     <div className={classes.root}>
       <NavBar className={classes.navBar} />
@@ -119,6 +124,10 @@ function ProductsPage(props) {
               spacing={2}
             >
               {/* <Grid container item xs={12} spacing={3}> */}
+              <Grid item xs={12}>
+                {/* <h3>Search result of {keyword}</h3> */}
+                {renderSearchTitle}
+              </Grid>
               {products.map((x) =>
                 <Grid key={`product-${x['product_id']}`} item xs={12} sm={4}>
                   {/* <p>{x['product_id']}</p>
