@@ -31,7 +31,7 @@ function ProductsPage(props) {
   const [currPage, setCurrPage] = React.useState(1);
   const [totalPages, setTotalPages] = React.useState(0);
   const [products, setProducts] = React.useState([]);
-
+  const [result, setResult] = React.useState(true);
   const token = "";
 
   const query = new URLSearchParams(props.location.search);
@@ -76,6 +76,12 @@ function ProductsPage(props) {
       })
       .then((response) => {
         const data = response.data;
+        const flag = data.flag;
+        if (!flag) {
+          setResult(false);
+        } else {
+          setResult(true);
+        }
 
         setTotalPages(data['total_pages']);
         setProducts(data['product_lst']);
@@ -94,8 +100,10 @@ function ProductsPage(props) {
   };
 
   const renderSearchTitle = (
-    (keyword == null || keyword == "") ?
-      <h3 /> : <h3>Search result of "{keyword}"</h3>
+    result ? 
+      ((keyword == null || keyword == "") ?
+        <h3 /> : <h3>Search result of "{keyword}"</h3>)
+      : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
   );
 
   return (
