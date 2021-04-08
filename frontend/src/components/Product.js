@@ -130,6 +130,11 @@ export default function Product(props) {
   };
 
   const handleAddToCart = () => {
+    if (!token) {
+      handleNlModalOpen();
+      return;
+    }
+
     axios.post("/user/cart/add",
       {
         token: token,
@@ -167,7 +172,7 @@ export default function Product(props) {
           <Typography variant="h4">{infos.name}</Typography>
           <Box display="flex" alignItems="center">
             <Rating name={`product-rating`} value={infos.rating} precision={0.5} readOnly/>
-            <Typography variant="caption">100 reviews</Typography>
+            {/* <Typography variant="caption">100 reviews</Typography> */}
           </Box>
           <Typography variant="h4">
             ${infos.price}
