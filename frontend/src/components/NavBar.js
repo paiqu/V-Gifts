@@ -264,7 +264,7 @@ export default function NavBar() {
               component={Link}
               to={ `/profile/${token}/cart`}
             >
-              <Badge badgeContent={0} color="secondary">
+            <Badge badgeContent={0} color="secondary">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>

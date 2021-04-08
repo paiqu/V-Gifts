@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -8,6 +8,9 @@ import Box from '@material-ui/core/Box';
 import axios from 'axios';
 import QuantitySelect from './QuantitySelect';
 import AuthContext from '../AuthContext';
+import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
+import NotLoginModal from '../components/modals/NotLoginModal';
+
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -75,9 +78,28 @@ export default function Product(props) {
     }
   };
 
+  const [psModalOpen, setPsModalOpen] = useState(false);
+  const [nlModalOpen, setNlModalOpen] = useState(false);
+
+  const handlePsModalOpen = () => {
+    setPsModalOpen(true);
+  };
+
+  const handlePsModalClose = () => {
+    setPsModalOpen(false);
+  };
+  const handleNlModalOpen = () => {
+    setNlModalOpen(true);
+  };
+
+  const handleNlModalClose = () => {
+    setNlModalOpen(false);
+  };
+
 
   const handlePurchase = () => {
     if (!token) {
+      handleNlModalOpen();
       return;
     }
 
@@ -97,6 +119,7 @@ export default function Product(props) {
     })
     .then(response => {
       console.log(response.data);
+      handlePsModalOpen();
     })
     .catch((err) => {
       console.log(err);
@@ -180,6 +203,16 @@ export default function Product(props) {
           </Box>
         </Grid>
       </Grid>
+      <PurchaseSucessModal
+        handleClose={handlePsModalClose}
+        open={psModalOpen}
+        token={token}
+      />
+      <NotLoginModal
+        handleClose={handleNlModalClose}
+        open={nlModalOpen}
+        token={token}
+      />
     </div>
   );
 }
