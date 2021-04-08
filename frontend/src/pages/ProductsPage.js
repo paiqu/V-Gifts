@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import ProductFilter from "../components/ProductFilter";
 import Grid from "@material-ui/core/Grid";
@@ -40,6 +40,17 @@ function ProductsPage(props) {
   const page = query.get('page');
   // const category = query.get('category');
 
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
+  const prevKeyword = usePrevious(keyword);
+  const prevPage = usePrevious(currPage);
+
   const retrieveProducts = () => {
     if (keyword == null || keyword == "") {    
       axios.get('/product/get_all', {
@@ -55,17 +66,22 @@ function ProductsPage(props) {
         setProducts(data['product_lst']);
       })
     } else {
-      axios.get('/product/search', {
-        params: {
-          token: "",
-          "page": (page == null || page == "") ? 1 : page,
-        }
+      axios.post('/product/search', {
+        token: "",
+        // "page": (page == null || page == "") ? 1 : page,
+        page: prevKeyword !== keyword ? 1 : currPage, 
+        keyword: keyword,
+        category: [],
+        price_range: [],
       })
       .then((response) => {
         const data = response.data;
 
         setTotalPages(data['total_pages']);
         setProducts(data['product_lst']);
+        if (prevKeyword !== keyword) {
+          setCurrPage(1);
+        }
       })
     }
   };
