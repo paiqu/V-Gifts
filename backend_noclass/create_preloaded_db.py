@@ -49,7 +49,7 @@ def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     #     }
     # ]
     # load products into db
-    for prod in lst:
+    for prod in prod_lst:
         db.add_prod(ad.new_product(prod['name'], prod['price'], prod['description'],\
                             None, prod['delivery_days'], prod['pic_link'], file_name), file_name)
     # show db
@@ -58,7 +58,7 @@ def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
 if __name__ == "__main__":
     db.to_json(db.init_db(), 'database_manual.json')
 
-    lst = [
+    lst_hr = [
             {
                 'name': 'A N KINGPiiN Inspirational Bracelets for Women Inspirational Gift for Women Girls Men Motivational Birthday Cuff Bangle Friendship Personalized Mantra Jewelry Come Gift Box',
                 'price': 12,
@@ -415,7 +415,7 @@ if __name__ == "__main__":
         }
     ]
 
-    add_product_to_db_special(lst)
+    add_product_to_db_special(lst_hr)
     add_product_to_db_special(lst_yifan)
     sample_user = us.new_user('u_test_1', 'u_test_1', 'u_test_1', 'password', 'email@em.com', \
             'u_test_1', 'u_test_1', 'u_test_1', 'database_manual.json')
