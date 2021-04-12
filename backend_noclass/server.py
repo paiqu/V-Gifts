@@ -501,13 +501,11 @@ def get_product_by_search():
     keyword = data["keyword"]
     ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
     price_rg = data["price_range"] # [min_price, max_price]
-    if token == "":
-        user_id = -1
-    else:
-        try:
-            user_id = login.token_to_idd(token)
-        except err.InvalidToken as error:
-            raise error
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    user_id = -1
     if price_rg == []:
         result = wbp.search_filter_recommendation(keyword, ctgry, [0, 999999], user_id, page)
     else:

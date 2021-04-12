@@ -306,63 +306,56 @@ def show_product_detail(prod_id, db_name = 'database.json'):
         "pic_link": temp["PRODUCT_DB"][str(prod_id)]["pic"],
     }
 
-def show_product_lst(page = -1, user_id = -1, num_each_page = 9, db_name = 'database.json'):
+def show_product_lst(page = -1, user_id = -1, num_each_page = 9, rec_num = 6, db_name = 'database.json'):
     """
         This function shows a lst of product
     """
+    temp = db.load_json(db_name)
+    proc_lst = []
+    for key in temp["PRODUCT_DB"].keys():
+        rtt = round(wb.rating_calc(temp["PRODUCT_DB"][key]["id"]),2)
+        proc_lst.append({
+            "product_id": temp["PRODUCT_DB"][key]["id"],
+            "name": temp["PRODUCT_DB"][key]["name"],
+            "price": temp["PRODUCT_DB"][key]["price"],
+            "rating": rtt,
+            "pic_link": temp["PRODUCT_DB"][key]["pic"]
+        })
+    proc_rt = []
+    if page != -1:
+        for i in range(len(proc_lst)):
+            if i >= (page-1)*num_each_page and i < page*num_each_page:
+                # e.g. page 1 => item 0~8
+                proc_rt.append(proc_lst[i])
+    else: # return all prods
+        proc_rt = proc_lst
     if user_id == -1:
-        lst = []
-        temp = db.load_json(db_name)
-        for key in temp["PRODUCT_DB"].keys():
-            rtt = round(wb.rating_calc(temp["PRODUCT_DB"][key]["id"]),2)
-            lst.append({
-                "product_id": temp["PRODUCT_DB"][key]["id"],
-                "name": temp["PRODUCT_DB"][key]["name"],
-                "price": temp["PRODUCT_DB"][key]["price"],
-                "rating": rtt,
-                "pic_link": temp["PRODUCT_DB"][key]["pic"]
-            })
-        rt = []
-        if page != -1:
-            for i in range(len(lst)):
-                if i >= (page-1)*num_each_page and i < page*num_each_page:
-                    # e.g. page 1 => item 0~8
-                    rt.append(lst[i])
-        else: # return all prods
-            rt = lst
-        return {
-            "product_lst": rt,
-            "total_pages": ceil((len(lst)/num_each_page))
-        }
+        rec_rt = []
     else:
         # if a user presist, execute recommendation algo
-        lst = wb.prod_recommendation(user_id, 1000) # technically fetchs all product
-        rt0 = []
-        for item in lst:
-            rt0.append(item[0])
-        temp = db.load_json(db_name)
-        rt1 = []
-        for prod_id in rt0:
+        # technically fetchs all product
+        rec_lst = wb.search_filter_recommendation(user_id = user_id)["product_lst"]
+        rec_pid = []
+        for item in rec_lst:
+            rec_pid.append(item["product_id"])
+        rec_rt = []
+        if rec_num >= len(rec_lst):
+            rec_num = len(rec_lst)
+        for i in range(rec_num):
+            prod_id = rec_pid[i]
             rtt = round(wb.rating_calc(prod_id),2)
-            rt1.append({
+            rec_rt.append({
                 "product_id": prod_id,
                 "name": temp["PRODUCT_DB"][str(prod_id)]["name"],
                 "price": temp["PRODUCT_DB"][str(prod_id)]["price"],
                 "rating": rtt,
                 "pic_link": temp["PRODUCT_DB"][str(prod_id)]["pic"]
             })
-        rt = []
-        if page != -1:
-            for i in range(len(lst)):
-                if i >= (page-1)*num_each_page and i < page*num_each_page:
-                    # e.g. page 1 => item 0~8
-                    rt.append(lst[i])
-        else: # return all prods
-            rt = lst
-        return {
-            "product_lst": rt,
-            "total_pages": ceil((len(lst)/num_each_page))
-        }
+    return {
+        "recommendation_list": rec_rt,
+        "product_lst": proc_rt,
+        "total_pages": ceil((len(proc_lst)/num_each_page))
+    }
 
 def show_all_cart(uid, db_name = 'database.json'):
     lst = []
