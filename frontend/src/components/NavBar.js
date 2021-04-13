@@ -18,28 +18,20 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import axios from "axios";
 import { useHistory } from 'react-router'
+import { Grid } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
-    // display: "block",
-    // [theme.breakpoints.up("sm")]: {
-    //   display: "block",
-    // },
 		marginRight: theme.spacing(2),
-
   },
 	marketButton: {
-		// display: "none",
-    // [theme.breakpoints.up("sm")]: {
-    //   display: "block",
-    // },
 		marginRight: theme.spacing(2),
 	},
   search: {
@@ -52,10 +44,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -76,23 +64,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-    },
   },
   sectionDesktop: {
-    // display: "none",
-    // [theme.breakpoints.up("md")]: {
-    //   display: "flex",
-    // },
     display: 'flex',
   },
-  // sectionMobile: {
-  //   display: "flex",
-  //   [theme.breakpoints.up("md")]: {
-  //     display: "none",
-  //   },
-  // },
   toolBar: {
     minHeight: "10vh",
   },
@@ -112,12 +87,7 @@ export default function NavBar() {
   const theme = useTheme();
   const history = useHistory();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [searchInput, setSearchInput] = React.useState("");
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleSearchChange = event => {
     setSearchInput(event.target.value);
@@ -127,83 +97,71 @@ export default function NavBar() {
     history.push(`/products?keyword=${searchInput}`);
   };
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
-    </Menu>
+  const NotLoggedIn = (
+    <Button>
+      Login
+    </Button>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  // eslint-disable-next-line
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+  const LoggedInProfile = (
+    <Button
+      component={Link}
+      to={ token ? `/profile/${token}` : "/login"}
+      edge="end"
+      aria-label="account of current user"
+      color="inherit"
+      startIcon={<AccountCircle />}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+      Logged in as Pai
+    </Button>
   );
+
+  const renderProfile = () => {
+    if (token) {
+      return <LoggedInProfile />
+    } else {
+      return <NotLoggedIn />
+    }
+  };
+
 
   return (
     <div className={classes.grow}>
+      {/* <Grid
+        container
+        spacing={2}
+      >
+        <Grid
+          item
+          xs={}
+        >
+          
+        </Grid>
+        <Grid
+          item
+          xs={}
+        >
+
+        </Grid>
+        <Grid
+          item
+          xs={}
+        >
+
+        </Grid>
+        <Grid
+          item
+          xs={}
+        >
+
+        </Grid>
+        <Grid
+          item
+          xs={}
+        >
+
+        </Grid>
+      </Grid> */}
       <AppBar position="static" style={{boxShadow: 'none'}}>
         <Toolbar className={classes.toolBar}>
           <img 
@@ -256,7 +214,7 @@ export default function NavBar() {
               }}
             />
           </div>
-          <div className={classes.grow} />
+          {/* <div className={classes.grow} /> */}
           <div className={classes.sectionDesktop}>
             <IconButton 
               aria-label="cart" 
@@ -268,7 +226,7 @@ export default function NavBar() {
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            <IconButton
+            {/* <IconButton
 							component={Link}
 							to={ token ? `/profile/${token}` : "/login"}
               edge="end"
@@ -276,11 +234,11 @@ export default function NavBar() {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
+            </IconButton> */}
+            {/* <renderProfile /> */}
           </div>
         </Toolbar>
       </AppBar>
-      {renderMenu}
     </div>
   );
 }

@@ -53,7 +53,7 @@ function HomePage(props) {
             color: theme.palette.primary.contrastText
           }} 
           paragraph>
-          Join us today and explore our range of gifts! 
+          Join us today and receive $2000! 
         </Typography>
         <Box
           display="flex"

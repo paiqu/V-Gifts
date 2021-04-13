@@ -9,9 +9,11 @@ import NavBar from "../components/NavBar";
 import axios from 'axios';
 import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
 import NotLoginModal from '../components/modals/NotLoginModal';
-// import AuthContext from '../AuthContext';
 import AuthContext from '../AuthContext';
-
+import Fab from '@material-ui/core/Fab';
+import ChatIcon from '@material-ui/icons/Chat';
+import Popper from '@material-ui/core/Popper';
+import Chat from '../components/chat/Chat';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -26,8 +28,29 @@ const useStyles = makeStyles((theme) => ({
   },
   pagination: {
     justifySelf: "end",
+  },
+  fab: {
+    position: "fixed",
+    bottom: 40,
+    right: 20,
+  },
+  popper: {
+    marginRight: "1rem",
   }
 }));
+
+const steps = [
+  {
+    id: '0',
+    message: 'Welcome to react chatbot!',
+    trigger: '1',
+  },
+  {
+    id: '1',
+    message: 'Bye!',
+    end: true,
+  },
+];
 
 function ProductsPage(props) {
   const classes = useStyles();
@@ -132,6 +155,21 @@ function ProductsPage(props) {
 
   const [modalType, setModalType] = useState(1);
 
+  const children = (
+    <p>hello world</p>
+  );
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = React.useState();
+
+  const handleOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen(!open);
+  };
+
+  const id = open ? 'simple-popper' : undefined;
+
   return (
     <div className={classes.root}>
       <NavBar className={classes.navBar} />
@@ -209,6 +247,24 @@ function ProductsPage(props) {
         open={nlModalOpen}
         token={token}
       />
+      <Fab
+        className={classes.fab} 
+        color="secondary"
+        aria-label="chat"
+        aria-describedby={id}
+        onClick={handleOpen}
+      >
+        <ChatIcon />
+      </Fab>
+      <Popper
+        className={classes.popper}
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        placement={'top'}
+      >
+        <Chat />
+      </Popper>
     </div>
   );
 }
