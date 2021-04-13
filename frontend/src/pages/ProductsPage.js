@@ -153,11 +153,9 @@ function ProductsPage(props) {
       : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
   );
 
-  const [modalType, setModalType] = useState(1);
 
-  const children = (
-    <p>hello world</p>
-  );
+
+  const [modalType, setModalType] = useState(1);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -185,6 +183,25 @@ function ProductsPage(props) {
             className={classes.rightContainer} 
             container item xs={12} sm={9} spacing={3}
           >
+            <Grid
+              container
+              item
+              xs={12}
+              spacing={2}
+            >
+              <Grid item xs={12}>
+                <h3>Recommended for you:</h3>
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                empty
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                empty
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                empty
+              </Grid>
+            </Grid>
             <Grid
               className={classes.productsGrid}
               container
