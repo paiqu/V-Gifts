@@ -6,24 +6,19 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import axios from "axios";
 import { useHistory } from 'react-router'
-import { Grid } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    // flexGrow: 1,
+    flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -43,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: "100%",
+    width: "50rem",
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -56,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
-    width: "50rem",
+    // width: "50rem",
+    width: "100%",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -98,22 +94,39 @@ export default function NavBar() {
   };
 
   const NotLoggedIn = (
-    <Button>
-      Login
+    <Button
+      component={Link}
+      to={'/login'}
+      variant="outlined"
+    >
+      Login/Register
     </Button>
   );
 
   const LoggedInProfile = (
-    <Button
-      component={Link}
-      to={ token ? `/profile/${token}` : "/login"}
-      edge="end"
-      aria-label="account of current user"
-      color="inherit"
-      startIcon={<AccountCircle />}
-    >
-      Logged in as Pai
-    </Button>
+    <div>
+      <IconButton
+        aria-label="cart"
+        color="inherit"
+        component={Link}
+        to={ `/profile//cart`}
+      >
+        <Badge badgeContent={0} color="secondary">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
+      <Button
+        component={Link}
+        to={ token ? `/profile/` : "/login"}
+        edge="end"
+        aria-label="account of current user"
+        color="inherit"
+        className={classes.logo}
+      >
+        <AccountCircle />
+        Hi, Pai
+      </Button>
+    </div>
   );
 
   const renderProfile = () => {
@@ -127,41 +140,6 @@ export default function NavBar() {
 
   return (
     <div className={classes.grow}>
-      {/* <Grid
-        container
-        spacing={2}
-      >
-        <Grid
-          item
-          xs={}
-        >
-          
-        </Grid>
-        <Grid
-          item
-          xs={}
-        >
-
-        </Grid>
-        <Grid
-          item
-          xs={}
-        >
-
-        </Grid>
-        <Grid
-          item
-          xs={}
-        >
-
-        </Grid>
-        <Grid
-          item
-          xs={}
-        >
-
-        </Grid>
-      </Grid> */}
       <AppBar position="static" style={{boxShadow: 'none'}}>
         <Toolbar className={classes.toolBar}>
           <img 
@@ -177,14 +155,14 @@ export default function NavBar() {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/'}
+						to={'/products?keyword='}
 						className={classes.title} 
 						variant="h4"
 						noWrap
 					>
             V-Gifts
           </Typography>
-					<Button
+					{/* <Button
 						className={classes.marketButton}
 						component={Link}
 						to={{
@@ -194,7 +172,7 @@ export default function NavBar() {
 						variant="outlined"
 					>
             Market
-					</Button>
+					</Button> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -214,28 +192,10 @@ export default function NavBar() {
               }}
             />
           </div>
-          {/* <div className={classes.grow} /> */}
+          <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton 
-              aria-label="cart" 
-              color="inherit"
-              component={Link}
-              to={ `/profile/${token}/cart`}
-            >
-            <Badge badgeContent={0} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-            {/* <IconButton
-							component={Link}
-							to={ token ? `/profile/${token}` : "/login"}
-              edge="end"
-              aria-label="account of current user"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
-            {/* <renderProfile /> */}
+            {token && LoggedInProfile}
+            {!token && NotLoggedIn}
           </div>
         </Toolbar>
       </AppBar>
