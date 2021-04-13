@@ -79,11 +79,16 @@ function RegisterPage({ setAuth, ...props }) {
         axios.post('user/register', { ...infos })
           .then((response) => {
               const data = response.data;
-              if (data.code === 403) {
-                  setState({
-                      account_error: true,
-                      account_text: "Account name exists"
-                  })
+              if (data.code === 403 ) {
+                setState({
+                    account_error: true,
+                    account_text: "Account name exists"
+                })
+              } else if (data.code === 408 ) {
+                setState({
+                  email_error: true,
+                  email_text: "Email exists"
+                })
               }
               else {
                 // mark the user as signed-in in local storage, it will be removed when it is logged out
