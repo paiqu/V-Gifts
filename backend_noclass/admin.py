@@ -12,7 +12,7 @@ ADMIN_DB = {
     }
 }
 '''
-
+import csv
 import database as db
 import datetime as dt
 import user as us
@@ -251,6 +251,67 @@ def get_all_admin():
         })
     return lst
 
+def add_prod_from_csv(filename, db_name = 'database.json'):
+    '''
+        This function allows admin to import prod data from
+        csv file
+    '''
+    if filename[-4:] != '.csv':
+        # print(filename[-4:-1])
+        return 'File format is not accepted'
+    else:
+        csvf = open(filename, 'r')
+        csvfr = csv.reader(csvf)
+        n_prod = []
+        row_n = 0
+        for rows in csvfr:
+            row_n += 1
+            print(rows)
+            # 6 inputs for new_product()
+            if len(rows) == 6:
+                name, price, description, category, \
+                        deli_days, pic_link = rows
+                n_prod.append(new_product(name, int(price), description, category, \
+                        int(deli_days), pic_link, db_name))
+            elif len(rows) == 0:
+                continue
+            else:
+                csvf.close()
+                return 'Error information in provided csv file, row {}, \
+                            roll back database'.format(row_n)
+        # if all fows are good
+        for prod in n_prod:
+            db.add_prod(prod, db_name)
+        csvf.close()
+        return 'Success, {} products imported'.format(row_n)
+
+def add_prod_to_csv(filename, db_name = 'database.json'):
+    '''
+        This function allows admin to import prod data from
+        csv file
+    '''
+    if filename[-4:] != '.csv':
+        # print(filename[-4:-1])
+        return 'File format is not accepted (not *.csv)'
+    else:
+        temp = db.load_json(db_name)
+        csvf = open(filename, 'w', newline='')
+        csvfw = csv.writer(csvf)
+        row_n = 0
+        for prod_key in temp['PRODUCT_DB'].keys():
+            row_n += 1
+            csvfw.writerow([
+                temp['PRODUCT_DB'][prod_key]['name'],
+                temp['PRODUCT_DB'][prod_key]['price'],
+                temp['PRODUCT_DB'][prod_key]['description'],
+                temp['PRODUCT_DB'][prod_key]['category'],
+                temp['PRODUCT_DB'][prod_key]['delivery'],
+                temp['PRODUCT_DB'][prod_key]['pic']
+            ])
+        csvf.close()
+        return "{} rows of products saved into {}".format(row_n, filename)
+
+
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.
@@ -258,4 +319,7 @@ def get_all_admin():
 #     return {}
 
 if __name__ == "__main__":
-    temp_use()
+    # temp_use()
+    # print(add_prod_from_csv("prod.csv", db_name = 'database.json'))
+    print(add_prod_to_csv('prod.csv', db_name = 'database.json'))
+    pass
