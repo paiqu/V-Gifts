@@ -512,5 +512,35 @@ def get_product_by_search():
         result = wbp.search_filter_recommendation(keyword, ctgry, price_rg, user_id, page)
     return dumps(result)
 
+@app.route("/user/edit", methods = ["POST"])
+def user_edit_info():
+    data = request.get_json()
+    token       = data["token"]
+    fname       = data["fname"]
+    lname       = data["lname"]
+    address     = data["address"]
+    city        = data["city"]
+    country     = data["country"]
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = usr.edit_info_user(user_id, fname, lname, address, city, \
+            country, 'database.json')
+    return dumps(result)
+
+@app.route("/product/edit", methods = ["POST"])
+def prod_edit_info():
+    data = request.get_json()
+    prod_id         = data["prod_id"]
+    prod_name       = data["prod_name"]
+    prod_descrip    = data["prod_descrip"]
+    prod_price      = data["prod_price"]
+    prod_delivery   = data["prod_delivery"]
+    prod_pic        = data["prod_pic"]
+    result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
+                prod_delivery, prod_pic, db_name = 'database.json')
+    return dumps(result)
+    
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
