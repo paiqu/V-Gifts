@@ -131,10 +131,23 @@ def change_password(idd, old_password, new_password):
     return False
 
 
-def edit_info_user(u_id):
+def edit_info_user(u_id, fname, lname, address, city, \
+            country, db_name = 'database.json'):
     """
         This function edits user info
+        But no permission to change account name and email
+        change password from us.change_password func
     """
+    temp = db.load_json(db_name)
+    # temp["USER_DB"][str(u_id)]["name"] = aname
+    temp["USER_DB"][str(u_id)]["fname"] = fname
+    temp["USER_DB"][str(u_id)]["lname"] = lname
+    # temp["USER_DB"][str(u_id)]["password"] = password
+    # temp["USER_DB"][str(u_id)]["email"] = email
+    temp["USER_DB"][str(u_id)]["address"] = address
+    temp["USER_DB"][str(u_id)]["city"] = city
+    temp["USER_DB"][str(u_id)]["country"] = country
+    db.to_json(temp, db_name)
     return {
     }
 
