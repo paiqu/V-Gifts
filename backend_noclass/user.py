@@ -280,19 +280,6 @@ def rate_order(u_id, order_id, rating, db_name = 'database.json'):
     db.to_json(temp, db_name)
     return {}
 
-def edit_user_interest(u_id, interest_lst, db_name = 'database.json'):
-    """
-        This function is used to directly edit 
-        user"s interest vecetor
-    """
-    db.valid_id("user", u_id, db_name)
-    temp = db.load_json(db_name)
-    if len(interest_lst) != temp["TYPE_OF_PRODUCTS"]:
-        raise ValueError()
-    else:
-        temp["USER_DB"][str(u_id)]["interest"] = interest_lst
-        db.to_json(temp, db_name)
-    return {}
 
 def show_user_cart(u_id, db_name = 'database.json'):
     """
@@ -508,3 +495,13 @@ def check_token_token(token, db_name = 'database.json'):
         if token == user_token:
             return True
     return False
+
+def my_reset_passowrd(email, db_name = 'database.json'):
+    '''
+        This function picks the email and send link to reset password
+    '''
+    temp = db.load_json(db_name)
+    for user_id, user_info in temp["USER_DB"].items():
+        if user_info["email"] == email:
+            return user_info
+    raise err.InvalidEmail()
