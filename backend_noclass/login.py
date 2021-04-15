@@ -7,7 +7,7 @@
 import user as usr
 import database as db 
 import admin as adm
-import generate_token as gt
+import token as tk
 import error as err
 import hashlib
 import re
@@ -64,7 +64,7 @@ def login_user(name, password):
     for user_id, user_info in temp["USER_DB"].items():
         if user_info["name"] == name:
             if user_info["password"] == encrypt_password(password):
-                login_token = gt.token(name)
+                login_token = tk.token(name)
                 uid = user_id
                 temp["TOKEN_DB"][login_token] = uid
                 db.to_json(temp)
@@ -169,7 +169,7 @@ def login_admin(name, password):
     for admin_id, admin_info in temp["ADMIN_DB"].items():
         if admin_info["name"] == name:
             if admin_info["password"] == encrypt_password(password):
-                login_token = gt.token(name)
+                login_token = tk.token(name)
                 aid = admin_id
                 temp["TOKEN_DB"][login_token] = aid
                 db.to_json(temp)

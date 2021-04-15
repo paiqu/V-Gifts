@@ -7,16 +7,14 @@ import database as db
 import user as usr
 import admin as adm
 import webpage as wbp
-import SAMPLE_DB as samp
 import login as login
 import error as err
-import random
-
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
 from flask_mail import Mail
 from json import dumps
+import random
 import sys
 
 def defaultHandler(err):
@@ -33,14 +31,12 @@ def defaultHandler(err):
 app = Flask(__name__)
 CORS(app)
 app.config.update(
-    # DEBUG = True, ## remeber to change later
-    # TESTING = True,
     TRAP_HTTP_EXCEPTIONS = True,
-    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_SERVER = "smtp.gmail.com",
     MAIL_PORT = 465,
     MAIL_USE_SSL = True,
-    MAIL_USERNAME = 'oldjeffspectator@gmail.com',
-    MAIL_PASSWORD = 'jeffLHR123'
+    MAIL_USERNAME = "oldjeffspectator@gmail.com",
+    MAIL_PASSWORD = "jeffLHR123"
 )
 app.register_error_handler(Exception, defaultHandler)
 
@@ -54,18 +50,18 @@ mail = Mail(app)
 def send_mail():
     data = request.get_json()
     email = data["email"]
-    num_str = ''.join(str(random.choice(range(10))) for i in range(6))
+    num_str = "".join(str(random.choice(range(10))) for i in range(6))
     user_test = usr.my_reset_passowrd(email)
     usr.change_password(user_test["id"], user_test["password"], num_str)
     msg = mail.send_message(
-        'Send Mail for reset password',
-        sender = ['ANONYMOUS', 'oldjeffspectator@gmail.com'],
+        "Send Mail for reset password",
+        sender = ["ANONYMOUS", "oldjeffspectator@gmail.com"],
         recipients = [email],
         body="This is your temporary passowrd, please change it as soon as \
             possible! Password: " + num_str
     )
     mail.send(msg)
-    return 'Mail sent'
+    return "Mail sent"
 
 @app.route("/admin/register", methods = ["POST"])
 def adm_register():
@@ -552,7 +548,7 @@ def user_edit_info():
     except err.InvalidToken as error:
         raise error
     result = usr.edit_info_user(user_id, fname, lname, address, city, \
-            country, 'database.json')
+            country, "database.json")
     return dumps(result)
 
 @app.route("/product/edit", methods = ["POST"])
@@ -565,7 +561,7 @@ def prod_edit_info():
     prod_delivery   = data["prod_delivery"]
     prod_pic        = data["prod_pic"]
     result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
-                prod_delivery, prod_pic, db_name = 'database.json')
+                prod_delivery, prod_pic, db_name = "database.json")
     return dumps(result)
 
 @app.route("/user/get_interest", methods = ["GET"])
@@ -583,8 +579,8 @@ def user_get_interest():
 @app.route("/user/set_interest", methods = ["POST"])
 def user_set_interest():
     data = request.get_json()
-    token           = data['token']
-    interest_lst    = data['interest_lst']
+    token           = data["token"]
+    interest_lst    = data["interest_lst"]
     try:
         user_id = login.token_to_id(token)
     except err.InvalidToken as error:
@@ -595,15 +591,15 @@ def user_set_interest():
 @app.route("/user/refund_order", methods = ["POST"])
 def user_refund_order():
     data = request.get_json()
-    token           = data['token']
-    order_id        = data['order_id']
+    token           = data["token"]
+    order_id        = data["order_id"]
     try:
         user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     rt = usr.order_refund(user_id, order_id)
     return dumps({
-            'refund_result': rt
+            "refund_result": rt
         })
 
 @app.route("/admin/change_order_state", methods = ["POST"])
