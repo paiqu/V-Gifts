@@ -10,10 +10,12 @@ import webpage as wbp
 import SAMPLE_DB as samp
 import login as login
 import error as err
+import random
 
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
+from flask_mail import Mail
 from json import dumps
 import sys
 
@@ -33,13 +35,37 @@ CORS(app)
 app.config.update(
     # DEBUG = True, ## remeber to change later
     # TESTING = True,
-    TRAP_HTTP_EXCEPTIONS = True
+    TRAP_HTTP_EXCEPTIONS = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 465,
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = 'oldjeffspectator@gmail.com',
+    MAIL_PASSWORD = 'jeffLHR123'
 )
 app.register_error_handler(Exception, defaultHandler)
 
 ##########################
 # admin related routes
 ##########################
+
+mail = Mail(app)
+
+@app.route("/user/login/send_mail/", methods = ["POST"])
+def send_mail():
+    MAIL_USERNAME = ('oldjeffspectator@gmail.com', 'jeffLHR123')
+    data = request.get_json()
+    email = data["email"]
+    num_str = ''.join(str(random.choice(range(10))) for i in range(6))
+    user_test = usr.my_reset_passowrd(email)
+    usr.change_password(user_test["id"], user_test["password"], num_str)
+    msg = mail.send_message(
+        'Send Mail for reset password',
+        sender = MAIL_USERNAME,
+        recipients = [email],
+        body="This is your temporary passowrd, please change it as soon as possible! Password: " + num_str 
+    )
+    mail.send(msg)
+    return 'Mail sent'
 
 @app.route("/admin/register", methods = ["POST"])
 def adm_register():
@@ -542,7 +568,7 @@ def prod_edit_info():
                 prod_delivery, prod_pic, db_name = 'database.json')
     return dumps(result)
 
-@app.route("/user/get_interest", method = ["GET"])
+@app.route("/user/get_interest", methods = ["GET"])
 def user_get_interest():
     token = request.args.get("token")
     try:
@@ -554,7 +580,7 @@ def user_get_interest():
         "interest_list": rt
     })
 
-@app.route("/user/set_interest", method = ["POST"])
+@app.route("/user/set_interest", methods = ["POST"])
 def user_set_interest():
     data = request.get_json()
     token           = data['token']
@@ -566,7 +592,7 @@ def user_set_interest():
     rt = db.edit_user_interest(user_id, interest_lst)
     return dumps(rt)
 
-@app.route("/user/refund_order", method = ["POST"])
+@app.route("/user/refund_order", methods = ["POST"])
 def user_refund_order():
     data = request.get_json()
     token           = data['token']
@@ -580,7 +606,7 @@ def user_refund_order():
             'refund_result': rt
         })
 
-@app.route("/admin/change_order_state", method = ["POST"])
+@app.route("/admin/change_order_state", methods = ["POST"])
 def admin_change_order_state():
     data = request.get_json()
     order_id     = data["order_id"]
