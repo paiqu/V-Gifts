@@ -541,6 +541,30 @@ def prod_edit_info():
     result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
                 prod_delivery, prod_pic, db_name = 'database.json')
     return dumps(result)
-    
+
+@app.route("/user/get_interest", method = ["GET"])
+def user_get_interest():
+    token = request.args.get("token")
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.get_interest_lst()
+    return dumps({
+        "interest_list": rt
+    })
+
+@app.route("/user/set_interest", method = ["POST"])
+def user_set_interest():
+    data = request.get_json()
+    token           = data['token']
+    interest_lst    = data['interest_lst']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.edit_user_interest(user_id, interest_lst)
+    return dumps(rt)
+
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
