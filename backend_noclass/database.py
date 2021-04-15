@@ -212,7 +212,7 @@ def prod_rating_calculator(prod_id, db_name = "database.json"):
 def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
     """
         This function is used to directly edit 
-        user"s interest vecetor
+        user's interest vecetor
     """
     valid_id("user", u_id, db_name)
     db = load_json(db_name)
@@ -227,6 +227,6 @@ def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
 def get_interest_lst():
     """
         This functions returns all keywords as options to user
-        to set up user"s interest
+        to set up user's interest
     """
     return list(TEST_KEYWORDS.keys())
