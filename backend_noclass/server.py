@@ -566,5 +566,27 @@ def user_set_interest():
     rt = db.edit_user_interest(user_id, interest_lst)
     return dumps(rt)
 
+@app.route("/user/refund_order", method = ["POST"])
+def user_refund_order():
+    data = request.get_json()
+    token           = data['token']
+    order_id        = data['order_id']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = usr.order_refund(user_id, order_id)
+    return dumps({
+            'refund_result': rt
+        })
+
+@app.route("/admin/change_order_state", method = ["POST"])
+def admin_change_order_state():
+    data = request.get_json()
+    order_id     = data["order_id"]
+    new_state    = data["new_state"]
+    rt = adm.change_order_state(order_id, new_state)
+    return dumps(rt)
+
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
