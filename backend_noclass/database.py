@@ -8,27 +8,21 @@
 import json
 import admin as adm
 from chatbot import TEST_KEYWORDS
-# main content
-# ID_DB = {
-#     """
-#         This DB stores the next id should be used upon
-#         creating new user/admin/product/order
-#     """
-#     "USER_ID": 0,
-#     "ADMIN_ID": 0,
-#     "PRODUCT_ID": 0,
-#     "ORDER_ID": 0,
-#     "USER_DB": {},
-#     "ADMIN_DB": {},
-#     "PRODUCT_DB": {},
-#     "ORDER_DB": {},
-# }
+from login import encrypt_password
 
-# global
+# Global values
+
 TYPE_OF_PRODUCTS_INIT = 11
 
-def init_db_withoutadm():
-    return {
+
+# Main fuctions
+
+def init_db():
+    """
+        This fuction initialize the database 
+        with no values but a pre-set admin for further use
+    """
+    db = {
         "TYPE_OF_PRODUCTS": TYPE_OF_PRODUCTS_INIT,   # dimension of interests
         "PROD_CATAGORY":["for men", 
                         "for women", 
@@ -52,12 +46,9 @@ def init_db_withoutadm():
         "ORDER_DB": {},
         "TOKEN_DB":{}
     }
-
-def init_db():
-    temp = init_db_withoutadm()
-    admin = adm.new_preset_admin("admin", "admin", "VictimsCOMP3900@gmail.com")
-    temp["ADMIN_DB"][str(admin["id"])] = admin
-    return temp
+    admin = adm.new_preset_admin("admin", encrypt_password("admin"), "VictimsCOMP3900@gmail.com")
+    db["ADMIN_DB"][str(admin["id"])] = admin
+    return db
 
 def pretty_print(dct, level = 0, strr = "    "):
     for key in dct.keys():
@@ -72,128 +63,135 @@ def pretty_print(dct, level = 0, strr = "    "):
             print(dct[key])
     return {}
 
-# check valid
-
 def valid_id(option, idd, db_name = "database.json"):
     """
-        This func checks if an id exist in DB
+        This func checks if an id exist in database
+        options in user/product/admin/order
     """
-    temp = load_json(db_name)
+    db = load_json(db_name)
     if option == "user" or option == "users":
-        if str(idd) in temp["USER_DB"]:
+        if str(idd) in db["USER_DB"]:
             return True
     elif option == "product" or option == "products":
-        if str(idd) in temp["PRODUCT_DB"]:
+        if str(idd) in db["PRODUCT_DB"]:
             return True
     elif option == "admin" or option == "admins":
-        if str(idd) in temp["ADMIN_DB"]:
+        if str(idd) in db["ADMIN_DB"]:
             return True
     elif option == "order" or option == "orders":
-        if str(idd) in temp["ORDER_DB"]:
+        if str(idd) in db["ORDER_DB"]:
             return True
-    # Temporary
-    # invalid id
+
+    # raise key error if id not found
     raise KeyError()
 
-# read and write
-
-def to_json(DB, filename = "database.json"):
+def to_json(db, filename = "database.json"):
     """
-        Save DB to json file
+        This fuction save database to json file
     """
     with open(filename, "w") as fp:
-        json.dump(DB, fp)
+        json.dump(db, fp)
     return {}
-    # return json.dumps(output)
 
 def load_json(filename = "database.json"):
     """
-        This function loads database from json
+        This function loads database from json file
     """
-    # temp = {}
     with open(filename, "r") as fp:
-        temp = json.load(fp)
-    return temp
+        db = json.load(fp)
+    return db
 
 def add_user(user, db_name = "database.json"):
     """
-        Add user to db
+        This fuction add user to database
     """
-    temp = load_json(db_name)
-    temp["USER_DB"][str(user["id"])] = user
-    to_json(temp, db_name)
+    db = load_json(db_name)
+    db["USER_DB"][str(user["id"])] = user
+    to_json(db, db_name)
     return {}
 
 def add_admin(admin, db_name = "database.json"):
     """
-        Add admin to db
+        This fuction add admin to database
     """
-    temp = load_json(db_name)
-    temp["ADMIN_DB"][str(admin["id"])] = admin
-    to_json(temp, db_name)
+    db = load_json(db_name)
+    db["ADMIN_DB"][str(admin["id"])] = admin
+    to_json(db, db_name)
     return {}
 
 def add_prod(prod, db_name = "database.json"):
     """
-        Add product to db
+        This fuction add product to db
     """
-    temp = load_json(db_name)
-    temp["PRODUCT_DB"][str(prod["id"])] = prod
-    to_json(temp, db_name)
+    db = load_json(db_name)
+    db["PRODUCT_DB"][str(prod["id"])] = prod
+    to_json(db, db_name)
     return {}
 
 def add_order(order, db_name = "database.json"):
     """
-        Add order to db
+        This fuction add order to db
     """
-    temp = load_json(db_name)
-    # add to order db
-    temp["ORDER_DB"][str(order["id"])] = order
-    to_json(temp, db_name)
+    db = load_json(db_name)
+    db["ORDER_DB"][str(order["id"])] = order
+    to_json(db, db_name)
     return {}
 
 def clear_db(db_name = "database.json"):
+    """
+        This fuction reset all value in database to its initial value
+    """
     to_json(init_db(), db_name)
     return {}
 
 def id_generator(option, db_name = "database.json"):
-    temp = load_json(db_name)
+    """
+        This fuction generate id of objects
+        options in user/product/admin/order
+    """
+    db = load_json(db_name)
     if option == "user" or option == "users":
-        temp["USER_ID"] += 1
-        to_json(temp, db_name)
-        return temp["USER_ID"]
+        db["USER_ID"] += 1
+        to_json(db, db_name)
+        return db["USER_ID"]
     elif option == "product" or option == "products":
-        temp["PRODUCT_ID"] += 1
-        to_json(temp, db_name)
-        return temp["PRODUCT_ID"]
+        db["PRODUCT_ID"] += 1
+        to_json(db, db_name)
+        return db["PRODUCT_ID"]
     elif option == "admin" or option == "admins":
-        temp["ADMIN_ID"] += 1
-        to_json(temp, db_name)
-        return temp["ADMIN_ID"]
+        db["ADMIN_ID"] += 1
+        to_json(db, db_name)
+        return db["ADMIN_ID"]
     elif option == "order" or option == "orders":
-        temp["ORDER_ID"] += 1
-        to_json(temp, db_name)
-        return temp["ORDER_ID"]
+        db["ORDER_ID"] += 1
+        to_json(db, db_name)
+        return db["ORDER_ID"]
     else:
-        # Temporary
+        # raise key error if option not in range
         raise KeyError()
 
 def check_interest_dim(category, db_name = "database.json"):
-    temp = load_json(db_name)
-    if len(category) == temp["TYPE_OF_PRODUCTS"]:
+    """
+        This fuction check user interest dimension
+    """
+    db = load_json(db_name)
+    if len(category) == db["TYPE_OF_PRODUCTS"]:
         return True
     else:
         return False
 
 def add_product_type(db_name = "database.json"):
-    temp = load_json(db_name)
-    temp["TYPE_OF_PRODUCTS"] += 1
-    for key in temp["PRODUCT_DB"]:
-        temp["PRODUCT_DB"][key]["category"].append(0)
-    for key in temp["USER_DB"]:
-        temp["USER_DB"][key]["interest"].append(0)
-    to_json(temp, db_name)
-    return temp["TYPE_OF_PRODUCTS"]
+    """
+        This fuction add more product type
+    """
+    db = load_json(db_name)
+    db["TYPE_OF_PRODUCTS"] += 1
+    for key in db["PRODUCT_DB"]:
+        db["PRODUCT_DB"][key]["category"].append(0)
+    for key in db["USER_DB"]:
+        db["USER_DB"][key]["interest"].append(0)
+    to_json(db, db_name)
+    return db["TYPE_OF_PRODUCTS"]
 
 def prod_rating_calculator(prod_id, db_name = "database.json"):
     """
@@ -202,8 +200,8 @@ def prod_rating_calculator(prod_id, db_name = "database.json"):
         user ratings
     """
     valid_id("product", prod_id)
-    temp = load_json(db_name)
-    rating_lst = temp["PRODUCT_DB"][str(prod_id)]["rating"]
+    db = load_json(db_name)
+    rating_lst = db["PRODUCT_DB"][str(prod_id)]["rating"]
     if len(rating_lst) == 0:
         return 0
     summ = 0
@@ -211,107 +209,24 @@ def prod_rating_calculator(prod_id, db_name = "database.json"):
         summ += rating[1]
     return summ / len(rating_lst)
 
-def edit_user_interest(u_id, interest_lst, db_name = 'database.json'):
+def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
     """
         This function is used to directly edit 
         user"s interest vecetor
     """
     valid_id("user", u_id, db_name)
-    temp = load_json(db_name)
+    db = load_json(db_name)
     # 11 product types
     interest_vector = [0] * 11
     for ctgry in interest_lst:
         interest_vector[TEST_KEYWORDS[ctgry]] += 1
-    temp["USER_DB"][str(u_id)]["interest"] = interest_vector
-    to_json(temp, db_name)
+    db["USER_DB"][str(u_id)]["interest"] = interest_vector
+    to_json(db, db_name)
     return {}
 
 def get_interest_lst():
-    '''
+    """
         This functions returns all keywords as options to user
-        to set up user's interest
-    '''
+        to set up user"s interest
+    """
     return list(TEST_KEYWORDS.keys())
-
-# USER_DB = {
-#     """
-#     format:
-#         "<id>":                 # type: string
-#                 <User class object>
-#             contains:
-#             {                
-#             "id": 1             # type: int, serial
-#             "name": "Zard"      # type: string
-#             "fund": 10          # type: int; unit: $
-#             "address": "Pacific Ocean"
-#                                 # type: string
-#             "cart": [list of product ID]
-#                                 # type: list of int
-#             "orders": [list of order ID]
-#                                 # type: list of int
-#             "interests": [("cheap", 1.0), ...]
-#                                 # type: list of tuple, tuple of (category, weight)
-#                                 #                                string,  float
-#         }
-#     """
-# }
-
-# ADMIN_DB = {
-#     """
-#     format:
-#         "<id>":{                 # type: string
-#                 <Admin class object>
-#             contains:
-#             {     
-#             "id": 2             # type: int, serial
-#             "name": "YYF"       # type: string
-#             "admin_token": "198ANFu72oDJ0827"
-#                                 # type: string
-#         }
-#     """
-# }
-
-# PRODUCT_DB = {
-#     """
-#     format:
-#         "<id>":{                 # type: string
-#                 <Product class object>
-#             contains:
-#             {     
-#             "id": 3             # type: int, serial
-#             "name": "gift_1"    # type: string
-#             "pic": ??????
-#                                 # type: string, website or file name
-#             "description": "good"
-#                                 # type: string
-#             "category": ["cheap", "durable"]
-#                                 # type: list of string, adjective words
-#             "delivery": datetime_object
-#                                 # type: leng of time (mm/dd)
-#         }
-#     """
-# }
-
-# ORDER_DB = {
-#     """
-#     format:
-#         "<id>":{                 # type: string
-#                 <Order class object>
-#             contains:
-#             {      
-#                                         e.g. "<id>" means: "3" for item with "id": 3
-#             "id": 4             # type: int, serial
-#             "product_id": 3     # type: int
-#             "user_id": 2        # type: int
-#             "order_date": datetime_object
-#                                 # type: datetime_object
-#             "delivery_date": datetime_object
-#                                 # type: datetime_object
-#             "delivery_state": 0
-#                                 # type: int, [0: not delivered,
-#                                 #             1: on the way,
-#                                 #             2: delivered,
-#                                 #             3: cancelled]
-#         }
-#     """
-# }

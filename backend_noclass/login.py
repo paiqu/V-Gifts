@@ -2,11 +2,11 @@
     This file includes functions related to login/register
     for both user and admin, they are separated functions
     with similar layout. They are always used in different
-    website (user only / admin only).
+    website (user/admin only).
 """
-import user as us
+import user as usr
 import database as db 
-import admin as ad
+import admin as adm
 import generate_token as gt
 import error as err
 import hashlib
@@ -40,7 +40,7 @@ def register_user(account_name, first_name, last_name, password, email, address,
     # encrypt password 
     encryption = encrypt_password(password)
     # add new user to databse
-    new = us.new_user(account_name, first_name, last_name, encryption, email, address, city, country)
+    new = usr.new_user(account_name, first_name, last_name, encryption, email, address, city, country)
     db.add_user(new)
 
     # auto login user after register
@@ -82,7 +82,7 @@ def logout_user(token):
     """
     temp = db.load_json()
 
-    if us.check_token(token): 
+    if usr.check_token(token): 
         temp["TOKEN_DB"].pop(token)
         db.to_json(temp)
         return True
@@ -117,7 +117,7 @@ def register_admin(name, password, email):
     # encrypt password 
     encryption = encrypt_password(password)
     # add new admin to databse
-    new = ad.new_admin(name, encryption, email)
+    new = adm.new_admin(name, encryption, email)
     db.add_admin(new)
     
     # auto login admin after register
@@ -147,7 +147,7 @@ def register_admin_nologin(name, password, email):
     # encrypt password 
     encryption = encrypt_password(password)
     # add new admin to databse
-    new = ad.new_admin(name, encryption, email)
+    new = adm.new_admin(name, encryption, email)
     db.add_admin(new)
 
     return {}
@@ -186,7 +186,7 @@ def logout_admin(token):
         This function logout admin
     """
     temp = db.load_json()
-    if us.check_token(token):
+    if usr.check_token(token):
         temp["TOKEN_DB"].pop(token)
         db.to_json(temp)
         return True
