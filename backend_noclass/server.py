@@ -108,7 +108,7 @@ def adm_logout():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = login.logout_admin(token)
@@ -120,7 +120,7 @@ def adm_logout():
 def adm_profile():
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.show_profile(aid)
@@ -131,7 +131,7 @@ def adm_edit():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     name = data["name"]
@@ -147,7 +147,7 @@ def new_product():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     name = data["name"]
@@ -167,7 +167,7 @@ def edit_product():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     id = data["id"]
@@ -253,7 +253,7 @@ def usr_logout():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = login.logout_user(token)
@@ -266,7 +266,7 @@ def usr_logout():
 def usr_profile():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.show_profile(user_id)
@@ -279,7 +279,7 @@ def change_password():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     opassword = data["old_password"]
@@ -296,7 +296,7 @@ def add_fund():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     num = int(data["num"])
@@ -311,7 +311,7 @@ def add_cart():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     pid = data["product_id"]
@@ -331,7 +331,7 @@ def remove_cart():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     pid = data["product_id"]
@@ -349,7 +349,7 @@ def cart_change():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     pid = data["product_id"]
@@ -369,7 +369,7 @@ def cost_cart():
     # token = data["token"]
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     cart = usr.show_user_cart(user_id)
@@ -382,7 +382,7 @@ def cost_cart():
 def cart_list():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.show_all_cart(user_id)
@@ -393,7 +393,7 @@ def create_order():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     # list : [[product_id, amount]
@@ -409,7 +409,7 @@ def rate_order():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     oid = data["order_id"]
@@ -424,7 +424,7 @@ def refund_order():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     oid = data["order_id"]
@@ -437,7 +437,7 @@ def refund_order():
 def order_list():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.show_all_order(user_id)
@@ -448,7 +448,7 @@ def admin_get_all_user():
     # date = request.get_json()
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.get_user_list()
@@ -458,7 +458,7 @@ def admin_get_all_user():
 def admin_get_all_order():
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.get_all_order()
@@ -468,7 +468,7 @@ def admin_get_all_order():
 def all_admin():
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.get_all_admin()
@@ -479,14 +479,14 @@ def admin_regesiter_admin():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     name = data["name"]
     password = data["password"]
     email = data["email"].lower()
     try:
-        result = login.register_adm_nologin(name, password, email)
+        result = login.register_admin_nologin(name, password, email)
     except err.InvalidUsername as iuerr:
         raise iuerr
     except err.InvalidEmail as ieerr:
@@ -513,7 +513,7 @@ def get_product_all():
         user_id = -1
     else:
         try:
-            user_id = login.token_to_idd(token)
+            user_id = login.token_to_id(token)
         except err.InvalidToken as error:
             raise error
     result = usr.show_product_lst(page, user_id)
@@ -528,7 +528,7 @@ def get_product_by_search():
     ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
     price_rg = data["price_range"] # [min_price, max_price]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     user_id = -1
@@ -548,7 +548,7 @@ def user_edit_info():
     city        = data["city"]
     country     = data["country"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.edit_info_user(user_id, fname, lname, address, city, \
@@ -572,7 +572,7 @@ def prod_edit_info():
 def user_get_interest():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     rt = db.get_interest_lst()
@@ -586,7 +586,7 @@ def user_set_interest():
     token           = data['token']
     interest_lst    = data['interest_lst']
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     rt = db.edit_user_interest(user_id, interest_lst)
@@ -598,7 +598,7 @@ def user_refund_order():
     token           = data['token']
     order_id        = data['order_id']
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     rt = usr.order_refund(user_id, order_id)

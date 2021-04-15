@@ -489,7 +489,7 @@ def show_profile(u_id, db_name = 'database.json'):
 #             return True
 #     return False
 
-def check_token_token(token, db_name = 'database.json'):
+def check_token(token, db_name = 'database.json'):
     temp = db.load_json(db_name)
     for user_token, token_id in temp["TOKEN_DB"].items():
         if token == user_token:
