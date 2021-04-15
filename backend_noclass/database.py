@@ -7,6 +7,7 @@
 """
 import json
 import admin as adm
+from chatbot import TEST_KEYWORDS
 # main content
 # ID_DB = {
 #     """
@@ -24,16 +25,22 @@ import admin as adm
 # }
 
 # global
-TYPE_OF_PRODUCTS_INIT = 3
+TYPE_OF_PRODUCTS_INIT = 11
 
 def init_db_withoutadm():
     return {
         "TYPE_OF_PRODUCTS": TYPE_OF_PRODUCTS_INIT,   # dimension of interests
-        "PROD_CATAGORY":["test_cata_01", 
-                        "test_cata_02", 
-                        "test_cata_03", 
-                        # "test_cata_04", 
-                        # "test_cata_05"
+        "PROD_CATAGORY":["for men", 
+                        "for women", 
+                        "for children", 
+                        "for friends", 
+                        "for elder",
+                        "for relationship", 
+                        "foods", 
+                        "tools", 
+                        "luxuries",
+                        "entertainment", 
+                        "working",
                         ],
         "USER_ID": 0,
         "ADMIN_ID": 1,
@@ -204,7 +211,27 @@ def prod_rating_calculator(prod_id, db_name = "database.json"):
         summ += rating[1]
     return summ / len(rating_lst)
 
+def edit_user_interest(u_id, interest_lst, db_name = 'database.json'):
+    """
+        This function is used to directly edit 
+        user"s interest vecetor
+    """
+    valid_id("user", u_id, db_name)
+    temp = load_json(db_name)
+    # 11 product types
+    interest_vector = [0] * 11
+    for ctgry in interest_lst:
+        interest_vector[TEST_KEYWORDS[ctgry]] += 1
+    temp["USER_DB"][str(u_id)]["interest"] = interest_vector
+    to_json(temp, db_name)
+    return {}
 
+def get_interest_lst():
+    '''
+        This functions returns all keywords as options to user
+        to set up user's interest
+    '''
+    return list(TEST_KEYWORDS.keys())
 
 # USER_DB = {
 #     """

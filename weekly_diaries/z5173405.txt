@@ -46,3 +46,19 @@ Due to the homework of other classes this week, I didn't do more, just completed
 After the demo, we found that the implementation of the react framework is more advantageous than bootstrap,
 
 then we decided to convert to react for subsequent coding.
+
+Week 6:
+
+Optimize the layout of login and register pages, group meeting for Retrospective A.
+
+#######################################################################################
+
+Week 7:
+
+Solve the error report of the login and register link backend, complete the user's login and registration.
+
+#######################################################################################
+
+Week 8:
+
+Complete the order history page.

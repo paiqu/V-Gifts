@@ -6,17 +6,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
+import axios from "axios";
+import { useHistory } from 'react-router'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,18 +24,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    // display: "block",
-    // [theme.breakpoints.up("sm")]: {
-    //   display: "block",
-    // },
 		marginRight: theme.spacing(2),
-
   },
 	marketButton: {
-		// display: "none",
-    // [theme.breakpoints.up("sm")]: {
-    //   display: "block",
-    // },
 		marginRight: theme.spacing(2),
 	},
   search: {
@@ -50,11 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
+    width: "50rem",
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -67,7 +51,8 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: "inherit",
-    width: "50rem",
+    // width: "50rem",
+    width: "100%",
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -75,23 +60,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "100%",
-    },
   },
   sectionDesktop: {
-    // display: "none",
-    // [theme.breakpoints.up("md")]: {
-    //   display: "flex",
-    // },
     display: 'flex',
   },
-  // sectionMobile: {
-  //   display: "flex",
-  //   [theme.breakpoints.up("md")]: {
-  //     display: "none",
-  //   },
-  // },
   toolBar: {
     minHeight: "10vh",
   },
@@ -109,87 +81,62 @@ export default function NavBar() {
 
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [searchInput, setSearchInput] = React.useState("");
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const handleSearchChange = event => {
+    setSearchInput(event.target.value);
+  }
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleSearch = () => {
+    history.push(`/products?keyword=${searchInput}`);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
+  const NotLoggedIn = (
+    <Button
+      component={Link}
+      to={'/login'}
+      variant="outlined"
     >
-      <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log out</MenuItem>
-    </Menu>
+      Login/Register
+    </Button>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  // eslint-disable-next-line
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
+  const LoggedInProfile = (
+    <div>
+      <IconButton
+        aria-label="cart"
+        color="inherit"
+        component={Link}
+        to={ `/profile//cart`}
+      >
+        <Badge badgeContent={0} color="secondary">
+          <ShoppingCartIcon />
+        </Badge>
+      </IconButton>
+      <Button
+        component={Link}
+        to={ token ? `/profile/` : "/login"}
+        edge="end"
+        aria-label="account of current user"
+        color="inherit"
+        className={classes.logo}
+      >
+        <AccountCircle />
+        Hi, Pai
+      </Button>
+    </div>
   );
+
+  const renderProfile = () => {
+    if (token) {
+      return <LoggedInProfile />
+    } else {
+      return <NotLoggedIn />
+    }
+  };
+
 
   return (
     <div className={classes.grow}>
@@ -208,22 +155,24 @@ export default function NavBar() {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/'}
+						to={'/products?keyword='}
 						className={classes.title} 
 						variant="h4"
 						noWrap
 					>
             V-Gifts
           </Typography>
-					<Button
+					{/* <Button
 						className={classes.marketButton}
 						component={Link}
-						to={'/products'}
+						to={{
+              pathname: '/products',
+            }}
 						style={{color: theme.palette.primary.contrastText}}
 						variant="outlined"
 					>
             Market
-					</Button>
+					</Button> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -235,53 +184,21 @@ export default function NavBar() {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              onChange={handleSearchChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton 
-              aria-label="cart" 
-              color="inherit"
-              component={Link}
-              to={ `/profile/${token}/cart`}
-            >
-              <Badge badgeContent={0} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-            {/* <IconButton aria-label="show 5 new notifications" color="inherit">
-              <Badge badgeContent={5} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
-            <IconButton
-							component={Link}
-							to={ token ? `/profile/${token}` : "/login"}
-              edge="end"
-              aria-label="account of current user"
-              // aria-controls={menuId}
-              // aria-haspopup="true"
-              // onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            {token && LoggedInProfile}
+            {!token && NotLoggedIn}
           </div>
-          {/* <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div> */}
         </Toolbar>
       </AppBar>
-      {/* {renderMobileMenu} */}
-      {renderMenu}
     </div>
   );
 }

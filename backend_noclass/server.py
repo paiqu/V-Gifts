@@ -493,6 +493,78 @@ def get_product_all():
     result = usr.show_product_lst(page, user_id)
     return dumps(result)
 
+@app.route("/product/search", methods = ["POST"])
+def get_product_by_search():
+    data = request.get_json()
+    token = data["token"]
+    page = int(data["page"])
+    keyword = data["keyword"]
+    ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
+    price_rg = data["price_range"] # [min_price, max_price]
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    user_id = -1
+    if price_rg == []:
+        result = wbp.search_filter_recommendation(keyword, ctgry, [0, 999999], user_id, page)
+    else:
+        result = wbp.search_filter_recommendation(keyword, ctgry, price_rg, user_id, page)
+    return dumps(result)
+
+@app.route("/user/edit", methods = ["POST"])
+def user_edit_info():
+    data = request.get_json()
+    token       = data["token"]
+    fname       = data["fname"]
+    lname       = data["lname"]
+    address     = data["address"]
+    city        = data["city"]
+    country     = data["country"]
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    result = usr.edit_info_user(user_id, fname, lname, address, city, \
+            country, 'database.json')
+    return dumps(result)
+
+@app.route("/product/edit", methods = ["POST"])
+def prod_edit_info():
+    data = request.get_json()
+    prod_id         = data["prod_id"]
+    prod_name       = data["prod_name"]
+    prod_descrip    = data["prod_descrip"]
+    prod_price      = data["prod_price"]
+    prod_delivery   = data["prod_delivery"]
+    prod_pic        = data["prod_pic"]
+    result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
+                prod_delivery, prod_pic, db_name = 'database.json')
+    return dumps(result)
+
+@app.route("/user/get_interest", method = ["GET"])
+def user_get_interest():
+    token = request.args.get("token")
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.get_interest_lst()
+    return dumps({
+        "interest_list": rt
+    })
+
+@app.route("/user/set_interest", method = ["POST"])
+def user_set_interest():
+    data = request.get_json()
+    token           = data['token']
+    interest_lst    = data['interest_lst']
+    try:
+        user_id = login.token_to_idd(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.edit_user_interest(user_id, interest_lst)
+    return dumps(rt)
 
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))

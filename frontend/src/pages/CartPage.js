@@ -56,13 +56,8 @@ function CartPage(props) {
     })
     .catch((err) => {});
 
-  }), [token])
+  }), [token]);
 
-  // const totalPayment = () => {
-  //   let total = 0;
-
-  //   return products.reduce((sum, x) => sum + x[] * x[])
-  // }
 
   const handleTotalPaymentChange = (change) => {
     setTotalPayment(totalPayment + change);

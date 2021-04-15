@@ -7,6 +7,9 @@ import Box from '@material-ui/core/Box';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import axios from 'axios';
 import AuthContext from '../AuthContext';
+import { Link } from 'react-router-dom';
+import ButtonBase from '@material-ui/core/ButtonBase';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,23 +38,23 @@ export default function OrderCard(props) {
     const token = React.useContext(AuthContext).user;
     const date = moment(parseFloat(props.purchase_date*1000)).format("YYYY-MM-DD HH:mm:ss");
     const [rating, setRating] = useState({
-      disabled: false,
-      value: 0
+      disabled: props.rating === 0 ? false:true,
+      value: props.rating
     });
 
     const handleChange = () => event => {
       console.log(event.target.value);
       console.log(props.order_id);
       console.log(token);
-      /**
-        axios.post('/order/rate',{
-        token: token,
-        order_id: id,
-        rating: rating
+      
+      axios.post('/order/rate',{
+        "token": `${token}`,
+        "order_id": parseInt(props.order_id),
+        "rating": parseInt(event.target.value)
       }).then(res => {
         console.log(res);
       })
-       */
+      
       setRating({
         disabled: true,
         value: event.target.value
@@ -72,18 +75,13 @@ export default function OrderCard(props) {
         alignItems="center"
       >
         <Grid item xs={3}>
-          {/* <ButtonBase
+          <ButtonBase
             className={classes.image}
             component={Link}
             to={`/product/${props.product_id}`}
           >
             <img className={classes.img} src={props.pic_link} alt='props.product_id' />
-          </ButtonBase> */}
-          <img className={classes.img} src={props.pic_link} alt='props.product_id'
-            // style={{
-            //   border: `1px solid ${theme.palette.primary.contrastText}`
-            // }}
-          />
+          </ButtonBase>
         </Grid>
 
         <Grid item xs={4}>

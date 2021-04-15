@@ -5,37 +5,31 @@
 import json
 import database as db
 import admin as ad
+import user as us
+import webpage as wb
 
-KEYWORDS_LST_haoran = [
-    # targets
-    'men', 'man', 'women', 'woman', 'couple', 'mother', 'bride', 'groom', 'bridegroom',
-    'father', 'love', 'friendship', 'friend', 'friends', 'girls', 'lady', 'ladies',
-    'girl', 'boys', 'boy', 'birthday', 'family', 'mother\'s', 'father\'s', 
-    'men\'s', 'man\'s', 'women\'s', 'woman\'s',
+# KEYWORDS_LST_haoran = [
+#     # targets
+    
+    
 
-    # types
-    'cloth', 'cotton', 'polyester', 'hoodies', 'hoody', 'food',
-    'chocolate', 'speaker', 'music', 'bluetooth', 'cooking', 'organic',
-    'grilling', 'grill', 'cook', 'pork', 'beef', 'snack', 'sweet', 'hot',
-    'spicy', 'protein', 'health', 'healthy', 'candle', 'honey', 'wellness',
-    'bag', 'travel', 'cute', 'outdoor', 'gluten-free', 'luxury',
-    'office', 'pen', 'pens', 'professional', 'gold', 'necklace',
-    'ring', 'jewelry'
+#     # types
+#      'cotton', 'polyester', 'speaker', 'music', 'bluetooth', 
+    
+#     'necklace',
+#     'jewelry'
+# ]
 
+# KEYWORDS_LST_yifan = [
+#     # tergets
+#     'fandom', 'religion', 'tennage', 'musicion', 
+#     # types
+#     'wine tumbler', 'mug', 'candle', 'cushion', 'glass', 
+#     'cross', 'metal', 'star war',
+#     'cookbook', 'book',  'gadget', 'brick', 
+#     'water', 'player', 
+# ]
 
-]
-
-KEYWORDS_LST_yifan = [
-    # tergets
-    'mom', 'dad', 'grandma', 'grandmother', 'grandpa', 'grandfather', 'fandom', 'vegetarianism',
-    'vegan', 'religion', 'teen', 'tennage', 'kid', 'kids', 'musicion', 'music',
-    # types
-    'wine tumbler', 'necklace', 'earrings', 'jewelry', 'mug', 'candle', 'cushion', 'glass', 
-    'whiskey', 'cocktail', 'music', 'music box', 'cross', 'metal', 'pendant', 'star war',
-    'flash', 'notebook', 'cookbook', 'book', 'survival gear', 'gadget', 'lego', 'brick', 'toy',
-    'water', 'piano', 'player', 'bluetooth', 'bag'
-
-]
 
 def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     # temp = db.init_db()
@@ -55,7 +49,7 @@ def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
     #     }
     # ]
     # load products into db
-    for prod in lst:
+    for prod in prod_lst:
         db.add_prod(ad.new_product(prod['name'], prod['price'], prod['description'],\
                             None, prod['delivery_days'], prod['pic_link'], file_name), file_name)
     # show db
@@ -64,7 +58,7 @@ def add_product_to_db_special(prod_lst, file_name = 'database_manual.json'):
 if __name__ == "__main__":
     db.to_json(db.init_db(), 'database_manual.json')
 
-    lst = [
+    lst_hr = [
             {
                 'name': 'A N KINGPiiN Inspirational Bracelets for Women Inspirational Gift for Women Girls Men Motivational Birthday Cuff Bangle Friendship Personalized Mantra Jewelry Come Gift Box',
                 'price': 12,
@@ -282,7 +276,7 @@ if __name__ == "__main__":
         {
             'name': "Gifts for Grandma - Grandma Gifts Set Includes Sterling Silver Necklace，Earrings, Pink Marble Jewelry Trays,Pink Marble Mug, Scented Candle and Flower – Best Mother's Day Birthday Gift Set",
             'price': 47,
-            'description': "♥GRANDMA GIFTS SET PACK🎁-'Best Gandma Ever' Pink Marble Mug and a gold spoon, Pink Marble Jewelry Trays with 925 sterling silver necklace and a pair of Earrings,a scented candle and a bunch of carnations. Packaged with CUTE box and gift card. ♥MOTHERS DAY GIFTS FOR NANA-Perfect gift for the fabulous people in your life! Individually gift boxed that is sure to bring a smile. ♥BEST GRANDMA GIFT IDEAS-All the gifts are beautifully assorted, your grandma will love it. Heavy box with very cute and great presentation. ♥NANA GIFTS SET READY-Our gifts box is designed to provide the best experience. No need to repackage. ♥THE BEST VALUE-If any other issue, Please feel free to contact us for solution, we’ll reply you in 24 hours, we will try our 200% effort to make you 100% satisfy. SO HURRY UP! BUY NOW!",
+            'description': "GRANDMA GIFTS SET PACK -'Best Gandma Ever' Pink Marble Mug and a gold spoon, Pink Marble Jewelry Trays with 925 sterling silver necklace and a pair of Earrings,a scented candle and a bunch of carnations. Packaged with CUTE box and gift card. MOTHERS DAY GIFTS FOR NANA-Perfect gift for the fabulous people in your life! Individually gift boxed that is sure to bring a smile. BEST GRANDMA GIFT IDEAS-All the gifts are beautifully assorted, your grandma will love it. Heavy box with very cute and great presentation. NANA GIFTS SET READY-Our gifts box is designed to provide the best experience. No need to repackage. THE BEST VALUE-If any other issue, Please feel free to contact us for solution, we’ll reply you in 24 hours, we will try our 200% effort to make you 100% satisfy. SO HURRY UP! BUY NOW!",
             'delivery_days': 7,
             'pic_link': '/img/products/y002.jpg'
         },
@@ -359,7 +353,7 @@ if __name__ == "__main__":
         {
             'name': 'The Gift of Death, Second Edition & Literature in Secret (Religion and Postmodernism)',
             'price': 100,
-            'description': "The Gift of Death, Jacques Derridas most sustained consideration of religion, explores questions first introduced in his bookGiven Time about the limits of the rational and responsible that one reaches in granting or accepting death, whether by sacrifice, murder, execution, or suicide. Derrida analyzes Czech philosopher Jan PatockasHeretical Essays in the Philosophy of History and develops and compares his ideas to the works of Heidegger, Lévinas, and Kierkegaard. One of Derridas major works,The Gift of Death resonates with much of his earlier writing, and this highly anticipated second edition is greatly enhanced by David Willss updated translation. This new edition also features the first-ever English translation of DerridasLiterature in Secret. In it, Derrida continues his discussion of the sacrifice of Isaac, which leads to bracing meditations on secrecy, forgiveness, literature, and democracy. He also offers a reading of KafkasLetter to His Father and uses the story of the flood in Genesis as an embarkation point for a consideration of divine sovereignty. An important contribution to the critical study of ethics that commends itself to philosophers, social scientists, scholars of religion . . . [and those] made curious by the controversy that so often attends Derrida.Booklist, on the first edition",
+            'description': "The Gift of Death, Jacques Derrida's most sustained consideration of religion, explores questions first introduced in his bookGiven Time about the limits of the rational and responsible that one reaches in granting or accepting death, whether by sacrifice, murder, execution, or suicide. Derrida analyzes Czech philosopher Jan Patocka'sHeretical Essays in the Philosophy of History and develops and compares his ideas to the works of Heidegger, Lévinas, and Kierkegaard. One of Derrida's major works,The Gift of Death resonates with much of his earlier writing, and this highly anticipated second edition is greatly enhanced by David Wills's updated translation. This new edition also features the first-ever English translation of Derrida'sLiterature in Secret. In it, Derrida continues his discussion of the sacrifice of Isaac, which leads to bracing meditations on secrecy, forgiveness, literature, and democracy. He also offers a reading of Kafka'sLetter to His Father and uses the story of the flood in Genesis as an embarkation point for a consideration of divine sovereignty. An important contribution to the critical study of ethics that commends itself to philosophers, social scientists, scholars of religion.",
             'delivery_days': 15,
             'pic_link': '/img/products/y013.jpg'
         },
@@ -421,5 +415,25 @@ if __name__ == "__main__":
         }
     ]
 
-    add_product_to_db_special(lst)
+    add_product_to_db_special(lst_hr)
     add_product_to_db_special(lst_yifan)
+    sample_user = us.new_user('u_test_1', 'u_test_1', 'u_test_1', 'password', 'email@em.com', \
+            'u_test_1', 'u_test_1', 'u_test_1', 'database_manual.json')
+    db.add_user(sample_user, 'database_manual.json')
+    vec = [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0]
+    us.setup_interest(sample_user['id'], vec, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 1, 2, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 5, 6, 'database_manual.json')
+    us.add_product_to_cart(sample_user['id'], 3, 4, 'database_manual.json')
+    us.purchase(sample_user['id'], [[1,2], [3,8]], 'database_manual.json')
+    all_prod = wb.keyword_searcher("", 'database_manual.json')
+    print(wb.keyword_searcher("honey", 'database_manual.json'))
+    print(wb.prod_filter_type(all_prod, [], [50, 9999999], 'database_manual.json'))
+    # print(wb.prod_recommendation(sample_user['id'], all_prod, 'database_manual.json'))
+    print(wb.search_filter_recommendation("", ctgry = [], price_rg = [0, 99999999], 
+            user_id = sample_user['id'], page = -1, db_name = 'database_manual.json'))
+    print(wb.search_filter_recommendation("", ctgry = [], price_rg = [0, 99999999], 
+            user_id = sample_user['id'], page = 2, db_name = 'database_manual.json'))
+    # temp = db.load_json('database_manual.json')
+    # db.pretty_print(temp)

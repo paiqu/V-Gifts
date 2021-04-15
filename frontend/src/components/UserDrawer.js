@@ -9,11 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
 import HomeIcon from '@material-ui/icons/Home';
@@ -24,6 +22,7 @@ import axios from 'axios';
 import AuthContext from '../AuthContext';
 import OrderCard from './OrderCard';
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ListAltIcon from '@material-ui/icons/ListAlt';
 
 
 const drawerWidth = 240;
@@ -78,7 +77,7 @@ export default function UserDrawer(props) {
     users: false,
   });
 
-  const [order, setOrder] = React.useState([]);
+  const [orders, setOrders] = React.useState([]);
   
   React.useEffect(() => {
     axios.get('/order/list',{
@@ -87,16 +86,17 @@ export default function UserDrawer(props) {
       }
     }).then(res => {
       console.log(res.data);
-      setOrder(res.data);
+      setOrders(res.data);
     })
   }, [token])
   
-  // const renderUsers = (
-  //   <UsersDataGrid />
-  // );
 
   const renderUserHome = (
-    <UserHome token={token} profile={profile}/>
+    <UserHome 
+      token={token} 
+      profile={profile}
+      ordersNum={orders.length}
+    />
   );
 
   const handleDrawerOpen = () => {
@@ -140,6 +140,7 @@ export default function UserDrawer(props) {
         localStorage.removeItem('token');
 
         // after log out, redirect to home page
+        props.history.go(0);
         props.history.push('/');
       }) 
       .catch((err) => {console.log(err)});
@@ -193,7 +194,7 @@ export default function UserDrawer(props) {
               <ListItemText primary={"Back to Market"} />
             </ListItem>
             <ListItem button key={"Orders"} onClick={displayOrders}>
-              <ListItemIcon><AttachMoneyIcon /></ListItemIcon>
+              <ListItemIcon><ListAltIcon /></ListItemIcon>
               <ListItemText primary={"Orders"} />
             </ListItem>
             <ListItem button key={"Logout"} onClick={handleLogout} >
@@ -222,12 +223,12 @@ export default function UserDrawer(props) {
               marginBottom: theme.spacing(5),
             }}
           />
-          {display.orders && <h1>Order history</h1>}
+          {display.orders && <h1>Orders history</h1>}
 
         </Box>
         {display.home && renderUserHome}
         {/* {display.users && renderUsers} */}
-        {display.orders && order.map((item, index) => 
+        {display.orders && orders.map((item, index) => 
           <OrderCard key={index} {...item}/> 
         )}
       </main>

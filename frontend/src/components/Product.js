@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -8,6 +8,9 @@ import Box from '@material-ui/core/Box';
 import axios from 'axios';
 import QuantitySelect from './QuantitySelect';
 import AuthContext from '../AuthContext';
+import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
+import NotLoginModal from '../components/modals/NotLoginModal';
+
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -75,9 +78,30 @@ export default function Product(props) {
     }
   };
 
+  const [psModalOpen, setPsModalOpen] = useState(false);
+  const [nlModalOpen, setNlModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(1);
+
+
+  const handlePsModalOpen = () => {
+    setPsModalOpen(true);
+  };
+
+  const handlePsModalClose = () => {
+    setPsModalOpen(false);
+  };
+  const handleNlModalOpen = () => {
+    setNlModalOpen(true);
+  };
+
+  const handleNlModalClose = () => {
+    setNlModalOpen(false);
+  };
+
 
   const handlePurchase = () => {
     if (!token) {
+      handleNlModalOpen();
       return;
     }
 
@@ -97,6 +121,8 @@ export default function Product(props) {
     })
     .then(response => {
       console.log(response.data);
+      setModalType(1);
+      handlePsModalOpen();
     })
     .catch((err) => {
       console.log(err);
@@ -104,6 +130,11 @@ export default function Product(props) {
   };
 
   const handleAddToCart = () => {
+    if (!token) {
+      handleNlModalOpen();
+      return;
+    }
+
     axios.post("/user/cart/add",
       {
         token: token,
@@ -112,10 +143,12 @@ export default function Product(props) {
       }
     )
     .then((response) => {
-
+      setModalType(2);
+      handlePsModalOpen();
     })
     .catch((err) => {});
   };
+
 
   return (
     <div>
@@ -138,8 +171,8 @@ export default function Product(props) {
         <Grid item xs={7} className={classes.details}>
           <Typography variant="h4">{infos.name}</Typography>
           <Box display="flex" alignItems="center">
-            <Rating name={`product-rating`} value={infos.rating} readOnly/>
-            <Typography variant="caption">100 reviews</Typography>
+            <Rating name={`product-rating`} value={infos.rating} precision={0.5} readOnly/>
+            {/* <Typography variant="caption">100 reviews</Typography> */}
           </Box>
           <Typography variant="h4">
             ${infos.price}
@@ -180,6 +213,17 @@ export default function Product(props) {
           </Box>
         </Grid>
       </Grid>
+      <PurchaseSucessModal
+        handleClose={handlePsModalClose}
+        open={psModalOpen}
+        token={token}
+        type={modalType}
+      />
+      <NotLoginModal
+        handleClose={handleNlModalClose}
+        open={nlModalOpen}
+        token={token}
+      />
     </div>
   );
 }

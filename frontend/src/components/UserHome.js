@@ -6,16 +6,13 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
 import axios from 'axios';
 import { useHistory } from 'react-router'
 
-
-import StoreIcon from '@material-ui/icons/Store';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import FaceIcon from '@material-ui/icons/Face';
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 const iconSize = 8;
 
@@ -56,6 +53,7 @@ function UserHome(props) {
     const token = props.token;
     const profile = props.profile;
     const [fundToAdd, setFundToAdd] = React.useState(profile['fund']);
+    const [cart, setCart] = React.useState([]);
 
     const handleFundToAddChange = (e) => {
       setFundToAdd(e.target.value);
@@ -71,12 +69,51 @@ function UserHome(props) {
         history.go(0);
       })
       .catch((err) => {});
-
     }
+
+    React.useEffect((() => {
+      axios.get('/user/cart/list', {
+        params: {
+          token,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        setCart(data);
+      })
+      .catch((err) => {});
+    }), [token]);
+  
 
     return (
       <div classeName={classes.root}>
         <Grid container spacing={3}>
+          <Grid item md={3} xs={12}>
+            <Card className={classes.gridItem} variant="outlined">
+              <CardContent className={classes.cardContent}>
+                <div className={classes.cardTitle}>
+                  <FaceIcon className={classes.cardIcon}/>
+                  <Typography variant="h3" classname={classes.cardTitleText}>
+                    My Details
+                  </Typography>
+                </div>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  Name: {profile["first_name"]} {profile["last_name"]}
+                </Typography>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  Username: {profile["username"]}
+                </Typography>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  Email: {profile["email"]}
+                </Typography>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  Address: {profile["address"]}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid> 
+
           <Grid item md={3} xs={12}>
             <Card className={classes.gridItem}  variant="outlined">
               <CardContent className={classes.cardContent}>
@@ -121,39 +158,18 @@ function UserHome(props) {
                 </Button>
               </CardContent>
             </Card>
-          </Grid> 
+          </Grid>
           <Grid item md={3} xs={12}>
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <StoreIcon className={classes.cardIcon}/>
+                  <ShoppingCartIcon className={classes.cardIcon}/>
                   <Typography variant="h3" classname={classes.cardTitleText}>
-                    Market
+                    Cart
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  12 messages in total
-                  <br />
-                  <br />
-                  3 unread messages
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid> 
-          <Grid item md={3} xs={12}>
-            <Card className={classes.gridItem} variant="outlined">
-              <CardContent className={classes.cardContent}>
-                <div className={classes.cardTitle}>
-                  <GroupIcon className={classes.cardIcon}/>
-                  <Typography
-                    variant="h3"
-                    classname={classes.cardTitleText}
-                  >
-                    Users
-                  </Typography>
-                </div>
-                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  50 users registered
+                  {cart.length} items in cart
                 </Typography>
               </CardContent>
             </Card>
@@ -168,10 +184,7 @@ function UserHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  50 orders in total
-                  <br />
-                  <br />
-                  4 orders placed today
+                  {props.ordersNum} orders in total
                 </Typography>
               </CardContent>
             </Card>
