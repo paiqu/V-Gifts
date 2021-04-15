@@ -52,7 +52,6 @@ mail = Mail(app)
 
 @app.route("/user/login/send_mail/", methods = ["POST"])
 def send_mail():
-    MAIL_USERNAME = ('oldjeffspectator@gmail.com', 'jeffLHR123')
     data = request.get_json()
     email = data["email"]
     num_str = ''.join(str(random.choice(range(10))) for i in range(6))
@@ -60,9 +59,10 @@ def send_mail():
     usr.change_password(user_test["id"], user_test["password"], num_str)
     msg = mail.send_message(
         'Send Mail for reset password',
-        sender = MAIL_USERNAME,
+        sender = ['ANONYMOUS', 'oldjeffspectator@gmail.com'],
         recipients = [email],
-        body="This is your temporary passowrd, please change it as soon as possible! Password: " + num_str 
+        body="This is your temporary passowrd, please change it as soon as \
+            possible! Password: " + num_str
     )
     mail.send(msg)
     return 'Mail sent'
