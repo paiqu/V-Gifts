@@ -91,21 +91,6 @@ def delete_product(prod_id, db_name = "database.json"):
             "prod_info": rt
         }
 
-def edit_prod_category(prod_id, category_lst):
-    """
-        *** NO LONGER USED ***
-        This function can update the category vector of a product
-    """
-    db.valid_id("product", prod_id)
-    dbs = db.load_json()
-    if len(category_lst) != dbs["TYPE_OF_PRODUCTS"]:
-        raise ValueError()
-        return {}
-    else:
-        dbs["PRODUCT_DB"][str(prod_id)]["category"] = category_lst
-        db.to_json(dbs)
-    return {}
-
 def show_product_detail(prod_id, db_name = "database.json"):
     """
         This function shows the details of a product

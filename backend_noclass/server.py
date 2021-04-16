@@ -19,6 +19,13 @@ from json import dumps
 import random
 import sys
 
+
+ALLOWED_IMAGES = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_image(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
+
 def defaultHandler(err):
     response = err.get_response()
     print("response", err, err.get_response())
@@ -549,15 +556,32 @@ def user_edit_info():
 @app.route("/product/edit", methods = ["POST"])
 def prod_edit_info():
     data = request.get_json()
-    prod_id         = data["prod_id"]
-    prod_name       = data["prod_name"]
-    prod_descrip    = data["prod_descrip"]
-    prod_price      = data["prod_price"]
-    prod_delivery   = data["prod_delivery"]
-    prod_pic        = data["prod_pic"]
+    prod_id = data["prod_id"]
+    prod_name = data["prod_name"]
+    prod_descrip = data["prod_descrip"]
+    prod_price = data["prod_price"]
+    prod_delivery = data["prod_delivery"]
+    if "file" not in request.files:
+        flag = False
+    else:
+        image = request.files["file"]
+        if image.filename == "":
+            flag = False
+        elif allowed_image(image.filename) == False:
+            flag = False
+        else :
+            flag = True
+    if flag == True:
+        format = image.filename.rsplit('.', 1)[1].lower()
+        prod_pic = "/img/products/" + "pro" + str(prod_id) + "." + format
+    else:
+        dbs = db.load_json()
+        prod_pic = dbs["PRODUCT_DB"][str(prod_id)]["pic"]
     result = pdt.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
                 prod_delivery, prod_pic, db_name = "database.json")
-    return dumps(result)
+    return dumps({
+        "pic_link": prod_pic
+    })
 
 @app.route("/user/get_interest", methods = ["GET"])
 def user_get_interest():
@@ -584,4 +608,4 @@ def user_set_interest():
     return dumps(rt)
 
 if __name__ == "__main__":
-    app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
+    app.run(port = (int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
