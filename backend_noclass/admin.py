@@ -1,34 +1,19 @@
-'''
-    This fill contains function related to admin
-'''
-'''
-ADMIN_DB = {
-    # format:
-    '<id>':{                # type: string
-        'id': 2             # type: int, serial
-        'name': 'YYF'       # type: string
-        'admin_token': '198ANFu72oDJ0827'
-                            # type: string
-    }
-}
-'''
-import csv
+"""
+    This fill contains functions related to admin
+"""
+
+
 import database as db
-import datetime as dt
-import user as us
-import chatbot as ct
-import login
+import user as usr
+import product as pdt
 
-# class Admin:
-#     def __init__(name, password, email):
-#         self.id = None
-#         self.name = name
-#         self.password = password
-#         self.email = email
 
-# init
+# Object types
 
 def new_preset_admin(name, password, email):
+    """
+        This fuction create a preset admin with id = 1
+    """
     return {
         "id": 1,
         "name": name,
@@ -36,8 +21,11 @@ def new_preset_admin(name, password, email):
         "email": email
     }
 
-def new_admin(name, password, email, db_name = 'database.json'):
-    new_id = db.id_generator('admin', db_name)
+def new_admin(name, password, email, db_name = "database.json"):
+    """
+        This fuction create new admin with input data
+    """
+    new_id = db.id_generator("admin", db_name)
     return {
         "id": new_id,
         "name": name,
@@ -45,176 +33,67 @@ def new_admin(name, password, email, db_name = 'database.json'):
         "email": email
     }
 
-def new_product(name, price, description, category, deli_days, pic_link, db_name = 'database.json'):
-    '''
-        create a new product,
-        category should be a lst of int with length of
-        TYPE_OF_PRODUCTS
-    '''
-    new_id = db.id_generator('product', db_name)
-    # assert db.check_interest_dim(category)
-    # catagory is now calculated by query_analysis
-    category = None
-    if description == "" or description is None:
-        description = name
-        category = ct.query_analysis_test3(name)
-    else:
-        category = ct.query_analysis_test3(name + '. ' + description)
-    return {
-        "id": new_id,
-        "name": name,
-        "price": price,
-        "description": description,
-        "category": category, # [0] * temp['TYPE_OF_PRODUCTS']
-        "delivery": deli_days,
-        "ratings": [],
-                    # [(u_id, rating), ...]
-        "pic": pic_link
-    }
 
+# Admin related operators
 
-# editors
-
-def edit_admin(admin_id, name, password, email, db_name = 'database.json'):
-    '''
+def edit_admin(admin_id, name, password, email, db_name = "database.json"):
+    """
         This function edits admin info with inputs above
         and returns the id of this admin
-    '''
-    temp = db.load_json(db_name)
-    if str(admin_id) not in temp['ADMIN_DB']:
+    """
+    dbs = db.load_json(db_name)
+    if str(admin_id) not in dbs["ADMIN_DB"]:
         raise KeyError()
-    temp['ADMIN_DB'][str(admin_id)]["name"] = name
-    temp['ADMIN_DB'][str(admin_id)]["password"] = password
-    temp['ADMIN_DB'][str(admin_id)]["email"] = email
-    db.to_json(temp, db_name)
+    dbs["ADMIN_DB"][str(admin_id)]["name"] = name
+    dbs["ADMIN_DB"][str(admin_id)]["password"] = password
+    dbs["ADMIN_DB"][str(admin_id)]["email"] = email
+    db.to_json(dbs, db_name)
     return {
-        'id': admin_id
-    }
-
-def temp_use():
-    temp = db.load_json()
-    passw = login.encrypt_password("admin")
-    print(passw)
-    temp['ADMIN_DB']["1"]["password"] = passw
-    db.to_json(temp)
-
-def edit_product(prod_id, prod_name, prod_descrip, prod_price, \
-                prod_delivery, prod_pic, db_name = 'database.json'):
-    '''
-        This function edits product info with inputs above
-        and returns the id of this product
-    '''
-    temp = db.load_json(db_name)
-    if str(prod_id) not in temp['PRODUCT_DB']:
-        raise KeyError()
-    temp['PRODUCT_DB'][str(prod_id)]["name"] = prod_name
-    # assert db.check_interest_dim(prod_category)
-    prod_category = None
-    if prod_descrip == "" or prod_descrip is None:
-        prod_descrip = prod_name
-        prod_category = ct.query_analysis_test3(prod_name)
-    else:
-        prod_category = ct.query_analysis_test3(prod_name + '. ' + prod_descrip)
-    temp['PRODUCT_DB'][str(prod_id)]["category"] = prod_category
-    temp['PRODUCT_DB'][str(prod_id)]["description"] = prod_descrip
-    temp['PRODUCT_DB'][str(prod_id)]["price"] = prod_price
-    temp['PRODUCT_DB'][str(prod_id)]["delivery"] = prod_delivery
-    temp['PRODUCT_DB'][str(prod_id)]["pic"] = prod_pic
-    db.to_json(temp, db_name)
-    return {
-        'id': prod_id
-    }
-
-def product_id_to_name(prod_id, db_name = 'database.json'):
-    temp = db.load_json(db_name)
-    if str(prod_id) not in temp['PRODUCT_DB']:
-        raise KeyError()
-    return temp['PRODUCT_DB'][str(prod_id)]["name"]
-
-def delete_product(prod_id, db_name = 'database.json'):
-    '''
-        This function deletes a product by id
-        and returns the id of this product
-    '''
-    temp = db.load_json(db_name)
-    if str(prod_id) not in temp['PRODUCT_DB']:
-        raise KeyError()
-    else:
-        rt = temp['PRODUCT_DB'].pop(str(prod_id))
-        db.to_json(temp, db_name)
-        return {
-            'prod_info': rt
-        }
-
-def edit_prod_category(prod_id, category_lst):
-    '''
-        *** NO LONGER USED ***
-        This function can update the category vector of a product
-    '''
-    db.valid_id('product', prod_id)
-    temp = db.load_json()
-    if len(category_lst) != temp['TYPE_OF_PRODUCTS']:
-        raise ValueError()
-        return {}
-    else:
-        temp['PRODUCT_DB'][str(prod_id)]['category'] = category_lst
-        db.to_json(temp)
-    return {}
-
-def change_order_state(order_id, new_state):
-    '''
-        Thi function changes the delivery state of an order
-        # 0: just purchase
-        # 1: delivering
-        # 2: done
-        # 3: cancelled
-    '''
-    assert new_state in [0,1,2,3]
-    db.valid_id('order', order_id)
-    temp = db.load_json()
-    temp['ORDER_DB'][str(order_id)]['state'] = new_state
-    db.to_json(temp)
-    return {
-        'id': order_id,
-        'state': new_state
+        "id": admin_id
     }
 
 def get_user_list():
-    '''
-        This functions returns all user's basic info for admin
-    '''
-    temp = db.load_json()
-    rt = []
-    for key in temp['USER_DB'].keys():
-        rt.append({
-            'user_id': temp['USER_DB'][key]['id'],
-            'account_name': temp['USER_DB'][key]['name'],
-            'first_name': temp['USER_DB'][key]['fname'],
-            'last_name': temp['USER_DB'][key]['lname'],
-            'email': temp['USER_DB'][key]['email'],
-            'address': temp['USER_DB'][key]['address'],
-            'city': temp['USER_DB'][key]['city'],
-            'country': temp['USER_DB'][key]['country']
+    """
+        This functions returns all user's basic infomation for admin
+    """
+    dbs = db.load_json()
+    usr_lst = []
+    for key in dbs["USER_DB"].keys():
+        usr_lst.append({
+            "user_id": dbs["USER_DB"][key]["id"],
+            "account_name": dbs["USER_DB"][key]["name"],
+            "first_name": dbs["USER_DB"][key]["fname"],
+            "last_name": dbs["USER_DB"][key]["lname"],
+            "email": dbs["USER_DB"][key]["email"],
+            "address": dbs["USER_DB"][key]["address"],
+            "city": dbs["USER_DB"][key]["city"],
+            "country": dbs["USER_DB"][key]["country"]
         })
-    return rt
+    return usr_lst
 
-def show_profile(aid):
-    db.valid_id("admin", aid)
-    temp = db.load_json()
+def show_profile(admin_id):
+    """
+        This function show the details of admin
+    """
+    db.valid_id("admin", admin_id)
+    dbs = db.load_json()
     return {
-        "username": temp["ADMIN_DB"][str(aid)]["name"],
-        "email": temp["ADMIN_DB"][str(aid)]["email"]
+        "username": dbs["ADMIN_DB"][str(admin_id)]["name"],
+        "email": dbs["ADMIN_DB"][str(admin_id)]["email"]
     }
 
 def get_all_order():
-    temp = db.load_json()
-    lst = []
-    for key in temp["ORDER_DB"].keys():
-        uid = temp["ORDER_DB"][key]["user_id"]
-        pid = temp["ORDER_DB"][key]["product_id"]
-        amount = temp["ORDER_DB"][key]["amount"]
-        datte = temp["ORDER_DB"][key]["purchase_date"]
-        state_in_code = temp["ORDER_DB"][key]["state"]
+    """
+        This fuction get all order's details information for all users
+    """
+    dbs = db.load_json()
+    order_lst = []
+    for key in dbs["ORDER_DB"].keys():
+        uid = dbs["ORDER_DB"][key]["user_id"]
+        product_id = dbs["ORDER_DB"][key]["product_id"]
+        amount = dbs["ORDER_DB"][key]["amount"]
+        datte = dbs["ORDER_DB"][key]["purchase_date"]
+        state_in_code = dbs["ORDER_DB"][key]["state"]
         if state_in_code == 0:
             state_in_text = "Just purchase"
         elif state_in_code == 1:
@@ -225,101 +104,31 @@ def get_all_order():
             state_in_text = "Cancelled / Refunded"
         else:
             state_in_text = "Invalid state"
-        lst.append({
+        order_lst.append({
             "order_id": key,
             "user_id": uid,
-            "product_id": pid,
-            "product_name": product_id_to_name(pid),
+            "product_id": product_id,
+            "product_name": pdt.product_id_to_name(product_id),
             "amount": amount,
-            "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
-            "cost": us.individual_price(pid, amount),
+            "pic_link": dbs["PRODUCT_DB"][str(product_id)]["pic"],
+            "cost": usr.individual_price(product_id, amount),
             "purchase_date": int(datte),
             "state_in_code": state_in_code,
             "state_in_text": state_in_text,
-            "rating": temp["ORDER_DB"][key]["rating"]
+            "rating": dbs["ORDER_DB"][key]["rating"]
         })
-    return lst
+    return order_lst
 
 def get_all_admin():
-    temp = db.load_json()
-    lst = []
-    for key in temp["ADMIN_DB"].keys():
-        lst.append({
+    """
+        This fuction get all admin information in database
+    """
+    dbs = db.load_json()
+    admin_lst = []
+    for key in dbs["ADMIN_DB"].keys():
+        admin_lst.append({
             "admin_id": key,
-            "username": temp["ADMIN_DB"][key]["name"],
-            "email": temp["ADMIN_DB"][key]["email"]
+            "username": dbs["ADMIN_DB"][key]["name"],
+            "email": dbs["ADMIN_DB"][key]["email"]
         })
-    return lst
-
-def add_prod_from_csv(filename, db_name = 'database.json'):
-    '''
-        This function allows admin to import prod data from
-        csv file
-    '''
-    if filename[-4:] != '.csv':
-        # print(filename[-4:-1])
-        return 'File format is not accepted'
-    else:
-        csvf = open(filename, 'r')
-        csvfr = csv.reader(csvf)
-        n_prod = []
-        row_n = 0
-        for rows in csvfr:
-            row_n += 1
-            print(rows)
-            # 6 inputs for new_product()
-            if len(rows) == 6:
-                name, price, description, category, \
-                        deli_days, pic_link = rows
-                n_prod.append(new_product(name, int(price), description, category, \
-                        int(deli_days), pic_link, db_name))
-            elif len(rows) == 0:
-                continue
-            else:
-                csvf.close()
-                return 'Error information in provided csv file, row {}, \
-                            roll back database'.format(row_n)
-        # if all fows are good
-        for prod in n_prod:
-            db.add_prod(prod, db_name)
-        csvf.close()
-        return 'Success, {} products imported'.format(row_n)
-
-def add_prod_to_csv(filename, db_name = 'database.json'):
-    '''
-        This function allows admin to import prod data from
-        csv file
-    '''
-    if filename[-4:] != '.csv':
-        # print(filename[-4:-1])
-        return 'File format is not accepted (not *.csv)'
-    else:
-        temp = db.load_json(db_name)
-        csvf = open(filename, 'w', newline='')
-        csvfw = csv.writer(csvf)
-        row_n = 0
-        for prod_key in temp['PRODUCT_DB'].keys():
-            row_n += 1
-            csvfw.writerow([
-                temp['PRODUCT_DB'][prod_key]['name'],
-                temp['PRODUCT_DB'][prod_key]['price'],
-                temp['PRODUCT_DB'][prod_key]['description'],
-                temp['PRODUCT_DB'][prod_key]['category'],
-                temp['PRODUCT_DB'][prod_key]['delivery'],
-                temp['PRODUCT_DB'][prod_key]['pic']
-            ])
-        csvf.close()
-        return "{} rows of products saved into {}".format(row_n, filename)
-
-
-# def order_history():
-#     '''
-#         This function doen't have a purpose yet.
-#     '''
-#     return {}
-
-if __name__ == "__main__":
-    # temp_use()
-    # print(add_prod_from_csv("prod.csv", db_name = 'database.json'))
-    print(add_prod_to_csv('prod.csv', db_name = 'database.json'))
-    pass
+    return admin_lst

@@ -1,13 +1,16 @@
-'''
+"""
     This file implements a chatbot AI based on provided keyword list
     It uses Information Retrieval technic to calculate the 
-        interest vector in user's query and compare with that of 
+        interest vector in user"s query and compare with that of 
         product description, to find the best match.
     Upon if the top match is pretty poor (??? w8 definition), 
         chatbot AI should (??? not decided yet)
-'''
+"""
+
+
 import re
 import database as db
+
 
 TEST_KEYWORDS = {
     "men": [0], "man": [0], "dad": [0], "groom": [0], "bridegroom": [0], 
@@ -26,37 +29,37 @@ TEST_KEYWORDS = {
 NUM_CATA = 11
 
 # NEGATION_KEYWORDS = [
-#     'not',
-#     'don\'t',
-#     'doesn\'t',
-#     'dislike',
-#     'hate',
-#     'bad',
+#     "not",
+#     "don\"t",
+#     "doesn\"t",
+#     "dislike",
+#     "hate",
+#     "bad",
 # ]
 
 # CONTRARY_KEYWORDS = [
-#     'but',
-#     'although',
-#     'though',
-#     'instead',
+#     "but",
+#     "although",
+#     "though",
+#     "instead",
 # ]
 
 TEST_QRY = \
-    'I want a toy for children, and my wife. But I don\'t like it for men.\
-    My neighbor\'s husband doesn\'t like toy.'
+    "I want a toy for children, and my wife. But I don\"t like it for men.\
+    My neighbor's husband doesn't like toy."
 
 TEST_QRY_UPPER = \
-    'I want a toy for children, and my wife. But I don\'t like it for men.\
-    My neighbor\'s husband doesn\'t like toy.'.upper()
+    "I want a toy for children, and my wife. But I don\"t like it for men.\
+    My neighbor's husband doesn't like toy.".upper()
 
 TEST_QRY_1 = \
-    'I don\'t want cat toys nor dog toys'
+    "I don't want cat toys nor dog toys"
 
 def query_analysis_test0(qry):
-    '''
+    """
         This function simply returns the frequency 
         of catagory of keywords
-    '''
+    """
     lst = re.split("[,.; ]", qry)
     vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
@@ -67,12 +70,12 @@ def query_analysis_test0(qry):
     return vec
 
 def deminishing_returns(num):
-    '''
+    """
         This function returns a slightly larger number
         then input, with a reduced increasing rate
         for each recursive call.
         e.g. 0 --> 0, 1 --> 1, 2 --> 1.5
-    '''
+    """
     if num == 0:
         return 0.0
     else:
@@ -90,12 +93,12 @@ def deminishing_returns(num):
             return -1 * summ
 
 def query_analysis_test1(qry):
-    '''
+    """
         This function returns the weighted
         frequency of catagory of keywords
 
         For high frequency words, the score increases slower
-    '''
+    """
     lst = re.split("[,.; ]", qry)
     vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
@@ -113,11 +116,11 @@ def adding_lsts(lst1, lst2): # -> lst
     return new
 
 def query_analysis_test2(qry):
-    '''
+    """
         This function returns the weighted score
         of word frequency, but qry is seperated into sections
-    '''
-    qrys = qry.split('.')
+    """
+    qrys = qry.split(".")
     vec = [0] * NUM_CATA
     for qryy in qrys:
         vec = adding_lsts(vec, 
@@ -125,12 +128,12 @@ def query_analysis_test2(qry):
     return list(map(deminishing_returns, vec))
 
 # def query_analysis_negation_included(qry):
-#     '''
+#     """
 #         This function identifies negations inside query
 #         Including:[
-#             'not', 'don\'t', 'doesn\'t', 'dislike', etc.
+#             "not", "don\"t", "doesn\"t", "dislike", etc.
 #         ]
-#     '''
+#     """
 #     negation = False 
 #     lst = re.split("[,.; ]", qry)
 #     # print(lst)
@@ -149,14 +152,14 @@ def query_analysis_test2(qry):
 #     return vec
 
 def query_analysis_test3(qry):
-    '''
+    """
         This function identifies negation in qry,
         and punishes the direction on value negated
 
         <qry> should include product name if name mentions 
         important keywords
-    '''
-    qrys = qry.split('.')
+    """
+    qrys = qry.split(".")
     vec = [0] * NUM_CATA
     for qryy in qrys:
         vec = adding_lsts(vec, 
@@ -164,7 +167,7 @@ def query_analysis_test3(qry):
     return list(map(deminishing_returns, vec))
 
 def query_analysis_test4(qry):
-    '''
+    """
         This function breaks small query sentencies
         into branch format to include negation, contrary,
         and, or and etc. relationships
@@ -172,7 +175,7 @@ def query_analysis_test4(qry):
 
         ==>                       but
                     wife + toy           not (children + men)
-    '''
+    """
     pass
 
 if __name__ == "__main__":

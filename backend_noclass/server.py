@@ -6,18 +6,25 @@
 import database as db
 import user as usr
 import admin as adm
+import order as odr
+import product as pdt
 import webpage as wbp
-import SAMPLE_DB as samp
 import login as login
 import error as err
-import random
-
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
 from flask_mail import Mail
 from json import dumps
+import random
 import sys
+
+
+ALLOWED_IMAGES = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+def allowed_image(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
 
 def defaultHandler(err):
     response = err.get_response()
@@ -33,14 +40,12 @@ def defaultHandler(err):
 app = Flask(__name__)
 CORS(app)
 app.config.update(
-    # DEBUG = True, ## remeber to change later
-    # TESTING = True,
     TRAP_HTTP_EXCEPTIONS = True,
-    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_SERVER = "smtp.gmail.com",
     MAIL_PORT = 465,
     MAIL_USE_SSL = True,
-    MAIL_USERNAME = 'oldjeffspectator@gmail.com',
-    MAIL_PASSWORD = 'jeffLHR123'
+    MAIL_USERNAME = "oldjeffspectator@gmail.com",
+    MAIL_PASSWORD = "jeffLHR123"
 )
 app.register_error_handler(Exception, defaultHandler)
 
@@ -54,18 +59,18 @@ mail = Mail(app)
 def send_mail():
     data = request.get_json()
     email = data["email"]
-    num_str = ''.join(str(random.choice(range(10))) for i in range(6))
+    num_str = "".join(str(random.choice(range(10))) for i in range(6))
     user_test = usr.my_reset_passowrd(email)
     usr.change_password(user_test["id"], user_test["password"], num_str)
     msg = mail.send_message(
-        'Send Mail for reset password',
-        sender = ['ANONYMOUS', 'oldjeffspectator@gmail.com'],
+        "Send Mail for reset password",
+        sender = ["ANONYMOUS", "oldjeffspectator@gmail.com"],
         recipients = [email],
         body="This is your temporary passowrd, please change it as soon as \
             possible! Password: " + num_str
     )
     mail.send(msg)
-    return 'Mail sent'
+    return "Mail sent"
 
 @app.route("/admin/register", methods = ["POST"])
 def adm_register():
@@ -156,27 +161,10 @@ def new_product():
     category = data["category"]
     deli_days = data["deli_days"]
     pic_link = data["pic_link"]
-    result = adm.new_product(name, price, description, category, deli_days, pic_link)
+    result = pdt.new_product(name, price, description, category, deli_days, pic_link)
     db.add_prod(result)
     return dumps({
         "product_id": result["id"]
-    })
-
-@app.route("/product/edit", methods = ["POST"])
-def edit_product():
-    data = request.get_json()
-    token = data["token"]
-    try:
-        aid = login.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
-    id = data["id"]
-    name = data["name"]
-    category = data["category"]
-    description = data["description"]
-    result = adm.edit_product(id, name, category, description)
-    return dumps({
-        "id": result["id"]
     })
 
 # @app.route("/admin/product/editcategory")
@@ -184,8 +172,13 @@ def edit_product():
 @app.route("/product/delete", methods = ["POST"])
 def delete_product():
     data = request.get_json()
+    token = data["token"]
+    try:
+        aid = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
     id = data["id"]
-    result = adm.delete_product(id)
+    result = pdt.delete_product(id)
     return dumps({
         "status": "success"
     })
@@ -193,9 +186,14 @@ def delete_product():
 @app.route("/order/statechange", methods = ["POST"])
 def order_state_change():
     data = request.get_json()
-    id = data["id"]
+    token = data["token"]
+    try:
+        aid = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    order_id = data["id"]
     state = data["state"]
-    result = adm.change_order_state(id, state)
+    result = odr.change_order_state(order_id, state)
     return dumps({
         "status": "success",
         "id": result["id"],
@@ -316,7 +314,7 @@ def add_cart():
         raise error
     pid = data["product_id"]
     amount = data["amount"]
-    pname = adm.product_id_to_name(pid)
+    pname = pdt.product_id_to_name(pid)
     result = usr.add_product_to_cart(user_id, pid, amount)
     price = usr.individual_price(pid, amount)
     return dumps({
@@ -414,7 +412,7 @@ def rate_order():
         raise error
     oid = data["order_id"]
     rating = data["rating"]
-    result = usr.rate_order(user_id, oid, rating)
+    result = odr.rate_order(user_id, oid, rating)
     return dumps({
         "status": "success"
     })
@@ -428,7 +426,7 @@ def refund_order():
     except err.InvalidToken as error:
         raise error
     oid = data["order_id"]
-    result = usr.order_refund(user_id, oid)
+    result = odr.order_refund(user_id, oid)
     return dumps({
         "status": result
     })
@@ -440,7 +438,7 @@ def order_list():
         user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    result = usr.show_all_order(user_id)
+    result = odr.show_all_order(user_id)
     return dumps(result)
 
 @app.route("/admin/all_user", methods = ["GET"])
@@ -501,7 +499,7 @@ def admin_regesiter_admin():
 def get_product_info():
     # data = request.get_json()
     product_id = request.args.get("id")
-    result = usr.show_product_detail(product_id)
+    result = pdt.show_product_detail(product_id)
     return dumps(result)
 
 @app.route("/product/get_all", methods = ["GET"])
@@ -516,21 +514,16 @@ def get_product_all():
             user_id = login.token_to_id(token)
         except err.InvalidToken as error:
             raise error
-    result = usr.show_product_lst(page, user_id)
+    result = pdt.show_product_lst(page, user_id)
     return dumps(result)
 
 @app.route("/product/search", methods = ["POST"])
 def get_product_by_search():
     data = request.get_json()
-    token = data["token"]
     page = int(data["page"])
     keyword = data["keyword"]
     ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
     price_rg = data["price_range"] # [min_price, max_price]
-    try:
-        user_id = login.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
     user_id = -1
     if price_rg == []:
         result = wbp.search_filter_recommendation(keyword, ctgry, [0, 999999], user_id, page)
@@ -552,21 +545,43 @@ def user_edit_info():
     except err.InvalidToken as error:
         raise error
     result = usr.edit_info_user(user_id, fname, lname, address, city, \
-            country, 'database.json')
+            country, "database.json")
     return dumps(result)
 
 @app.route("/product/edit", methods = ["POST"])
 def prod_edit_info():
     data = request.get_json()
-    prod_id         = data["prod_id"]
-    prod_name       = data["prod_name"]
-    prod_descrip    = data["prod_descrip"]
-    prod_price      = data["prod_price"]
-    prod_delivery   = data["prod_delivery"]
-    prod_pic        = data["prod_pic"]
-    result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
-                prod_delivery, prod_pic, db_name = 'database.json')
-    return dumps(result)
+    token = data["token"]
+    try:
+        admin_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    prod_id = data["prod_id"]
+    prod_name = data["prod_name"]
+    prod_descrip = data["prod_descrip"]
+    prod_price = data["prod_price"]
+    prod_delivery = data["prod_delivery"]
+    if "file" not in request.files:
+        flag = False
+    else:
+        image = request.files["file"]
+        if image.filename == "":
+            flag = False
+        elif allowed_image(image.filename) == False:
+            flag = False
+        else :
+            flag = True
+    if flag == True:
+        format = image.filename.rsplit('.', 1)[1].lower()
+        prod_pic = "/img/products/" + "pro" + str(prod_id) + "." + format
+    else:
+        dbs = db.load_json()
+        prod_pic = dbs["PRODUCT_DB"][str(prod_id)]["pic"]
+    result = pdt.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
+                prod_delivery, prod_pic, db_name = "database.json")
+    return dumps({
+        "pic_link": prod_pic
+    })
 
 @app.route("/user/get_interest", methods = ["GET"])
 def user_get_interest():
@@ -583,8 +598,8 @@ def user_get_interest():
 @app.route("/user/set_interest", methods = ["POST"])
 def user_set_interest():
     data = request.get_json()
-    token           = data['token']
-    interest_lst    = data['interest_lst']
+    token           = data["token"]
+    interest_lst    = data["interest_lst"]
     try:
         user_id = login.token_to_id(token)
     except err.InvalidToken as error:
@@ -592,27 +607,5 @@ def user_set_interest():
     rt = db.edit_user_interest(user_id, interest_lst)
     return dumps(rt)
 
-@app.route("/user/refund_order", methods = ["POST"])
-def user_refund_order():
-    data = request.get_json()
-    token           = data['token']
-    order_id        = data['order_id']
-    try:
-        user_id = login.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
-    rt = usr.order_refund(user_id, order_id)
-    return dumps({
-            'refund_result': rt
-        })
-
-@app.route("/admin/change_order_state", methods = ["POST"])
-def admin_change_order_state():
-    data = request.get_json()
-    order_id     = data["order_id"]
-    new_state    = data["new_state"]
-    rt = adm.change_order_state(order_id, new_state)
-    return dumps(rt)
-
 if __name__ == "__main__":
-    app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
+    app.run(port = (int(sys.argv[1]) if len(sys.argv) == 2 else 5000))

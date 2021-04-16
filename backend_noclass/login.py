@@ -4,10 +4,12 @@
     with similar layout. They are always used in different
     website (user/admin only).
 """
+
+
 import user as usr
 import database as db 
 import admin as adm
-import generate_token as gt
+import token_ours as tk
 import error as err
 import hashlib
 import re
@@ -64,7 +66,7 @@ def login_user(name, password):
     for user_id, user_info in temp["USER_DB"].items():
         if user_info["name"] == name:
             if user_info["password"] == encrypt_password(password):
-                login_token = gt.token(name)
+                login_token = tk.token(name)
                 uid = user_id
                 temp["TOKEN_DB"][login_token] = uid
                 db.to_json(temp)
@@ -82,7 +84,7 @@ def logout_user(token):
     """
     temp = db.load_json()
 
-    if usr.check_token(token): 
+    if check_token(token): 
         temp["TOKEN_DB"].pop(token)
         db.to_json(temp)
         return True
@@ -169,7 +171,7 @@ def login_admin(name, password):
     for admin_id, admin_info in temp["ADMIN_DB"].items():
         if admin_info["name"] == name:
             if admin_info["password"] == encrypt_password(password):
-                login_token = gt.token(name)
+                login_token = tk.token(name)
                 aid = admin_id
                 temp["TOKEN_DB"][login_token] = aid
                 db.to_json(temp)
@@ -186,7 +188,7 @@ def logout_admin(token):
         This function logout admin
     """
     temp = db.load_json()
-    if usr.check_token(token):
+    if check_token(token):
         temp["TOKEN_DB"].pop(token)
         db.to_json(temp)
         return True
@@ -249,6 +251,16 @@ def verify_password(password):
         hashlib.sha256(password.encode()).hexdigest()
     for user_id, user_info in temp["USER_DB"]:
         if user_info["password"] == sha_signature:
+            return True
+    return False
+
+def check_token(token):
+    """
+        This fuction check if token is in the database
+    """
+    dbs = db.load_json()
+    for user_token, token_id in dbs["TOKEN_DB"].items():
+        if token == user_token:
             return True
     return False
 
