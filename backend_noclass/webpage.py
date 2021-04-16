@@ -5,10 +5,13 @@
         order sorting
         product recommendation
 """
+
+
 import random as rd
 import numpy as np
 import database as db
 import user as us
+
 
 def unit_vector(vector):
     """
