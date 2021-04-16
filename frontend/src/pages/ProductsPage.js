@@ -114,13 +114,16 @@ function ProductsPage(props) {
   };
 
   const query = new URLSearchParams(props.location.search);
-  const keyword = query.get('keyword');
+  const keywordQuery = query.get('keyword');
   const categoryQuery = query.getAll('category');
   // const [categories, setCategories] = useState({
   //   strList: categoryQuery ? categoryQuery : [],
   //   numList: categoryQuery ? strListToNumList(categoryQuery) : []
   // });
   // const [categories, setCategories] = useState([]);
+  const [keyword, setKeyword] = useState(
+    keywordQuery ? keywordQuery : ""
+  );
   const [category, setCategory] = useState("");
 
   function usePrevious(value) {
@@ -152,7 +155,8 @@ function ProductsPage(props) {
     } else {
       axios.post('/product/search', {
         token: "",
-        page: prevKeyword !== keyword ? 1 : currPage, 
+        // page: prevKeyword !== keyword ? 1 : currPage, 
+        page: currPage,
         keyword: keyword,
         category: strToNumList(category),
         price_range: [],
