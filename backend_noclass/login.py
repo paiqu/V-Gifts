@@ -7,7 +7,7 @@
 import user as usr
 import database as db 
 import admin as adm
-import token as tk
+import token_ours as tk
 import error as err
 import hashlib
 import re
