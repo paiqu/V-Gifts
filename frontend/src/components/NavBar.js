@@ -90,7 +90,7 @@ export default function NavBar(props) {
   }
 
   const handleSearch = () => {
-    history.push(`/products?keyword=${searchInput}`);
+    // history.push(`/products?keyword=${searchInput}`);
     props.setKeyword(searchInput);
   };
 

@@ -154,7 +154,7 @@ function ProductsPage(props) {
       })
     } else {
       axios.post('/product/search', {
-        token: "",
+        token: token ? token : "",
         // page: prevKeyword !== keyword ? 1 : currPage, 
         page: currPage,
         keyword: keyword,
@@ -172,6 +172,8 @@ function ProductsPage(props) {
 
         setTotalPages(data['total_pages']);
         setProducts(data['product_lst']);
+        setRecommendation(data["recommendation_list"]);
+
         if (prevKeyword !== keyword) {
           setCurrPage(1);
         }
@@ -213,6 +215,9 @@ function ProductsPage(props) {
     // currentParams.append('category', category.replace(/\s+/g, '-').toLowerCase());
 
     // history.push(`${location.pathname}?${currentParams}`);
+    if (category === "") {
+      setKeyword("");
+    }
     setCategory(category);
   };
 
