@@ -14,6 +14,18 @@ import Fab from '@material-ui/core/Fab';
 import ChatIcon from '@material-ui/icons/Chat';
 import Popper from '@material-ui/core/Popper';
 import Chat from '../components/chat/Chat';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import IconButton from '@material-ui/core/IconButton';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase';
+import { Link } from 'react-router-dom';
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -36,33 +48,52 @@ const useStyles = makeStyles((theme) => ({
   },
   popper: {
     marginRight: "1rem",
-  }
+  },
+  recommendations: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: theme.palette.background.paper,
+  },
+  gridList: {
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  gridListTitle: {
+    color: theme.palette.secondary.contrastText,
+  },
+  titleBar: {
+    background:
+      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+  },
+
 }));
 
-const steps = [
-  {
-    id: '0',
-    message: 'Welcome to react chatbot!',
-    trigger: '1',
-  },
-  {
-    id: '1',
-    message: 'Bye!',
-    end: true,
-  },
-];
+// const steps = [
+//   {
+//     id: '0',
+//     message: 'Welcome to react chatbot!',
+//     trigger: '1',
+//   },
+//   {
+//     id: '1',
+//     message: 'Bye!',
+//     end: true,
+//   },
+// ];
 
 function ProductsPage(props) {
   const classes = useStyles();
 
-  const [currPage, setCurrPage] = React.useState(1);
-  const [totalPages, setTotalPages] = React.useState(0);
-  const [products, setProducts] = React.useState([]);
-  const [result, setResult] = React.useState(true);
-  // const token = "";
+  const [currPage, setCurrPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [recommendation, setRecommendation] = useState([]);
+  const [result, setResult] = useState(true);
 
   const token = React.useContext(AuthContext).user;
-  // const token = "";
   const [psModalOpen, setPsModalOpen] = useState(false);
   const [nlModalOpen, setNlModalOpen] = useState(false);
 
@@ -82,10 +113,7 @@ function ProductsPage(props) {
   };
 
   const query = new URLSearchParams(props.location.search);
-  // const token = query.get('token');
   const keyword = query.get('keyword');
-  // const page = query.get('page');
-  // const category = query.get('category');
 
   function usePrevious(value) {
     const ref = useRef();
@@ -96,13 +124,13 @@ function ProductsPage(props) {
   }
 
   const prevKeyword = usePrevious(keyword);
-  const prevPage = usePrevious(currPage);
+  // const prevPage = usePrevious(currPage);
 
   const retrieveProducts = () => {
-    if (keyword == null || keyword == "") {    
+    if (keyword == null || keyword === "") {    
       axios.get('/product/get_all', {
         params: {
-          token: "",
+          token: token ? token : "",
           "page": currPage,
         }
       })
@@ -111,11 +139,11 @@ function ProductsPage(props) {
 
         setTotalPages(data['total_pages']);
         setProducts(data['product_lst']);
+        setRecommendation(data["recommendation_list"]);
       })
     } else {
       axios.post('/product/search', {
         token: "",
-        // "page": (page == null || page == "") ? 1 : page,
         page: prevKeyword !== keyword ? 1 : currPage, 
         keyword: keyword,
         category: [],
@@ -148,7 +176,7 @@ function ProductsPage(props) {
 
   const renderSearchTitle = (
     result ? 
-      ((keyword == null || keyword == "") ?
+      ((keyword == null || keyword === "") ?
         <h3 /> : <h3>Search result of "{keyword}"</h3>)
       : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
   );
@@ -183,25 +211,68 @@ function ProductsPage(props) {
             className={classes.rightContainer} 
             container item xs={12} sm={9} spacing={3}
           >
-            <Grid
-              container
-              item
-              xs={12}
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <h3>Recommended for you:</h3>
+            {recommendation.length > 0 &&
+              <Grid
+                className={classes.recommendations}
+                container
+                item
+                xs={12}
+                spacing={2}
+              >
+                <Grid item xs={12}>
+                  <h4><ThumbUpAltIcon />Recommendations for you:</h4>
+                </Grid>
+                <GridList className={classes.gridList} cols={2.5}>
+                  {recommendation.map(x => (
+                    <GridListTile key={`rec-${x['product_id']}`}>
+                      {/* <ButtonBase
+                        component={Link}
+                        to={`/product/${x['product_id']}`}
+                      >
+                      </ButtonBase> */}
+                        <img
+                          src={x['pic_link']}
+                          alt={`product-${x['product_id']}`}
+                        />
+                      <GridListTileBar
+                        title={x['name']}
+                        classes={{
+                          root: classes.titleBar,
+                          title: classes.gridListTitle,
+                        }}
+                        actionIcon={
+                          <ButtonGroup 
+                            className={classes.gridListTitle}
+                            color="primary"
+                            variant="text"
+                            disableElevation
+                          >
+                            <IconButton
+                              aria-label={`cart-${x['name']}`}
+                              component={Link}
+                              to={`/product/${x['product_id']}`}
+                            >
+                              <InfoOutlinedIcon  />
+                            </IconButton>
+                            {/* <IconButton 
+                              aria-label={`cart-${x['name']}`}
+                              onClick={handleAddToCart(x['product_id'])}
+                            >
+                              <ShoppingCartIcon  />
+                            </IconButton>
+                            <Button
+                              onClick={handlePurchase(x['product_id'])}
+                            >
+                              Buy
+                            </Button> */}
+                          </ButtonGroup>
+                        }
+                      />
+                    </GridListTile>
+                  ))}
+                </GridList>
               </Grid>
-              <Grid item xs={12} sm={4}>
-                empty
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                empty
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                empty
-              </Grid>
-            </Grid>
+            }
             <Grid
               className={classes.productsGrid}
               container
@@ -209,9 +280,7 @@ function ProductsPage(props) {
               xs={12}
               spacing={2}
             >
-              {/* <Grid container item xs={12} spacing={3}> */}
               <Grid item xs={12}>
-                {/* <h3>Search result of {keyword}</h3> */}
                 {renderSearchTitle}
               </Grid>
               {products.map((x) =>

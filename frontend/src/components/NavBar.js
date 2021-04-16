@@ -109,7 +109,7 @@ export default function NavBar() {
         aria-label="cart"
         color="inherit"
         component={Link}
-        to={ `/profile//cart`}
+        to={ `/profile/${token}/cart`}
       >
         <Badge badgeContent={0} color="secondary">
           <ShoppingCartIcon />
@@ -117,7 +117,7 @@ export default function NavBar() {
       </IconButton>
       <Button
         component={Link}
-        to={ token ? `/profile/{token}` : "/login"}
+        to={`/profile/${token}`}
         edge="end"
         aria-label="account of current user"
         color="inherit"

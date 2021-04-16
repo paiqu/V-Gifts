@@ -126,7 +126,7 @@ function CartPage(props) {
                 <Typography variant="h5">
                   Total Payment
                 </Typography>
-                <b>{`\$${totalPayment}`}</b>
+                <b>{`$${totalPayment}`}</b>
                 <Button 
                   className={classes.checkoutBtn} 
                   variant="contained" 
