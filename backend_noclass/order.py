@@ -7,6 +7,7 @@ import database as db
 import datetime as dt
 import admin as adm
 import user as usr
+import product as pdt
 
 
 # Object types
@@ -84,6 +85,24 @@ def rate_order(user_id, order_id, rating, db_name = "database.json"):
     db.to_json(dbs, db_name)
     return {}
 
+def change_order_state(order_id, new_state):
+    """
+        Thi function changes the delivery state of an order
+        # 0: just purchase
+        # 1: delivering
+        # 2: done
+        # 3: cancelled
+    """
+    assert new_state in [0,1,2,3]
+    db.valid_id("order", order_id)
+    abs = db.load_json()
+    abs["ORDER_DB"][str(order_id)]["state"] = new_state
+    db.to_json(abs)
+    return {
+        "id": order_id,
+        "state": new_state
+    }
+
 def refund_helper(dbs, user_id, amount):
     """
         This function adds amount to a user
@@ -150,7 +169,7 @@ def show_all_order(user_id, db_name = "database.json"):
         order_lst.append({
             "order_id": order_id,
             "product_id": product_id,
-            "product_name": adm.product_id_to_name(product_id),
+            "product_name": pdt.product_id_to_name(product_id),
             "amount": amount,
             "pic_link": dbs["PRODUCT_DB"][str(product_id)]["pic"],
             "cost": usr.individual_price(product_id, amount),

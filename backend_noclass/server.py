@@ -7,6 +7,7 @@ import database as db
 import user as usr
 import admin as adm
 import order as odr
+import product as pdt
 import webpage as wbp
 import login as login
 import error as err
@@ -153,27 +154,10 @@ def new_product():
     category = data["category"]
     deli_days = data["deli_days"]
     pic_link = data["pic_link"]
-    result = adm.new_product(name, price, description, category, deli_days, pic_link)
+    result = pdt.new_product(name, price, description, category, deli_days, pic_link)
     db.add_prod(result)
     return dumps({
         "product_id": result["id"]
-    })
-
-@app.route("/product/edit", methods = ["POST"])
-def edit_product():
-    data = request.get_json()
-    token = data["token"]
-    try:
-        aid = login.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
-    id = data["id"]
-    name = data["name"]
-    category = data["category"]
-    description = data["description"]
-    result = adm.edit_product(id, name, category, description)
-    return dumps({
-        "id": result["id"]
     })
 
 # @app.route("/admin/product/editcategory")
@@ -181,8 +165,13 @@ def edit_product():
 @app.route("/product/delete", methods = ["POST"])
 def delete_product():
     data = request.get_json()
+    token = data["token"]
+    try:
+        aid = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
     id = data["id"]
-    result = adm.delete_product(id)
+    result = pdt.delete_product(id)
     return dumps({
         "status": "success"
     })
@@ -190,9 +179,14 @@ def delete_product():
 @app.route("/order/statechange", methods = ["POST"])
 def order_state_change():
     data = request.get_json()
-    id = data["id"]
+    token = data["token"]
+    try:
+        aid = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    order_id = data["id"]
     state = data["state"]
-    result = adm.change_order_state(id, state)
+    result = odr.change_order_state(order_id, state)
     return dumps({
         "status": "success",
         "id": result["id"],
@@ -313,7 +307,7 @@ def add_cart():
         raise error
     pid = data["product_id"]
     amount = data["amount"]
-    pname = adm.product_id_to_name(pid)
+    pname = pdt.product_id_to_name(pid)
     result = usr.add_product_to_cart(user_id, pid, amount)
     price = usr.individual_price(pid, amount)
     return dumps({
@@ -498,7 +492,7 @@ def admin_regesiter_admin():
 def get_product_info():
     # data = request.get_json()
     product_id = request.args.get("id")
-    result = adm.show_product_detail(product_id)
+    result = pdt.show_product_detail(product_id)
     return dumps(result)
 
 @app.route("/product/get_all", methods = ["GET"])
@@ -513,7 +507,7 @@ def get_product_all():
             user_id = login.token_to_id(token)
         except err.InvalidToken as error:
             raise error
-    result = adm.show_product_lst(page, user_id)
+    result = pdt.show_product_lst(page, user_id)
     return dumps(result)
 
 @app.route("/product/search", methods = ["POST"])
@@ -561,7 +555,7 @@ def prod_edit_info():
     prod_price      = data["prod_price"]
     prod_delivery   = data["prod_delivery"]
     prod_pic        = data["prod_pic"]
-    result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
+    result = pdt.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
                 prod_delivery, prod_pic, db_name = "database.json")
     return dumps(result)
 
@@ -587,14 +581,6 @@ def user_set_interest():
     except err.InvalidToken as error:
         raise error
     rt = db.edit_user_interest(user_id, interest_lst)
-    return dumps(rt)
-
-@app.route("/admin/change_order_state", methods = ["POST"])
-def admin_change_order_state():
-    data = request.get_json()
-    order_id     = data["order_id"]
-    new_state    = data["new_state"]
-    rt = adm.change_order_state(order_id, new_state)
     return dumps(rt)
 
 if __name__ == "__main__":

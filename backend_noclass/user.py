@@ -4,8 +4,7 @@
 
 
 import database as db
-import datetime as dt
-import admin as adm
+import product as pdt
 import login as lo
 import order as odr
 import error as err
@@ -225,7 +224,7 @@ def show_all_cart(user_id, db_name = "database.json"):
         product_id, amount = pair
         cart_lst.append({
             "product_id": product_id,
-            "product_name": adm.product_id_to_name(product_id),
+            "product_name": pdt.product_id_to_name(product_id),
             "pic_link": dbs["PRODUCT_DB"][str(product_id)]["pic"],
             "amount": amount,
             "price": dbs["PRODUCT_DB"][str(product_id)]["price"],
