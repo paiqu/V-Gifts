@@ -167,7 +167,7 @@ export default function ProductCard(props) {
                         </Grid> */}
                     </Grid>
                     <Grid item xs={1}>
-                      <Typography variant="h7">${price}</Typography>
+                      <Typography variant="h6">${price}</Typography>
                     </Grid>
                 </Grid>
             </Paper>

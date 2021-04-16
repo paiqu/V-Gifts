@@ -17,14 +17,13 @@ import Chat from '../components/chat/Chat';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button'
-import ButtonBase from '@material-ui/core/ButtonBase';
 import { Link } from 'react-router-dom';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import { useHistory, useLocation } from 'react-router'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,21 +70,23 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-// const steps = [
-//   {
-//     id: '0',
-//     message: 'Welcome to react chatbot!',
-//     trigger: '1',
-//   },
-//   {
-//     id: '1',
-//     message: 'Bye!',
-//     end: true,
-//   },
-// ];
+const strToNumList = (str) => {
+  const CATEGORIES = ["for men", "for women", "for children", "for friends", "for elder", "for relationship", "foods", "tools", "luxuries", "entertainment", "working"];
+  let output = Array(11).fill(0);
+
+  let index = CATEGORIES.indexOf(str);
+
+  if (index >= 0) {
+    output[index] = 1;
+  }
+
+  return output;
+}
 
 function ProductsPage(props) {
   const classes = useStyles();
+  const history = useHistory();
+  const location = useLocation();
 
   const [currPage, setCurrPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -114,6 +115,13 @@ function ProductsPage(props) {
 
   const query = new URLSearchParams(props.location.search);
   const keyword = query.get('keyword');
+  const categoryQuery = query.getAll('category');
+  // const [categories, setCategories] = useState({
+  //   strList: categoryQuery ? categoryQuery : [],
+  //   numList: categoryQuery ? strListToNumList(categoryQuery) : []
+  // });
+  // const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState("");
 
   function usePrevious(value) {
     const ref = useRef();
@@ -127,7 +135,7 @@ function ProductsPage(props) {
   // const prevPage = usePrevious(currPage);
 
   const retrieveProducts = () => {
-    if (keyword == null || keyword === "") {    
+    if (1 == 0) {    
       axios.get('/product/get_all', {
         params: {
           token: token ? token : "",
@@ -146,7 +154,7 @@ function ProductsPage(props) {
         token: "",
         page: prevKeyword !== keyword ? 1 : currPage, 
         keyword: keyword,
-        category: [],
+        category: strToNumList(category),
         price_range: [],
       })
       .then((response) => {
@@ -167,7 +175,7 @@ function ProductsPage(props) {
     }
   };
 
-  React.useEffect(retrieveProducts, [currPage, keyword]);
+  React.useEffect(retrieveProducts, [currPage, keyword, category]);
 
 
   const handlePageChange = (event, number) => {
@@ -177,7 +185,7 @@ function ProductsPage(props) {
   const renderSearchTitle = (
     result ? 
       ((keyword == null || keyword === "") ?
-        <h3 /> : <h3>Search result of "{keyword}"</h3>)
+        <h3>{category}</h3> : <h3>Search result of "{keyword}"</h3>)
       : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
   );
 
@@ -187,7 +195,7 @@ function ProductsPage(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
-  const [placement, setPlacement] = React.useState();
+  // const [placement, setPlacement] = React.useState();
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -195,6 +203,14 @@ function ProductsPage(props) {
   };
 
   const id = open ? 'simple-popper' : undefined;
+
+  const handleCategory = (category) => {
+    // let currentParams = new URLSearchParams(location.search);
+    // currentParams.append('category', category.replace(/\s+/g, '-').toLowerCase());
+
+    // history.push(`${location.pathname}?${currentParams}`);
+    setCategory(category);
+  };
 
   return (
     <div className={classes.root}>
@@ -204,7 +220,11 @@ function ProductsPage(props) {
       >
         <Grid container spacing={0}>
           <Grid className={classes.leftContainer} container item xs={12} sm={3}>
-            <ProductFilter />
+            <ProductFilter 
+              // categories={category} 
+              handleCategory={handleCategory}
+              setCa
+            />
           </Grid>
 
           <Grid 
@@ -222,7 +242,7 @@ function ProductsPage(props) {
                 <Grid item xs={12}>
                   <h4><ThumbUpAltIcon />Recommendations for you:</h4>
                 </Grid>
-                <GridList className={classes.gridList} cols={2.5}>
+                <GridList className={classes.gridList} cols={4.5}>
                   {recommendation.map(x => (
                     <GridListTile key={`rec-${x['product_id']}`}>
                       {/* <ButtonBase
@@ -233,6 +253,10 @@ function ProductsPage(props) {
                         <img
                           src={x['pic_link']}
                           alt={`product-${x['product_id']}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                          }}
                         />
                       <GridListTileBar
                         title={x['name']}

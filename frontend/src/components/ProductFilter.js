@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ProductFilter() {
+export default function ProductFilter(props) {
     const classes = useStyles();
 
   return (
@@ -39,8 +39,11 @@ export default function ProductFilter() {
             }
             className={classes.root}
         >
-            <CollapseCategories />
-            <CollapsePriceFilter />
+            <CollapseCategories 
+              // categories={props.categories} 
+              handleCategory={props.handleCategory}
+            />
+            {/* <CollapsePriceFilter /> */}
             <ListItem button>
                     <ListItemIcon>
                         <LocalShippingIcon />
