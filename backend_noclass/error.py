@@ -3,6 +3,7 @@
     note that error code message may not match standard Http error code
 """
 
+
 from werkzeug.exceptions import HTTPException
 
 class InvalidToken(HTTPException):

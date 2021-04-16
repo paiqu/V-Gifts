@@ -1,7 +1,10 @@
 """
     This file organise keywords
 """
+
+
 import json
+
 
 KEYWORD_DICT = {
     # for men
