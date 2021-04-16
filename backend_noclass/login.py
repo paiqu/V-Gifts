@@ -82,7 +82,7 @@ def logout_user(token):
     """
     temp = db.load_json()
 
-    if usr.check_token(token): 
+    if check_token(token): 
         temp["TOKEN_DB"].pop(token)
         db.to_json(temp)
         return True
@@ -186,7 +186,7 @@ def logout_admin(token):
         This function logout admin
     """
     temp = db.load_json()
-    if usr.check_token(token):
+    if check_token(token):
         temp["TOKEN_DB"].pop(token)
         db.to_json(temp)
         return True
@@ -249,6 +249,16 @@ def verify_password(password):
         hashlib.sha256(password.encode()).hexdigest()
     for user_id, user_info in temp["USER_DB"]:
         if user_info["password"] == sha_signature:
+            return True
+    return False
+
+def check_token(token):
+    """
+        This fuction check if token is in the database
+    """
+    dbs = db.load_json()
+    for user_token, token_id in dbs["TOKEN_DB"].items():
+        if token == user_token:
             return True
     return False
 

@@ -6,6 +6,7 @@
 import database as db
 import user as usr
 import admin as adm
+import order as odr
 import webpage as wbp
 import login as login
 import error as err
@@ -410,7 +411,7 @@ def rate_order():
         raise error
     oid = data["order_id"]
     rating = data["rating"]
-    result = usr.rate_order(user_id, oid, rating)
+    result = odr.rate_order(user_id, oid, rating)
     return dumps({
         "status": "success"
     })
@@ -424,7 +425,7 @@ def refund_order():
     except err.InvalidToken as error:
         raise error
     oid = data["order_id"]
-    result = usr.order_refund(user_id, oid)
+    result = odr.order_refund(user_id, oid)
     return dumps({
         "status": result
     })
@@ -436,7 +437,7 @@ def order_list():
         user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    result = usr.show_all_order(user_id)
+    result = odr.show_all_order(user_id)
     return dumps(result)
 
 @app.route("/admin/all_user", methods = ["GET"])
@@ -497,7 +498,7 @@ def admin_regesiter_admin():
 def get_product_info():
     # data = request.get_json()
     product_id = request.args.get("id")
-    result = usr.show_product_detail(product_id)
+    result = adm.show_product_detail(product_id)
     return dumps(result)
 
 @app.route("/product/get_all", methods = ["GET"])
@@ -512,7 +513,7 @@ def get_product_all():
             user_id = login.token_to_id(token)
         except err.InvalidToken as error:
             raise error
-    result = usr.show_product_lst(page, user_id)
+    result = adm.show_product_lst(page, user_id)
     return dumps(result)
 
 @app.route("/product/search", methods = ["POST"])
@@ -587,20 +588,6 @@ def user_set_interest():
         raise error
     rt = db.edit_user_interest(user_id, interest_lst)
     return dumps(rt)
-
-@app.route("/user/refund_order", methods = ["POST"])
-def user_refund_order():
-    data = request.get_json()
-    token           = data["token"]
-    order_id        = data["order_id"]
-    try:
-        user_id = login.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
-    rt = usr.order_refund(user_id, order_id)
-    return dumps({
-            "refund_result": rt
-        })
 
 @app.route("/admin/change_order_state", methods = ["POST"])
 def admin_change_order_state():

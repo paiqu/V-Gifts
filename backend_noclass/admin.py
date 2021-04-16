@@ -15,8 +15,10 @@ ADMIN_DB = {
 import csv
 import database as db
 import datetime as dt
-import user as us
+import user as usr
 import chatbot as ct
+import webpage as wbp
+from numpy import ceil
 import login
 
 # class Admin:
@@ -232,7 +234,7 @@ def get_all_order():
             "product_name": product_id_to_name(pid),
             "amount": amount,
             "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
-            "cost": us.individual_price(pid, amount),
+            "cost": usr.individual_price(pid, amount),
             "purchase_date": int(datte),
             "state_in_code": state_in_code,
             "state_in_text": state_in_text,
@@ -284,6 +286,74 @@ def add_prod_from_csv(filename, db_name = 'database.json'):
             db.add_prod(prod, db_name)
         csvf.close()
         return 'Success, {} products imported'.format(row_n)
+
+def show_product_lst(page = -1, user_id = -1, num_each_page = 9, rec_num = 6, db_name = "database.json"):
+    """
+        This function shows a lst of product
+    """
+    dbs = db.load_json(db_name)
+    proc_lst = []
+    for key in dbs["PRODUCT_DB"].keys():
+        rtt = round(wbp.rating_calc(dbs["PRODUCT_DB"][key]["id"]),2)
+        proc_lst.append({
+            "product_id": dbs["PRODUCT_DB"][key]["id"],
+            "name": dbs["PRODUCT_DB"][key]["name"],
+            "price": dbs["PRODUCT_DB"][key]["price"],
+            "rating": rtt,
+            "pic_link": dbs["PRODUCT_DB"][key]["pic"]
+        })
+    proc_rt = []
+    if page != -1:
+        for i in range(len(proc_lst)):
+            if i >= (page-1)*num_each_page and i < page*num_each_page:
+                # e.g. page 1 => item 0~8
+                proc_rt.append(proc_lst[i])
+    else: # return all prods
+        proc_rt = proc_lst
+    if user_id == -1:
+        rec_rt = []
+    else:
+        # if a user presist, execute recommendation algo
+        # technically fetchs all product
+        rec_lst = wbp.search_filter_recommendation(user_id = user_id)["product_lst"]
+        rec_pid = []
+        for item in rec_lst:
+            rec_pid.append(item["product_id"])
+        rec_rt = []
+        if rec_num >= len(rec_lst):
+            rec_num = len(rec_lst)
+        for i in range(rec_num):
+            prod_id = rec_pid[i]
+            rtt = round(wbp.rating_calc(prod_id),2)
+            rec_rt.append({
+                "product_id": prod_id,
+                "name": dbs["PRODUCT_DB"][str(prod_id)]["name"],
+                "price": dbs["PRODUCT_DB"][str(prod_id)]["price"],
+                "rating": rtt,
+                "pic_link": dbs["PRODUCT_DB"][str(prod_id)]["pic"]
+            })
+    return {
+        "recommendation_list": rec_rt,
+        "product_lst": proc_rt,
+        "total_pages": ceil((len(proc_lst)/num_each_page))
+    }
+
+def show_product_detail(prod_id, db_name = "database.json"):
+    """
+        This function shows the details of a product
+    """
+    db.valid_id("product", prod_id)
+    dbs = db.load_json()
+    rt = round(wbp.rating_calc(prod_id), 2)
+    return {
+        "id": dbs["PRODUCT_DB"][str(prod_id)]["id"],
+        "name": dbs["PRODUCT_DB"][str(prod_id)]["name"],
+        "price": dbs["PRODUCT_DB"][str(prod_id)]["price"],
+        "description": dbs["PRODUCT_DB"][str(prod_id)]["description"],
+        "delivery": dbs["PRODUCT_DB"][str(prod_id)]["delivery"],
+        "rating": rt,
+        "pic_link": dbs["PRODUCT_DB"][str(prod_id)]["pic"],
+    }
 
 def add_prod_to_csv(filename, db_name = 'database.json'):
     '''
