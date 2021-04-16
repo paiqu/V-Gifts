@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.white, 0.45),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.white, 0.55),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -117,7 +117,7 @@ export default function NavBar() {
       </IconButton>
       <Button
         component={Link}
-        to={ token ? `/profile/` : "/login"}
+        to={ token ? `/profile/{token}` : "/login"}
         edge="end"
         aria-label="account of current user"
         color="inherit"
