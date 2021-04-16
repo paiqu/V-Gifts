@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.white, 0.45),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.white, 0.55),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar() {
+export default function NavBar(props) {
   const token = React.useContext(AuthContext).user;
 
   const classes = useStyles();
@@ -90,7 +90,8 @@ export default function NavBar() {
   }
 
   const handleSearch = () => {
-    history.push(`/products?keyword=${searchInput}`);
+    // history.push(`/products?keyword=${searchInput}`);
+    props.setKeyword(searchInput);
   };
 
   const NotLoggedIn = (
@@ -109,7 +110,7 @@ export default function NavBar() {
         aria-label="cart"
         color="inherit"
         component={Link}
-        to={ `/profile//cart`}
+        to={ `/profile/${token}/cart`}
       >
         <Badge badgeContent={0} color="secondary">
           <ShoppingCartIcon />
@@ -117,7 +118,7 @@ export default function NavBar() {
       </IconButton>
       <Button
         component={Link}
-        to={ token ? `/profile/` : "/login"}
+        to={`/profile/${token}`}
         edge="end"
         aria-label="account of current user"
         color="inherit"

@@ -33,7 +33,6 @@ const theme = createMuiTheme({
       dark: '#0069c0',
       contrastText: '#fafafa',
 		},
-
 	},
 });
 
@@ -98,6 +97,9 @@ function App() {
               <Route 
                 path="/products" 
                 component={ProductsPage}
+                // render={(props) => {
+                //   return <ProductsPage {...props} key={window.location.pathname} />
+                // }}
               />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />

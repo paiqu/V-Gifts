@@ -102,7 +102,7 @@ export default function ProductsManagement(props) {
   return (
     <div style={{width: '100%'}}>
       <Typography variant="h5">Products in the system</Typography>
-      <DataGrid 
+      <DataGrid
         rows={rows} 
         columns={columns} 
         pageSize={5} 
@@ -110,7 +110,6 @@ export default function ProductsManagement(props) {
         autoHeight
         selectionModel={selectionModel}
         hideFooterSelectedRowCount
-        // disableMultipleSelection={true}
         onSelectionModelChange={(selection) => {
           const newSelectionModel = selection.selectionModel;
 
@@ -153,6 +152,7 @@ export default function ProductsManagement(props) {
                     placeholder="Admin Name"
                     variant="outlined"
                     onChange={handleChange('name')}
+                    InputLabelProps={{shrink: true}}
                     style={{
                       marginRight: "1rem",
                       width: "100%",
@@ -358,7 +358,7 @@ export default function ProductsManagement(props) {
                         width: "100%"
                       }}
                     >
-                      <ImageIcon />Upload Image
+                      <ImageIcon />Upload New Image
                       <input
                         type="file"
                         accept="image/*"
