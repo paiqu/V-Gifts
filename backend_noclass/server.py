@@ -10,10 +10,12 @@ import webpage as wbp
 import SAMPLE_DB as samp
 import login as login
 import error as err
+import random
 
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
+from flask_mail import Mail
 from json import dumps
 import sys
 
@@ -33,13 +35,37 @@ CORS(app)
 app.config.update(
     # DEBUG = True, ## remeber to change later
     # TESTING = True,
-    TRAP_HTTP_EXCEPTIONS = True
+    TRAP_HTTP_EXCEPTIONS = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 465,
+    MAIL_USE_SSL = True,
+    MAIL_USERNAME = 'oldjeffspectator@gmail.com',
+    MAIL_PASSWORD = 'jeffLHR123'
 )
 app.register_error_handler(Exception, defaultHandler)
 
 ##########################
 # admin related routes
 ##########################
+
+mail = Mail(app)
+
+@app.route("/user/login/send_mail/", methods = ["POST"])
+def send_mail():
+    data = request.get_json()
+    email = data["email"]
+    num_str = ''.join(str(random.choice(range(10))) for i in range(6))
+    user_test = usr.my_reset_passowrd(email)
+    usr.change_password(user_test["id"], user_test["password"], num_str)
+    msg = mail.send_message(
+        'Send Mail for reset password',
+        sender = ['ANONYMOUS', 'oldjeffspectator@gmail.com'],
+        recipients = [email],
+        body="This is your temporary passowrd, please change it as soon as \
+            possible! Password: " + num_str
+    )
+    mail.send(msg)
+    return 'Mail sent'
 
 @app.route("/admin/register", methods = ["POST"])
 def adm_register():
@@ -82,7 +108,7 @@ def adm_logout():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = login.logout_admin(token)
@@ -94,7 +120,7 @@ def adm_logout():
 def adm_profile():
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.show_profile(aid)
@@ -105,7 +131,7 @@ def adm_edit():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     name = data["name"]
@@ -121,7 +147,7 @@ def new_product():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     name = data["name"]
@@ -141,7 +167,7 @@ def edit_product():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     id = data["id"]
@@ -227,7 +253,7 @@ def usr_logout():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = login.logout_user(token)
@@ -240,7 +266,7 @@ def usr_logout():
 def usr_profile():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.show_profile(user_id)
@@ -253,7 +279,7 @@ def change_password():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     opassword = data["old_password"]
@@ -270,7 +296,7 @@ def add_fund():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     num = int(data["num"])
@@ -285,7 +311,7 @@ def add_cart():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     pid = data["product_id"]
@@ -305,7 +331,7 @@ def remove_cart():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     pid = data["product_id"]
@@ -323,7 +349,7 @@ def cart_change():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     pid = data["product_id"]
@@ -343,7 +369,7 @@ def cost_cart():
     # token = data["token"]
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     cart = usr.show_user_cart(user_id)
@@ -356,7 +382,7 @@ def cost_cart():
 def cart_list():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.show_all_cart(user_id)
@@ -367,7 +393,7 @@ def create_order():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     # list : [[product_id, amount]
@@ -383,7 +409,7 @@ def rate_order():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     oid = data["order_id"]
@@ -398,7 +424,7 @@ def refund_order():
     data = request.get_json()
     token = data["token"]
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     oid = data["order_id"]
@@ -411,7 +437,7 @@ def refund_order():
 def order_list():
     token = request.args.get("token")
     try:
-        user_id = login.token_to_idd(token)
+        user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = usr.show_all_order(user_id)
@@ -422,7 +448,7 @@ def admin_get_all_user():
     # date = request.get_json()
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.get_user_list()
@@ -432,7 +458,7 @@ def admin_get_all_user():
 def admin_get_all_order():
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.get_all_order()
@@ -442,7 +468,7 @@ def admin_get_all_order():
 def all_admin():
     token = request.args.get("token")
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     result = adm.get_all_admin()
@@ -453,14 +479,14 @@ def admin_regesiter_admin():
     data = request.get_json()
     token = data["token"]
     try:
-        aid = login.token_to_idd(token)
+        aid = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
     name = data["name"]
     password = data["password"]
     email = data["email"].lower()
     try:
-        result = login.register_adm_nologin(name, password, email)
+        result = login.register_admin_nologin(name, password, email)
     except err.InvalidUsername as iuerr:
         raise iuerr
     except err.InvalidEmail as ieerr:
@@ -487,7 +513,7 @@ def get_product_all():
         user_id = -1
     else:
         try:
-            user_id = login.token_to_idd(token)
+            user_id = login.token_to_id(token)
         except err.InvalidToken as error:
             raise error
     result = usr.show_product_lst(page, user_id)
@@ -501,18 +527,92 @@ def get_product_by_search():
     keyword = data["keyword"]
     ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
     price_rg = data["price_range"] # [min_price, max_price]
-    if token == "":
-        user_id = -1
-    else:
-        try:
-            user_id = login.token_to_idd(token)
-        except err.InvalidToken as error:
-            raise error
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    user_id = -1
     if price_rg == []:
         result = wbp.search_filter_recommendation(keyword, ctgry, [0, 999999], user_id, page)
     else:
         result = wbp.search_filter_recommendation(keyword, ctgry, price_rg, user_id, page)
     return dumps(result)
+
+@app.route("/user/edit", methods = ["POST"])
+def user_edit_info():
+    data = request.get_json()
+    token       = data["token"]
+    fname       = data["fname"]
+    lname       = data["lname"]
+    address     = data["address"]
+    city        = data["city"]
+    country     = data["country"]
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    result = usr.edit_info_user(user_id, fname, lname, address, city, \
+            country, 'database.json')
+    return dumps(result)
+
+@app.route("/product/edit", methods = ["POST"])
+def prod_edit_info():
+    data = request.get_json()
+    prod_id         = data["prod_id"]
+    prod_name       = data["prod_name"]
+    prod_descrip    = data["prod_descrip"]
+    prod_price      = data["prod_price"]
+    prod_delivery   = data["prod_delivery"]
+    prod_pic        = data["prod_pic"]
+    result = adm.edit_product(prod_id, prod_name, prod_descrip, prod_price, \
+                prod_delivery, prod_pic, db_name = 'database.json')
+    return dumps(result)
+
+@app.route("/user/get_interest", methods = ["GET"])
+def user_get_interest():
+    token = request.args.get("token")
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.get_interest_lst()
+    return dumps({
+        "interest_list": rt
+    })
+
+@app.route("/user/set_interest", methods = ["POST"])
+def user_set_interest():
+    data = request.get_json()
+    token           = data['token']
+    interest_lst    = data['interest_lst']
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.edit_user_interest(user_id, interest_lst)
+    return dumps(rt)
+
+@app.route("/user/refund_order", methods = ["POST"])
+def user_refund_order():
+    data = request.get_json()
+    token           = data['token']
+    order_id        = data['order_id']
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = usr.order_refund(user_id, order_id)
+    return dumps({
+            'refund_result': rt
+        })
+
+@app.route("/admin/change_order_state", methods = ["POST"])
+def admin_change_order_state():
+    data = request.get_json()
+    order_id     = data["order_id"]
+    new_state    = data["new_state"]
+    rt = adm.change_order_state(order_id, new_state)
+    return dumps(rt)
 
 if __name__ == "__main__":
     app.run(port=(int(sys.argv[1]) if len(sys.argv) == 2 else 5000))

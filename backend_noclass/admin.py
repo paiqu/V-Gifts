@@ -12,7 +12,7 @@ ADMIN_DB = {
     }
 }
 '''
-
+import csv
 import database as db
 import datetime as dt
 import user as us
@@ -80,7 +80,7 @@ def edit_admin(admin_id, name, password, email, db_name = 'database.json'):
         This function edits admin info with inputs above
         and returns the id of this admin
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     if str(admin_id) not in temp['ADMIN_DB']:
         raise KeyError()
     temp['ADMIN_DB'][str(admin_id)]["name"] = name
@@ -98,7 +98,8 @@ def temp_use():
     temp['ADMIN_DB']["1"]["password"] = passw
     db.to_json(temp)
 
-def edit_product(prod_id, prod_name, prod_category, prod_descrip, db_name = 'database.json'):
+def edit_product(prod_id, prod_name, prod_descrip, prod_price, \
+                prod_delivery, prod_pic, db_name = 'database.json'):
     '''
         This function edits product info with inputs above
         and returns the id of this product
@@ -108,32 +109,46 @@ def edit_product(prod_id, prod_name, prod_category, prod_descrip, db_name = 'dat
         raise KeyError()
     temp['PRODUCT_DB'][str(prod_id)]["name"] = prod_name
     # assert db.check_interest_dim(prod_category)
+    prod_category = None
+    if prod_descrip == "" or prod_descrip is None:
+        prod_descrip = prod_name
+        prod_category = ct.query_analysis_test3(prod_name)
+    else:
+        prod_category = ct.query_analysis_test3(prod_name + '. ' + prod_descrip)
     temp['PRODUCT_DB'][str(prod_id)]["category"] = prod_category
     temp['PRODUCT_DB'][str(prod_id)]["description"] = prod_descrip
+    temp['PRODUCT_DB'][str(prod_id)]["price"] = prod_price
+    temp['PRODUCT_DB'][str(prod_id)]["delivery"] = prod_delivery
+    temp['PRODUCT_DB'][str(prod_id)]["pic"] = prod_pic
     db.to_json(temp, db_name)
     return {
         'id': prod_id
     }
 
-def product_id_to_name(prod_id):
-    temp = db.load_json()
+def product_id_to_name(prod_id, db_name = 'database.json'):
+    temp = db.load_json(db_name)
     if str(prod_id) not in temp['PRODUCT_DB']:
         raise KeyError()
     return temp['PRODUCT_DB'][str(prod_id)]["name"]
 
-def delete_product(prod_id):
+def delete_product(prod_id, db_name = 'database.json'):
     '''
         This function deletes a product by id
         and returns the id of this product
     '''
-    temp = db.load_json()
+    temp = db.load_json(db_name)
     if str(prod_id) not in temp['PRODUCT_DB']:
         raise KeyError()
     else:
-        return temp['PRODUCT_DB'].pop(str(prod_id))
+        rt = temp['PRODUCT_DB'].pop(str(prod_id))
+        db.to_json(temp, db_name)
+        return {
+            'prod_info': rt
+        }
 
 def edit_prod_category(prod_id, category_lst):
     '''
+        *** NO LONGER USED ***
         This function can update the category vector of a product
     '''
     db.valid_id('product', prod_id)
@@ -236,6 +251,67 @@ def get_all_admin():
         })
     return lst
 
+def add_prod_from_csv(filename, db_name = 'database.json'):
+    '''
+        This function allows admin to import prod data from
+        csv file
+    '''
+    if filename[-4:] != '.csv':
+        # print(filename[-4:-1])
+        return 'File format is not accepted'
+    else:
+        csvf = open(filename, 'r')
+        csvfr = csv.reader(csvf)
+        n_prod = []
+        row_n = 0
+        for rows in csvfr:
+            row_n += 1
+            print(rows)
+            # 6 inputs for new_product()
+            if len(rows) == 6:
+                name, price, description, category, \
+                        deli_days, pic_link = rows
+                n_prod.append(new_product(name, int(price), description, category, \
+                        int(deli_days), pic_link, db_name))
+            elif len(rows) == 0:
+                continue
+            else:
+                csvf.close()
+                return 'Error information in provided csv file, row {}, \
+                            roll back database'.format(row_n)
+        # if all fows are good
+        for prod in n_prod:
+            db.add_prod(prod, db_name)
+        csvf.close()
+        return 'Success, {} products imported'.format(row_n)
+
+def add_prod_to_csv(filename, db_name = 'database.json'):
+    '''
+        This function allows admin to import prod data from
+        csv file
+    '''
+    if filename[-4:] != '.csv':
+        # print(filename[-4:-1])
+        return 'File format is not accepted (not *.csv)'
+    else:
+        temp = db.load_json(db_name)
+        csvf = open(filename, 'w', newline='')
+        csvfw = csv.writer(csvf)
+        row_n = 0
+        for prod_key in temp['PRODUCT_DB'].keys():
+            row_n += 1
+            csvfw.writerow([
+                temp['PRODUCT_DB'][prod_key]['name'],
+                temp['PRODUCT_DB'][prod_key]['price'],
+                temp['PRODUCT_DB'][prod_key]['description'],
+                temp['PRODUCT_DB'][prod_key]['category'],
+                temp['PRODUCT_DB'][prod_key]['delivery'],
+                temp['PRODUCT_DB'][prod_key]['pic']
+            ])
+        csvf.close()
+        return "{} rows of products saved into {}".format(row_n, filename)
+
+
 # def order_history():
 #     '''
 #         This function doen't have a purpose yet.
@@ -243,4 +319,7 @@ def get_all_admin():
 #     return {}
 
 if __name__ == "__main__":
-    temp_use()
+    # temp_use()
+    # print(add_prod_from_csv("prod.csv", db_name = 'database.json'))
+    print(add_prod_to_csv('prod.csv', db_name = 'database.json'))
+    pass

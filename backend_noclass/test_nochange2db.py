@@ -34,11 +34,11 @@ def test4():
 
 
 if __name__ == "__main__":
-    # test0()
-    # test1()
+    test0()
+    test1()
     # test2()
     # test3()
-    test4()
+    # test4()
     # print("===============================")
     # temp = db.load_json()
     # db.pretty_print(temp)
