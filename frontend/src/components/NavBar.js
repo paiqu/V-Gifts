@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar() {
+export default function NavBar(props) {
   const token = React.useContext(AuthContext).user;
 
   const classes = useStyles();
@@ -91,6 +91,7 @@ export default function NavBar() {
 
   const handleSearch = () => {
     history.push(`/products?keyword=${searchInput}`);
+    props.setKeyword(searchInput);
   };
 
   const NotLoggedIn = (

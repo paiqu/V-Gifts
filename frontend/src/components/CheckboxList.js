@@ -59,39 +59,42 @@ export default function CheckboxList(props) {
 
   return (
     <List className={classes.root}>
-        {categoryList.map((value, index) => {
-            const labelId = `checkbox-list-label-${value}`;
+      <ListItem
+        key={"all-products"} 
+        role={undefined} 
+        button 
+        onClick={() => props.handleCategory("")}
+        className={classes.nested}
+      >
+        <ListItemText 
+          id={"list-label-all"} 
+          primary={"All Products"} 
+          style={{
+            textTransform: "capitalize",
+          }}
+        />
+      </ListItem>
+      {categoryList.map((value, index) => {
+          const labelId = `list-label-${value}`;
 
-            return (
-                <ListItem
-                    key={value} 
-                    role={undefined} 
-                    //dense 
-                    button 
-                    // onClick={handleToggle(value)}
-                    onClick={() => props.handleCategory(value)}
-                    className={classes.nested}
-                >
-                    {/* <ListItemIcon>
-                        <Checkbox
-                            edge="start"
-                            // checked={checked.indexOf(value) !== -1}
-                            checked={setChecked(index)}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                    </ListItemIcon> */}
-                    <ListItemText 
-                      id={labelId} 
-                      primary={value} 
-                      style={{
-                        textTransform: "capitalize",
-                      }}
-                    />
-                </ListItem>
-            );
-        })}
+          return (
+            <ListItem
+              key={value} 
+              role={undefined} 
+              button 
+              onClick={() => props.handleCategory(value)}
+              className={classes.nested}
+            >
+              <ListItemText 
+                id={labelId} 
+                primary={value} 
+                style={{
+                  textTransform: "capitalize",
+                }}
+              />
+            </ListItem>
+          );
+      })}
     </List>
   );
 }

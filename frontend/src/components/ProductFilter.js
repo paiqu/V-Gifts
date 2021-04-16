@@ -44,7 +44,7 @@ export default function ProductFilter(props) {
               handleCategory={props.handleCategory}
             />
             {/* <CollapsePriceFilter /> */}
-            <ListItem button>
+            {/* <ListItem button>
                     <ListItemIcon>
                         <LocalShippingIcon />
                     </ListItemIcon>
@@ -56,7 +56,7 @@ export default function ProductFilter(props) {
                                 disableRipple
                             />
                     </ListItemIcon>
-            </ListItem>
+            </ListItem> */}
         </List>
     </div>
   );

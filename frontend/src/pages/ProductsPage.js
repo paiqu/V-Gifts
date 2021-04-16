@@ -218,7 +218,7 @@ function ProductsPage(props) {
 
   return (
     <div className={classes.root}>
-      <NavBar className={classes.navBar} />
+      <NavBar className={classes.navBar} setKeyword={setKeyword}/>
       <Box
         className={classes.main}
       >
