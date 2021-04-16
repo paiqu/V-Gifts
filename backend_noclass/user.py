@@ -8,6 +8,7 @@ import product as pdt
 import login as lo
 import order as odr
 import error as err
+from numpy import ceil
 
 
 # Object types
