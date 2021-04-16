@@ -520,16 +520,30 @@ def get_product_all():
 @app.route("/product/search", methods = ["POST"])
 def get_product_by_search():
     data = request.get_json()
+    token = data["token"]
+    if token == "":
+        user_id = -1
+    else:
+        try:
+            user_id = login.token_to_id(token)
+        except err.InvalidToken as error:
+            raise error
     page = int(data["page"])
     keyword = data["keyword"]
     ctgry = data["category"] # [1, 0, ..., 1] of len() = 11
     price_rg = data["price_range"] # [min_price, max_price]
+    rec_lst = pdt.show_product_lst(page, user_id)["recommendation_list"]
     user_id = -1
     if price_rg == []:
         result = wbp.search_filter_recommendation(keyword, ctgry, [0, 999999], user_id, page)
     else:
         result = wbp.search_filter_recommendation(keyword, ctgry, price_rg, user_id, page)
-    return dumps(result)
+    return dumps({
+        "recommendation_list": rec_lst,
+        "product_lst": result["product_lst"],
+        "total_pages": result["total_pages"],
+        "flag": result["flag"]
+    })
 
 @app.route("/user/edit", methods = ["POST"])
 def user_edit_info():
