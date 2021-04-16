@@ -556,6 +556,11 @@ def user_edit_info():
 @app.route("/product/edit", methods = ["POST"])
 def prod_edit_info():
     data = request.get_json()
+    token = data["token"]
+    try:
+        admin_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
     prod_id = data["prod_id"]
     prod_name = data["prod_name"]
     prod_descrip = data["prod_descrip"]
