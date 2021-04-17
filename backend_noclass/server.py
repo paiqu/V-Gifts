@@ -566,17 +566,19 @@ def user_edit_info():
 
 @app.route("/product/edit", methods = ["POST"])
 def prod_edit_info():
-    data = request.get_json()
+    # data = request.get_json()
+    data = request.form
     token = data["token"]
+    # print(data, 2)
     try:
         admin_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    prod_id = data["prod_id"]
-    prod_name = data["prod_name"]
-    prod_descrip = data["prod_descrip"]
-    prod_price = data["prod_price"]
-    prod_delivery = data["prod_delivery"]
+    prod_id = data["id"]
+    prod_name = data["name"]
+    prod_descrip = data["description"]
+    prod_price = data["price"]
+    prod_delivery = data["delivery"]
     if "file" not in request.files:
         flag = False
     else:
