@@ -156,7 +156,7 @@ export default function NavBar(props) {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/products?keyword='}
+						to={'/products'}
 						className={classes.title} 
 						variant="h4"
 						noWrap

@@ -88,11 +88,17 @@ function ProductsPage(props) {
   const history = useHistory();
   const location = useLocation();
 
-  const [currPage, setCurrPage] = useState(1);
+  // const [currPage, setCurrPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [products, setProducts] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
   const [result, setResult] = useState(true);
+  
+  const [infos, setInfos] = useState({
+    page: 1,
+    keyword: "",
+    category: "",
+  });
 
   const token = React.useContext(AuthContext).user;
   const [psModalOpen, setPsModalOpen] = useState(false);
@@ -113,18 +119,18 @@ function ProductsPage(props) {
     setNlModalOpen(false);
   };
 
-  const query = new URLSearchParams(props.location.search);
-  const keywordQuery = query.get('keyword');
-  const categoryQuery = query.getAll('category');
+  // const query = new URLSearchParams(props.location.search);
+  // const keywordQuery = query.get('keyword');
+  // const categoryQuery = query.getAll('category');
   // const [categories, setCategories] = useState({
   //   strList: categoryQuery ? categoryQuery : [],
   //   numList: categoryQuery ? strListToNumList(categoryQuery) : []
   // });
   // const [categories, setCategories] = useState([]);
-  const [keyword, setKeyword] = useState(
-    keywordQuery ? keywordQuery : ""
-  );
-  const [category, setCategory] = useState("");
+  // const [keyword, setKeyword] = useState(
+  //   keywordQuery ? keywordQuery : ""
+  // );
+  // const [category, setCategory] = useState("");
 
   function usePrevious(value) {
     const ref = useRef();
@@ -134,15 +140,16 @@ function ProductsPage(props) {
     return ref.current;
   }
 
-  const prevKeyword = usePrevious(keyword);
-  // const prevPage = usePrevious(currPage);
+  const prevKeyword = usePrevious(infos.keyword);
+  const prevPage = usePrevious(infos.page);
+  const prevCategory = usePrevious(infos.category);
 
   const retrieveProducts = () => {
     if (1 == 0) {    
       axios.get('/product/get_all', {
         params: {
           token: token ? token : "",
-          "page": currPage,
+          "page": infos.page,
         }
       })
       .then((response) => {
@@ -156,13 +163,18 @@ function ProductsPage(props) {
       axios.post('/product/search', {
         token: token ? token : "",
         // page: prevKeyword !== keyword ? 1 : currPage, 
-        page: currPage,
-        keyword: keyword,
-        category: strToNumList(category),
+        page: infos.page,
+        keyword: infos.keyword,
+        category: strToNumList(infos.category),
         price_range: [],
       })
       .then((response) => {
         const data = response.data;
+
+        if (data.code === 400) {
+          history.push('/404');
+        }
+
         const flag = data.flag;
         if (!flag) {
           setResult(false);
@@ -174,25 +186,37 @@ function ProductsPage(props) {
         setProducts(data['product_lst']);
         setRecommendation(data["recommendation_list"]);
 
-        if (prevKeyword !== keyword) {
-          setCurrPage(1);
+        if (prevKeyword !== infos.keyword) {
+          setInfos({
+            ...infos,
+            category: "",
+            page: 1,
+          })
         }
+
+        // if (keyword === "" && prevCategory !== "") {
+        //   setCategory("");
+        // }
       })
     }
   };
 
-  React.useEffect(retrieveProducts, [currPage, keyword, category]);
+  React.useEffect(retrieveProducts, [infos]);
 
 
   const handlePageChange = (event, number) => {
-    setCurrPage(number);
+    setInfos({
+      ...infos,
+      page: number,
+    })
   };
+
 
   const renderSearchTitle = (
     result ? 
-      ((keyword == null || keyword === "") ?
-        <h3>{category}</h3> : <h3>Search result of "{keyword}"</h3>)
-      : <h3>Sorry, no result of "{keyword}". Take a look at our other products instead</h3>
+      ((infos.keyword == null || infos.keyword === "") ?
+        <h3 style={{textTransform: "capitalize"}}>{infos.category}</h3> : <h3>Search result of "{infos.keyword}"</h3>)
+      : <h3>Sorry, no result of "{infos.keyword}". Take a look at our other products instead</h3>
   );
 
 
@@ -215,11 +239,22 @@ function ProductsPage(props) {
     // currentParams.append('category', category.replace(/\s+/g, '-').toLowerCase());
 
     // history.push(`${location.pathname}?${currentParams}`);
-    if (category === "") {
-      setKeyword("");
-    }
-    setCategory(category);
+    // if (category === "") {
+    //   setKeyword("");
+    // }
+    setInfos({
+      keyword: "",
+      category: category,
+      page: 1,
+    })
   };
+
+  const setKeyword = (keyword) => {
+    setInfos({
+      ...infos,
+      keyword: keyword,
+    });
+  }
 
   return (
     <div className={classes.root}>
@@ -228,17 +263,16 @@ function ProductsPage(props) {
         className={classes.main}
       >
         <Grid container spacing={0}>
-          <Grid className={classes.leftContainer} container item xs={12} sm={3}>
+          <Grid className={classes.leftContainer} container item xs={12} sm={2}>
             <ProductFilter 
               // categories={category} 
               handleCategory={handleCategory}
-              setCa
             />
           </Grid>
 
           <Grid 
             className={classes.rightContainer} 
-            container item xs={12} sm={9} spacing={3}
+            container item xs={12} sm={10} spacing={3}
           >
             {recommendation.length > 0 &&
               <Grid
@@ -346,10 +380,10 @@ function ProductsPage(props) {
                 variant="outlined"
                 shape="rounded"
                 size="large"
-                page={currPage}
+                page={infos.page}
                 onChange={handlePageChange}
               />
-              <p>page {currPage} of {totalPages}</p>
+              <p>page {infos.page} of {totalPages}</p>
             </Grid>
 
           </Grid>

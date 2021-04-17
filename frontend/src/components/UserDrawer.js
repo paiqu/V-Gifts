@@ -12,8 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import StoreIcon from '@material-ui/icons/Store';
 import HomeIcon from '@material-ui/icons/Home';
 import UserHome from './UserHome';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -23,6 +21,7 @@ import AuthContext from '../AuthContext';
 import OrderCard from './OrderCard';
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import { useHistory } from 'react-router'
 
 
 const drawerWidth = 240;
@@ -66,6 +65,8 @@ const useStyles = makeStyles((theme) => ({
 export default function UserDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const history = useHistory();
+
   
   const token = React.useContext(AuthContext).user;
   const profile = props.profile;
@@ -140,8 +141,9 @@ export default function UserDrawer(props) {
         localStorage.removeItem('token');
 
         // after log out, redirect to home page
-        props.history.go(0);
-        props.history.push('/');
+        // props.history.go(0);
+        history.go(0);
+        // history.push('/');
       }) 
       .catch((err) => {console.log(err)});
   };
@@ -189,10 +191,10 @@ export default function UserDrawer(props) {
               <ListItemIcon><ShoppingCartIcon /></ListItemIcon>
               <ListItemText primary={"Cart"} />
             </ListItem>
-            <ListItem button key={"Market"} component={Link} to={"/products"}>
+            {/* <ListItem button key={"Market"} component={Link} to={"/products"}>
               <ListItemIcon><StoreIcon /></ListItemIcon>
               <ListItemText primary={"Back to Market"} />
-            </ListItem>
+            </ListItem> */}
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><ListAltIcon /></ListItemIcon>
               <ListItemText primary={"Orders"} />

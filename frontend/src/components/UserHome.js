@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -8,11 +8,15 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { useHistory } from 'react-router'
+import Chip from '@material-ui/core/Chip';
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
+// import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FaceIcon from '@material-ui/icons/Face';
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+// import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 const iconSize = 8;
 
@@ -25,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     display: "flex",
+    alignItems: "center",
     marginBottom: theme.spacing(1),
   },
   cardIcon: {
@@ -71,7 +76,19 @@ function UserHome(props) {
       .catch((err) => {});
     }
 
-    React.useEffect((() => {
+    useEffect((() => {
+      axios.get('/user/cart/list', {
+        params: {
+          token,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        setCart(data);
+      })
+      .catch((err) => {});
+
       axios.get('/user/cart/list', {
         params: {
           token,
@@ -94,7 +111,7 @@ function UserHome(props) {
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
                   <FaceIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     My Details
                   </Typography>
                 </div>
@@ -117,9 +134,11 @@ function UserHome(props) {
           <Grid item md={3} xs={12}>
             <Card className={classes.gridItem}  variant="outlined">
               <CardContent className={classes.cardContent}>
-                <div className={classes.cardTitle}>
-                  <AttachMoneyIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                <div 
+                  className={classes.cardTitle}
+                >
+                  <AttachMoneyOutlinedIcon className={classes.cardIcon}/>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     Balance
                   </Typography>
                 </div>
@@ -163,14 +182,21 @@ function UserHome(props) {
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <ShoppingCartIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
-                    Cart
+                  <FavoriteBorderOutlinedIcon className={classes.cardIcon}/>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
+                    My Interests
                   </Typography>
                 </div>
-                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  {cart.length} items in cart
-                </Typography>
+                <div
+                  style={{
+                    display: "flex"
+                  }}
+                >
+                  <Chip label="healthy" />
+                  <Chip label="whiskey" />
+                  <Chip label="vagan" color="secondary" />
+                  <Chip label="pens" vairant="outlined"  />
+                </div>
               </CardContent>
             </Card>
           </Grid> 
@@ -179,12 +205,21 @@ function UserHome(props) {
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
                   <ListAltIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     Orders
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
                   {props.ordersNum} orders in total
+                </Typography>
+                <div className={classes.cardTitle}>
+                  <ShoppingCartOutlinedIcon className={classes.cardIcon}/>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
+                    Cart
+                  </Typography>
+                </div>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  {cart.length} items in cart
                 </Typography>
               </CardContent>
             </Card>
