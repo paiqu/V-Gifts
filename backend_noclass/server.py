@@ -591,7 +591,7 @@ def prod_edit_info():
         path = "../frontend/public/img/products"
         filename = secure_filename(image.filename)
         image.save(os.path.join(path, filename))
-        proc_pic = "/img/products/" + filename
+        prod_pic = "/img/products/" + filename
     else:
         dbs = db.load_json()
         prod_pic = dbs["PRODUCT_DB"][str(prod_id)]["pic"]
