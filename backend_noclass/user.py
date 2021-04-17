@@ -264,7 +264,7 @@ def increment_user_interest(u_id, p_id, db_name = "database.json"):
         This function changes user's interest upon purchasing products
     '''
     temp = db.load_json(db_name)
-    vec_1 = temp['PROD_DB'][str(p_id)]["category"]
+    vec_1 = temp['PRODUCT_DB'][str(p_id)]["category"]
     for i in range(len(vec_1)):
         temp['USER_DB'][str(u_id)]["interest"][i] = \
                 round(temp['USER_DB'][str(u_id)]["interest"][i]/2.0 + vec_1[i]/2.0, 2)
