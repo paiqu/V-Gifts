@@ -285,9 +285,9 @@ function ProductsPage(props) {
                 <Grid item xs={12}>
                   <h4><ThumbUpAltIcon />Recommendations for you:</h4>
                 </Grid>
-                <GridList className={classes.gridList} cols={4.5}>
+                <GridList className={classes.gridList} cols={4.5} >
                   {recommendation.map(x => (
-                    <GridListTile key={`rec-${x['product_id']}`}>
+                    <GridListTile key={`rec-${x['product_id']}`} style={{height: "10rem"}}>
                       {/* <ButtonBase
                         component={Link}
                         to={`/product/${x['product_id']}`}
@@ -297,8 +297,10 @@ function ProductsPage(props) {
                           src={x['pic_link']}
                           alt={`product-${x['product_id']}`}
                           style={{
-                            width: "100%",
-                            height: "100%",
+                            width: "10rem",
+                            height: "10rem",
+                            // width: "100%",
+                            // height: "100%",
                           }}
                         />
                       <GridListTileBar
