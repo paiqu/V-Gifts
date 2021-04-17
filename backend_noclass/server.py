@@ -179,7 +179,7 @@ def new_product():
         prod_pic = "/img/products/" + filename
     else:
         raise err.NoImage(description = "No image found, please upload one!")
-    result = pdt.new_product(prod_name, prod_descrip, prod_category, prod_price, \
+    result = pdt.new_product(prod_name, prod_price, prod_descrip, prod_category, \
                 prod_delivery, prod_pic, db_name = "database.json")
     db.add_prod(result)
     return dumps({
