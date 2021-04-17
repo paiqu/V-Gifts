@@ -16,8 +16,10 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask_mail import Mail
 from json import dumps
+from werkzeug.utils import secure_filename
 import random
 import sys
+import os
 
 
 ALLOWED_IMAGES = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -586,8 +588,10 @@ def prod_edit_info():
         else :
             flag = True
     if flag == True:
-        format = image.filename.rsplit('.', 1)[1].lower()
-        prod_pic = "/img/products/" + "pro" + str(prod_id) + "." + format
+        path = "../frontend/public/img/products"
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(path, filename))
+        prod_pic = "/img/products/" + filename
     else:
         dbs = db.load_json()
         prod_pic = dbs["PRODUCT_DB"][str(prod_id)]["pic"]

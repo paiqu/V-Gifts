@@ -259,15 +259,15 @@ def purchase(user_id, cart, db_name = "database.json"):
             result = odr.create_order(user_id, product_id, amount, db_name)
     return {}
 
-def increment_user_interest(u_id, p_id, db_name = "database.json"):
-    '''
+def increment_user_interest(user_id, product_id, db_name = "database.json"):
+    """
         This function changes user's interest upon purchasing products
-    '''
-    temp = db.load_json(db_name)
-    vec_1 = temp['PRODUCT_DB'][str(p_id)]["category"]
+    """
+    dbs = db.load_json(db_name)
+    vec_1 = dbs["PRODUCT_DB"][str(product_id)]["category"]
     for i in range(len(vec_1)):
-        temp['USER_DB'][str(u_id)]["interest"][i] = \
-                round(temp['USER_DB'][str(u_id)]["interest"][i]/2.0 + vec_1[i]/2.0, 2)
-    db.to_json(temp, db_name)
+        dbs["USER_DB"][str(user_id)]["interest"][i] = \
+                round(dbs["USER_DB"][str(user_id)]["interest"][i]/2.0 + vec_1[i]/2.0, 2)
+    db.to_json(dbs, db_name)
     return {}
 

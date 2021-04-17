@@ -100,6 +100,30 @@ Adding more products to database for later testing purpose.
 
 Learn how to user google firebase and google dialogflow for chatbot.
 
+#######################################################################
+
+Week 8:
+
+Preparing for Demo B, debug and improve backend to match frontend.
+
+Implemented search bar function, and catagory selection for backend.
+
+#######################################################################
+
+Week 9:
+
+Preparing for Retro B, implemented function to export product list into 
+
+CSV file, and implemented function to import product form CSV file. 
+
+########################################################################
+
+Week 10:
+
+Finalizing report, coding, and improve coding style, remove redundent 
+
+code, prepare for final presentation.
+
 
 
 
