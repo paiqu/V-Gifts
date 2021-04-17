@@ -91,15 +91,37 @@ export default function ProductsManagement(props) {
   const handleEditProduct = (event) => {
     event.preventDefault();
 
-    axios.post("/product/edit", {
-      id: selectedProduct.id,
-      name: selectedProduct.name,
-      description: selectedProduct.description,
-      delivery: selectedProduct.delivery,
-      img_type: selectedProduct.img.type.replace(/(.*)\//g, ''),
-    })
+    console.log(selectedProduct.token);
+
+    let formData = new FormData();
+    formData.append('token', token);
+    formData.append('file', selectedProduct.img);
+    formData.append('id', selectedProduct.id);
+    formData.append('name', selectedProduct.name);
+    formData.append('delivery', selectedProduct.delivery);
+    formData.append('description', selectedProduct.description);
+    formData.append('price', selectedProduct.price);
+
+    console.log(formData);
+
+      // id: selectedProduct.id,
+      // name: selectedProduct.name,
+      // description: selectedProduct.description,
+      // delivery: selectedProduct.delivery,
+      // img_type: selectedProduct.img.type.replace(/(.*)\//g, ''),
+    axios.post("/product/edit", 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
     .then((response) => {
-        
+      const data = response.data;
+
+      console.log(data);
+      setReloadProducts(true);
     })
     .catch((err) => {});
   }
@@ -114,11 +136,12 @@ export default function ProductsManagement(props) {
 
   const handleSelectedFileUpload = (event) => {
     // console.log("uploaded!");
+    console.log(event.target.files[0]);
     setSelectedProduct({
       ...selectedProduct,
       img: event.target.files[0],
     });
-    // console.log(event.target.files[0].type.replace(/(.*)\//g, ''));
+    console.log(event.target.files[0].type.replace(/(.*)\//g, ''));
     setIsSelectedUploaded(true);
   }
 
@@ -234,7 +257,7 @@ export default function ProductsManagement(props) {
                     variant="outlined"
                     onChange={handleNewProductChange('price')}
                     inputProps={{
-                      step: 10,
+                      step: 1,
                       min: 0,
                     }}
                     value={newProduct.price}
@@ -390,7 +413,7 @@ export default function ProductsManagement(props) {
                     variant="outlined"
                     onChange={handleSelectedProductChange('price')}
                     inputProps={{
-                      step: 10,
+                      step: 1,
                       min: 0,
                     }}
                     value={newProduct.price}

@@ -317,8 +317,8 @@ def prod_filter_type(prod_lst = [], ctgry = [], \
     # filter price
     rt2 = []
     for prod in rt1:
-        if temp["PRODUCT_DB"][prod]["price"] >= price_rg[0] \
-            and temp["PRODUCT_DB"][prod]["price"] <= price_rg[-1]:
+        if int(temp["PRODUCT_DB"][prod]["price"]) >= int(price_rg[0]) \
+            and int(temp["PRODUCT_DB"][prod]["price"]) <= int(price_rg[-1]):
             rt2.append(prod)
     return rt2
 
