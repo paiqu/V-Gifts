@@ -37,3 +37,7 @@ class NotEoughFund(HTTPException):
 class EmailAlreadyExit(HTTPException):
     code = 408
     message = "Email already used by another account, try another one."
+
+class NoImage(HTTPException):
+    code = 409
+    message = "No image found, please upload one!"
