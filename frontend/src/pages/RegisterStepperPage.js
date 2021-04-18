@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import RegisterPage from './RegisterPage';
 import InterestSelectionPage from './InterestSelectionPage';
+import RegisterLastPage from './RegisterLastPage';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
-import TextField from '@material-ui/core/TextField';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -34,9 +34,13 @@ function getSteps() {
 
 
 
+
+
 function RegisterStepperPage({ setAuth, ...props }) {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [interests, setInterets] = useState([]);
+
   const steps = getSteps();
 
   
@@ -64,14 +68,32 @@ function RegisterStepperPage({ setAuth, ...props }) {
       case 1:
         return (
           <InterestSelectionPage 
+            interests={interests}
             handleBack={handleBack}
             handleNext={handleNext}
           />
         );
       case 2:
-        return "Go to the market now"
+        return (
+          <RegisterLastPage 
+            handleBack={handleBack}
+            handleNext={handleNext}
+          />
+        );
     }
   }
+
+  useEffect((() => {
+  axios.get("/user/get_interest")
+  .then((response) => {
+    const data = response.data;
+
+    setInterets(data["interest_list"]);
+  })
+  .catch((err) => {
+
+  });
+}), []);
 
   return (
     <div className={classes.root}>

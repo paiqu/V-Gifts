@@ -605,11 +605,11 @@ def prod_edit_info():
 
 @app.route("/user/get_interest", methods = ["GET"])
 def user_get_interest():
-    token = request.args.get("token")
-    try:
-        user_id = login.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
+    # token = request.args.get("token")
+    # try:
+    #     user_id = login.token_to_id(token)
+    # except err.InvalidToken as error:
+    #     raise error
     rt = db.get_interest_lst()
     return dumps({
         "interest_list": rt

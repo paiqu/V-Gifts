@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import NavBar from '../components/NavBar';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -23,24 +22,7 @@ function InterestSelectionPage(props) {
   const classes = useStyles();
   const token = useContext(AuthContext).user;
   
-  const [interests, setInterets] = useState([]);
-
-  useEffect((() => {
-    axios.get("/user/get_interest", {
-      params: {
-        token: token,
-      }
-    })
-    .then((response) => {
-      const data = response.data;
-
-      setInterets(data["interest_list"]);
-    })
-    .catch((err) => {
-
-    });
-  }), []);
-
+  const [interests, setInterets] = useState(props.interests);
 
   const handleUserInterests = (handleNext) => {
     axios.post("/user/set_interest", {
@@ -48,7 +30,7 @@ function InterestSelectionPage(props) {
       interest_lst: interests,
     })
     .then((response) => {
-
+      handleNext();
     })
     .catch((err) => {});
   };
@@ -58,10 +40,10 @@ function InterestSelectionPage(props) {
       <Grid className={classes.grid} container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h3" style={{textAlign: "center"}}>
-            Interests
+            Interests:
           </Typography>
           <Typography variant="subtitle1" style={{textAlign: "center"}}>
-            Welcome to V-Gifts. Now you can select your interests for better recommendations send to you
+            Register completed! Welcome to V-Gifts. Now you can select your interests for better recommendations send to you
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -69,17 +51,7 @@ function InterestSelectionPage(props) {
         </Grid>
         <Grid container item xs={12} spacing={2}>
           <Grid item xs={6} />
-          <Grid item xs={2}>
-            <Button
-              variant="outlined" 
-              color="default"
-              style={{width: "100%"}} 
-              onClick={props.handleBack} 
-            >
-              Back
-            </Button>
-          </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Button
               variant="outlined" 
               color="secondary"
@@ -89,7 +61,7 @@ function InterestSelectionPage(props) {
               Skip
             </Button>
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <Button 
               variant="contained" 
               color="secondary" 
