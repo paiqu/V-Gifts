@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import InterestChips from '../components/InterestsChips';
 import Button from '@material-ui/core/Button'
 import AuthContext from '../AuthContext';
+import { useHistory } from 'react-router'
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
 function InterestSelectionPage(props) {
   const classes = useStyles();
   const token = useContext(AuthContext).user;
-  
+  const history = useHistory();
+
   const [interests, setInterets] = useState(props.interests);
 
   const handleUserInterests = (handleNext) => {
@@ -30,7 +33,7 @@ function InterestSelectionPage(props) {
       interest_lst: interests,
     })
     .then((response) => {
-      handleNext();
+      history.push('/products')
     })
     .catch((err) => {});
   };

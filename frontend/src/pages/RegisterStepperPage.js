@@ -27,8 +27,7 @@ const useStyles = makeStyles((theme) => ({
 function getSteps() {
   return [
     'Register your personal info',
-    'Select your interests',
-    'Browse the market'
+    'Select your interests'
   ];
 }
 
@@ -73,13 +72,13 @@ function RegisterStepperPage({ setAuth, ...props }) {
             handleNext={handleNext}
           />
         );
-      case 2:
-        return (
-          <RegisterLastPage 
-            handleBack={handleBack}
-            handleNext={handleNext}
-          />
-        );
+      // case 2:
+      //   return (
+      //     <RegisterLastPage 
+      //       handleBack={handleBack}
+      //       handleNext={handleNext}
+      //     />
+      //   );
     }
   }
 
@@ -112,16 +111,7 @@ function RegisterStepperPage({ setAuth, ...props }) {
         ))}
       </Stepper>
       <div>
-        {activeStep === steps.length ? (
-          <div>
-            <Typography className={classes.instructions}>All steps completed</Typography>
-            <Button onClick={handleReset}>Reset</Button>
-          </div>      
-        ) : (
-          <div>
-            {getStepContent(activeStep)}
-          </div>
-        )}
+        {getStepContent(activeStep)}
       </div>
     </div>
   );
