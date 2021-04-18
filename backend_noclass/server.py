@@ -151,22 +151,39 @@ def adm_edit():
 
 @app.route("/product/new", methods = ["POST"])
 def new_product():
-    data = request.get_json()
+    data = request.form
     token = data["token"]
     try:
-        aid = login.token_to_id(token)
+        admin_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    name = data["name"]
-    price = data["price"]
-    description = data["description"]
-    category = data["category"]
-    deli_days = data["deli_days"]
-    pic_link = data["pic_link"]
-    result = pdt.new_product(name, price, description, category, deli_days, pic_link)
+    prod_name = data["name"]
+    prod_descrip = data["description"]
+    prod_price = data["price"]
+    prod_delivery = data["delivery"]
+    prod_category = None
+    if "file" not in request.files:
+        flag = False
+    else:
+        image = request.files["file"]
+        if image.filename == "":
+            flag = False
+        elif allowed_image(image.filename) == False:
+            flag = False
+        else :
+            flag = True
+    if flag == True:
+        path = "../frontend/public/img/products"
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(path, filename))
+        prod_pic = "/img/products/" + filename
+    else:
+        raise err.NoImage(description = "No image found, please upload one!")
+    result = pdt.new_product(prod_name, prod_price, prod_descrip, prod_category, \
+                prod_delivery, prod_pic, db_name = "database.json")
     db.add_prod(result)
     return dumps({
-        "product_id": result["id"]
+        "pic_link": prod_pic
     })
 
 # @app.route("/admin/product/editcategory")
@@ -566,10 +583,8 @@ def user_edit_info():
 
 @app.route("/product/edit", methods = ["POST"])
 def prod_edit_info():
-    # data = request.get_json()
     data = request.form
     token = data["token"]
-    # print(data, 2)
     try:
         admin_id = login.token_to_id(token)
     except err.InvalidToken as error:
