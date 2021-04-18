@@ -4,6 +4,9 @@ import NavBar from '../components/NavBar';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 
+const EXISTED_NAME = 403;
+const EXISTED_EMAIL = 408;
+
 function RegisterPage({ setAuth, ...props }) {
     const [infos, setInfos] = React.useState({
       account_name: "",
@@ -79,12 +82,12 @@ function RegisterPage({ setAuth, ...props }) {
         axios.post('user/register', { ...infos })
           .then((response) => {
               const data = response.data;
-              if (data.code === 403 ) {
+              if (data.code === EXISTED_NAME ) {
                 setState({
                     account_error: true,
                     account_text: "Account name exists"
                 })
-              } else if (data.code === 408 ) {
+              } else if (data.code === EXISTED_EMAIL ) {
                 setState({
                   email_error: true,
                   email_text: "Email exists"
