@@ -13,8 +13,8 @@ import axios from 'axios';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 
-const INVALID_NAME = 404;
-const INVALID_PASSWORD = 405;
+const INVALID_NAME = 464;
+const INVALID_PASSWORD = 465;
 
 function Copyright() {
   return (

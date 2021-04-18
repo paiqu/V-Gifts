@@ -8,8 +8,8 @@ import axios from 'axios';
 
 
 
-const EXISTED_NAME = 403;
-const EXISTED_EMAIL = 408;
+const EXISTED_NAME = 463;
+const EXISTED_EMAIL = 468;
 
 const useStyles = makeStyles((theme) => ({
   root: {

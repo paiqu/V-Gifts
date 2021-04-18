@@ -21,7 +21,7 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { useHistory, useLocation } from 'react-router'
 
-const ERROR = 400;
+const ERROR = 460;
 
 const useStyles = makeStyles((theme) => ({
   main: {
