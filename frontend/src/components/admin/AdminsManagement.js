@@ -8,6 +8,11 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { useHistory } from 'react-router'
 
+const INVALID_EMAIL = 462;
+const INVALID_NAME = 464;
+const EXISTED_NAME = 463;
+const EXISTED_EMAIL = 468;
+
 const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: "2rem",
@@ -61,26 +66,26 @@ export default function AdminsManagement(props) {
     })
     .then((response) => {
       const data = response.data;
-      if (data.code == 402) {
+      if (data.code === INVALID_EMAIL) {
         // invalid email
         setState({
           ...state,
           emailError: true,
           help_text: "The entered email is invalid"
         });
-      } else if (data.code == 404) {
+      } else if (data.code === INVALID_NAME) {
         // invalid user name
         setState({
           nameError: true,
           help_text: "The admin name is invalid"
         });
-      } else if (data.code == 403) {
+      } else if (data.code === EXISTED_NAME) {
         // username exist
         setState({
           nameError: true,
           help_text: "The admin name is already existed"
         });
-      } else if (data.code == 408) {
+      } else if (data.code === EXISTED_EMAIL) {
         // email existed
         setState({
           ...state,

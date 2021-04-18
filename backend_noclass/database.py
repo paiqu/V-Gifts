@@ -222,7 +222,9 @@ def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
     # 11 product types
     interest_vector = [0] * 11
     for ctgry in interest_lst:
-        interest_vector[TEST_KEYWORDS[ctgry]] += 1
+        for item in TEST_KEYWORDS[ctgry]:
+            interest_vector[item] += 1
+            
     dbs["USER_DB"][str(u_id)]["interest"] = interest_vector
     to_json(dbs, db_name)
     return {}

@@ -125,7 +125,7 @@ export default function NavBar(props) {
         className={classes.logo}
       >
         <AccountCircle />
-        Hi, Pai
+        Account
       </Button>
     </div>
   );

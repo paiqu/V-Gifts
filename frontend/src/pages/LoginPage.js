@@ -12,7 +12,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-
+const ERROR = 465;
 
 
 function Copyright() {
@@ -97,7 +97,7 @@ function LoginPage({ setAuth, ...props }) {
     axios.post('user/login', { ...infos })
       .then((response) => {
         const data = response.data;
-        if (data.code === 405) {
+        if (data.code === ERROR) {
           setState({
             error: true,
             help_text: "Invalid account name/Password error"
