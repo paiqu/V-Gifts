@@ -7,37 +7,37 @@
 from werkzeug.exceptions import HTTPException
 
 class InvalidToken(HTTPException):
-    code = 400
+    code = 460
     message = "Invalid token!"
 
 class InvalidUsername(HTTPException):
-    code = 401
+    code = 461
     message = "Incorrect syntax! You can only use number, letter and underline."
 
 class InvalidEmail(HTTPException):
-    code = 402
+    code = 462
     message = "Incorrect email format! Please try again."
 
 class UsernameAlreadyExit(HTTPException):
-    code = 403
+    code = 463
     message = "Name is already exist! Please try another one."
 
 class IncorrectUsername(HTTPException):
-    code = 404
+    code = 464
     message = "Incorrect user name! Please try again."
 
 class InvalidPassword(HTTPException):
-    code = 405
+    code = 465
     message = "Login fail! Invalid password or name! Please try again."
 
 class NotEoughFund(HTTPException):
-    code = 406
+    code = 466
     message = "Not enough fund, purchase fail!"
 
 class EmailAlreadyExit(HTTPException):
-    code = 408
+    code = 468
     message = "Email already used by another account, try another one."
 
 class NoImage(HTTPException):
-    code = 409
+    code = 469
     message = "No image found, please upload one!"
