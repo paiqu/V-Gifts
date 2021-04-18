@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 const EXISTED_NAME = 403;
 const EXISTED_EMAIL = 408;
 
+
 function RegisterPage({ setAuth, ...props }) {
     const [infos, setInfos] = React.useState({
       account_name: "",
@@ -65,54 +66,51 @@ function RegisterPage({ setAuth, ...props }) {
         }
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event, handleNext) => {
         // prevent it from submitting a form
         event.preventDefault();
         
-        // validate if all field have been entered
-        // if (!infos.email 
-        //     || !infos.password
-        //     || !infos.first_name
-        //     || !infos.last_name
-        //     || !infos.address
-        //     || !infos.city
-        //     || !infos.country) { return; }
-        
+        handleNext();
         // send the infos to backend
-        axios.post('user/register', { ...infos })
-          .then((response) => {
-              const data = response.data;
-              if (data.code === EXISTED_NAME ) {
-                setState({
-                    account_error: true,
-                    account_text: "Account name exists"
-                })
-              } else if (data.code === EXISTED_EMAIL ) {
-                setState({
-                  email_error: true,
-                  email_text: "Email exists"
-                })
-              }
-              else {
-                // mark the user as signed-in in local storage, it will be removed when it is logged out
-                setAuth(data.token, data.user_id);
-
-                // direct the user to the market page
-                props.history.push('/products');
-              }
+        // axios.post('user/register', { ...infos })
+        //   .then((response) => {
+        //       const data = response.data;
+        //       if (data.code === EXISTED_NAME ) {
+        //         setState({
+        //           account_error: true,
+        //           account_text: "Account name exists"
+        //         })
+        //       } else if (data.code === EXISTED_EMAIL ) {
+        //         setState({
+        //           email_error: true,
+        //           email_text: "Email exists"
+        //         })
+        //       }
+        //       else {
+        //         // mark the user as signed-in in local storage, it will be removed when it is logged out
+        //         setAuth(data.token, data.user_id);
+                
+        //         handleNext();
+        //         // direct the user to the market page
+        //         // props.history.push('/products');
+        //       }
               
-          })
-          .catch((err) => {});
+        //   })
+        //   .catch((err) => {});
     };
 
     return (
         <div>
-            <NavBar />            
+            {/* <NavBar />             */}
             <blockquote className="blockquote text-center" style={{marginTop: 40}}>
                 <h1>Become to V-Gift member</h1>
             </blockquote>
             <main className="container">
-                <form onSubmit={handleSubmit}>
+                <form 
+                  onSubmit={(e) => {
+                    handleSubmit(e, props.handleNext)
+                  }}
+                >
                     <div className="row" style={{marginTop: 60}}>
                         <div className="col-sm-6 form-group">
                             <TextField 
