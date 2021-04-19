@@ -15,7 +15,7 @@ function QuantitySelect(props) {
   const theme = useTheme();
 
   return (
-    <ButtonGroup color="secondary" variant="contained" disableElevation style={{width: "100%"}}>
+    <ButtonGroup color="secondary" variant="contained" disableElevation>
       <Button onClick={props.handleDecrement}>-</Button>
       <Button
         color="primary"
