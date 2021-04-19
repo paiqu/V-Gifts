@@ -210,7 +210,7 @@ def import_csv():
         else :
             flag = True
     if flag == True:
-        path = "/csv_files"
+        path = "./csv_files"
         filename = secure_filename(datas.filename)
         datas.save(os.path.join(path, filename))
         filepath = "./csv_files/" + filename
