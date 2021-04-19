@@ -690,5 +690,18 @@ def user_set_interest():
     rt = db.edit_user_interest(user_id, interest_lst)
     return dumps(rt)
 
+@app.route("/user/get_cart_number", methods = ["GET"])
+def user_get_interest():
+    token = request.args.get("token")
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    rt = db.get_user_cart_n(user_id)
+    return dumps({
+        "cart_product_num": rt["cart_product_num"],
+        "cart_product_total": rt["cart_product_total"]
+    })
+
 if __name__ == "__main__":
     app.run(port = (int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
