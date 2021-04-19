@@ -205,7 +205,7 @@ def import_csv():
         datas = request.files["file"]
         if datas.filename == "":
             flag = False
-        elif allowed_image(datas.filename) == False:
+        elif allowed_data(datas.filename) == False:
             flag = False
         else :
             flag = True
