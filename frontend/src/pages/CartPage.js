@@ -9,6 +9,7 @@ import CartProductCard from '../components/cart/CartProductCard';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button'
 import { useHistory } from 'react-router'
+import CustomSnackBar from '../components/CustomSnackbar';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -18,6 +19,21 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
+
+const FUND_ALERT = {
+  severity: "error",
+  message: "Sorry, you don't have enough fund in your account",
+};
+
+const EMPTY_ALERT = {
+  severity: "warning",
+  message: "Sorry, you cart is empty",
+};
+
+const THANKS_ALERT= {
+  severity: "success",
+  message: "Thanks for your purchase!",
+};
 
 function CartPage(props) {
   const classes = useStyles();
@@ -31,6 +47,11 @@ function CartPage(props) {
   const [totalPayment, setTotalPayment] = useState(0);
   const [products, setProducts] = useState([]);
   const [reload, setReload] = useState(0);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    severity: "",
+    message: "",
+  })
 
   useEffect((() => {
     axios.get('/user/cart/list', {
@@ -59,12 +80,14 @@ function CartPage(props) {
 
   }), [token, reload]);
 
-
-  // const handleTotalPaymentChange = (change) => {
-  //   setTotalPayment(totalPayment + change);
-  // };
-
   const handleCheckout = () => {
+    if (products.length == 0) {
+      setAlertInfo(EMPTY_ALERT);
+      setAlertOpen(true);
+
+      return;
+    }
+
     let cartProducts = products.map((x) => [x["product_id"], x["amount"]]);
 
     let payload = {
@@ -78,10 +101,17 @@ function CartPage(props) {
       data: payload,
     })
     .then(response => {
-      console.log(response.data);
-      // history.go(0);
+      const data = response.data;
+      const NOT_ENOUGH_FUND = 466;
 
-      setReload(prev => prev + 1);
+      if (data.code === NOT_ENOUGH_FUND) {
+        setAlertInfo(FUND_ALERT);
+        setAlertOpen(true);
+      } else { 
+        setAlertInfo(THANKS_ALERT);
+        setAlertOpen(true);
+        setReload(prev => prev + 1);
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -147,6 +177,14 @@ function CartPage(props) {
           </Grid>
         </Grid>
       </Box>
+      {alertOpen && 
+        <CustomSnackBar 
+          severity={alertInfo.severity}
+          message={alertInfo.message}
+          open={alertOpen}
+          setOpen={setAlertOpen}
+        />
+      }
     </div>
   );
 }
