@@ -9,6 +9,9 @@ import CartProductCard from '../components/cart/CartProductCard';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button'
 import { useHistory } from 'react-router'
+import CustomSnackBar from '../components/CustomSnackbar';
+import { FUND_ALERT, EMPTY_ALERT, THANKS_ALERT } from '../utils/AlertInfo';
+import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -18,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
 }));
+
+
 
 function CartPage(props) {
   const classes = useStyles();
@@ -30,6 +35,12 @@ function CartPage(props) {
   // eslint-disable-next-line
   const [totalPayment, setTotalPayment] = useState(0);
   const [products, setProducts] = useState([]);
+  const [reload, setReload] = useState(0);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    severity: "",
+    message: "",
+  })
 
   useEffect((() => {
     axios.get('/user/cart/list', {
@@ -56,14 +67,16 @@ function CartPage(props) {
     })
     .catch((err) => {});
 
-  }), [token]);
-
-
-  const handleTotalPaymentChange = (change) => {
-    setTotalPayment(totalPayment + change);
-  };
+  }), [token, reload]);
 
   const handleCheckout = () => {
+    if (products.length == 0) {
+      setAlertInfo(EMPTY_ALERT);
+      setAlertOpen(true);
+
+      return;
+    }
+
     let cartProducts = products.map((x) => [x["product_id"], x["amount"]]);
 
     let payload = {
@@ -77,8 +90,16 @@ function CartPage(props) {
       data: payload,
     })
     .then(response => {
-      console.log(response.data);
-      history.go(0);
+      const data = response.data;
+
+      if (data.code === NOT_ENOUGH_FUND) {
+        setAlertInfo(FUND_ALERT);
+        setAlertOpen(true);
+      } else { 
+        setAlertInfo(THANKS_ALERT);
+        setAlertOpen(true);
+        setReload(prev => prev + 1);
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -87,7 +108,7 @@ function CartPage(props) {
 
   return (
     <div>
-      <NavBar />
+      <NavBar reload={reload}/>
       <Box 
         ml={theme.spacing(1)} mr={theme.spacing(1)}
       >
@@ -106,8 +127,10 @@ function CartPage(props) {
                 <Grid key={`${x["product_id"]}-${x["product_name"]}-${x["amount"]}`} item xs={12}>
                   <CartProductCard 
                     item={x} 
-                    history={history} 
-                    handleTotalPaymentChange={handleTotalPaymentChange}
+                    history={history}
+                    setAlertOpen={setAlertOpen}
+                    setAlertInfo={setAlertInfo}
+                    setReload={setReload}
                   />
                 </Grid>
               )}
@@ -143,6 +166,14 @@ function CartPage(props) {
           </Grid>
         </Grid>
       </Box>
+      {alertOpen && 
+        <CustomSnackBar 
+          severity={alertInfo.severity}
+          message={alertInfo.message}
+          open={alertOpen}
+          setOpen={setAlertOpen}
+        />
+      }
     </div>
   );
 }
