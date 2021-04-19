@@ -230,35 +230,33 @@ export default function Product(props) {
             container
             item
             xs={12}
-            alignItems="center"
             spacing={1}
           >
-            {infos.description}
-            <br />
-            <br />
-            Delivery: ${infos.delivery}
-          </Typography>
-          <QuantitySelect
-            amount={amount}
-            handleIncrement={handleIncrement}
-            handleDecrement={handleDecrement}
-          />
-
-          <Box
-            display="flex"
-            flexDirection="row"
-            mt={1}
-          >
-            <Button
-              variant="contained" 
-              color="primary" 
-              style={{marginRight: "1rem"}}
-              onClick={handlePurchase}  
-            >
-              Purchase
-            </Button>
-            <Button variant="outlined" color="secondary" onClick={handleAddToCart}>Add to Cart</Button>
-          </Box>
+            <Grid item xs={12} sm={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{
+                  width: "100%"
+                }}
+                onClick={handlePurchase}
+              >
+                Purchase
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleAddToCart}
+                style={{
+                  width: "100%"
+                }}
+              >
+                Add to Cart
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <PurchaseSucessModal
