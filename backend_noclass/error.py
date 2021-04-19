@@ -38,6 +38,6 @@ class EmailAlreadyExit(HTTPException):
     code = 468
     message = "Email already used by another account, try another one."
 
-class NoImage(HTTPException):
+class NoFile(HTTPException):
     code = 469
-    message = "No image found, please upload one!"
+    message = "No file found, please upload one!"

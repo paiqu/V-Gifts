@@ -87,11 +87,11 @@ def rate_order(user_id, order_id, rating, db_name = "database.json"):
 
 def change_order_state(order_id, new_state):
     """
-        Thi function changes the delivery state of an order
-        # 0: just purchase
-        # 1: delivering
-        # 2: done
-        # 3: cancelled
+        This function changes the delivery state of an order
+        0: just purchase
+        1: delivering
+        2: done
+        3: cancelled
     """
     assert new_state in [0,1,2,3]
     db.valid_id("order", order_id)
@@ -125,7 +125,7 @@ def order_refund(user_id, order_id, db_name = "database.json"):
     elif dbs["ORDER_DB"][str(order_id)]["state"] == 0:
         if int(user_id) != dbs["ORDER_DB"][str(order_id)]["user_id"]:
             status = "Only user paid for this order can refund"
-        adm.change_order_state(order_id, 3)
+        change_order_state(order_id, 3)
         prod_id = dbs["ORDER_DB"][str(order_id)]["product_id"]
         price = dbs["PRODUCT_DB"][str(prod_id)]["price"]
         amount = dbs["ORDER_DB"][str(order_id)]["amount"]
