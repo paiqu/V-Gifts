@@ -691,7 +691,7 @@ def user_set_interest():
     return dumps(rt)
 
 @app.route("/user/get_cart_number", methods = ["GET"])
-def user_get_interest():
+def get_cart_num():
     token = request.args.get("token")
     try:
         user_id = login.token_to_id(token)
