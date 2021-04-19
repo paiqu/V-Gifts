@@ -213,7 +213,7 @@ def import_csv():
         path = "/csv_files"
         filename = secure_filename(datas.filename)
         datas.save(os.path.join(path, filename))
-        filepath = "/csv_files/" + filename
+        filepath = "./csv_files/" + filename
     else:
         raise err.NoFile(description = "No file found, please upload one!")
     result = pdt.add_prod_from_csv(filepath)
@@ -230,7 +230,7 @@ def export_csv():
         admin_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    filename = data["filename"]
+    filename = "./csv_files/" + data["filename"]
     result = pdt.add_prod_to_csv(filename)
     return dumps({
         "status": result

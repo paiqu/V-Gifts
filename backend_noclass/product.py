@@ -50,6 +50,9 @@ def edit_product(prod_id, prod_name, prod_descrip, prod_price, \
         and returns the id of this product
     """
     dbs = db.load_json(db_name)
+    prod_id = int(prod_id)
+    prod_price = float(prod_price)
+    prod_delivery = int(prod_delivery)
     if str(prod_id) not in dbs["PRODUCT_DB"]:
         raise KeyError()
     dbs["PRODUCT_DB"][str(prod_id)]["name"] = prod_name
@@ -175,7 +178,6 @@ def add_prod_from_csv(filename, db_name = "database.json"):
         row_n = 0
         for rows in csvfr:
             row_n += 1
-            print(rows)
             # 6 inputs for new_product()
             if len(rows) == 6:
                 name, price, description, category, \

@@ -96,6 +96,7 @@ def change_order_state(order_id, new_state):
         2: done
         3: cancelled
     """
+    new_state = int(new_state)
     assert new_state in [0,1,2,3]
     db.valid_id("order", order_id)
     abs = db.load_json()
