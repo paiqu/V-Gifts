@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { fade, makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -77,13 +77,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function NavBar(props) {
-  const token = React.useContext(AuthContext).user;
+  const token = useContext(AuthContext).user;
 
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
 
-  const [searchInput, setSearchInput] = React.useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [cartCount, setCartCount] = useState(0);
 
   const handleSearchChange = event => {
     setSearchInput(event.target.value);
@@ -112,7 +113,7 @@ export default function NavBar(props) {
         component={Link}
         to={ `/profile/${token}/cart`}
       >
-        <Badge badgeContent={0} color="secondary">
+        <Badge badgeContent={cartCount} color="secondary">
           <ShoppingCartIcon />
         </Badge>
       </IconButton>
@@ -129,6 +130,21 @@ export default function NavBar(props) {
       </Button>
     </div>
   );
+
+  useEffect(((() => {
+    if (token) {
+      axios.get("/user/get_cart_number", {
+        params: {
+          token: token,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        setCartCount(data["cart_product_num"]);
+      })
+      .catch((err) => {});
+    }
+  })), [props.reload]);
 
   const renderProfile = () => {
     if (token) {
@@ -195,8 +211,7 @@ export default function NavBar(props) {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {token && LoggedInProfile}
-            {!token && NotLoggedIn}
+            {token ? LoggedInProfile : NotLoggedIn}
           </div>
         </Toolbar>
       </AppBar>

@@ -9,7 +9,6 @@ import login as lo
 import order as odr
 import error as err
 from numpy import ceil
-from chatbot import TEST_KEYWORDS
 
 
 # Object types
@@ -195,7 +194,7 @@ def total_price(lst, db_name = "database.json"):
     price = 0
     for cart_item_pair in lst:
         product_id, amount = cart_item_pair
-        price += individual_price(product_id, amount, db_name)
+        price += int(individual_price(product_id, amount, db_name))
     return price
 
 def change_cart_amount(user_id, cart_index, new_amount, db_name = "database.json"):
@@ -233,20 +232,6 @@ def show_all_cart(user_id, db_name = "database.json"):
             "cost": individual_price(product_id, amount)
         })
     return cart_lst
-
-def get_user_cart_n(user_id, db_name = "database.json"):
-    dbs = db.load_json(db_name)
-    n1 = len(dbs["USER_DB"][str(user_id)]["shopping_cart"])
-    n2 = 0
-    if n1 == 0:
-        pass
-    else:
-        for p_pair in dbs["USER_DB"][str(user_id)]["shopping_cart"]:
-            n2 += p_pair[1]
-    return {
-        "cart_product_num": n1,
-        "cart_product_total": n2
-    }
 
 def purchase(user_id, cart, db_name = "database.json"):
     """
@@ -286,19 +271,3 @@ def increment_user_interest(user_id, product_id, db_name = "database.json"):
     db.to_json(dbs, db_name)
     return {}
 
-def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
-    """
-        This function is used to directly edit 
-        user's interest vecetor
-    """
-    db.valid_id("user", u_id, db_name)
-    dbs = db.load_json(db_name)
-    # 11 product types
-    interest_vector = [0] * 11
-    for ctgry in interest_lst:
-        for item in TEST_KEYWORDS[ctgry]:
-            interest_vector[item] += 1
-            
-    dbs["USER_DB"][str(u_id)]["interest"] = interest_vector
-    db.to_json(dbs, db_name)
-    return {}

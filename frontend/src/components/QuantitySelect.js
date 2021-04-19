@@ -15,15 +15,15 @@ function QuantitySelect(props) {
   const theme = useTheme();
 
   return (
-      <ButtonGroup color="secondary" variant="contained" disableElevation style={{width: "100%"}}>
-        <Button onClick={props.handleDecrement}>-</Button>
-        <Button
-          color="primary"
-        >
-          {props.amount}
-        </Button>
-        <Button onClick={props.handleIncrement}>+</Button>
-      </ButtonGroup>
+    <ButtonGroup color="secondary" variant="contained" disableElevation style={{width: "100%"}}>
+      <Button onClick={props.handleDecrement}>-</Button>
+      <Button
+        color="primary"
+      >
+        {props.amount}
+      </Button>
+      <Button onClick={props.handleIncrement}>+</Button>
+    </ButtonGroup>
   );
 }
 
