@@ -10,10 +10,7 @@ import axios from 'axios';
 import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
 import NotLoginModal from '../components/modals/NotLoginModal';
 import AuthContext from '../AuthContext';
-import Fab from '@material-ui/core/Fab';
-import ChatIcon from '@material-ui/icons/Chat';
-import Popper from '@material-ui/core/Popper';
-import Chat from '../components/chat/Chat';
+import Chatbot from '../components/chat/Chatbot';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
@@ -24,7 +21,7 @@ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { useHistory, useLocation } from 'react-router'
 
-
+const ERROR = 460;
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -171,7 +168,7 @@ function ProductsPage(props) {
       .then((response) => {
         const data = response.data;
 
-        if (data.code === 400) {
+        if (data.code === ERROR) {
           history.push('/404');
         }
 
@@ -285,9 +282,9 @@ function ProductsPage(props) {
                 <Grid item xs={12}>
                   <h4><ThumbUpAltIcon />Recommendations for you:</h4>
                 </Grid>
-                <GridList className={classes.gridList} cols={4.5}>
+                <GridList className={classes.gridList} cols={4.5} >
                   {recommendation.map(x => (
-                    <GridListTile key={`rec-${x['product_id']}`}>
+                    <GridListTile key={`rec-${x['product_id']}`} style={{height: "10rem"}}>
                       {/* <ButtonBase
                         component={Link}
                         to={`/product/${x['product_id']}`}
@@ -297,8 +294,10 @@ function ProductsPage(props) {
                           src={x['pic_link']}
                           alt={`product-${x['product_id']}`}
                           style={{
-                            width: "100%",
-                            height: "100%",
+                            width: "10rem",
+                            height: "10rem",
+                            // width: "100%",
+                            // height: "100%",
                           }}
                         />
                       <GridListTileBar
@@ -400,7 +399,7 @@ function ProductsPage(props) {
         open={nlModalOpen}
         token={token}
       />
-      <Fab
+      {/* <Fab
         className={classes.fab} 
         color="secondary"
         aria-label="chat"
@@ -408,8 +407,8 @@ function ProductsPage(props) {
         onClick={handleOpen}
       >
         <ChatIcon />
-      </Fab>
-      <Popper
+      </Fab> */}
+      {/* <Popper
         className={classes.popper}
         id={id}
         open={open}
@@ -417,7 +416,9 @@ function ProductsPage(props) {
         placement={'top'}
       >
         <Chat />
-      </Popper>
+        
+      </Popper> */}
+      <Chatbot />
     </div>
   );
 }

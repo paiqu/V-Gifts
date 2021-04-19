@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
+import RegisterStepperPage from './pages/RegisterStepperPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
@@ -84,7 +85,7 @@ function App() {
                 exact 
                 path="/register" 
                 render={(props) => {
-                  return <RegisterPage {...props} setAuth={setAuth} />;
+                  return <RegisterStepperPage {...props} setAuth={setAuth} />;
                 }}  
               />
               <Route 
