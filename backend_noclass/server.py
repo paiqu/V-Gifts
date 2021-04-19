@@ -23,10 +23,15 @@ import os
 
 
 ALLOWED_IMAGES = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_DATA = {'csv'}
 
 def allowed_image(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGES
+
+def allowed_data(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_DATA
 
 def defaultHandler(err):
     response = err.get_response()
@@ -178,7 +183,7 @@ def new_product():
         image.save(os.path.join(path, filename))
         prod_pic = "/img/products/" + filename
     else:
-        raise err.NoImage(description = "No image found, please upload one!")
+        raise err.NoFile(description = "No file found, please upload one!")
     result = pdt.new_product(prod_name, prod_price, prod_descrip, prod_category, \
                 prod_delivery, prod_pic, db_name = "database.json")
     db.add_prod(result)
@@ -186,7 +191,50 @@ def new_product():
         "pic_link": prod_pic
     })
 
-# @app.route("/admin/product/editcategory")
+@app.route("/product/import_csv", methods = ["POST"])
+def import_csv():
+    data = request.form
+    token = data["token"]
+    try:
+        admin_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    if "file" not in request.files:
+        flag = False
+    else:
+        datas = request.files["file"]
+        if datas.filename == "":
+            flag = False
+        elif allowed_image(datas.filename) == False:
+            flag = False
+        else :
+            flag = True
+    if flag == True:
+        path = "/csv_files"
+        filename = secure_filename(datas.filename)
+        datas.save(os.path.join(path, filename))
+        filepath = "/csv_files/" + filename
+    else:
+        raise err.NoFile(description = "No file found, please upload one!")
+    result = pdt.add_prod_from_csv(filepath)
+    db.add_prod(result)
+    return dumps({
+        "status": result
+    })
+
+@app.route("/product/export_csv", methods = ["POST"])
+def export_csv():
+    data = request.get_json()
+    token = data["token"]
+    try:
+        admin_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    filename = data["filename"]
+    result = pdt.add_prod_to_csv(filename)
+    return dumps({
+        "status": result
+    })
 
 @app.route("/product/delete", methods = ["POST"])
 def delete_product():
