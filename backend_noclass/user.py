@@ -194,7 +194,7 @@ def total_price(lst, db_name = "database.json"):
     price = 0
     for cart_item_pair in lst:
         product_id, amount = cart_item_pair
-        price += individual_price(product_id, amount, db_name)
+        price += int(individual_price(product_id, amount, db_name))
     return price
 
 def change_cart_amount(user_id, cart_index, new_amount, db_name = "database.json"):

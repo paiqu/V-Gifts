@@ -30,6 +30,7 @@ function CartPage(props) {
   // eslint-disable-next-line
   const [totalPayment, setTotalPayment] = useState(0);
   const [products, setProducts] = useState([]);
+  const [reload, setReload] = useState(0);
 
   useEffect((() => {
     axios.get('/user/cart/list', {
@@ -56,12 +57,12 @@ function CartPage(props) {
     })
     .catch((err) => {});
 
-  }), [token]);
+  }), [token, reload]);
 
 
-  const handleTotalPaymentChange = (change) => {
-    setTotalPayment(totalPayment + change);
-  };
+  // const handleTotalPaymentChange = (change) => {
+  //   setTotalPayment(totalPayment + change);
+  // };
 
   const handleCheckout = () => {
     let cartProducts = products.map((x) => [x["product_id"], x["amount"]]);
@@ -78,7 +79,9 @@ function CartPage(props) {
     })
     .then(response => {
       console.log(response.data);
-      history.go(0);
+      // history.go(0);
+
+      setReload(prev => prev + 1);
     })
     .catch((err) => {
       console.log(err);
@@ -87,7 +90,7 @@ function CartPage(props) {
 
   return (
     <div>
-      <NavBar />
+      <NavBar reload={reload}/>
       <Box 
         ml={theme.spacing(1)} mr={theme.spacing(1)}
       >
@@ -106,8 +109,9 @@ function CartPage(props) {
                 <Grid key={`${x["product_id"]}-${x["product_name"]}-${x["amount"]}`} item xs={12}>
                   <CartProductCard 
                     item={x} 
-                    history={history} 
-                    handleTotalPaymentChange={handleTotalPaymentChange}
+                    history={history}
+                    // handleTotalPaymentChange={handleTotalPaymentChange}
+                    setReload={setReload}
                   />
                 </Grid>
               )}

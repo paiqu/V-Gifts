@@ -37,9 +37,7 @@ function CartProductCard(props) {
   const [id, setID] = useState(item["product_id"]);
   const [img, setImg] = useState(item["pic_link"]);
   const [name, setName] = useState(item["product_name"]);
-  const [price, setPrice] = useState(item["price"]);
   const [amount, setAmount] = useState(item["amount"]);
-  const [cost, setCost] = useState(item["cost"]);
 
   const handleDecrement = () => {
     if (amount - 1 <= 0) {
@@ -54,13 +52,7 @@ function CartProductCard(props) {
       amount: amount-1,
     })
     .then((response) => {
-      setCost(cost-price);
-      if (amount - 1 == 0) {
-        props.handleTotalPaymentChange(-price);
-        
-
-        props.history.go(0);
-      }
+      props.setReload(prev => prev + 1);
     })
     .catch((err) => {});
   };
@@ -74,8 +66,9 @@ function CartProductCard(props) {
       amount: amount+1,
     })
     .then((response) => {
-      props.handleTotalPaymentChange(price);
-      setCost(cost + price);
+      // props.handleTotalPaymentChange(price);
+      props.setReload(prev => prev + 1);
+
     })
     .catch((err) => {});
   };
@@ -130,8 +123,8 @@ function CartProductCard(props) {
         </Grid>
         <Grid item xs={2}>
           <p>Quantity: {amount}</p>
-          <p>{`Item price: \$${price}`}</p>
-          <p>{`Total price: \$${cost}`}</p>
+          <p>{`Item price: \$${item.price}`}</p>
+          <p>{`Total price: \$${item.cost}`}</p>
         </Grid>
         <Grid container item xs={4} justify="flex-end">
           <Grid item xs={12}>
