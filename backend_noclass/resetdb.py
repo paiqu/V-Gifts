@@ -10,4 +10,4 @@ from product import add_prod_from_csv
 
 if __name__ == "__main__":
     clear_db()
-    result = add_prod_from_csv("./csv_files/prod.csv")
+    add_prod_from_csv("./csv_files/prod.csv")

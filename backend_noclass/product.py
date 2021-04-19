@@ -96,6 +96,22 @@ def delete_product(prod_id, db_name = "database.json"):
             "prod_info": rt
         }
 
+def prod_rating_calculator(prod_id, db_name = "database.json"):
+    """
+        This function is used to obtain total 
+        rating for a product from individual 
+        user ratings
+    """
+    db.valid_id("product", prod_id)
+    dbs = db.load_json(db_name)
+    rating_lst = dbs["PRODUCT_DB"][str(prod_id)]["rating"]
+    if len(rating_lst) == 0:
+        return 0
+    summ = 0
+    for rating in rating_lst:
+        summ += rating[1]
+    return summ / len(rating_lst)
+
 def show_product_detail(prod_id, db_name = "database.json"):
     """
         This function shows the details of a product
