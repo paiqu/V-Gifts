@@ -225,15 +225,19 @@ export default function Product(props) {
             </Typography>
           </Grid>
           <Grid container item xs={12} alignItems="center">
-            <Grid item xs={2}>
+            <Grid item xs={12}>
               <QuantitySelect
                 amount={amount}
                 handleIncrement={handleIncrement}
                 handleDecrement={handleDecrement}
               />
             </Grid>
-            <Grid item xs={3}>
-              Total: ${amount * infos.price}
+          </Grid>
+          <Grid container item xs={12} alignItems="center">
+            <Grid item xs={12}>
+              <Typography variant='body1'>
+                Total: ${amount * infos.price}
+              </Typography>
             </Grid>
           </Grid>
 
