@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import RegisterPage from './RegisterPage';
 import InterestSelectionPage from './InterestSelectionPage';
-import RegisterLastPage from './RegisterLastPage';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
@@ -51,9 +49,9 @@ function RegisterStepperPage({ setAuth, ...props }) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  // const handleReset = () => {
+  //   setActiveStep(0);
+  // };
   
   function getStepContent(index) {
     switch(index) {
@@ -72,6 +70,8 @@ function RegisterStepperPage({ setAuth, ...props }) {
             handleNext={handleNext}
           />
         );
+      default:
+        return;
       // case 2:
       //   return (
       //     <RegisterLastPage 

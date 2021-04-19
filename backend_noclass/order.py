@@ -19,9 +19,6 @@ def new_order(user_id, product_id, datee, amount, db_name = "database.json"):
         TYPE_OF_PRODUCTS
     """
     new_id = db.id_generator("order", db_name)
-    user_id = int(user_id)
-    product_id = int(product_id)
-    amount = int(amount)
     return {
         "id": new_id,
         "user_id": user_id,
@@ -96,7 +93,6 @@ def change_order_state(order_id, new_state):
         2: done
         3: cancelled
     """
-    new_state = int(new_state)
     assert new_state in [0,1,2,3]
     db.valid_id("order", order_id)
     abs = db.load_json()

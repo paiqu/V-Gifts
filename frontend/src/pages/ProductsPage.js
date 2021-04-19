@@ -20,6 +20,8 @@ import { Link } from 'react-router-dom';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { useHistory, useLocation } from 'react-router'
+import CustomSnackBar from '../components/CustomSnackbar';
+
 
 const ERROR = 460;
 
@@ -90,7 +92,8 @@ function ProductsPage(props) {
   const [products, setProducts] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
   const [result, setResult] = useState(true);
-  
+  const [navbarReload, setNavbarReload] = useState(0);
+
   const [infos, setInfos] = useState({
     page: 1,
     keyword: "",
@@ -222,7 +225,6 @@ function ProductsPage(props) {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
-  // const [placement, setPlacement] = React.useState();
 
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -232,13 +234,6 @@ function ProductsPage(props) {
   const id = open ? 'simple-popper' : undefined;
 
   const handleCategory = (category) => {
-    // let currentParams = new URLSearchParams(location.search);
-    // currentParams.append('category', category.replace(/\s+/g, '-').toLowerCase());
-
-    // history.push(`${location.pathname}?${currentParams}`);
-    // if (category === "") {
-    //   setKeyword("");
-    // }
     setInfos({
       keyword: "",
       category: category,
@@ -255,7 +250,11 @@ function ProductsPage(props) {
 
   return (
     <div className={classes.root}>
-      <NavBar className={classes.navBar} setKeyword={setKeyword}/>
+      <NavBar
+        className={classes.navBar} 
+        setKeyword={setKeyword}
+        reload={navbarReload}
+      />
       <Box
         className={classes.main}
       >
@@ -363,6 +362,7 @@ function ProductsPage(props) {
                     handleNlModalOpen={handleNlModalOpen}
                     handleNlModalClose={handleNlModalClose}
                     setModalType={setModalType}
+                    setNavbarReload={setNavbarReload}
                   />
                 </Grid>
               )}

@@ -178,3 +178,10 @@ def query_analysis_test4(qry):
     """
     pass
 
+if __name__ == "__main__":
+    print(TEST_QRY)
+    print(query_analysis_test0(TEST_QRY))
+    print(query_analysis_test1(TEST_QRY))
+    print(query_analysis_test2(TEST_QRY))
+    print(query_analysis_test3(TEST_QRY))
+    print(query_analysis_test3(TEST_QRY_UPPER))

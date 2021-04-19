@@ -196,9 +196,56 @@ def add_product_type(db_name = "database.json"):
     to_json(dbs, db_name)
     return dbs["TYPE_OF_PRODUCTS"]
 
+def prod_rating_calculator(prod_id, db_name = "database.json"):
+    """
+        This function is used to obtain total 
+        rating for a product from individual 
+        user ratings
+    """
+    valid_id("product", prod_id)
+    dbs = load_json(db_name)
+    rating_lst = dbs["PRODUCT_DB"][str(prod_id)]["rating"]
+    if len(rating_lst) == 0:
+        return 0
+    summ = 0
+    for rating in rating_lst:
+        summ += rating[1]
+    return summ / len(rating_lst)
+
+def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
+    """
+        This function is used to directly edit 
+        user's interest vecetor
+    """
+    valid_id("user", u_id, db_name)
+    dbs = load_json(db_name)
+    # 11 product types
+    interest_vector = [0] * 11
+    for ctgry in interest_lst:
+        for item in TEST_KEYWORDS[ctgry]:
+            interest_vector[item] += 1
+            
+    dbs["USER_DB"][str(u_id)]["interest"] = interest_vector
+    to_json(dbs, db_name)
+    return {}
+
 def get_interest_lst():
     """
         This functions returns all keywords as options to user
         to set up user's interest
     """
     return list(TEST_KEYWORDS.keys())
+
+def get_user_cart_n(u_id, db_name = "database.json"):
+    temp = load_json(db_name)
+    n1 = len(temp["USER_DB"][str(u_id)]["shopping_cart"])
+    n2 = 0
+    if n1 == 0:
+        pass
+    else:
+        for p_pair in temp["USER_DB"][str(u_id)]["shopping_cart"]:
+            n2 += p_pair[1]
+    return {
+        "cart_product_num": n1,
+        "cart_product_total": n2
+    }
