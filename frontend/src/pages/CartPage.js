@@ -10,6 +10,8 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button'
 import { useHistory } from 'react-router'
 import CustomSnackBar from '../components/CustomSnackbar';
+import { FUND_ALERT, EMPTY_ALERT, THANKS_ALERT } from '../utils/AlertInfo';
+import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -20,20 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FUND_ALERT = {
-  severity: "error",
-  message: "Sorry, you don't have enough fund in your account",
-};
 
-const EMPTY_ALERT = {
-  severity: "warning",
-  message: "Sorry, you cart is empty",
-};
-
-const THANKS_ALERT= {
-  severity: "success",
-  message: "Thanks for your purchase!",
-};
 
 function CartPage(props) {
   const classes = useStyles();
@@ -102,7 +91,6 @@ function CartPage(props) {
     })
     .then(response => {
       const data = response.data;
-      const NOT_ENOUGH_FUND = 466;
 
       if (data.code === NOT_ENOUGH_FUND) {
         setAlertInfo(FUND_ALERT);
@@ -140,7 +128,8 @@ function CartPage(props) {
                   <CartProductCard 
                     item={x} 
                     history={history}
-                    // handleTotalPaymentChange={handleTotalPaymentChange}
+                    setAlertOpen={setAlertOpen}
+                    setAlertInfo={setAlertInfo}
                     setReload={setReload}
                   />
                 </Grid>

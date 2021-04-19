@@ -20,6 +20,8 @@ import { Link } from 'react-router-dom';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import { useHistory, useLocation } from 'react-router'
+import CustomSnackBar from '../components/CustomSnackbar';
+
 
 const ERROR = 460;
 
