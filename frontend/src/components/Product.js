@@ -10,9 +10,7 @@ import QuantitySelect from './QuantitySelect';
 import AuthContext from '../AuthContext';
 import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
 import NotLoginModal from '../components/modals/NotLoginModal';
-import { FUND_ALERT, EMPTY_ALERT, THANKS_ALERT } from '../utils/AlertInfo';
-import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
-import CustomSnackBar from './CustomSnackbar';
+
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -46,11 +44,6 @@ export default function Product(props) {
     img: "",
   });
   const [amount, setAmount] = React.useState(1);
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [alertInfo, setAlertInfo] = useState({
-    severity: "",
-    message: "",
-  })
 
   React.useEffect((() => {
     axios.get('/product/get_info', {
@@ -127,16 +120,9 @@ export default function Product(props) {
       data: payload,
     })
     .then(response => {
-      const data = response.data;
-
-      if (data.code === NOT_ENOUGH_FUND) {
-        setAlertInfo(FUND_ALERT);
-        setAlertOpen(true);
-      } else {
-        setModalType(1);
-        handlePsModalOpen();
-      }
-
+      console.log(response.data);
+      setModalType(1);
+      handlePsModalOpen();
     })
     .catch((err) => {
       console.log(err);
@@ -178,8 +164,7 @@ export default function Product(props) {
         <Grid
           className={classes.imageContainer}
           item 
-          sm={5}
-          xs={12}
+          xs={5} 
         >
           <img className={classes.image} src={infos.img} alt="product"/>
         </Grid>
@@ -248,31 +233,32 @@ export default function Product(props) {
             alignItems="center"
             spacing={1}
           >
-            <Grid item xs={6} sm={2} >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handlePurchase}
-                style={{
-                  width: "100%"
-                }}
-              >
-                Purchase
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={2}>
-              <Button 
-                variant="outlined" 
-                color="secondary" 
-                onClick={handleAddToCart}
-                style={{
-                  width: "100%"
-                }}
-              >
-                Add to Cart
-              </Button>
-            </Grid>
-          </Grid>
+            {infos.description}
+            <br />
+            <br />
+            Delivery: ${infos.delivery}
+          </Typography>
+          <QuantitySelect
+            amount={amount}
+            handleIncrement={handleIncrement}
+            handleDecrement={handleDecrement}
+          />
+
+          <Box
+            display="flex"
+            flexDirection="row"
+            mt={1}
+          >
+            <Button
+              variant="contained" 
+              color="primary" 
+              style={{marginRight: "1rem"}}
+              onClick={handlePurchase}  
+            >
+              Purchase
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleAddToCart}>Add to Cart</Button>
+          </Box>
         </Grid>
       </Grid>
       <PurchaseSucessModal
@@ -286,14 +272,6 @@ export default function Product(props) {
         open={nlModalOpen}
         token={token}
       />
-      {alertOpen && 
-        <CustomSnackBar 
-          severity={alertInfo.severity}
-          message={alertInfo.message}
-          open={alertOpen}
-          setOpen={setAlertOpen}
-        />
-      }
     </div>
   );
 }

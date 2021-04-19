@@ -68,8 +68,6 @@ export default function ProductCard(props) {
       .then((response) => {
         props.setModalType(2);
         props.handlePsModalOpen();
-        props.setNavbarReload(prev => prev + 1);
-        // props.setNavbarReload(false);
       })
       .catch((err) => {});
     };
