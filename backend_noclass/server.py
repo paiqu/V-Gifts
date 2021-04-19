@@ -697,7 +697,7 @@ def get_cart_num():
         user_id = login.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    rt = db.get_user_cart_n(user_id)
+    rt = usr.get_user_cart_n(user_id)
     return dumps({
         "cart_product_num": rt["cart_product_num"],
         "cart_product_total": rt["cart_product_total"]

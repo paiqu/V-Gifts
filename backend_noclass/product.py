@@ -21,6 +21,8 @@ def new_product(name, price, description, category, deli_days, pic_link, db_name
     # assert db.check_interest_dim(category)
     # catagory is now calculated by query_analysis
     category = None
+    price = float(price)
+    deli_days = int(deli_days)
     if description == "" or description is None:
         description = name
         category = ct.query_analysis_test3(name)

@@ -233,6 +233,20 @@ def show_all_cart(user_id, db_name = "database.json"):
         })
     return cart_lst
 
+def get_user_cart_n(u_id, db_name = "database.json"):
+    temp = db.load_json(db_name)
+    n1 = len(temp["USER_DB"][str(u_id)]["shopping_cart"])
+    n2 = 0
+    if n1 == 0:
+        pass
+    else:
+        for p_pair in temp["USER_DB"][str(u_id)]["shopping_cart"]:
+            n2 += p_pair[1]
+    return {
+        "cart_product_num": n1,
+        "cart_product_total": n2
+    }
+
 def purchase(user_id, cart, db_name = "database.json"):
     """
         This function makes payment
