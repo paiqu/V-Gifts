@@ -182,21 +182,14 @@ function UserHome(props) {
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <FavoriteBorderOutlinedIcon className={classes.cardIcon}/>
+                  <ShoppingCartOutlinedIcon className={classes.cardIcon}/>
                   <Typography variant="h4" classname={classes.cardTitleText}>
-                    My Interests
+                    Cart
                   </Typography>
                 </div>
-                <div
-                  style={{
-                    display: "flex"
-                  }}
-                >
-                  <Chip label="healthy" />
-                  <Chip label="whiskey" />
-                  <Chip label="vagan" color="secondary" />
-                  <Chip label="pens" vairant="outlined"  />
-                </div>
+                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
+                  {cart.length} items in cart
+                </Typography>
               </CardContent>
             </Card>
           </Grid> 
@@ -212,15 +205,7 @@ function UserHome(props) {
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
                   {props.ordersNum} orders in total
                 </Typography>
-                <div className={classes.cardTitle}>
-                  <ShoppingCartOutlinedIcon className={classes.cardIcon}/>
-                  <Typography variant="h4" classname={classes.cardTitleText}>
-                    Cart
-                  </Typography>
-                </div>
-                <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  {cart.length} items in cart
-                </Typography>
+
               </CardContent>
             </Card>
           </Grid> 
