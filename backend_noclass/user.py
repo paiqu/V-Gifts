@@ -110,6 +110,8 @@ def change_password(idd, old_password, new_password):
             return True
     return False
 
+# test change
+
 def edit_info_user(user_id, first_name, last_name, address, city, \
             country, db_name = "database.json"):
     """
