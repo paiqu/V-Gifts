@@ -58,7 +58,6 @@ def query_analysis_test0(qry):
         of catagory of keywords
     '''
     lst = re.split("[,.; ]", qry)
-    # print(lst)
     vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
     for wd in lst:
@@ -98,7 +97,6 @@ def query_analysis_test1(qry):
         For high frequency words, the score increases slower
     '''
     lst = re.split("[,.; ]", qry)
-    # print(lst)
     vec = [0] * NUM_CATA
     kwds = TEST_KEYWORDS
     for wd in lst:
@@ -119,7 +117,6 @@ def query_analysis_test2(qry):
         This function returns the weighted score
         of word frequency, but qry is seperated into sections
     '''
-    # print(lst)
     qrys = qry.split('.')
     vec = [0] * NUM_CATA
     for qryy in qrys:
@@ -159,7 +156,6 @@ def query_analysis_test3(qry):
         <qry> should include product name if name mentions 
         important keywords
     '''
-    # print(lst)
     qrys = qry.split('.')
     vec = [0] * NUM_CATA
     for qryy in qrys:
