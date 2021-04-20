@@ -223,13 +223,13 @@ export default function Product(props) {
               {infos.description}
             </Typography>
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <Typography
               variant='body1'
             >
               Delivery: ${infos.delivery}
             </Typography>
-          </Grid>
+          </Grid> */}
           <Grid container item xs={12}>
             <Grid item xs={2}>
               <QuantitySelect
