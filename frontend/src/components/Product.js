@@ -15,9 +15,17 @@ import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
 import CustomSnackBar from './CustomSnackbar';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "Column",
+    alignItems: "center",
+  },
+  grid: {
+    width: "80%",
+  },
   image: {
-    width: 550,
-    height: 550,
+    width: "20rem",
+    height: "20rem",
   },
   imageContainer: {
     display: "flex",
@@ -50,7 +58,8 @@ export default function Product(props) {
   const [alertInfo, setAlertInfo] = useState({
     severity: "",
     message: "",
-  })
+  });
+
 
   React.useEffect((() => {
     axios.get('/product/get_info', {
@@ -157,6 +166,7 @@ export default function Product(props) {
       }
     )
     .then((response) => {
+      props.setNavbarReload();
       setModalType(2);
       handlePsModalOpen();
     })
@@ -165,15 +175,13 @@ export default function Product(props) {
 
 
   return (
-    <div>
+    <div className={classes.root}>
       <Grid
         container 
+        className={classes.grid}
         spacing={5}
         direction="row"
         justify="flex-end"
-        style={{
-          marginTop: "1rem",
-        }}
       >
         <Grid
           className={classes.imageContainer}
@@ -184,13 +192,11 @@ export default function Product(props) {
           <img className={classes.image} src={infos.img} alt="product"/>
         </Grid>
         <Grid
-          className={classes.details}
           container
-          direction="column"
-          spacing={1}
-          item 
+          item
           sm={7}
-          xs={12} 
+          xs={12}
+          spacing={2}
         >
           <Grid item xs={12}>
             <Typography variant="h4">
@@ -224,7 +230,7 @@ export default function Product(props) {
               Delivery: ${infos.delivery}
             </Typography>
           </Grid>
-          <Grid container item xs={12} alignItems="center">
+          <Grid container item xs={12}>
             <Grid item xs={2}>
               <QuantitySelect
                 amount={amount}
@@ -232,6 +238,8 @@ export default function Product(props) {
                 handleDecrement={handleDecrement}
               />
             </Grid>
+          </Grid>
+          <Grid  container item xs={12}>
             <Grid item xs={3}>
               Total: ${amount * infos.price}
             </Grid>
@@ -244,7 +252,7 @@ export default function Product(props) {
             alignItems="center"
             spacing={1}
           >
-            <Grid item xs={6} sm={2} >
+            <Grid item xs={6} sm={3} >
               <Button
                 variant="contained"
                 color="primary"
@@ -256,7 +264,7 @@ export default function Product(props) {
                 Purchase
               </Button>
             </Grid>
-            <Grid item xs={6} sm={2}>
+            <Grid item xs={6} sm={3}>
               <Button 
                 variant="outlined" 
                 color="secondary" 
