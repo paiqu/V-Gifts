@@ -3,12 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography";
 import { DataGrid } from '@material-ui/data-grid';
 import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { Grid } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 import DoneIcon from '@material-ui/icons/Done';
+import CustomSnackBar from '../CustomSnackbar';
+import {
+  EDIT_PRODUCT_SUCCESS_ALERT as EDIT_ALERT,
+  ADD_PRODUCT_SUCCESS_ALERT as ADD_ALERT,
+  NEGATIVE_NUM_ALERT
+} from '../../utils/AlertInfo';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -40,6 +45,11 @@ export default function ProductsManagement(props) {
   const [isNewUploaded, setIsNewUploaded] = useState(false);
   const [isSelectedUploaded, setIsSelectedUploaded] = useState(false);
   const [selectionModel, setSelectionModel] = useState([]);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    severity: "",
+    message: "",
+  })
 
   const columns = [
     { field: 'id', headerName: 'Product ID', width: 150},
@@ -74,24 +84,48 @@ export default function ProductsManagement(props) {
 
   const handleAddProduct = (event) => {
     event.preventDefault();
+    if (newProduct.price < 0) {
+      setAlertInfo(NEGATIVE_NUM_ALERT);
+      setAlertOpen(true);
+      return;
+    }
 
-    let imgData = new FormData();
-    imgData.append("img", newProduct.img);
+    let formData = new FormData();
+    formData.append('token', token);
+    formData.append('file', newProduct.img);
+    formData.append('name', newProduct.name);
+    formData.append('delivery', newProduct.delivery);
+    formData.append('description', newProduct.description);
+    formData.append('price', newProduct.price);
 
-    // axios.post("/product/new", {
-    //   name: newProduct.name,
-    //   price: newProduct.price,
-    //   description: newProduct.description,
-    //   "deli_days": newProduct.delivery,
-    //   img: 
+    axios.post("/product/new", 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+    .then((response) => {
+      const data = response.data;
 
-    // })
+      setAlertInfo(ADD_ALERT);
+      setAlertOpen(true);
+
+      console.log(data);
+      setReloadProducts(true);
+    })
+    .catch((err) => {});
   };
 
   const handleEditProduct = (event) => {
     event.preventDefault();
 
-    console.log(selectedProduct.token);
+    if (selectedProduct.price < 0) {
+      setAlertInfo(NEGATIVE_NUM_ALERT);
+      setAlertOpen(true);
+      return;
+    }
 
     let formData = new FormData();
     formData.append('token', token);
@@ -104,11 +138,6 @@ export default function ProductsManagement(props) {
 
     console.log(formData);
 
-      // id: selectedProduct.id,
-      // name: selectedProduct.name,
-      // description: selectedProduct.description,
-      // delivery: selectedProduct.delivery,
-      // img_type: selectedProduct.img.type.replace(/(.*)\//g, ''),
     axios.post("/product/edit", 
       formData,
       {
@@ -119,6 +148,9 @@ export default function ProductsManagement(props) {
     )
     .then((response) => {
       const data = response.data;
+
+      setAlertInfo(EDIT_ALERT);
+      setAlertOpen(true);
 
       console.log(data);
       setReloadProducts(true);
@@ -237,7 +269,7 @@ export default function ProductsManagement(props) {
                     required
                     id="product-name"
                     label="Product Name"
-                    placeholder="Admin Name"
+                    placeholder="Product Name"
                     variant="outlined"
                     onChange={handleNewProductChange('name')}
                     InputLabelProps={{shrink: true}}
@@ -530,7 +562,14 @@ export default function ProductsManagement(props) {
           </form>
         </Grid>
       </Grid>
-    
+      {alertOpen && 
+        <CustomSnackBar 
+          severity={alertInfo.severity}
+          message={alertInfo.message}
+          open={alertOpen}
+          setOpen={setAlertOpen}
+        />
+      }
     </div>
   );
 }

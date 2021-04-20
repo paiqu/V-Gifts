@@ -17,3 +17,13 @@ export const NEGATIVE_NUM_ALERT = {
   severity: "error",
   message: "Sorry, the entered number has to be positive",
 };
+
+export const EDIT_PRODUCT_SUCCESS_ALERT = {
+  severity: "success",
+  message: "Product info has been updated",
+};
+
+export const ADD_PRODUCT_SUCCESS_ALERT = {
+  severity: "success",
+  message: "The new product has been added",
+};
