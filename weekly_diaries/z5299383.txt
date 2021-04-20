@@ -81,3 +81,22 @@ What I've done this week
 5. Modify products layout design
     * Utlitized grid system more
 
+## Week 9
+What I've done
+1. Implemented the interface for admin to add product
+2. Admin now can get the info of a product by clicking one any row of product data grid
+    * After clicking, the admin can send a POST request to the server to edit the clicked product.
+3. Improved UI design
+    * changed search bar color
+    * remove the redundant "market" button on the NavBar
+    * use a stepper to show the current step at Register page
+        * Enter personal details or Select interests
+4. Added a slidable row for product recommendations in ProductsPage
+5. Users now can click the any shown catogory to retrieve the category of products they want to see.
+6. Added a Interest Selection page where users can select their interests for more precise recommendations
+
+Plan for next week
+1. Make the website more responsive
+2. Handle all error received from flask by showing users an alert (snackbar)
+
+
