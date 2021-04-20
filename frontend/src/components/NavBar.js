@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { fade, makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.common.white, 0.45),
     "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.common.white, 0.55),
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -76,21 +76,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar() {
-  const token = React.useContext(AuthContext).user;
+export default function NavBar(props) {
+  const token = useContext(AuthContext).user;
 
   const classes = useStyles();
   const theme = useTheme();
   const history = useHistory();
 
-  const [searchInput, setSearchInput] = React.useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [cartCount, setCartCount] = useState(0);
 
   const handleSearchChange = event => {
     setSearchInput(event.target.value);
   }
 
   const handleSearch = () => {
-    history.push(`/products?keyword=${searchInput}`);
+    // history.push(`/products?keyword=${searchInput}`);
+    props.setKeyword(searchInput);
   };
 
   const NotLoggedIn = (
@@ -109,25 +111,40 @@ export default function NavBar() {
         aria-label="cart"
         color="inherit"
         component={Link}
-        to={ `/profile//cart`}
+        to={ `/profile/${token}/cart`}
       >
-        <Badge badgeContent={0} color="secondary">
+        <Badge badgeContent={cartCount} color="secondary">
           <ShoppingCartIcon />
         </Badge>
       </IconButton>
       <Button
         component={Link}
-        to={ token ? `/profile/` : "/login"}
+        to={`/profile/${token}`}
         edge="end"
         aria-label="account of current user"
         color="inherit"
         className={classes.logo}
       >
         <AccountCircle />
-        Hi, Pai
+        Account
       </Button>
     </div>
   );
+
+  useEffect(((() => {
+    if (token) {
+      axios.get("/user/get_cart_number", {
+        params: {
+          token: token,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        setCartCount(data["cart_product_num"]);
+      })
+      .catch((err) => {});
+    }
+  })), [props.reload]);
 
   const renderProfile = () => {
     if (token) {
@@ -155,7 +172,7 @@ export default function NavBar() {
 						}}
 						color="inherit"
 						component={Link}
-						to={'/products?keyword='}
+						to={'/products'}
 						className={classes.title} 
 						variant="h4"
 						noWrap
@@ -194,8 +211,7 @@ export default function NavBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {token && LoggedInProfile}
-            {!token && NotLoggedIn}
+            {token ? LoggedInProfile : NotLoggedIn}
           </div>
         </Toolbar>
       </AppBar>

@@ -10,7 +10,7 @@ import CheckboxList from './CheckboxList';
 import ListIcon from '@material-ui/icons/List';
 
 
-export default function CollapseCategories () {
+export default function CollapseCategories (props) {
     const [open, setOpen] = React.useState(true);
 
     const handleClick = () => {
@@ -28,7 +28,11 @@ export default function CollapseCategories () {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                        <CheckboxList list={["For Him", "For Her", "For Baby", "For Pet"]} />
+                        <CheckboxList 
+                          handleCategory={props.handleCategory}
+                          // categories={props.categories} 
+                          // list={} 
+                        />
                     </List>
             </Collapse>
             {/* <CheckboxList list={["For Him", "For Her", "For Baby", "For Pet"]} /> */}

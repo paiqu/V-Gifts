@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -8,11 +8,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { useHistory } from 'react-router'
+import CustomSnackBar from '../components/CustomSnackbar';
+import {NEGATIVE_NUM_ALERT} from '../utils/AlertInfo';
 
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FaceIcon from '@material-ui/icons/Face';
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 const iconSize = 8;
 
@@ -25,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cardTitle: {
     display: "flex",
+    alignItems: "center",
     marginBottom: theme.spacing(1),
   },
   cardIcon: {
@@ -52,14 +55,25 @@ function UserHome(props) {
 
     const token = props.token;
     const profile = props.profile;
-    const [fundToAdd, setFundToAdd] = React.useState(profile['fund']);
-    const [cart, setCart] = React.useState([]);
+    const [fundToAdd, setFundToAdd] = useState(profile['fund']);
+    const [cart, setCart] = useState([]);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertInfo, setAlertInfo] = useState({
+      severity: "",
+      message: "",
+    })
 
     const handleFundToAddChange = (e) => {
       setFundToAdd(e.target.value);
     }
 
     const handleAddFund = () => {
+      if (fundToAdd < 0) {
+        setAlertInfo(NEGATIVE_NUM_ALERT);
+        setAlertOpen(true);
+
+        return;
+      }
       axios.post("/user/profile/fund/add", {
         token: token,
         num: fundToAdd,
@@ -71,7 +85,19 @@ function UserHome(props) {
       .catch((err) => {});
     }
 
-    React.useEffect((() => {
+    useEffect((() => {
+      axios.get('/user/cart/list', {
+        params: {
+          token,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        setCart(data);
+      })
+      .catch((err) => {});
+
       axios.get('/user/cart/list', {
         params: {
           token,
@@ -94,7 +120,7 @@ function UserHome(props) {
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
                   <FaceIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     My Details
                   </Typography>
                 </div>
@@ -117,9 +143,11 @@ function UserHome(props) {
           <Grid item md={3} xs={12}>
             <Card className={classes.gridItem}  variant="outlined">
               <CardContent className={classes.cardContent}>
-                <div className={classes.cardTitle}>
-                  <AttachMoneyIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                <div 
+                  className={classes.cardTitle}
+                >
+                  <AttachMoneyOutlinedIcon className={classes.cardIcon}/>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     Balance
                   </Typography>
                 </div>
@@ -163,8 +191,8 @@ function UserHome(props) {
             <Card className={classes.gridItem} variant="outlined">
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
-                  <ShoppingCartIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                  <ShoppingCartOutlinedIcon className={classes.cardIcon}/>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     Cart
                   </Typography>
                 </div>
@@ -179,17 +207,26 @@ function UserHome(props) {
               <CardContent className={classes.cardContent}>
                 <div className={classes.cardTitle}>
                   <ListAltIcon className={classes.cardIcon}/>
-                  <Typography variant="h3" classname={classes.cardTitleText}>
+                  <Typography variant="h4" classname={classes.cardTitleText}>
                     Orders
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
                   {props.ordersNum} orders in total
                 </Typography>
+
               </CardContent>
             </Card>
           </Grid> 
         </Grid>
+        {alertOpen && 
+          <CustomSnackBar 
+            severity={alertInfo.severity}
+            message={alertInfo.message}
+            open={alertOpen}
+            setOpen={setAlertOpen}
+          />
+        }
       </div>
     );
 }

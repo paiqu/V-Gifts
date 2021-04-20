@@ -1,24 +1,32 @@
 """
-    This file contains user side functions
+    This file contains user side types and operations
 """
-from numpy import ceil
-import database as db
-import datetime as dt
-import admin as ad
-import login as lo
-import webpage as wb
-import error as err
 
-def new_user(aname, fname, lname, password, email, address, city, \
-            country, db_name = 'database.json'):
+
+import database as db
+import product as pdt
+import login as lo
+import order as odr
+import error as err
+from numpy import ceil
+from chatbot import TEST_KEYWORDS
+
+
+# Object types
+
+def new_user(account_name, first_name, last_name, password, email, address, city, \
+            country, db_name = "database.json"):
+    """
+        This fuction create new user with input data
+    """
     new_id = db.id_generator("user", db_name)
-    temp = db.load_json(db_name)
+    dbs = db.load_json(db_name)
     return {
         "id": new_id,
-        "name": aname,
+        "name": account_name,
                 # account name
-        "fname": fname,
-        "lname": lname,
+        "fname": first_name,
+        "lname": last_name,
         "password": password,
         "email": email,
         "address": address,
@@ -29,184 +37,218 @@ def new_user(aname, fname, lname, password, email, address, city, \
                 # [[product_id, amount], ...]
         "order": [],
                 # [order_id, ...]
-        "interest": [0] * temp["TYPE_OF_PRODUCTS"]
+        "interest": [0] * dbs["TYPE_OF_PRODUCTS"]
     }
 
-def new_order(user_id, product_id, datee, amount, db_name = 'database.json'):
+
+# User related operations
+
+def show_profile(user_id, db_name = "database.json"):
     """
-        create a new product,
-        category should be a lst of int with length of
-        TYPE_OF_PRODUCTS
+        This fuction show user profile 
     """
-    new_id = db.id_generator("order", db_name)
+    db.valid_id("user", user_id, db_name)
+    dbs = db.load_json(db_name)
     return {
-        "id": new_id,
-        "user_id": user_id,
-        "product_id": product_id,
-        "purchase_date": datee,
-                                # in format of timestamp:
-                                # e.g. datee = 1545730073  ->  2018-12-25 09:27:53
-        "amount": amount,
-        "state": 0,             # 0: just purchase
-                                # 1: delivering
-                                # 2: done
-                                # 3: cancelled / refunded
-        "rating": 0
+        "first_name": dbs["USER_DB"][str(user_id)]["fname"],
+        "last_name": dbs["USER_DB"][str(user_id)]["lname"],
+        "username": dbs["USER_DB"][str(user_id)]["name"],
+        "email": dbs["USER_DB"][str(user_id)]["email"],
+        "address": dbs["USER_DB"][str(user_id)]["address"],
+        "city": dbs["USER_DB"][str(user_id)]["city"],
+        "country": dbs["USER_DB"][str(user_id)]["country"],
+        "fund": dbs["USER_DB"][str(user_id)]["fund"],
     }
 
-####################################################################
-########### Corrections for function below are required ############
-####################################################################
-
-
-def add_fund(u_id, num):
+def add_fund(user_id, num):
     """
-    This function adds fund to a user
+        This function adds fund to a user
     """
-    temp = db.load_json()
-    db.valid_id("user",u_id)
-    temp["USER_DB"][str(u_id)]["fund"] += num
-    new_fund = temp["USER_DB"][str(u_id)]["fund"]
-    db.to_json(temp)
+    dbs = db.load_json()
+    db.valid_id("user",user_id)
+    dbs["USER_DB"][str(user_id)]["fund"] += num
+    new_fund = dbs["USER_DB"][str(user_id)]["fund"]
+    db.to_json(dbs)
     return {
         "fund": new_fund
     }
 
-def buy_product_from_cart(self, product):
+def add_interest(user_id, posi, num):
     """
-    This function buys a product if user has 
-    enough fund, and create a corresponding
-    ordr
-
-    :param product: the product to be purchased
-    """
-
-
-def add_interest(u_id, posi, num):
-    """
-        This function updates user"s interest
+        This function updates user's interest
         Prevent overflow
     """
-    temp = db.load_json()
-    db.valid_id("user",u_id)
-    temp["USER_DB"][str(u_id)]["interest"][posi % temp["TYPE_OF_PRODUCTS"]] \
+    dbs = db.load_json()
+    db.valid_id("user",user_id)
+    dbs["USER_DB"][str(user_id)]["interest"][posi % dbs["TYPE_OF_PRODUCTS"]] \
              += num
-    db.to_json(temp)
-    return temp["USER_DB"][str(u_id)]["interest"]
+    db.to_json(dbs)
+    return dbs["USER_DB"][str(user_id)]["interest"]
 
-def setup_interest(u_id, vec, db_name = 'database.json'):
+def setup_interest(user_id, vec, db_name = "database.json"):
     """
-        This function updates user"s interest
+        This function updates user's interest
         Prevent overflow
     """
-    temp = db.load_json(db_name)
-    db.valid_id("user",u_id, db_name)
-    temp["USER_DB"][str(u_id)]["interest"] = vec
-    db.to_json(temp, db_name)
-    return temp["USER_DB"][str(u_id)]["interest"]
+    dbs = db.load_json(db_name)
+    db.valid_id("user",user_id, db_name)
+    dbs["USER_DB"][str(user_id)]["interest"] = vec
+    db.to_json(dbs, db_name)
+    return dbs["USER_DB"][str(user_id)]["interest"]
 
-# User forget password and reset
-def forget_password(name, email):
-    """
-    Check the email exist
-    Send reset url to the email
-    return new password
-    """
-    pass
-
-# Users change password
 def change_password(idd, old_password, new_password):
     """
-    Check the name and password match
-    Reset the password
+    This fuction check the name and password match
+    and then reset the password
     """
-    
-    temp = db.load_json()
-    for user_id, user_info in temp["USER_DB"].items():
+    dbs = db.load_json()
+    for user_id, user_info in dbs["USER_DB"].items():
         if user_info["password"] == lo.encrypt_password(old_password) and user_id == idd:
             user_info["password"] = lo.encrypt_password(new_password)
-            db.to_json(temp)
+            db.to_json(dbs)
             lo.logout_user(user_id)
             return True
     return False
 
-
-def edit_info_user(u_id, fname, lname, address, city, \
-            country, db_name = 'database.json'):
+def edit_info_user(user_id, first_name, last_name, address, city, \
+            country, db_name = "database.json"):
     """
         This function edits user info
         But no permission to change account name and email
         change password from us.change_password func
     """
-    temp = db.load_json(db_name)
-    # temp["USER_DB"][str(u_id)]["name"] = aname
-    temp["USER_DB"][str(u_id)]["fname"] = fname
-    temp["USER_DB"][str(u_id)]["lname"] = lname
-    # temp["USER_DB"][str(u_id)]["password"] = password
-    # temp["USER_DB"][str(u_id)]["email"] = email
-    temp["USER_DB"][str(u_id)]["address"] = address
-    temp["USER_DB"][str(u_id)]["city"] = city
-    temp["USER_DB"][str(u_id)]["country"] = country
-    db.to_json(temp, db_name)
-    return {
-    }
+    dbs = db.load_json(db_name)
+    dbs["USER_DB"][str(user_id)]["fname"] = first_name
+    dbs["USER_DB"][str(user_id)]["lname"] = last_name
+    dbs["USER_DB"][str(user_id)]["address"] = address
+    dbs["USER_DB"][str(user_id)]["city"] = city
+    dbs["USER_DB"][str(user_id)]["country"] = country
+    db.to_json(dbs, db_name)
+    return {}
 
+def my_reset_passowrd(email, db_name = "database.json"):
+    """
+        This function picks the email and send link to reset password
+    """
+    dbs = db.load_json(db_name)
+    for user_id, user_info in dbs["USER_DB"].items():
+        if user_info["email"] == email:
+            return user_info
+    raise err.InvalidEmail()
 
-def add_product_to_cart(user_id, product_id, amount, db_name = 'database.json'):
+def show_user_cart(user_id, db_name = "database.json"):
     """
-        This function adds a product into user"s 
-        shopping cart
+        This function shows the shopping cart of a user
     """
-    db.valid_id("user",user_id, db_name)
-    db.valid_id("product",product_id, db_name)
+    db.valid_id("user", user_id, db_name)
+    dbs = db.load_json(db_name)
+    return dbs["USER_DB"][str(user_id)]["shopping_cart"]
+
+def add_product_to_cart(user_id, product_id, amount, db_name = "database.json"):
+    """
+        This function adds a product into user's shopping cart
+    """
+    db.valid_id("user", user_id, db_name)
+    db.valid_id("product", product_id, db_name)
     cart = show_user_cart(user_id, db_name)
     i = 0
     while (i < len(cart)):
         if (cart[i][0] == product_id):
             break
         i = i + 1
-    temp = db.load_json(db_name)
+    dbs = db.load_json(db_name)
     if i == len(cart):
-        item = [product_id, amount]
-        # (product_id, amount)
-        # print(str(user_id), item)
-        temp["USER_DB"][str(user_id)]["shopping_cart"].append(item)
+        item = [product_id, amount] # (product_id, amount)
+        dbs["USER_DB"][str(user_id)]["shopping_cart"].append(item)
     else:
-        pid, old_amount = cart[i]
+        product_id, old_amount = cart[i]
         pair = [product_id, amount + old_amount]
-        temp["USER_DB"][str(user_id)]["shopping_cart"][i] = pair
-    db.to_json(temp, db_name)
+        dbs["USER_DB"][str(user_id)]["shopping_cart"][i] = pair
+    db.to_json(dbs, db_name)
     return {}
 
-def remove_prod_from_cart(user_id, cart_item_pair, db_name = 'database.json'):
+def remove_prod_from_cart(user_id, cart_item_pair, db_name = "database.json"):
     """
         cart_item_pair -> (product_id, amount)
-        This function remvoes prod from cart
+        This function removes product from cart
     """
     product_id, amount = cart_item_pair
     db.valid_id("user",user_id, db_name)
     db.valid_id("product",product_id, db_name)
-    temp = db.load_json(db_name)
-    temp["USER_DB"][str(user_id)]["shopping_cart"].remove(cart_item_pair)
-    db.to_json(temp, db_name)
+    dbs = db.load_json(db_name)
+    dbs["USER_DB"][str(user_id)]["shopping_cart"].remove(cart_item_pair)
+    db.to_json(dbs, db_name)
     return {}
 
-def individual_price(product_id, amount, db_name = 'database.json'):
-    temp = db.load_json(db_name)
-    price = amount * temp["PRODUCT_DB"][str(product_id)]["price"]
+def individual_price(product_id, amount, db_name = "database.json"):
+    """
+        This fuction caculate individual product price using amount
+    """
+    dbs = db.load_json(db_name)
+    price = amount * dbs["PRODUCT_DB"][str(product_id)]["price"]
     return price
 
-def total_price(lst, db_name = 'database.json'):
+def total_price(lst, db_name = "database.json"):
     """
-        This function calculates the total price of item to purchase
+        This function calculates the total price of item in cart
     """
     price = 0
     for cart_item_pair in lst:
         product_id, amount = cart_item_pair
-        price += individual_price(product_id, amount, db_name)
+        price += int(individual_price(product_id, amount, db_name))
     return price
 
-def purchase(u_id, lst, db_name = 'database.json'):
+def change_cart_amount(user_id, cart_index, new_amount, db_name = "database.json"):
+    """
+        This fuction change the amount of product in user's cart
+        auto remove product from cart when amount = 0
+    """
+    db.valid_id("user", user_id, db_name)
+    dbs = db.load_json(db_name)
+    pair = dbs["USER_DB"][str(user_id)]["shopping_cart"][cart_index]
+    if new_amount == 0:
+        dbs["USER_DB"][str(user_id)]["shopping_cart"].pop(cart_index)
+    else:
+        product_id, amount = pair
+        pair = [product_id, new_amount]
+        dbs["USER_DB"][str(user_id)]["shopping_cart"][cart_index] = pair
+    db.to_json(dbs, db_name)
+    return {}
+
+def show_all_cart(user_id, db_name = "database.json"):
+    """
+        This fuction show the user's cart with details information
+    """
+    cart_lst = []
+    dbs = db.load_json(db_name)
+    cart = show_user_cart(user_id, db_name)
+    for pair in cart:
+        product_id, amount = pair
+        cart_lst.append({
+            "product_id": product_id,
+            "product_name": pdt.product_id_to_name(product_id),
+            "pic_link": dbs["PRODUCT_DB"][str(product_id)]["pic"],
+            "amount": amount,
+            "price": dbs["PRODUCT_DB"][str(product_id)]["price"],
+            "cost": individual_price(product_id, amount)
+        })
+    return cart_lst
+
+def get_user_cart_n(user_id, db_name = "database.json"):
+    dbs = db.load_json(db_name)
+    n1 = len(dbs["USER_DB"][str(user_id)]["shopping_cart"])
+    n2 = 0
+    if n1 == 0:
+        pass
+    else:
+        for p_pair in dbs["USER_DB"][str(user_id)]["shopping_cart"]:
+            n2 += p_pair[1]
+    return {
+        "cart_product_num": n1,
+        "cart_product_total": n2
+    }
+
+def purchase(user_id, cart, db_name = "database.json"):
     """
         This function makes payment
         lst -> [[product_id, amount], ...]
@@ -214,294 +256,49 @@ def purchase(u_id, lst, db_name = 'database.json'):
         2. make payments
     """
     # 1
-    db.valid_id("user", u_id, db_name)
-    total_cost = total_price(lst, db_name)
-    temp = db.load_json(db_name)
-    user_fund = temp["USER_DB"][str(u_id)]["fund"]
+    db.valid_id("user", user_id, db_name)
+    total_cost = total_price(cart, db_name)
+    dbs = db.load_json(db_name)
+    user_fund = dbs["USER_DB"][str(user_id)]["fund"]
     if user_fund < total_cost:
         # not enough fund
-        print("Not enough fund")
         raise err.NotEoughFund(description = "Not enough fund, purchase fail!")
     else:
         # 2
         # enough fund
-        temp["USER_DB"][str(u_id)]["fund"] -= total_cost
-        db.to_json(temp, db_name)
-        for cart_item_pair in lst:
+        dbs["USER_DB"][str(user_id)]["fund"] -= total_cost
+        db.to_json(dbs, db_name)
+        for cart_item_pair in cart:
             product_id, amount = cart_item_pair
-            result = create_order(u_id, product_id, amount, db_name)
+            increment_user_interest(user_id, product_id, db_name)
+            result = odr.create_order(user_id, product_id, amount, db_name)
     return {}
 
-def create_order(user_id, product_id, amount, db_name = 'database.json'):
+def increment_user_interest(user_id, product_id, db_name = "database.json"):
     """
-        This function creates an order
-        and generate an order id and store it in user
-        3. create order
-        4. remove product from cart
-        5. add order to user & order_db
-        6. save to db
-
-        This function adds order to ORDER_DB
+        This function changes user's interest upon purchasing products
     """
-    db.valid_id("user",user_id, db_name)
-    db.valid_id("product",product_id, db_name)
-    # 3
-    datee = int(dt.datetime.timestamp(dt.datetime.now()))
-    order = new_order(user_id, product_id, datee, amount, db_name)
-    db.add_order(order, db_name)
-    order_id = order["id"]
-    # 4 
-    temp = db.load_json(db_name)
-    cart_item_pair = [product_id, amount]
-    if cart_item_pair in temp["USER_DB"][str(user_id)]["shopping_cart"]:
-        temp["USER_DB"][str(user_id)]["shopping_cart"].remove(cart_item_pair)
-    # 5 add order id to user
-    temp["USER_DB"][str(user_id)]["order"].append(order["id"])
-    # 6
-    db.to_json(temp, db_name)
+    dbs = db.load_json(db_name)
+    vec_1 = dbs["PRODUCT_DB"][str(product_id)]["category"]
+    for i in range(len(vec_1)):
+        dbs["USER_DB"][str(user_id)]["interest"][i] = \
+                round(dbs["USER_DB"][str(user_id)]["interest"][i]/2.0 + vec_1[i]/2.0, 2)
+    db.to_json(dbs, db_name)
     return {}
 
-def rate_order(u_id, order_id, rating, db_name = 'database.json'):
+def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
     """
-        This function allows user to rate an order if order is completed
+        This function is used to directly edit 
+        user's interest vecetor
     """
     db.valid_id("user", u_id, db_name)
-    db.valid_id("order", order_id, db_name)
-    if rating <= 0.5:
-        rating = 0.5
-    elif rating >= 5:
-        rating = 5
-    temp = db.load_json(db_name)
-    if u_id != temp["ORDER_DB"][str(order_id)]["user_id"]:
-        raise KeyError()
-    prod_id = temp["ORDER_DB"][str(order_id)]["product_id"]
-    temp["ORDER_DB"][str(order_id)]["rating"] = rating
-    temp["PRODUCT_DB"][str(prod_id)]["ratings"].append([u_id, rating])
-    db.to_json(temp, db_name)
+    dbs = db.load_json(db_name)
+    # 11 product types
+    interest_vector = [0] * 11
+    for ctgry in interest_lst:
+        for item in TEST_KEYWORDS[ctgry]:
+            interest_vector[item] += 1
+            
+    dbs["USER_DB"][str(u_id)]["interest"] = interest_vector
+    db.to_json(dbs, db_name)
     return {}
-
-
-def show_user_cart(u_id, db_name = 'database.json'):
-    """
-        This function shows the shopping cart of a user
-    """
-    db.valid_id("user", u_id, db_name)
-    temp = db.load_json(db_name)
-    return temp["USER_DB"][str(u_id)]["shopping_cart"]
-
-def show_product_detail(prod_id, db_name = 'database.json'):
-    """
-        This function shows the details of a product
-    """
-    db.valid_id("product", prod_id)
-    temp = db.load_json()
-    rt = round(wb.rating_calc(prod_id),2)
-    return {
-        "id": temp["PRODUCT_DB"][str(prod_id)]["id"],
-        "name": temp["PRODUCT_DB"][str(prod_id)]["name"],
-        "price": temp["PRODUCT_DB"][str(prod_id)]["price"],
-        "description": temp["PRODUCT_DB"][str(prod_id)]["description"],
-        "delivery": temp["PRODUCT_DB"][str(prod_id)]["delivery"],
-        "rating": rt,
-        "pic_link": temp["PRODUCT_DB"][str(prod_id)]["pic"],
-    }
-
-def show_product_lst(page = -1, user_id = -1, num_each_page = 9, rec_num = 6, db_name = 'database.json'):
-    """
-        This function shows a lst of product
-    """
-    temp = db.load_json(db_name)
-    proc_lst = []
-    for key in temp["PRODUCT_DB"].keys():
-        rtt = round(wb.rating_calc(temp["PRODUCT_DB"][key]["id"]),2)
-        proc_lst.append({
-            "product_id": temp["PRODUCT_DB"][key]["id"],
-            "name": temp["PRODUCT_DB"][key]["name"],
-            "price": temp["PRODUCT_DB"][key]["price"],
-            "rating": rtt,
-            "pic_link": temp["PRODUCT_DB"][key]["pic"]
-        })
-    proc_rt = []
-    if page != -1:
-        for i in range(len(proc_lst)):
-            if i >= (page-1)*num_each_page and i < page*num_each_page:
-                # e.g. page 1 => item 0~8
-                proc_rt.append(proc_lst[i])
-    else: # return all prods
-        proc_rt = proc_lst
-    if user_id == -1:
-        rec_rt = []
-    else:
-        # if a user presist, execute recommendation algo
-        # technically fetchs all product
-        rec_lst = wb.search_filter_recommendation(user_id = user_id)["product_lst"]
-        rec_pid = []
-        for item in rec_lst:
-            rec_pid.append(item["product_id"])
-        rec_rt = []
-        if rec_num >= len(rec_lst):
-            rec_num = len(rec_lst)
-        for i in range(rec_num):
-            prod_id = rec_pid[i]
-            rtt = round(wb.rating_calc(prod_id),2)
-            rec_rt.append({
-                "product_id": prod_id,
-                "name": temp["PRODUCT_DB"][str(prod_id)]["name"],
-                "price": temp["PRODUCT_DB"][str(prod_id)]["price"],
-                "rating": rtt,
-                "pic_link": temp["PRODUCT_DB"][str(prod_id)]["pic"]
-            })
-    return {
-        "recommendation_list": rec_rt,
-        "product_lst": proc_rt,
-        "total_pages": ceil((len(proc_lst)/num_each_page))
-    }
-
-def show_all_cart(uid, db_name = 'database.json'):
-    lst = []
-    temp = db.load_json(db_name)
-    cart = show_user_cart(uid, db_name)
-    for pair in cart:
-        pid, amount = pair
-        lst.append({
-            "product_id": pid,
-            "product_name": ad.product_id_to_name(pid),
-            "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
-            "amount": amount,
-            "price": temp["PRODUCT_DB"][str(pid)]["price"],
-            "cost": individual_price(pid, amount)
-        })
-    return lst
-
-def change_cart_amount(uid, cart_index, new_amount, db_name = 'database.json'):
-    db.valid_id("user", uid, db_name)
-    temp = db.load_json(db_name)
-    pair = temp["USER_DB"][str(uid)]["shopping_cart"][cart_index]
-    if new_amount == 0:
-        temp["USER_DB"][str(uid)]["shopping_cart"].pop(cart_index)
-    else:
-        pid, amount = pair
-        pair = [pid, new_amount]
-        temp["USER_DB"][str(uid)]["shopping_cart"][cart_index] = pair
-    db.to_json(temp, db_name)
-    return {}
-
-def refund_helper(db, u_id, amount):
-    """
-        This function adds amount to a user
-        WITHOUT loading/saving from/to Database
-    """
-    db["USER_DB"][str(u_id)]["fund"] += amount
-    return db
-
-def order_refund(u_id, order_id, db_name = 'database.json'):
-    """
-        This function refunds an order if 
-        the order is not delivered yet (state = 0)
-    """
-    db.valid_id("user", u_id, db_name)
-    db.valid_id("order", order_id, db_name)
-    temp = db.load_json()
-    # if refund is applicable
-    if temp["ORDER_DB"][str(order_id)]["state"] == 3:
-        # print("Order already refunded")
-        status = "Order already refunded"
-    elif temp["ORDER_DB"][str(order_id)]["state"] == 0:
-        if int(u_id) != temp["ORDER_DB"][str(order_id)]["user_id"]:
-            # print("Only user paid for this order can refund")
-            status = "Only user paid for this order can refund"
-        ad.change_order_state(order_id, 3)
-        prod_id = temp["ORDER_DB"][str(order_id)]["product_id"]
-        price = temp["PRODUCT_DB"][str(prod_id)]["price"]
-        amount = temp["ORDER_DB"][str(order_id)]["amount"]
-        temp = refund_helper(temp, u_id, amount * price)
-        db.to_json(temp, db_name)
-        # print("Refund success")
-        status = "Refund success"
-    else:
-        # print("Already on delivery, refund not applicable")
-        status = "Already on delivery, refund not applicable"
-    return status
-
-def show_order_user(u_id, db_name = 'database.json'):
-    """
-        This functions shows order ids done by selected user
-    """
-    db.valid_id("user", u_id, db_name)
-    temp = db.load_json(db_name)
-    return temp["USER_DB"][str(u_id)]["order"]
-
-def show_all_order(uid, db_name = 'database.json'):
-    lst = []
-    temp = db.load_json(db_name)
-    orders = show_order_user(uid, db_name)
-    for oid in orders:
-        pid = temp["ORDER_DB"][str(oid)]["product_id"]
-        amount = temp["ORDER_DB"][str(oid)]["amount"]
-        datte = temp["ORDER_DB"][str(oid)]["purchase_date"]
-        state_in_code = temp["ORDER_DB"][str(oid)]["state"]
-        if state_in_code == 0:
-            state_in_text = "Just purchase"
-        elif state_in_code == 1:
-            state_in_text = "Delivering"
-        elif state_in_code == 2:
-            state_in_text = "Done"
-        elif state_in_code == 3:
-            state_in_text = "Cancelled / Refunded"
-        else:
-            state_in_text = "Invalid state"
-        lst.append({
-            "order_id": oid,
-            "product_id": pid,
-            "product_name": ad.product_id_to_name(pid),
-            "amount": amount,
-            "pic_link": temp["PRODUCT_DB"][str(pid)]["pic"],
-            "cost": individual_price(pid, amount),
-            "purchase_date": int(datte),
-            "state_in_code": state_in_code,
-            "state_in_text": state_in_text,
-            "rating": temp["ORDER_DB"][str(oid)]["rating"]
-        })
-    return lst
-
-# Function to show user info
-def show_profile(u_id, db_name = 'database.json'):
-    db.valid_id("user", u_id, db_name)
-    temp = db.load_json(db_name)
-    return {
-        "first_name": temp["USER_DB"][str(u_id)]["fname"],
-        "last_name": temp["USER_DB"][str(u_id)]["lname"],
-        "username": temp["USER_DB"][str(u_id)]["name"],
-        "email": temp["USER_DB"][str(u_id)]["email"],
-        "address": temp["USER_DB"][str(u_id)]["address"],
-        "city": temp["USER_DB"][str(u_id)]["city"],
-        "country": temp["USER_DB"][str(u_id)]["country"],
-        "fund": temp["USER_DB"][str(u_id)]["fund"],
-    }
-
-
-
-# Check token is available
-# def check_token(iid):
-#     temp = db.load_json()
-#     for token_id, user_token in temp["TOKEN_DB"].items():
-#         if iid == token_id:
-#             return True
-#     return False
-
-def check_token(token, db_name = 'database.json'):
-    temp = db.load_json(db_name)
-    for user_token, token_id in temp["TOKEN_DB"].items():
-        if token == user_token:
-            return True
-    return False
-
-def my_reset_passowrd(email, db_name = 'database.json'):
-    '''
-        This function picks the email and send link to reset password
-    '''
-    temp = db.load_json(db_name)
-    for user_id, user_info in temp["USER_DB"].items():
-        if user_info["email"] == email:
-            return user_info
-    raise err.InvalidEmail()

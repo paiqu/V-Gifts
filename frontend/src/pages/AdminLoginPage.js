@@ -13,6 +13,9 @@ import axios from 'axios';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 
 
+const INVALID_NAME = 464;
+const INVALID_PASSWORD = 465;
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -110,13 +113,13 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
      })
     .then((response) => {
       const data = response.data;
-      if (data.code == 404) {
+      if (data.code === INVALID_NAME) {
         // admin name does not exist
         setState({
           nameError: true,
           help_text: "The entered admin name does not exist"
         });
-      } else if (data.code == 405) {
+      } else if (data.code === INVALID_PASSWORD) {
         // wrong password
         setState({
           passwordError: true,

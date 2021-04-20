@@ -5,10 +5,13 @@
     attributes, PLEASE do pytest to remove any
     conflict changes.
 """
+
+
 import json
 import admin as adm
 from chatbot import TEST_KEYWORDS
 from login import encrypt_password
+
 
 # Global values
 
@@ -22,7 +25,7 @@ def init_db():
         This fuction initialize the database 
         with no values but a pre-set admin for further use
     """
-    db = {
+    dbs = {
         "TYPE_OF_PRODUCTS": TYPE_OF_PRODUCTS_INIT,   # dimension of interests
         "PROD_CATAGORY":["for men", 
                         "for women", 
@@ -47,8 +50,8 @@ def init_db():
         "TOKEN_DB":{}
     }
     admin = adm.new_preset_admin("admin", encrypt_password("admin"), "VictimsCOMP3900@gmail.com")
-    db["ADMIN_DB"][str(admin["id"])] = admin
-    return db
+    dbs["ADMIN_DB"][str(admin["id"])] = admin
+    return dbs
 
 def pretty_print(dct, level = 0, strr = "    "):
     for key in dct.keys():
@@ -68,29 +71,29 @@ def valid_id(option, idd, db_name = "database.json"):
         This func checks if an id exist in database
         options in user/product/admin/order
     """
-    db = load_json(db_name)
+    dbs = load_json(db_name)
     if option == "user" or option == "users":
-        if str(idd) in db["USER_DB"]:
+        if str(idd) in dbs["USER_DB"]:
             return True
     elif option == "product" or option == "products":
-        if str(idd) in db["PRODUCT_DB"]:
+        if str(idd) in dbs["PRODUCT_DB"]:
             return True
     elif option == "admin" or option == "admins":
-        if str(idd) in db["ADMIN_DB"]:
+        if str(idd) in dbs["ADMIN_DB"]:
             return True
     elif option == "order" or option == "orders":
-        if str(idd) in db["ORDER_DB"]:
+        if str(idd) in dbs["ORDER_DB"]:
             return True
 
     # raise key error if id not found
     raise KeyError()
 
-def to_json(db, filename = "database.json"):
+def to_json(dbs, filename = "database.json"):
     """
         This fuction save database to json file
     """
     with open(filename, "w") as fp:
-        json.dump(db, fp)
+        json.dump(dbs, fp)
     return {}
 
 def load_json(filename = "database.json"):
@@ -98,43 +101,43 @@ def load_json(filename = "database.json"):
         This function loads database from json file
     """
     with open(filename, "r") as fp:
-        db = json.load(fp)
-    return db
+        dbs = json.load(fp)
+    return dbs
 
 def add_user(user, db_name = "database.json"):
     """
         This fuction add user to database
     """
-    db = load_json(db_name)
-    db["USER_DB"][str(user["id"])] = user
-    to_json(db, db_name)
+    dbs = load_json(db_name)
+    dbs["USER_DB"][str(user["id"])] = user
+    to_json(dbs, db_name)
     return {}
 
 def add_admin(admin, db_name = "database.json"):
     """
         This fuction add admin to database
     """
-    db = load_json(db_name)
-    db["ADMIN_DB"][str(admin["id"])] = admin
-    to_json(db, db_name)
+    dbs = load_json(db_name)
+    dbs["ADMIN_DB"][str(admin["id"])] = admin
+    to_json(dbs, db_name)
     return {}
 
 def add_prod(prod, db_name = "database.json"):
     """
-        This fuction add product to db
+        This fuction add product to database
     """
-    db = load_json(db_name)
-    db["PRODUCT_DB"][str(prod["id"])] = prod
-    to_json(db, db_name)
+    dbs = load_json(db_name)
+    dbs["PRODUCT_DB"][str(prod["id"])] = prod
+    to_json(dbs, db_name)
     return {}
 
 def add_order(order, db_name = "database.json"):
     """
-        This fuction add order to db
+        This fuction add order to database
     """
-    db = load_json(db_name)
-    db["ORDER_DB"][str(order["id"])] = order
-    to_json(db, db_name)
+    dbs = load_json(db_name)
+    dbs["ORDER_DB"][str(order["id"])] = order
+    to_json(dbs, db_name)
     return {}
 
 def clear_db(db_name = "database.json"):
@@ -149,23 +152,23 @@ def id_generator(option, db_name = "database.json"):
         This fuction generate id of objects
         options in user/product/admin/order
     """
-    db = load_json(db_name)
+    dbs = load_json(db_name)
     if option == "user" or option == "users":
-        db["USER_ID"] += 1
-        to_json(db, db_name)
-        return db["USER_ID"]
+        dbs["USER_ID"] += 1
+        to_json(dbs, db_name)
+        return dbs["USER_ID"]
     elif option == "product" or option == "products":
-        db["PRODUCT_ID"] += 1
-        to_json(db, db_name)
-        return db["PRODUCT_ID"]
+        dbs["PRODUCT_ID"] += 1
+        to_json(dbs, db_name)
+        return dbs["PRODUCT_ID"]
     elif option == "admin" or option == "admins":
-        db["ADMIN_ID"] += 1
-        to_json(db, db_name)
-        return db["ADMIN_ID"]
+        dbs["ADMIN_ID"] += 1
+        to_json(dbs, db_name)
+        return dbs["ADMIN_ID"]
     elif option == "order" or option == "orders":
-        db["ORDER_ID"] += 1
-        to_json(db, db_name)
-        return db["ORDER_ID"]
+        dbs["ORDER_ID"] += 1
+        to_json(dbs, db_name)
+        return dbs["ORDER_ID"]
     else:
         # raise key error if option not in range
         raise KeyError()
@@ -174,8 +177,8 @@ def check_interest_dim(category, db_name = "database.json"):
     """
         This fuction check user interest dimension
     """
-    db = load_json(db_name)
-    if len(category) == db["TYPE_OF_PRODUCTS"]:
+    dbs = load_json(db_name)
+    if len(category) == dbs["TYPE_OF_PRODUCTS"]:
         return True
     else:
         return False
@@ -184,45 +187,14 @@ def add_product_type(db_name = "database.json"):
     """
         This fuction add more product type
     """
-    db = load_json(db_name)
-    db["TYPE_OF_PRODUCTS"] += 1
-    for key in db["PRODUCT_DB"]:
-        db["PRODUCT_DB"][key]["category"].append(0)
-    for key in db["USER_DB"]:
-        db["USER_DB"][key]["interest"].append(0)
-    to_json(db, db_name)
-    return db["TYPE_OF_PRODUCTS"]
-
-def prod_rating_calculator(prod_id, db_name = "database.json"):
-    """
-        This function is used to obtain total 
-        rating for a product from individual 
-        user ratings
-    """
-    valid_id("product", prod_id)
-    db = load_json(db_name)
-    rating_lst = db["PRODUCT_DB"][str(prod_id)]["rating"]
-    if len(rating_lst) == 0:
-        return 0
-    summ = 0
-    for rating in rating_lst:
-        summ += rating[1]
-    return summ / len(rating_lst)
-
-def edit_user_interest(u_id, interest_lst, db_name = "database.json"):
-    """
-        This function is used to directly edit 
-        user's interest vecetor
-    """
-    valid_id("user", u_id, db_name)
-    db = load_json(db_name)
-    # 11 product types
-    interest_vector = [0] * 11
-    for ctgry in interest_lst:
-        interest_vector[TEST_KEYWORDS[ctgry]] += 1
-    db["USER_DB"][str(u_id)]["interest"] = interest_vector
-    to_json(db, db_name)
-    return {}
+    dbs = load_json(db_name)
+    dbs["TYPE_OF_PRODUCTS"] += 1
+    for key in dbs["PRODUCT_DB"]:
+        dbs["PRODUCT_DB"][key]["category"].append(0)
+    for key in dbs["USER_DB"]:
+        dbs["USER_DB"][key]["interest"].append(0)
+    to_json(dbs, db_name)
+    return dbs["TYPE_OF_PRODUCTS"]
 
 def get_interest_lst():
     """

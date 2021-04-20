@@ -10,15 +10,15 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import axios from 'axios';
 import Rating from '@material-ui/lab/Rating';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import PurchaseSucessModal from './modals/PurchaseSuccessModal';
+import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
+import { FUND_ALERT } from '../utils/AlertInfo';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
         // flexGrow: 1,
         height: "100%",
+        maxHeight: "100%",
     },
     paper: {
         padding: theme.spacing(2),
@@ -71,6 +71,8 @@ export default function ProductCard(props) {
       .then((response) => {
         props.setModalType(2);
         props.handlePsModalOpen();
+        props.setNavbarReload(prev => prev + 1);
+        // props.setNavbarReload(false);
       })
       .catch((err) => {});
     };
@@ -97,14 +99,19 @@ export default function ProductCard(props) {
         data: payload,
       })
       .then(response => {
-        console.log(response.data);
+        const data = response.data;
+
+        if (data.code === NOT_ENOUGH_FUND) {
+          props.setAlertInfo(FUND_ALERT);
+          props.setAlertOpen(true);
+          return;
+        }
         props.setModalType(1);
         props.handlePsModalOpen();
       })
       .catch((err) => {
         console.log(err);
-      });
-  
+      }); 
     };
 
     return (
@@ -123,11 +130,11 @@ export default function ProductCard(props) {
                         </Grid>
                         <Grid item>
                             <Button
-                              color={theme.palette.primary.contrastText}
                               onClick={handleAddToCart}
                               variant="outlined"
                               style={{
                                 width: "9rem",
+                                color: theme.palette.primary.contrastText,
                               }}
                             >
                               <Typography variant="body2" style={{ cursor: 'pointer' }}>
@@ -137,11 +144,11 @@ export default function ProductCard(props) {
                         </Grid>
                         <Grid item>
                             <Button
-                              color={theme.palette.primary.contrastText}
                               onClick={handlePurchase}
                               variant="outlined"
                               style={{
                                 width: "9rem",
+                                color: theme.palette.primary.contrastText,
                               }}
                             >
                               <Typography variant="body2" style={{ cursor: 'pointer' }}>
@@ -154,14 +161,14 @@ export default function ProductCard(props) {
                         <Grid item xs container direction="column" spacing={2}>
                         <Grid item xs>
                             <Typography gutterBottom variant="subtitle1">
-                              {`${name.split(" ").splice(0, 11).join(" ")} ...`}
+                              {`${name.split(" ").splice(0, 15).join(" ")}`}
                             </Typography>
-                            <Typography variant="body2" gutterBottom>
+                            {/* <Typography variant="body2" gutterBottom>
                               A normal product
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary">
+                            </Typography> */}
+                            {/* <Typography variant="body2" color="secondary">
                               ID: {`${id}`}
-                            </Typography>
+                            </Typography> */}
                             <Rating name={`product-rating`} value={rating} readOnly/>
                         </Grid>
 
@@ -171,7 +178,7 @@ export default function ProductCard(props) {
                         </Grid> */}
                     </Grid>
                     <Grid item xs={1}>
-                      <Typography variant="h7">${price}</Typography>
+                      <Typography variant="h6">${price}</Typography>
                     </Grid>
                 </Grid>
             </Paper>

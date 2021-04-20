@@ -8,6 +8,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import RegisterPage from './pages/RegisterPage';
+import RegisterStepperPage from './pages/RegisterStepperPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
@@ -33,7 +34,6 @@ const theme = createMuiTheme({
       dark: '#0069c0',
       contrastText: '#fafafa',
 		},
-
 	},
 });
 
@@ -85,7 +85,7 @@ function App() {
                 exact 
                 path="/register" 
                 render={(props) => {
-                  return <RegisterPage {...props} setAuth={setAuth} />;
+                  return <RegisterStepperPage {...props} setAuth={setAuth} />;
                 }}  
               />
               <Route 
@@ -98,6 +98,9 @@ function App() {
               <Route 
                 path="/products" 
                 component={ProductsPage}
+                // render={(props) => {
+                //   return <ProductsPage {...props} key={window.location.pathname} />
+                // }}
               />
               <Route exact path="/product/:id" component={ProductDetailPage} />
               <ProtectedRoute exact path="/profile/:id" component={ProfilePage} />

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
+import { useHistory } from 'react-router'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,48 +20,79 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CheckboxList(props) {
     const classes = useStyles();
-    const [checked, setChecked] = React.useState([0]);
+    const history = useHistory();
 
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
+    const categoryList = ["for men", "for women", "for children", "for friends", "for elder", "for relationship", "foods", "tools", "luxuries", "entertainment", "working"];
+    // const categories = props.categories.numList;
 
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
+    // // const [checked, setChecked] = useState([0]);
+    // const [categories, setCategories] = useState(Array(11).fill(0));
+    // // console.log(props);
+    // if (props.categories.length > 0) {
+    //   for (let i = 0; i < props.categories.length; i++) {
+    //     if (categories.includes(props.categories[i])) {
+    //       setCategories(categories.map(x => (
+    //         x === props.categories[i] ? 1 : 0
+    //       )));
+    //     }
+    //   }
+    // }
 
-        setChecked(newChecked);
-    };
+    // const setChecked = (index) => {
+    //   return !!categories[index];
+    // }
+
+    // const handleToggle = (value) => () => {
+    //     const currentIndex = checked.indexOf(value);
+    //     const newChecked = [...checked];
+
+    //     if (currentIndex === -1) {
+    //         newChecked.push(value);
+    //     } else {
+    //         newChecked.splice(currentIndex, 1);
+    //     }
+
+    //     setChecked(newChecked);
+    // };
 
   return (
     <List className={classes.root}>
-        {props.list.map((value, index) => {
-            const labelId = `checkbox-list-label-${value}`;
+      <ListItem
+        key={"all-products"} 
+        role={undefined} 
+        button 
+        onClick={() => props.handleCategory("")}
+        className={classes.nested}
+      >
+        <ListItemText 
+          id={"list-label-all"} 
+          primary={"All Products"} 
+          style={{
+            textTransform: "capitalize",
+          }}
+        />
+      </ListItem>
+      {categoryList.map((value, index) => {
+          const labelId = `list-label-${value}`;
 
-            return (
-                <ListItem
-                    key={value} 
-                    role={undefined} 
-                    //dense 
-                    button 
-                    onClick={handleToggle(value)}
-                    className={classes.nested}
-                >
-                    <ListItemIcon>
-                        <Checkbox
-                            edge="start"
-                            checked={checked.indexOf(value) !== -1}
-                            tabIndex={-1}
-                            disableRipple
-                            inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                    </ListItemIcon>
-                    <ListItemText id={labelId} primary={value} />
-                </ListItem>
-            );
-        })}
+          return (
+            <ListItem
+              key={value} 
+              role={undefined} 
+              button 
+              onClick={() => props.handleCategory(value)}
+              className={classes.nested}
+            >
+              <ListItemText 
+                id={labelId} 
+                primary={value} 
+                style={{
+                  textTransform: "capitalize",
+                }}
+              />
+            </ListItem>
+          );
+      })}
     </List>
   );
 }

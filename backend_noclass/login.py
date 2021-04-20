@@ -4,10 +4,12 @@
     with similar layout. They are always used in different
     website (user/admin only).
 """
+
+
 import user as usr
 import database as db 
 import admin as adm
-import generate_token as gt
+import tokeen as tk
 import error as err
 import hashlib
 import re
@@ -59,15 +61,15 @@ def login_user(name, password):
 
     # login user and generate token
     login_token = ""
-    temp = db.load_json()
+    dbs = db.load_json()
     uid = 0
-    for user_id, user_info in temp["USER_DB"].items():
+    for user_id, user_info in dbs["USER_DB"].items():
         if user_info["name"] == name:
             if user_info["password"] == encrypt_password(password):
-                login_token = gt.token(name)
+                login_token = tk.token(name)
                 uid = user_id
-                temp["TOKEN_DB"][login_token] = uid
-                db.to_json(temp)
+                dbs["TOKEN_DB"][login_token] = uid
+                db.to_json(dbs)
                 return {
                     "id": uid,
                     "token": login_token
@@ -80,11 +82,11 @@ def logout_user(token):
     """
         This function logout user
     """
-    temp = db.load_json()
+    dbs = db.load_json()
 
-    if usr.check_token(token): 
-        temp["TOKEN_DB"].pop(token)
-        db.to_json(temp)
+    if check_token(token): 
+        dbs["TOKEN_DB"].pop(token)
+        db.to_json(dbs)
         return True
     else:
         return False
@@ -164,15 +166,15 @@ def login_admin(name, password):
 
     # login admin and generate token
     login_token = ""
-    temp = db.load_json()
+    dbs = db.load_json()
     aid = 0
-    for admin_id, admin_info in temp["ADMIN_DB"].items():
+    for admin_id, admin_info in dbs["ADMIN_DB"].items():
         if admin_info["name"] == name:
             if admin_info["password"] == encrypt_password(password):
-                login_token = gt.token(name)
+                login_token = tk.token(name)
                 aid = admin_id
-                temp["TOKEN_DB"][login_token] = aid
-                db.to_json(temp)
+                dbs["TOKEN_DB"][login_token] = aid
+                db.to_json(dbs)
                 return {
                     "id": aid,
                     "token":login_token
@@ -185,10 +187,10 @@ def logout_admin(token):
     """
         This function logout admin
     """
-    temp = db.load_json()
-    if usr.check_token(token):
-        temp["TOKEN_DB"].pop(token)
-        db.to_json(temp)
+    dbs = db.load_json()
+    if check_token(token):
+        dbs["TOKEN_DB"].pop(token)
+        db.to_json(dbs)
         return True
     else:
         return False
@@ -200,10 +202,10 @@ def check_user_exist(name):
     """
         This fuction check whether user has already exist when register
     """
-    temp = db.load_json()
-    if temp["USER_DB"] is None:
+    dbs = db.load_json()
+    if dbs["USER_DB"] is None:
         return True
-    for user_id, user_info in temp["USER_DB"].items():
+    for user_id, user_info in dbs["USER_DB"].items():
         if user_info["name"] == name: 
             return True
     return False
@@ -212,10 +214,10 @@ def check_admin_exist(name):
     """
         This fuction check whether admin has already exist when register
     """
-    temp = db.load_json()
-    if temp["ADMIN_DB"] is None:
+    dbs = db.load_json()
+    if dbs["ADMIN_DB"] is None:
         return True
-    for admin_id, admin_info in temp["ADMIN_DB"].items():
+    for admin_id, admin_info in dbs["ADMIN_DB"].items():
         if admin_info["name"] == name: 
             return True
     return False
@@ -225,8 +227,8 @@ def check_email_exist(email, option):
         This fuction check if email has already exist when register
         option in ["ADMIN_DB", "USER_DB"]
     """
-    temp = db.load_json()
-    for idd, info in temp[option].items():
+    dbs = db.load_json()
+    for idd, info in dbs[option].items():
         if info["email"] == email: 
             return True
     return False
@@ -244,11 +246,21 @@ def verify_password(password):
     """
         This fuction verify the password mathch in database
     """
-    temp = db.load_json()
+    dbs = db.load_json()
     sha_signature = \
         hashlib.sha256(password.encode()).hexdigest()
-    for user_id, user_info in temp["USER_DB"]:
+    for user_id, user_info in dbs["USER_DB"]:
         if user_info["password"] == sha_signature:
+            return True
+    return False
+
+def check_token(token):
+    """
+        This fuction check if token is in the database
+    """
+    dbs = db.load_json()
+    for user_token, token_id in dbs["TOKEN_DB"].items():
+        if token == user_token:
             return True
     return False
 
@@ -257,8 +269,8 @@ def token_to_id(token):
         This fuction transfer token to id
         raise error when token not found in database
     """
-    temp = db.load_json()
-    for key, attr in temp["TOKEN_DB"].items():
+    dbs = db.load_json()
+    for key, attr in dbs["TOKEN_DB"].items():
         if key == token:
             return attr
     raise err.InvalidToken(description = "Invalid token!")

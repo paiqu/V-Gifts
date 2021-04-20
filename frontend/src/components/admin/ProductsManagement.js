@@ -3,12 +3,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from "@material-ui/core/Typography";
 import { DataGrid } from '@material-ui/data-grid';
 import TextField from '@material-ui/core/TextField';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { Grid } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 import DoneIcon from '@material-ui/icons/Done';
+import CustomSnackBar from '../CustomSnackbar';
+import {
+  EDIT_PRODUCT_SUCCESS_ALERT as EDIT_ALERT,
+  ADD_PRODUCT_SUCCESS_ALERT as ADD_ALERT,
+  NEGATIVE_NUM_ALERT
+} from '../../utils/AlertInfo';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -19,23 +24,32 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductsManagement(props) {
   const classes = useStyles();
   const token = props.token;
+  const [products, setProducts] = useState([]);
+  const [reloadProducts, setReloadProducts] = useState(false);
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: 0,
     description: "",
-    delivery: "",
+    delivery: 0,
     img: null,
   });
   const [selectedProduct, setSelectedProduct] = useState({
+    id: 0,
     name: "",
     price: 0,
     description: "",
-    delivery: "",
+    delivery: 0,
     img: null,
   });
 
-  const [isUploaded, setIsUploaded] = useState(false);
+  const [isNewUploaded, setIsNewUploaded] = useState(false);
+  const [isSelectedUploaded, setIsSelectedUploaded] = useState(false);
   const [selectionModel, setSelectionModel] = useState([]);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    severity: "",
+    message: "",
+  })
 
   const columns = [
     { field: 'id', headerName: 'Product ID', width: 150},
@@ -45,7 +59,7 @@ export default function ProductsManagement(props) {
     // { field: "pic_link", headerName: 'Amount', width: 100 },
   ];
 
-  const rows = props.products.map(x => {
+  const rows = products.map(x => {
     return {
       "id": x["product_id"],
       "name": x["name"],
@@ -54,28 +68,133 @@ export default function ProductsManagement(props) {
     };
   });
 
-  const handleChange = name => event => {
+  const handleNewProductChange = name => event => {
     setNewProduct({
       ...newProduct,
       [name]: event.target.value
     });
   };
 
-  const handleAddProduct = (event) => {
-    event.preventDefault();
-
-    let imgData = new FormData();
-    imgData.append("img", newProduct.img)
+  const handleSelectedProductChange = name => event => {
+    setSelectedProduct({
+      ...selectedProduct,
+      [name]: event.target.value
+    });
   };
 
-  const handleFileUpload = (event) => {
+  const handleAddProduct = (event) => {
+    event.preventDefault();
+    if (newProduct.price < 0) {
+      setAlertInfo(NEGATIVE_NUM_ALERT);
+      setAlertOpen(true);
+      return;
+    }
+
+    let formData = new FormData();
+    formData.append('token', token);
+    formData.append('file', newProduct.img);
+    formData.append('name', newProduct.name);
+    formData.append('delivery', newProduct.delivery);
+    formData.append('description', newProduct.description);
+    formData.append('price', newProduct.price);
+
+    axios.post("/product/new", 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+    .then((response) => {
+      const data = response.data;
+
+      setAlertInfo(ADD_ALERT);
+      setAlertOpen(true);
+
+      console.log(data);
+      setReloadProducts(true);
+    })
+    .catch((err) => {});
+  };
+
+  const handleEditProduct = (event) => {
+    event.preventDefault();
+
+    if (selectedProduct.price < 0) {
+      setAlertInfo(NEGATIVE_NUM_ALERT);
+      setAlertOpen(true);
+      return;
+    }
+
+    let formData = new FormData();
+    formData.append('token', token);
+    formData.append('file', selectedProduct.img);
+    formData.append('id', selectedProduct.id);
+    formData.append('name', selectedProduct.name);
+    formData.append('delivery', selectedProduct.delivery);
+    formData.append('description', selectedProduct.description);
+    formData.append('price', selectedProduct.price);
+
+    console.log(formData);
+
+    axios.post("/product/edit", 
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    )
+    .then((response) => {
+      const data = response.data;
+
+      setAlertInfo(EDIT_ALERT);
+      setAlertOpen(true);
+
+      console.log(data);
+      setReloadProducts(true);
+    })
+    .catch((err) => {});
+  }
+
+  const handleNewFileUpload = (event) => {
     setNewProduct({
       ...newProduct,
       img: event.target.files[0],
     });
-    setIsUploaded(true);
+    setIsNewUploaded(true);
   }
 
+  const handleSelectedFileUpload = (event) => {
+    // console.log("uploaded!");
+    console.log(event.target.files[0]);
+    setSelectedProduct({
+      ...selectedProduct,
+      img: event.target.files[0],
+    });
+    console.log(event.target.files[0].type.replace(/(.*)\//g, ''));
+    setIsSelectedUploaded(true);
+  }
+
+
+  // reload products when database changed
+  useEffect((() => {
+    axios.get('/product/get_all', {
+      params: {
+        token: "",
+        page: -1,
+      }
+    })
+    .then((response) => {
+      const data = response.data["product_lst"];
+
+      setProducts(data);
+    })
+    .catch((err) => {});
+  }), [reloadProducts]);
+
+  // load products based on current selection
   useEffect((() => {
     if (selectionModel.length != 0) {    
       axios.get('/product/get_info', {
@@ -87,10 +206,11 @@ export default function ProductsManagement(props) {
         const data = response.data;
         
         setSelectedProduct({
+          id: data['id'],
           name: data['name'],
           price: data['price'],
           description: data['description'],
-          // delivery: data['delivery'],
+          delivery: data['delivery'],
           // rating: data['rating'],
           // img: data['pic_link'],
         });
@@ -102,15 +222,14 @@ export default function ProductsManagement(props) {
   return (
     <div style={{width: '100%'}}>
       <Typography variant="h5">Products in the system</Typography>
-      <DataGrid 
+      <DataGrid
         rows={rows} 
         columns={columns} 
         pageSize={5} 
-        checkboxSelection 
+        // checkboxSelection 
         autoHeight
         selectionModel={selectionModel}
         hideFooterSelectedRowCount
-        // disableMultipleSelection={true}
         onSelectionModelChange={(selection) => {
           const newSelectionModel = selection.selectionModel;
 
@@ -150,16 +269,17 @@ export default function ProductsManagement(props) {
                     required
                     id="product-name"
                     label="Product Name"
-                    placeholder="Admin Name"
+                    placeholder="Product Name"
                     variant="outlined"
-                    onChange={handleChange('name')}
+                    onChange={handleNewProductChange('name')}
+                    InputLabelProps={{shrink: true}}
                     style={{
                       marginRight: "1rem",
                       width: "100%",
                     }}
                   />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={2}>
                   <TextField
                     required
                     id="product-price"
@@ -167,12 +287,31 @@ export default function ProductsManagement(props) {
                     placeholder="Product Price"
                     type="number"
                     variant="outlined"
-                    onChange={handleChange('price')}
+                    onChange={handleNewProductChange('price')}
                     inputProps={{
-                      step: 10,
+                      step: 1,
                       min: 0,
                     }}
                     value={newProduct.price}
+                    style={{
+                      width: "100%",
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    required
+                    id="product-delivery"
+                    label="Delivery Days"
+                    placeholder="Delivery Days"
+                    type="number"
+                    variant="outlined"
+                    onChange={handleNewProductChange('delivery')}
+                    inputProps={{
+                      step: 1,
+                      min: 0,
+                    }}
+                    value={newProduct.delivery}
                     style={{
                       width: "100%",
                     }}
@@ -192,7 +331,7 @@ export default function ProductsManagement(props) {
                     label="Description"
                     placeholder="Product Description"
                     variant="outlined"
-                    onChange={handleChange('description')}
+                    onChange={handleNewProductChange('description')}
                     style={{
                       marginRight: "1rem",
                       width: "100%",
@@ -210,7 +349,7 @@ export default function ProductsManagement(props) {
                 spacing={2}
               >
                 <Grid item xs={5}>
-                  { !isUploaded &&
+                  { !isNewUploaded &&
                     <Button
                       variant="contained"
                       component="label"
@@ -224,11 +363,11 @@ export default function ProductsManagement(props) {
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={handleFileUpload}
+                        onChange={handleNewFileUpload}
                       />
                     </Button>
                   }
-                  { isUploaded &&
+                  { isNewUploaded &&
                     <Button
                       variant="contained"
                       component="label"
@@ -242,7 +381,7 @@ export default function ProductsManagement(props) {
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={handleFileUpload}
+                        onChange={handleNewFileUpload}
                       />
                     </Button>
                   }
@@ -264,7 +403,7 @@ export default function ProductsManagement(props) {
           </form>
         </Grid>
         <Grid container item xs={6}>
-          <form className={classes.form} onSubmit={handleAddProduct}>
+          <form className={classes.form} onSubmit={handleEditProduct}>
             <Grid
               container
               spacing={2}
@@ -287,7 +426,7 @@ export default function ProductsManagement(props) {
                     label="Name"
                     placeholder="Product Name"
                     variant="outlined"
-                    onChange={handleChange('name')}
+                    onChange={handleSelectedProductChange('name')}
                     InputLabelProps={{shrink: true}}
                     style={{
                       marginRight: "1rem",
@@ -296,7 +435,7 @@ export default function ProductsManagement(props) {
                     value={selectedProduct.name}
                   />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={2}>
                   <TextField
                     required
                     id="product-price"
@@ -304,9 +443,9 @@ export default function ProductsManagement(props) {
                     // placeholder="Product Price"
                     type="number"
                     variant="outlined"
-                    onChange={handleChange('price')}
+                    onChange={handleSelectedProductChange('price')}
                     inputProps={{
-                      step: 10,
+                      step: 1,
                       min: 0,
                     }}
                     value={newProduct.price}
@@ -314,6 +453,26 @@ export default function ProductsManagement(props) {
                       width: "100%",
                     }}
                     value={selectedProduct.price}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    required
+                    id="selected-product-delivery"
+                    label="Delivery Days"
+                    // placeholder="Product Price"
+                    type="number"
+                    variant="outlined"
+                    onChange={handleSelectedProductChange('delivery')}
+                    inputProps={{
+                      step: 1,
+                      min: 0,
+                    }}
+                    value={selectedProduct.delivery}
+                    InputLabelProps={{shrink: true}}
+                    style={{
+                      width: "100%",
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -330,7 +489,7 @@ export default function ProductsManagement(props) {
                     label="Description"
                     // placeholder="Product Description"
                     variant="outlined"
-                    onChange={handleChange('description')}
+                    onChange={handleSelectedProductChange('description')}
                     style={{
                       marginRight: "1rem",
                       width: "100%",
@@ -349,7 +508,7 @@ export default function ProductsManagement(props) {
                 spacing={2}
               >
                 <Grid item xs={5}>
-                  { !isUploaded &&
+                  { !isSelectedUploaded &&
                     <Button
                       variant="contained"
                       component="label"
@@ -358,16 +517,16 @@ export default function ProductsManagement(props) {
                         width: "100%"
                       }}
                     >
-                      <ImageIcon />Upload Image
+                      <ImageIcon />Upload New Image
                       <input
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={handleFileUpload}
+                        onChange={handleSelectedFileUpload}
                       />
                     </Button>
                   }
-                  { isUploaded &&
+                  { isSelectedUploaded &&
                     <Button
                       variant="contained"
                       component="label"
@@ -381,7 +540,7 @@ export default function ProductsManagement(props) {
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={handleFileUpload}
+                        onChange={handleSelectedFileUpload}
                       />
                     </Button>
                   }
@@ -403,7 +562,14 @@ export default function ProductsManagement(props) {
           </form>
         </Grid>
       </Grid>
-    
+      {alertOpen && 
+        <CustomSnackBar 
+          severity={alertInfo.severity}
+          message={alertInfo.message}
+          open={alertOpen}
+          setOpen={setAlertOpen}
+        />
+      }
     </div>
   );
 }
