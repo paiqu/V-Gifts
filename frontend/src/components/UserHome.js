@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
@@ -8,14 +8,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { useHistory } from 'react-router'
-import Chip from '@material-ui/core/Chip';
+import CustomSnackBar from '../components/CustomSnackbar';
+import {NEGATIVE_NUM_ALERT} from '../utils/AlertInfo';
 
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
-// import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FaceIcon from '@material-ui/icons/Face';
-// import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
 
 const iconSize = 8;
@@ -57,14 +55,25 @@ function UserHome(props) {
 
     const token = props.token;
     const profile = props.profile;
-    const [fundToAdd, setFundToAdd] = React.useState(profile['fund']);
-    const [cart, setCart] = React.useState([]);
+    const [fundToAdd, setFundToAdd] = useState(profile['fund']);
+    const [cart, setCart] = useState([]);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertInfo, setAlertInfo] = useState({
+      severity: "",
+      message: "",
+    })
 
     const handleFundToAddChange = (e) => {
       setFundToAdd(e.target.value);
     }
 
     const handleAddFund = () => {
+      if (fundToAdd < 0) {
+        setAlertInfo(NEGATIVE_NUM_ALERT);
+        setAlertOpen(true);
+
+        return;
+      }
       axios.post("/user/profile/fund/add", {
         token: token,
         num: fundToAdd,
@@ -210,6 +219,14 @@ function UserHome(props) {
             </Card>
           </Grid> 
         </Grid>
+        {alertOpen && 
+          <CustomSnackBar 
+            severity={alertInfo.severity}
+            message={alertInfo.message}
+            open={alertOpen}
+            setOpen={setAlertOpen}
+          />
+        }
       </div>
     );
 }

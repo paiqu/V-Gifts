@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-
+import TextField from '@material-ui/core/TextField';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+    display: "flex",
+  },
   disabledButton: {
     backgroundColor: theme.palette.secondary,
+  },
+  quantityButton: {
+    width: "200rem",
+  },
+  quantityText: {
+    width: "2rem",
+    textAlign: "center",
   },
 }));
 

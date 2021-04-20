@@ -10,6 +10,9 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import axios from 'axios';
 import Rating from '@material-ui/lab/Rating';
+import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
+import { FUND_ALERT } from '../utils/AlertInfo';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -96,7 +99,13 @@ export default function ProductCard(props) {
         data: payload,
       })
       .then(response => {
-        console.log(response.data);
+        const data = response.data;
+
+        if (data.code === NOT_ENOUGH_FUND) {
+          props.setAlertInfo(FUND_ALERT);
+          props.setAlertOpen(true);
+          return;
+        }
         props.setModalType(1);
         props.handlePsModalOpen();
       })
