@@ -12,3 +12,8 @@ export const THANKS_ALERT= {
   severity: "success",
   message: "Thanks for your purchase!",
 };
+
+export const NEGATIVE_NUM_ALERT = {
+  severity: "error",
+  message: "Sorry, the entered number has to be positive",
+};
