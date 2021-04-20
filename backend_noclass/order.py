@@ -80,11 +80,11 @@ def rate_order(user_id, order_id, rating, db_name = "database.json"):
     elif rating >= 5:
         rating = 5
     dbs = db.load_json(db_name)
-    if user_id != dbs["ORDER_DB"][str(order_id)]["user_id"]:
+    if int(user_id) != int(dbs["ORDER_DB"][str(order_id)]["user_id"]):
         raise KeyError()
     prod_id = dbs["ORDER_DB"][str(order_id)]["product_id"]
     dbs["ORDER_DB"][str(order_id)]["rating"] = rating
-    dbs["PRODUCT_DB"][str(prod_id)]["ratings"].append([user_id, rating])
+    dbs["PRODUCT_DB"][str(prod_id)]["ratings"].append([int(user_id), float(rating)])
     db.to_json(dbs, db_name)
     return {}
 
