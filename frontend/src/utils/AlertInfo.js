@@ -27,3 +27,8 @@ export const ADD_PRODUCT_SUCCESS_ALERT = {
   severity: "success",
   message: "The new product has been added",
 };
+
+export const UPDATE_ORDER_STATE_ALERT = {
+  severity: "success",
+  message: "The order state has been update",
+};
