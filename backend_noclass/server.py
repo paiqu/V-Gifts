@@ -692,6 +692,20 @@ def refund_order():
         "status": result
     })
 
+@app.route("/order/receive", methods = ["POST"])
+def receive_order():
+    data = request.get_json()
+    token = data["token"]
+    try:
+        user_id = login.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    oid = data["order_id"]
+    result = odr.order_receive(user_id, oid)
+    return dumps({
+        "status": result
+    })
+
 @app.route("/order/list", methods = ["GET"])
 def order_list():
     token = request.args.get("token")
