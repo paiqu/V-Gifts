@@ -93,6 +93,11 @@ function ProductsPage(props) {
   const [recommendation, setRecommendation] = useState([]);
   const [result, setResult] = useState(true);
   const [navbarReload, setNavbarReload] = useState(0);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({
+    severity: "",
+    message: "",
+  })
 
   const [infos, setInfos] = useState({
     page: 1,
@@ -363,6 +368,8 @@ function ProductsPage(props) {
                     handleNlModalClose={handleNlModalClose}
                     setModalType={setModalType}
                     setNavbarReload={setNavbarReload}
+                    setAlertOpen={setAlertOpen}
+                    setAlertInfo={setAlertInfo}
                   />
                 </Grid>
               )}
@@ -399,26 +406,15 @@ function ProductsPage(props) {
         open={nlModalOpen}
         token={token}
       />
-      {/* <Fab
-        className={classes.fab} 
-        color="secondary"
-        aria-label="chat"
-        aria-describedby={id}
-        onClick={handleOpen}
-      >
-        <ChatIcon />
-      </Fab> */}
-      {/* <Popper
-        className={classes.popper}
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        placement={'top'}
-      >
-        <Chat />
-        
-      </Popper> */}
       <Chatbot />
+      {alertOpen && 
+        <CustomSnackBar 
+          severity={alertInfo.severity}
+          message={alertInfo.message}
+          open={alertOpen}
+          setOpen={setAlertOpen}
+        />
+      }
     </div>
   );
 }
