@@ -27,15 +27,21 @@ import CustomSnackBar from '../components/CustomSnackbar';
 const ERROR = 460;
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
   main: {
-    padding: 10,
+    // padding: 10,
+    width: "90%",
   },
   leftContainer: {
 
   },
   rightContainer: {
     // overflowX: "hidden",
-    padding: 50,
+    // padding: 50,
   },
   pagination: {
     justifySelf: "end",

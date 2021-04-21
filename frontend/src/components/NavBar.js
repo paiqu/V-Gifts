@@ -18,7 +18,8 @@ import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    width: "100%",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -36,9 +37,10 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: fade(theme.palette.common.white, 0.55),
     },
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(20),
     marginLeft: 0,
-    width: "50rem",
+    minWidth: "10rem",
+    flexGrow: 1,
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -66,6 +68,8 @@ const useStyles = makeStyles((theme) => ({
   },
   toolBar: {
     minHeight: "10vh",
+    display: "flex",
+    alignItems: "center",
   },
   logo: {
     margin: "auto",
@@ -159,26 +163,34 @@ export default function NavBar(props) {
     <div className={classes.grow}>
       <AppBar position="static" style={{boxShadow: 'none'}}>
         <Toolbar className={classes.toolBar}>
-          <img 
-            className={classes.logo} 
-            src="/img/logo/logo-1.png" 
-            alt="V-Gifts logo"
-          />
-          <Typography
-						style={{
-							textDecoration: "none",
-              fontWeight: "200",
-              color: theme.palette.primary.contrastText
-						}}
-						color="inherit"
-						component={Link}
-						to={'/products'}
-						className={classes.title} 
-						variant="h4"
-						noWrap
-					>
-            V-Gifts
-          </Typography>
+          <Link
+            to={'/products'}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+          >
+            <img
+              className={classes.logo}
+              src="/img/logo/logo-1.png"
+              alt="V-Gifts logo"
+            />
+            <Typography
+              style={{
+                textDecoration: "none",
+                fontWeight: "200",
+                color: theme.palette.primary.contrastText
+              }}
+              color="inherit"
+              className={classes.title} 
+              variant="h4"
+              noWrap
+            >
+              V-Gifts
+            </Typography>
+          </Link>
 					{/* <Button
 						className={classes.marketButton}
 						component={Link}
@@ -209,7 +221,7 @@ export default function NavBar(props) {
               }}
             />
           </div>
-          <div className={classes.grow} />
+          <div style={{flexGrow: "0.1"}} />
           <div className={classes.sectionDesktop}>
             {token ? LoggedInProfile : NotLoggedIn}
           </div>

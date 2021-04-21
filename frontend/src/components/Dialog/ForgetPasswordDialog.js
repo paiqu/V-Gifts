@@ -44,13 +44,13 @@ export default function ForgetPasswordDialog(props) {
         email: email
     }).then(res => {
         if (res.status === 200) {
-            console.log(res);
+          console.log(res);
         } else {
-            console.log(res);
-            setError({
-                error: true,
-                help_text: `${res.data.name}`
-            })
+          console.log(res);
+          setError({
+            error: true,
+            help_text: `invalid email`
+          })
         }
     })
   }
