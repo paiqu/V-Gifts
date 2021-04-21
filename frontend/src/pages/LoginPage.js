@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import ForgetPasswordDialog from '../components/ForgetPasswordDialog';
+import ForgetPasswordDialog from '../components/Dialog/ForgetPasswordDialog';
 const ERROR = 465;
 
 

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router'
 import CustomSnackBar from '../components/CustomSnackbar';
 import {NEGATIVE_NUM_ALERT} from '../utils/AlertInfo';
-
+import EditProfileDialog from '../components/Dialog/EditProfileDialog';
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FaceIcon from '@material-ui/icons/Face';
@@ -63,6 +63,8 @@ function UserHome(props) {
       message: "",
     })
 
+    const [editDialog, setEditDialog] = useState(false);
+
     const handleFundToAddChange = (e) => {
       setFundToAdd(e.target.value);
     }
@@ -110,6 +112,10 @@ function UserHome(props) {
       })
       .catch((err) => {});
     }), [token]);
+
+    const handleEditDialogOpen = () => {
+      setEditDialog(true);
+    }
   
 
     return (
@@ -136,8 +142,11 @@ function UserHome(props) {
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
                   Address: {profile["address"]}
                 </Typography>
+                <Button variant="contained"color="primary" style={{marginTop: '10px'}} onClick={handleEditDialogOpen}>EDIT PROFILE</Button>
+                <Button variant="contained"color="secondary" style={{marginTop: '10px'}}>CHANGE PASSWORD</Button>
               </CardContent>
             </Card>
+            <EditProfileDialog open={editDialog} setOpen={setEditDialog}/>
           </Grid> 
 
           <Grid item md={3} xs={12}>
