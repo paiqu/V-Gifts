@@ -81,3 +81,51 @@ meeting with my team, also write the report of Retrospective
 A and upload to Github.
 
 
+############################################################
+Week 7
+############################################################
+Add ~45 products to database with Haoran, re-write server.py 
+that connect exsiting backend with the requirement input and 
+output of what frontend needed.
+
+With what we done this week, now our system allowed user to 
+actually purchase products.
+
+
+############################################################
+Week 8
+############################################################
+Continue working on server.py and its related backend 
+functions to help frontend implement features that already 
+done in the backend.
+With what we done this week, now we have basic admin system
+in our project.
+
+Also help team to made Progression Demo B.
+
+
+############################################################
+Week 9
+############################################################
+Had a Retrospective B meeting with my team, also write the 
+report of Retrospective B and upload to Github.
+
+Start re-construct whole backend files to have better code 
+style, split large file to small files to get a better view 
+of what file doing what job and rename variable names and 
+add more comments to functions to clear what they do.
+
+Learned how to accpt files that upload from frontend in flask 
+and help us to update database.
+With what we done this week, we now have abilities to create 
+or edit products with new pictures.
+
+
+############################################################
+Week 10
+############################################################
+Continue working on inprove code styles, help Chenkai to 
+work on what we can do for chatbot system.
+
+Help team to made Final Progression Demo, and Final Report,
+write my own peer.txt and finish this course with pleasure!
