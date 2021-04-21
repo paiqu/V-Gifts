@@ -14,7 +14,6 @@ import {
   ADD_PRODUCT_SUCCESS_ALERT as ADD_ALERT,
   NEGATIVE_NUM_ALERT
 } from '../../utils/AlertInfo';
-
 const useStyles = makeStyles((theme) => ({
   form: {
     marginTop: "2rem",
@@ -227,11 +226,9 @@ export default function ProductsManagement(props) {
   
   const handleCsvSubmit = (event) => {
     event.preventDefault();
-    console.log(1111);
     let formData = new FormData();
     formData.append('token', token);
     formData.append('file', csv);
-    console.log(formData);
     axios.post('/product/import_csv', 
       formData,
     {
@@ -239,7 +236,13 @@ export default function ProductsManagement(props) {
         'Content-Type': 'multipart/form-data'
       }
     }).then(res => {
-      console.log(res);
+      if (res.status === 200) {
+        setAlertInfo({
+          severity: "Success",
+          message: res.data.status,
+        });
+        setAlertOpen(true);
+      }
     }).catch((err) => {});
   }
   return (
