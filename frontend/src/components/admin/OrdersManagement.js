@@ -49,7 +49,8 @@ export default function OrdersManagement(props) {
           const data = response.data;
           setOrders(data);
         })
-      }
+      } 
+      // else if (res.status === 200)
     })
   }
 

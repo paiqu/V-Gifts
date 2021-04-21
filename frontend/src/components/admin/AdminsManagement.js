@@ -6,7 +6,12 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const INVALID_EMAIL = 462;
 const INVALID_NAME = 464;
@@ -30,6 +35,7 @@ export default function AdminsManagement(props) {
     name: "",
     password: "",
     email: "",
+    showPassword: true,
   })
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
@@ -53,6 +59,14 @@ export default function AdminsManagement(props) {
       ...newAdmin,
       [name]: event.target.value
     });
+  };
+
+  const handleClickShowPassword = () => {
+    setNewAdmin({ ...newAdmin, showPassword: !newAdmin.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   const handleAddAdmin = (event) => {
@@ -175,8 +189,10 @@ export default function AdminsManagement(props) {
               marginRight: "1rem",
             }}
           />
-          <TextField
-            required
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={newAdmin.showPassword ? 'text' : 'password'}
+            value={newAdmin.password}
             id="admin-password"
             label="Admin Password"
             placeholder="Admin Password"
@@ -185,7 +201,34 @@ export default function AdminsManagement(props) {
             helperText={state.help_text}
             onChange={handleChange('password')}
             onClick={handle_error()}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {newAdmin.showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            labelWidth={70}
           />
+
+          {/* <TextField
+            required
+            type={newAdmin.showPassword ? 'text' : 'password'}
+            value={newAdmin.password}
+            id="admin-password"
+            label="Admin Password"
+            placeholder="Admin Password"
+            variant="outlined"
+            error={state.passwordError}
+            helperText={state.help_text}
+            onChange={handleChange('password')}
+            onClick={handle_error()}
+          /> */}
           <Button 
             type="submit"
             variant="contained" 
