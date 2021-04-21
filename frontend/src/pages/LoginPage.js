@@ -196,7 +196,7 @@ function LoginPage({ setAuth, ...props }) {
                     {infos.showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
-            }
+              }
             />
             <Button
               type="submit"
