@@ -8,8 +8,10 @@ import Button from "@material-ui/core/Button";
 import axios from 'axios';
 import { Grid, TextField } from '@material-ui/core';
 import {
-  UPDATE_ORDER_STATE_ALERT as UPDATE_ALERT
+  UPDATE_ORDER_STATE_ALERT as UPDATE_ALERT,
+  INVALID_ORDER_ID
 } from '../../utils/AlertInfo';
+import { INVALID_ID } from '../../utils/ErrorCode';
 import CustomSnackBar from '../CustomSnackbar';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -50,7 +52,10 @@ export default function OrdersManagement(props) {
           setOrders(data);
         })
       } 
-      // else if (res.status === 200)
+      else if (res.status === INVALID_ID) {
+        setAlertInfo(INVALID_ORDER_ID);
+        setAlertOpen(true);
+      }
     })
   }
 

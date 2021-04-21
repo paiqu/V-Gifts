@@ -53,3 +53,7 @@ export const IMG_EMPTY_ALERT = {
   message: "Sorry, your Image cannot be empty",
 };
 
+export const INVALID_ORDER_ID = {
+  severity: "error",
+  message: "The order ID is invalid",
+};
