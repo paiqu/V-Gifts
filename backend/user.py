@@ -96,18 +96,16 @@ def setup_interest(user_id, vec, db_name = "database.json"):
     db.to_json(dbs, db_name)
     return dbs["USER_DB"][str(user_id)]["interest"]
 
-def change_password(idd, old_password, new_password):
+def change_password(user_id, old_password, new_password):
     """
-    This fuction check the name and password match
-    and then reset the password
+    This fuction check the name and password (encrypt) match
+    and then reset the password (no encrypt)
     """
     dbs = db.load_json()
-    for user_id, user_info in dbs["USER_DB"].items():
-        if user_info["password"] == lo.encrypt_password(old_password) and user_id == idd:
-            user_info["password"] = lo.encrypt_password(new_password)
-            db.to_json(dbs)
-            lo.logout_user(user_id)
-            return True
+    if dbs["USER_DB"][str(user_id)]["password"] == old_password:
+        dbs["USER_DB"][str(user_id)]["password"] = lo.encrypt_password(new_password)
+        db.to_json(dbs)
+        return True
     return False
 
 def edit_info_user(user_id, first_name, last_name, address, city, \
