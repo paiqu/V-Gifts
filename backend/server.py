@@ -507,6 +507,7 @@ def import_csv():
     else:
         raise err.NoFile(description = "No file found, please upload one!")
     result = pdt.add_prod_from_csv(filepath)
+    os.remove(filepath)
     db.add_prod(result)
     return dumps({
         "status": result
