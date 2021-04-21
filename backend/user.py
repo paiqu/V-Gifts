@@ -184,7 +184,7 @@ def individual_price(product_id, amount, db_name = "database.json"):
         This fuction caculate individual product price using amount
     """
     dbs = db.load_json(db_name)
-    price = amount * dbs["PRODUCT_DB"][str(product_id)]["price"]
+    price = amount * int(dbs["PRODUCT_DB"][str(product_id)]["price"])
     return price
 
 def total_price(lst, db_name = "database.json"):
