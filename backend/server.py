@@ -274,7 +274,7 @@ def change_password():
         "status": result
     })
 
-@app.route("/user/edit", methods = ["POST"])
+@app.route("/user/profile/edit", methods = ["POST"])
 def user_edit_info():
     data = request.get_json()
     token       = data["token"]
