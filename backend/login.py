@@ -1,233 +1,276 @@
-'''
+"""
     This file includes functions related to login/register
     for both user and admin, they are separated functions
     with similar layout. They are always used in different
-    website (user only / admin only).
-'''
-from database import *
-from user import *
+    website (user/admin only).
+"""
+
+
+import user as usr
+import database as db 
+import admin as adm
+import tokeen as tk
+import error as err
 import hashlib
 import re
-from generate_token import *
-from admin import *
 
-# user part
-def register_user(name, password, email):
-    '''
-        this function register user and initialize their info,
+
+# User part fuctions 
+
+def register_user(account_name, first_name, last_name, password, email, address, city, country):
+    """
+        This function register user and initialize their info,
         upon register, webpage should let user to further
         configure their personal information
 
-        calls login_user()
-    '''
-    # Filter SQL injection
-    pattern = re.compile("[a-zA-Z0-9_]")
-    if pattern.search(name) is None:
-        print("Incorrect user name! Please try again.")
-        return False 
+        Calls login_user() at the end
+    """
+    # check the if the input account name and email is in valid format
+    name_pattern = re.compile("[a-zA-Z0-9_]")
+    if name_pattern.search(account_name) is None:
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+    email_pattern = re.compile("^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$")
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
 
-    # Check whether the user name has been registered
-    if check_user_exist(name) is True:
-        raise Exception("Name is already exist! Please try another one.")
+    # check whether the account name and email has been registered
+    if check_user_exist(account_name) is True:
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
+    if check_email_exist(email, "USER_DB"):
+        raise err.EmailAlreadyExit(description = "Email is already exist! Please try another one.")
 
-    # Encrypt password 
+    # encrypt password 
     encryption = encrypt_password(password)
-    # One more user added into ID_DB["USER_DB"]
-    number_of_exist_user = ID_DB['USER_DB'] + 1
-    ID_DB["USER_DB"] += 1
-    new_user = User(name, encryption, email)
-    new_user.id = number_of_exist_user
-    # Transfer new user object to a dict
-    new_user_dict = new_user.to_dict()
-    USER_DB[str(number_of_exist_user)] = new_user_dict
+    # add new user to databse
+    new = usr.new_user(account_name, first_name, last_name, encryption, email, address, city, country)
+    db.add_user(new)
 
-    return new_user
+    # auto login user after register
+    return login_user(account_name, password)
 
-# Login user
+
 def login_user(name, password):
-    '''
-        this function login user
-        returns user_id
-    '''
+    """
+        This function login user
+        returns user id and token
+    """
+    # check if account name is in correct format
     pattern = re.compile("[a-zA-Z0-9_]")
-    
     if pattern.search(name) is None:
-        print("Incorrect user name! Please try again.")
-        return False
+        raise err.IncorrectUsername(description = "Incorrect account name! Please try again.")
 
-    login_token = ''
-    for user_id, user_info in USER_DB.items():
-        if user_info["name"] is name:
+    # login user and generate token
+    login_token = ""
+    dbs = db.load_json()
+    uid = 0
+    for user_id, user_info in dbs["USER_DB"].items():
+        if user_info["name"] == name:
             if user_info["password"] == encrypt_password(password):
-                login_token = token(name)
-                TOKEN_DB[str(name)] = login_token
-                return login_token
-    
-    print("Login fail! Invalid password or name! Please try again.")
-    return False
+                login_token = tk.token(name)
+                uid = user_id
+                dbs["TOKEN_DB"][login_token] = uid
+                db.to_json(dbs)
+                return {
+                    "id": uid,
+                    "token": login_token
+                }
 
-    
-    
-def logout_user(name, token):
-    '''
-        this function logout user
-        takes user back to login page
-    '''
+    # raise error if password not match with accout name
+    raise err.InvalidPassword(description = "Login fail! Invalid password or account name! Please try again.")
+
+def logout_user(token):
+    """
+        This function logout user
+    """
+    dbs = db.load_json()
+
     if check_token(token): 
-        del TOKEN_DB[name]
-        print("You have been logged out.")
+        dbs["TOKEN_DB"].pop(token)
+        db.to_json(dbs)
         return True
     else:
-        print("User already logout.")
         return False
 
 
-
-# admin part
+# Admin part fuctions
 
 def register_admin(name, password, email):
-    '''
-        this function register admin and initialize their info,
+    """
+        This function register admin and initialize their info,
         upon register, webpage should let admin to further
         configure their personal information
         
-        calls login_admin()
-    '''
-    # Filter SQL injection
-    pattern = re.compile("[a-zA-Z0-9_]")
-    if pattern.search(name) is None:
-        print("Incorrect admin name! Please try again.")
-        return False 
+        Calls login_admin()
+    """
+    # check the if the input account name and email is in valid format
+    name_pattern = re.compile("[a-zA-Z0-9_]")
+    if name_pattern.search(name) is None:
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+    email_pattern = re.compile("^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$")
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
 
-    # Check whether the user name has been registered
-    
+    # check whether the account name and email has been registered    
     if check_admin_exist(name) is True:
-        raise Exception("Name is already exist! Please try another one.")
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
+    if check_email_exist(email, "ADMIN_DB"):
+        raise err.EmailAlreadyExit(description = "Email is already exist! Please try another one.")
 
-    # Encrypt password 
+    # encrypt password 
     encryption = encrypt_password(password)
-    # One more user added into ID_DB["ADMIN_DB"]
-    number_of_exist_admin = ID_DB["ADMIN_DB"] + 1
-    print(number_of_exist_admin)
-    ID_DB["ADMIN_DB"] += 1
-    new_admin = Admin(name, encryption, email)
-    new_admin.id = number_of_exist_admin
-    # Transfer new user object to a dict
-    new_admin_dict = new_admin.to_dict()
-    ADMIN_DB[str(number_of_exist_admin)] = new_admin_dict
+    # add new admin to databse
+    new = adm.new_admin(name, encryption, email)
+    db.add_admin(new)
+    
+    # auto login admin after register
+    return login_admin(name, password)
 
-    return new_admin
-    # return {
-    #     'id': 1,
-    #     'name': name,
-    # }
+def register_admin_nologin(name, password, email):
+    """
+        This function create admin and initialize their info,
+        upon register, webpage should let admin to further
+        configure their personal information, it is used 
+        when admin create new admin
+    """
+    # check the if the input account name and email is in valid format
+    name_pattern = re.compile("[a-zA-Z0-9_]")
+    if name_pattern.search(name) is None:
+        raise err.InvalidUsername(description = "Incorrect syntax! You can only use number, letter and underline.")
+    email_pattern = re.compile("^[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){0,4}$")
+    if email_pattern.search(email) is None:
+        raise err.InvalidEmail(description = "Incorrect email format! Please try again.")
+
+    # check whether the account name and email has been registered    
+    if check_admin_exist(name) is True:
+        raise err.UsernameAlreadyExit(description = "Name is already exist! Please try another one.")
+    if check_email_exist(email, "ADMIN_DB"):
+        raise err.EmailAlreadyExit(description = "Email is already exist! Please try another one.")
+
+    # encrypt password 
+    encryption = encrypt_password(password)
+    # add new admin to databse
+    new = adm.new_admin(name, encryption, email)
+    db.add_admin(new)
+
+    return {}
 
 def login_admin(name, password):
-    '''
-        this function login admin
-        returns admin_id
-    '''
+    """
+        This function login admin
+        returns admin_id and token
+    """
+    # check if account name is in correct format
     pattern = re.compile("[a-zA-Z0-9_]")
-    
     if pattern.search(name) is None:
-        print("Incorrect admin name! Please try again.")
-        return False
+        raise err.IncorrectUsername(description = "Incorrect account name! Please try again.")
+
+    # login admin and generate token
+    login_token = ""
+    dbs = db.load_json()
+    aid = 0
+    for admin_id, admin_info in dbs["ADMIN_DB"].items():
+        if admin_info["name"] == name:
+            if admin_info["password"] == encrypt_password(password):
+                login_token = tk.token(name)
+                aid = admin_id
+                dbs["TOKEN_DB"][login_token] = aid
+                db.to_json(dbs)
+                return {
+                    "id": aid,
+                    "token":login_token
+                }
     
-    login_token = ''
-    for admin_id, admin_info in ADMIN_DB.items():
-        if admin_info["name"] is name and admin_info["password"] == encrypt_password(password):
-            login_token = token(name)
-            TOKEN_DB[str(name)] = login_token
-            return login_token
+    # raise error if password not match with accout name
+    raise err.InvalidPassword(description = "Login fail! Invalid password or account name! Please try again.")
 
-    print('Invalid password or name! Please try again.')
-    return False
-
-def logout_admin(name, token):
-    '''
-        this function logout admin
-        takes admin back to login page
-    '''
+def logout_admin(token):
+    """
+        This function logout admin
+    """
+    dbs = db.load_json()
     if check_token(token):
-        del TOKEN_DB[name]
-        print("You have been logged out.")
+        dbs["TOKEN_DB"].pop(token)
+        db.to_json(dbs)
         return True
     else:
-        print("Admin already logout.")
         return False
 
-# User forget password and reset
-def forget_password(name, email):
-    '''
-    Check the email exist
-    Send reset url to the email
-    return new password
-    '''
-    # Need flask to complete it
 
+# Helper functions
 
-    return None
-
-# Users change password
-def change_password(token, old_password, new_password):
-    '''
-    Check the name and password match
-    Reset the password
-    '''
-    
-    if check_token(token) is not True:
-        print('Invalid Token!')
-        return False
-
-    for user_id, user_info in USER_DB.items():
-        if user_info["password"] == encrypt_password(old_password):
-            user_info["password"] = encrypt_password(new_password)
-            logout_user(user_info["name"], token)
-            return True
-    return False
-
-
-# Helper function
-
-# Check whether user has already exist when register
 def check_user_exist(name):
-    if USER_DB is None:
+    """
+        This fuction check whether user has already exist when register
+    """
+    dbs = db.load_json()
+    if dbs["USER_DB"] is None:
         return True
-    for user_id, user_info in USER_DB.items():
-        if user_info['name'] is name:
+    for user_id, user_info in dbs["USER_DB"].items():
+        if user_info["name"] == name: 
             return True
     return False
     
-# Check whether admin has already exist when register
 def check_admin_exist(name):
-    if ADMIN_DB is None:
+    """
+        This fuction check whether admin has already exist when register
+    """
+    dbs = db.load_json()
+    if dbs["ADMIN_DB"] is None:
         return True
-    for admin_id, admin_info in ADMIN_DB.items():
-        if admin_info['name'] is name:
-                return True
+    for admin_id, admin_info in dbs["ADMIN_DB"].items():
+        if admin_info["name"] == name: 
+            return True
     return False
 
-# Encrypt the password with sha256 and store in database
-def encrypt_password(password):
+def check_email_exist(email, option):
+    """
+        This fuction check if email has already exist when register
+        option in ["ADMIN_DB", "USER_DB"]
+    """
+    dbs = db.load_json()
+    for idd, info in dbs[option].items():
+        if info["email"] == email: 
+            return True
+    return False
 
+def encrypt_password(password):
+    """
+        This fuction encrypt the password with sha256 and store in database
+    """
     sha_signature = \
         hashlib.sha256(password.encode()).hexdigest()
     
     return sha_signature
 
-# Verify the password mathch in db
 def verify_password(password):
+    """
+        This fuction verify the password mathch in database
+    """
+    dbs = db.load_json()
     sha_signature = \
         hashlib.sha256(password.encode()).hexdigest()
-    for user in USER_DB:
-        if user['password'] is sha_signature:
+    for user_id, user_info in dbs["USER_DB"]:
+        if user_info["password"] == sha_signature:
             return True
     return False
 
-# Check token is available
 def check_token(token):
-    for name, user_token in TOKEN_DB.items():
-        if user_token is token:
+    """
+        This fuction check if token is in the database
+    """
+    dbs = db.load_json()
+    for user_token, token_id in dbs["TOKEN_DB"].items():
+        if token == user_token:
             return True
     return False
 
+def token_to_id(token):
+    """
+        This fuction transfer token to id
+        raise error when token not found in database
+    """
+    dbs = db.load_json()
+    for key, attr in dbs["TOKEN_DB"].items():
+        if key == token:
+            return attr
+    raise err.InvalidToken(description = "Invalid token!")
