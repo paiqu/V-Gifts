@@ -1,5 +1,5 @@
 """
-    This file includes all database structure for 
+    This file includes all database structure for
     all databases, DO NOT make ANY CHANGE
     without notifying other members. Upon adding new
     attributes, PLEASE do pytest to remove any
@@ -11,7 +11,7 @@ import json
 import admin as adm
 from chatbot import TEST_KEYWORDS
 from login import encrypt_password
-
+import os
 
 # Global values
 
@@ -22,21 +22,21 @@ TYPE_OF_PRODUCTS_INIT = 11
 
 def init_db():
     """
-        This fuction initialize the database 
+        This fuction initialize the database
         with no values but a pre-set admin for further use
     """
     dbs = {
         "TYPE_OF_PRODUCTS": TYPE_OF_PRODUCTS_INIT,   # dimension of interests
-        "PROD_CATAGORY":["for men", 
-                        "for women", 
-                        "for children", 
-                        "for friends", 
+        "PROD_CATAGORY":["for men",
+                        "for women",
+                        "for children",
+                        "for friends",
                         "for elder",
-                        "for relationship", 
-                        "foods", 
-                        "tools", 
+                        "for relationship",
+                        "foods",
+                        "tools",
                         "luxuries",
-                        "entertainment", 
+                        "entertainment",
                         "working",
                         ],
         "USER_ID": 0,
@@ -100,7 +100,11 @@ def load_json(filename = "database.json"):
     """
         This function loads database from json file
     """
-    with open(filename, "r") as fp:
+    my_dir = os.path.dirname(__file__)
+    json_file_path = os.path.join(my_dir, filename)
+
+
+    with open(json_file_path, "r") as fp:
         dbs = json.load(fp)
     return dbs
 
