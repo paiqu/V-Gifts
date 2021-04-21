@@ -102,6 +102,7 @@ def change_password(user_id, old_password, new_password):
     and then reset the password (no encrypt)
     """
     dbs = db.load_json()
+    db.valid_id("user", user_id)
     if dbs["USER_DB"][str(user_id)]["password"] == old_password:
         dbs["USER_DB"][str(user_id)]["password"] = lo.encrypt_password(new_password)
         db.to_json(dbs)
