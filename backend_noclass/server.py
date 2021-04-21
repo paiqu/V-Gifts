@@ -11,6 +11,7 @@ import product as pdt
 import webpage as wbp
 import login as login
 import error as err
+import send_email as sem
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
@@ -431,14 +432,7 @@ def send_mail():
     num_str = "".join(str(random.choice(range(10))) for i in range(6))
     user_test = usr.my_reset_passowrd(email)
     usr.change_password(user_test["id"], user_test["password"], num_str)
-    msg = mail.send_message(
-        "Send Mail for reset password",
-        sender = ["ANONYMOUS", "oldjeffspectator@gmail.com"],
-        recipients = [email],
-        body="This is your temporary passowrd, please change it as soon as \
-            possible! Password: " + num_str
-    )
-    mail.send(msg)
+    sem.send_email_gm(email, num_str)
     return "Mail sent"
 
 
