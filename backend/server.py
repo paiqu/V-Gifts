@@ -540,23 +540,6 @@ def delete_product():
         "status": "success"
     })
 
-@app.route("/order/statechange", methods = ["POST"])
-def order_state_change():
-    data = request.get_json()
-    token = data["token"]
-    try:
-        aid = log.token_to_id(token)
-    except err.InvalidToken as error:
-        raise error
-    order_id = data["id"]
-    state = data["state"]
-    result = odr.change_order_state(order_id, state)
-    return dumps({
-        "status": "success",
-        "id": result["id"],
-        "state": result["state"]
-    })
-
 @app.route("/product/get_info", methods = ["GET"])
 def get_product_info():
     # data = request.get_json()
@@ -676,6 +659,26 @@ def rate_order():
     result = odr.rate_order(user_id, oid, rating)
     return dumps({
         "status": "success"
+    })
+
+@app.route("/order/statechange", methods = ["POST"])
+def order_state_change():
+    data = request.get_json()
+    token = data["token"]
+    try:
+        aid = log.token_to_id(token)
+    except err.InvalidToken as error:
+        raise error
+    order_id = data["id"]
+    state = data["state"]
+    try:
+        result = odr.change_order_state(order_id, state)
+    except KeyError as error:
+        raise err.InvalidID(description = "Invalid input ID, please try again!")
+    return dumps({
+        "status": "success",
+        "id": result["id"],
+        "state": result["state"]
     })
 
 @app.route("/order/refund", methods = ["POST"])

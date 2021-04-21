@@ -34,6 +34,10 @@ class NotEoughFund(HTTPException):
     code = 466
     message = "Not enough fund, purchase fail!"
 
+class InvalidID(HTTPException):
+    code = 467
+    message = "Invalid input ID, please try again!"
+
 class EmailAlreadyExit(HTTPException):
     code = 468
     message = "Email already used by another account, try another one."
