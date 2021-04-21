@@ -12,6 +12,7 @@ import CustomSnackBar from '../CustomSnackbar';
 import {
   EDIT_PRODUCT_SUCCESS_ALERT as EDIT_ALERT,
   ADD_PRODUCT_SUCCESS_ALERT as ADD_ALERT,
+  IMG_EMPTY_ALERT,
   NEGATIVE_NUM_ALERT
 } from '../../utils/AlertInfo';
 const useStyles = makeStyles((theme) => ({
@@ -88,6 +89,10 @@ export default function ProductsManagement(props) {
       setAlertInfo(NEGATIVE_NUM_ALERT);
       setAlertOpen(true);
       return;
+    } else if (newProduct.img === null) {
+      setAlertInfo(IMG_EMPTY_ALERT);
+      setAlertOpen(true);
+      return;
     }
 
     let formData = new FormData();
@@ -123,6 +128,10 @@ export default function ProductsManagement(props) {
 
     if (selectedProduct.price < 0) {
       setAlertInfo(NEGATIVE_NUM_ALERT);
+      setAlertOpen(true);
+      return;
+    } else if (newProduct.img === null) {
+      setAlertInfo(IMG_EMPTY_ALERT);
       setAlertOpen(true);
       return;
     }

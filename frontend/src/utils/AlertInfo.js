@@ -48,3 +48,8 @@ export const CHANGE_PASSWORD_ALERT = {
   message: "The password has been change",
 };
 
+export const IMG_EMPTY_ALERT = {
+  severity: "error",
+  message: "Sorry, your Image cannot be empty",
+};
+
