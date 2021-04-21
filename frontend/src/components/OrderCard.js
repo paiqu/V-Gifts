@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import moment from 'moment';
@@ -9,14 +9,18 @@ import axios from 'axios';
 import AuthContext from '../AuthContext';
 import { Link } from 'react-router-dom';
 import ButtonBase from '@material-ui/core/ButtonBase';
-
+import { Button } from '@material-ui/core';
+import {
+  UPDATE_RECEIVE_ALERT as RECEIVE_ALERT,
+  UPDATE_REFUND_ALERT as REFUND_ALERT
+} from '../utils/AlertInfo';
+import CustomSnackBar from './CustomSnackbar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
       margin: 5,
       borderRadius: 5,
       overflow: "hidden",
-      // height: "10rem",
       width: "100%",
     },
     grid: {
@@ -42,6 +46,50 @@ export default function OrderCard(props) {
       value: props.rating
     });
 
+    const [orderState, setOrderState] = useState(props.state_in_text);
+    const [displayReceive, setDisplayReceive] = useState(false);
+    const [displayRefund, setDisplayRefund] = useState(false);
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertInfo, setAlertInfo] = useState({
+      severity: "",
+      message: "",
+    })
+    useEffect(() => {
+      if (props.state_in_text === 'Delivering') {
+        setDisplayReceive(true);
+      }
+      if (props.state_in_text === 'Just purchase') {
+        setDisplayRefund(true);
+      }
+    })
+    
+    const handleReceive = () => event => {
+      axios.post('/order/receive', {
+        token,
+        order_id: props.order_id
+      }).then(res => {
+        if (res.status === 200) {
+          setAlertInfo(RECEIVE_ALERT);
+          setAlertOpen(true);
+          setDisplayReceive(false);
+          setOrderState('Done');
+        }
+      })
+    }
+    const handleRefund = () => event => {
+      axios.post('/order/refund', {
+        token,
+        order_id: props.order_id
+      }).then(res => {
+        if(res.status === 200) {
+          console.log(res);
+          setAlertInfo(REFUND_ALERT);
+          setAlertOpen(true);
+          setOrderState('Cancelled / Refunded');
+        }
+      })
+    }
+  
     const handleChange = () => event => {
       console.log(event.target.value);
       console.log(props.order_id);
@@ -74,7 +122,7 @@ export default function OrderCard(props) {
         spacing={3}
         alignItems="center"
       >
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <ButtonBase
             className={classes.image}
             component={Link}
@@ -84,7 +132,7 @@ export default function OrderCard(props) {
           </ButtonBase>
         </Grid>
 
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           {props.product_name}
         </Grid>
         <Grid item xs={1}>
@@ -93,6 +141,7 @@ export default function OrderCard(props) {
         </Grid>
         <Grid item xs={2}>
             <p>{date}</p>
+            <p>{`State: ${orderState}`}</p>
         </Grid>
         <Grid item xs={2}>
           <Box component="fieldset" mb={3} borderColor="transparent">
@@ -103,9 +152,21 @@ export default function OrderCard(props) {
               precision={0.5}
               emptyIcon={<StarBorderIcon fontSize="inherit" />}
             />
-      </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={2}>
+          {displayReceive && <Button variant="contained" color="primary" style={{marginBottom: '20px', width: '70%'}} onClick={handleReceive()}>Received</Button>}
+          {displayRefund && <Button variant="contained" color="secondary" style={{marginBottom: '20px', width: '70%'}} onClick={handleRefund()}>Refund</Button>}
         </Grid>
       </Grid>
+      {alertOpen && 
+        <CustomSnackBar 
+          severity={alertInfo.severity}
+          message={alertInfo.message}
+          open={alertOpen}
+          setOpen={setAlertOpen}
+        />
+      }
     </div>
   );
 }

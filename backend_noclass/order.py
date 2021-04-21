@@ -99,9 +99,9 @@ def change_order_state(order_id, new_state):
     new_state = int(new_state)
     assert new_state in [0,1,2,3]
     db.valid_id("order", order_id)
-    abs = db.load_json()
-    abs["ORDER_DB"][str(order_id)]["state"] = new_state
-    db.to_json(abs)
+    temp = db.load_json()
+    temp["ORDER_DB"][str(order_id)]["state"] = new_state
+    db.to_json(temp)
     return {
         "id": order_id,
         "state": new_state
@@ -122,23 +122,39 @@ def order_refund(user_id, order_id, db_name = "database.json"):
     """
     db.valid_id("user", user_id, db_name)
     db.valid_id("order", order_id, db_name)
-    dbs = db.load_json()
+    dbs = db.load_json(db_name)
     # if refund is applicable
     if dbs["ORDER_DB"][str(order_id)]["state"] == 3:
         status = "Order already refunded"
     elif dbs["ORDER_DB"][str(order_id)]["state"] == 0:
-        if int(user_id) != dbs["ORDER_DB"][str(order_id)]["user_id"]:
+        if int(user_id) != int(dbs["ORDER_DB"][str(order_id)]["user_id"]):
             status = "Only user paid for this order can refund"
         change_order_state(order_id, 3)
+        dbs = db.load_json(db_name)
         prod_id = dbs["ORDER_DB"][str(order_id)]["product_id"]
         price = dbs["PRODUCT_DB"][str(prod_id)]["price"]
         amount = dbs["ORDER_DB"][str(order_id)]["amount"]
-        dbs = refund_helper(dbs, user_id, amount * price)
+        dbs = refund_helper(dbs, user_id, int(amount) * int(price))
         db.to_json(dbs, db_name)
         status = "Refund success"
     else:
         status = "Already on delivery, refund not applicable"
     return status
+
+def order_receive(user_id, order_id, db_name = "database.json"):
+    temp = db.load_json(db_name)
+    if temp["ORDER_DB"][str(order_id)]["state"] == 3:
+        status = "Order already refunded"
+    elif temp["ORDER_DB"][str(order_id)]["state"] == 1:
+        change_order_state(order_id, 2)
+        status = "Successfully received"
+    elif temp["ORDER_DB"][str(order_id)]["state"] == 2:
+        status = "Already Received"
+    elif temp["ORDER_DB"][str(order_id)]["state"] == 0:
+        status = "Not delivered yet"
+    else:
+        return False
+    return {}
 
 def show_user_order(user_id, db_name = "database.json"):
     """

@@ -28,3 +28,21 @@ and some functions for user, besides I finish the test for all the code.
 Week 5:
 Team prepare for the demo a. In order to connect the backend and frontend, I change the format to fit 
 the database and then pass all tests.
+
+Week 6:
+It's a flexible week. Having a group meeting for Retro A and start working on Retro A.
+
+Week 7:
+Trying to set the token to have expiration time in order to increase the security level.
+
+Week8:
+Working on demo B, try to figure out the function that user can click forget password and reset the password
+via email. 
+
+Week9:
+Working on Retro B
+Start working on chatbot, it should work with text communication with users.
+
+Week10:
+Update chatbot and make sure chatbot can recommend products to user. User can click the URL to redirect to prodcts page.
+Working on final report.
