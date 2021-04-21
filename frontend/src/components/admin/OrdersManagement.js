@@ -11,6 +11,10 @@ import {
   UPDATE_ORDER_STATE_ALERT as UPDATE_ALERT
 } from '../../utils/AlertInfo';
 import CustomSnackBar from '../CustomSnackbar';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 export default function OrdersManagement(props) {
   const [orders, setOrders] = useState(props.orders);
@@ -23,7 +27,7 @@ export default function OrdersManagement(props) {
   const [alertInfo, setAlertInfo] = useState({
     severity: "",
     message: "",
-  })
+  }) 
 
   const handleSubmit = () => event =>{
     event.preventDefault();
@@ -55,6 +59,7 @@ export default function OrdersManagement(props) {
       [name]: event.target.value
     });
   }
+
   const columns = [
     { field: 'id', headerName: 'Order ID', width: 120},
     { field: 'order_state', headerName: 'State', width: 150},
@@ -115,18 +120,22 @@ export default function OrdersManagement(props) {
                   />
                 </Grid>
                 <Grid item xs={3}>
-                  <TextField
-                    required
-                    label="Order State"
-                    placeholder="Order State"
-                    variant="outlined"
-                    onChange={handleChange('orderState')}
-                    InputLabelProps={{shrink: true}}
-                    style={{
-                      marginRight: "1rem",
+                  <FormControl variant="outlined" style={{
                       width: "100%",
-                    }}
-                  />
+                    }}>
+                    <InputLabel id="demo-simple-select-label">State Code</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={info.orderState}
+                      onChange={handleChange('orderState')}
+                      >
+                      <MenuItem value={'0'}>Just purchase</MenuItem>
+                      <MenuItem value={'1'}>Delivering</MenuItem>
+                      <MenuItem value={'2'}>Done</MenuItem>
+                      <MenuItem value={'3'}>Cancel/Refund</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={2}>
                   <Button
