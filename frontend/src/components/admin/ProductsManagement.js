@@ -43,8 +43,9 @@ export default function ProductsManagement(props) {
     img: null,
   });
 
-  const [isNewUploaded, setIsNewUploaded] = useState(false);
-  const [isSelectedUploaded, setIsSelectedUploaded] = useState(false);
+  // const [isNewUploaded, setIsNewUploaded] = useState(false);
+  // const [isSelectedUploaded, setIsSelectedUploaded] = useState(false);
+  // const [isCsvUploaded, setIsCsvUploaded] = useState(false);
   const [selectionModel, setSelectionModel] = useState([]);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertInfo, setAlertInfo] = useState({
@@ -172,7 +173,7 @@ export default function ProductsManagement(props) {
       ...newProduct,
       img: event.target.files[0],
     });
-    setIsNewUploaded(true);
+    // setIsNewUploaded(true);
   }
 
   const handleSelectedFileUpload = (event) => {
@@ -183,7 +184,7 @@ export default function ProductsManagement(props) {
       img: event.target.files[0],
     });
     console.log(event.target.files[0].type.replace(/(.*)\//g, ''));
-    setIsSelectedUploaded(true);
+    // setIsSelectedUploaded(true);
   }
 
 
@@ -385,7 +386,7 @@ export default function ProductsManagement(props) {
                 spacing={2}
               >
                 <Grid item xs={5}>
-                  { !isNewUploaded &&
+                  { newProduct.img == null &&
                     <Button
                       variant="contained"
                       component="label"
@@ -403,7 +404,7 @@ export default function ProductsManagement(props) {
                       />
                     </Button>
                   }
-                  { isNewUploaded &&
+                  { newProduct.img != null &&
                     <Button
                       variant="contained"
                       component="label"
@@ -544,7 +545,7 @@ export default function ProductsManagement(props) {
                 spacing={2}
               >
                 <Grid item xs={5}>
-                  { !isSelectedUploaded &&
+                  { selectedProduct.img == null &&
                     <Button
                       variant="contained"
                       component="label"
@@ -562,7 +563,7 @@ export default function ProductsManagement(props) {
                       />
                     </Button>
                   }
-                  { isSelectedUploaded &&
+                  { selectedProduct.img != null &&
                     <Button
                       variant="contained"
                       component="label"
@@ -611,7 +612,8 @@ export default function ProductsManagement(props) {
                   style={{
                     width: "100%"
                   }}
-                >CSV Uploaded
+                >
+                  {csv == null ? "Upload a CSV file" : "CSV Uploaded"}
                   <input
                     type="file"
                     accept=".csv"
