@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import ProductCard from "../components/ProductCard";
+// import ProductCard from "../components/ProductCard";
+import ProductCardNew from "../components/ProductCardNew";
 import ProductFilter from "../components/ProductFilter";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -355,7 +356,7 @@ function ProductsPage(props) {
               </Grid>
               {products.map((x) =>
                 <Grid key={`product-${x['product_id']}`} item xs={12} sm={4}>
-                  <ProductCard
+                  <ProductCardNew
                     key={`product-${x['product_id']}`}
                     id={x['product_id']}
                     name={x['name']}

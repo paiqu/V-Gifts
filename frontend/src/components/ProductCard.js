@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
         width: '9rem',
         height: '9rem',
     },
+    mediaRoot: {
+
+    },
     img: {
         margin: 'auto',
         display: 'block',
