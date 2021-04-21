@@ -107,7 +107,7 @@ def change_password(user_id, old_password, new_password):
         dbs["USER_DB"][str(user_id)]["password"] = lo.encrypt_password(new_password)
         db.to_json(dbs)
         return True
-    return False
+    raise err.InvalidPassword
 
 def edit_info_user(user_id, first_name, last_name, address, city, \
             country, db_name = "database.json"):

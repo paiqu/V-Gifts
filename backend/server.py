@@ -269,7 +269,10 @@ def change_password():
         raise error
     opassword = log.encrypt_password(data["old_password"])
     npassword = data["new_password"]
-    result = usr.change_password(user_id, opassword, npassword)
+    try:
+        result = usr.change_password(user_id, opassword, npassword)
+    except err.InvalidPassword as error:
+        raise error
     return dumps({
         "status": result
     })
@@ -277,12 +280,12 @@ def change_password():
 @app.route("/user/profile/edit", methods = ["POST"])
 def user_edit_info():
     data = request.get_json()
-    token       = data["token"]
-    fname       = data["fname"]
-    lname       = data["lname"]
-    address     = data["address"]
-    city        = data["city"]
-    country     = data["country"]
+    token = data["token"]
+    fname = data["fname"]
+    lname = data["lname"]
+    address = data["address"]
+    city = data["city"]
+    country = data["country"]
     try:
         user_id = log.token_to_id(token)
     except err.InvalidToken as error:
