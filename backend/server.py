@@ -267,7 +267,7 @@ def change_password():
         user_id = log.token_to_id(token)
     except err.InvalidToken as error:
         raise error
-    opassword = data["old_password"]
+    opassword = log.encrypt_password(data["old_password"])
     npassword = data["new_password"]
     result = usr.change_password(user_id, opassword, npassword)
     return dumps({
