@@ -11,7 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const INVALID_NAME = 464;
 const INVALID_PASSWORD = 465;
@@ -70,6 +74,7 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
   const [infos, setInfos] = React.useState({
     name: "",
     password: "",
+    showPassword: false,
   });
 
   const handleChange = name => event => {
@@ -134,6 +139,14 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
     .catch((err) => { });
   }
 
+  const handleClickShowPassword = () => {
+    setInfos({ ...infos, showPassword: !infos.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const classes = useStyles();
   const theme = useTheme();
 
@@ -163,7 +176,9 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
               onChange={handleChange('name')}
               onClick={handle_error()}
             />
-            <TextField
+            <OutlinedInput
+              type={infos.showPassword ? 'text' : 'password'}
+              value={infos.password}
               error={state.passwordError}
               helperText={state.help_text}
               variant="outlined"
@@ -172,11 +187,22 @@ function AdminLoginPage({ setAdminAuth, ...props }) {
               fullWidth
               name="password"
               label="Admin Password"
-              type="password"
               id="password"
               autoComplete="current-password"
               onChange={handleChange('password')}
               onClick={handle_error()}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {infos.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
             />
             <Button
               type="submit"

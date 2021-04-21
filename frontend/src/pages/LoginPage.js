@@ -181,6 +181,7 @@ function LoginPage({ setAuth, ...props }) {
               name="password"
               label="Password"
               // type="password"
+              placeholder="Password"
               id="password"
               autoComplete="current-password"
               onChange={handleChange('password')}
@@ -196,7 +197,7 @@ function LoginPage({ setAuth, ...props }) {
                     {infos.showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
-            }
+              }
             />
             <Button
               type="submit"

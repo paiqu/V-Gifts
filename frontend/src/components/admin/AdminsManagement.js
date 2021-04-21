@@ -160,6 +160,7 @@ export default function AdminsManagement(props) {
         </Typography>
         <Box
           display="flex"
+          alignItems="center"
         >
           <TextField
             required
