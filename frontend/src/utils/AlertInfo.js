@@ -42,3 +42,9 @@ export const UPDATE_REFUND_ALERT = {
   severity: "success",
   message: "The order state has been change to refund",
 };
+
+export const CHANGE_PASSWORD_ALERT = {
+  severity: "success",
+  message: "The password has been change",
+};
+

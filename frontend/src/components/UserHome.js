@@ -11,6 +11,7 @@ import { useHistory } from 'react-router'
 import CustomSnackBar from '../components/CustomSnackbar';
 import {NEGATIVE_NUM_ALERT} from '../utils/AlertInfo';
 import EditProfileDialog from '../components/Dialog/EditProfileDialog';
+import ChangePasswordDialog from '../components/Dialog/ChangePasswordDialog';
 import AttachMoneyOutlinedIcon from '@material-ui/icons/AttachMoneyOutlined';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import FaceIcon from '@material-ui/icons/Face';
@@ -85,7 +86,7 @@ function UserHome(props) {
     }), [token, profile]);
 
     const [editDialog, setEditDialog] = useState(false);
-
+    const [PasswordDialog, setPasswordDialog] = useState(false);
     const handleFundToAddChange = (e) => {
       setFundToAdd(e.target.value);
     }
@@ -137,6 +138,10 @@ function UserHome(props) {
     const handleEditDialogOpen = () => {
       setEditDialog(true);
     }
+
+    const handleChangePasswordDialogOpen = () => {
+      setPasswordDialog(true);
+    }
   
 
     return (
@@ -164,10 +169,11 @@ function UserHome(props) {
                   Address: {profile["address"]}
                 </Typography>
                 <Button variant="contained"color="primary" style={{marginTop: '10px'}} onClick={handleEditDialogOpen}>EDIT PROFILE</Button>
-                <Button variant="contained"color="secondary" style={{marginTop: '10px'}}>CHANGE PASSWORD</Button>
+                <Button variant="contained"color="secondary" style={{marginTop: '10px'}} onClick={handleChangePasswordDialogOpen}>CHANGE PASSWORD</Button>
               </CardContent>
             </Card>
             <EditProfileDialog profile={profile} setProfile={setProfile} open={editDialog} setOpen={setEditDialog}/>
+            <ChangePasswordDialog open={PasswordDialog} setOpen={setPasswordDialog}/>
           </Grid> 
 
           <Grid item md={3} xs={12}>
