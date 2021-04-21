@@ -48,6 +48,7 @@ export default function OrderCard(props) {
 
     const [orderState, setOrderState] = useState(props.state_in_text);
     const [displayReceive, setDisplayReceive] = useState(false);
+    const [displayRefund, setDisplayRefund] = useState(false);
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertInfo, setAlertInfo] = useState({
       severity: "",
@@ -56,6 +57,9 @@ export default function OrderCard(props) {
     useEffect(() => {
       if (props.state_in_text === 'Delivering') {
         setDisplayReceive(true);
+      }
+      if (props.state_in_text === 'Just purchase') {
+        setDisplayRefund(true);
       }
     })
     
@@ -68,6 +72,7 @@ export default function OrderCard(props) {
           setAlertInfo(RECEIVE_ALERT);
           setAlertOpen(true);
           setDisplayReceive(false);
+          setOrderState('Done');
         }
       })
     }
@@ -151,7 +156,7 @@ export default function OrderCard(props) {
         </Grid>
         <Grid item xs={2}>
           {displayReceive && <Button variant="contained" color="primary" style={{marginBottom: '20px', width: '70%'}} onClick={handleReceive()}>Received</Button>}
-          <Button variant="contained" color="secondary" style={{marginBottom: '20px', width: '70%'}} onClick={handleRefund()}>Refund</Button>
+          {displayRefund && <Button variant="contained" color="secondary" style={{marginBottom: '20px', width: '70%'}} onClick={handleRefund()}>Refund</Button>}
         </Grid>
       </Grid>
       {alertOpen && 

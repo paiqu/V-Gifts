@@ -133,7 +133,7 @@ export default function OrdersManagement(props) {
                       <MenuItem value={'0'}>Just purchase</MenuItem>
                       <MenuItem value={'1'}>Delivering</MenuItem>
                       <MenuItem value={'2'}>Done</MenuItem>
-                      <MenuItem value={'3'}>Cancel/Refund</MenuItem>
+                      <MenuItem value={'3'}>Cancelled / Refunded</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
