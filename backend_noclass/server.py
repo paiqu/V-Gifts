@@ -430,10 +430,13 @@ def send_mail():
     data = request.get_json()
     email = data["email"]
     num_str = "".join(str(random.choice(range(10))) for i in range(6))
-    user_test = usr.my_reset_passowrd(email)
+    try:
+        user_test = usr.my_reset_passowrd(email)
+    except err.InvalidEmail as error:
+        raise error
     usr.change_password(user_test["id"], user_test["password"], num_str)
     sem.send_email_gm(email, num_str)
-    return "Mail sent"
+    return dumps({})
 
 
 # Product related routes
