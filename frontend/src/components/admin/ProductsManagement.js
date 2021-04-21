@@ -242,6 +242,7 @@ export default function ProductsManagement(props) {
           message: res.data.status,
         });
         setAlertOpen(true);
+        setReloadProducts(true);
       }
     }).catch((err) => {});
   }
