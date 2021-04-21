@@ -95,7 +95,7 @@ export default function EditProfileDialog(props) {
                         placeholder="Enter First Name Here.."
                         id="first_name"
                         name="first_name"
-                        onChange={handleChange('first_name')}
+                        onChange={handleChange('fname')}
                         variant="outlined"
                         fullWidth
                         required
@@ -107,7 +107,7 @@ export default function EditProfileDialog(props) {
                         label="Last name"
                         placeholder="Enter Last Name Here.."
                         name="last_name"
-                        onChange={handleChange('last_name')}
+                        onChange={handleChange('lname')}
                         variant="outlined"
                         fullWidth
                         required
