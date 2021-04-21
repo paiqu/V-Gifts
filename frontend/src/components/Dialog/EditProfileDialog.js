@@ -67,6 +67,7 @@ export default function EditProfileDialog(props) {
     event.preventDefault();
     axios.post('/user/profile/edit', {...infos, token}).then(res => {
         if (res.status === 200) {
+            props.setProfile({...infos})
             console.log(res);
         }
     })

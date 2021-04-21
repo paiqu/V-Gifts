@@ -54,7 +54,7 @@ function UserHome(props) {
     const history = useHistory();
 
     const token = props.token;
-    const profile = props.profile;
+    const [profile, setProfile] = useState(props.profile);
     const [fundToAdd, setFundToAdd] = useState(profile['fund']);
     const [cart, setCart] = useState([]);
     const [alertOpen, setAlertOpen] = useState(false);
@@ -62,6 +62,27 @@ function UserHome(props) {
       severity: "",
       message: "",
     })
+
+    React.useEffect((() => {
+      axios.get('/user/profile', { 
+        params: {
+          token,
+        }
+      })
+      .then((response) => {
+        const data = response.data;
+  
+        setProfile({
+          "first_name": data["first_name"],
+          "last_name": data["last_name"],
+          "username": data["username"],
+          "email": data["email"],
+          "address": data["address"],
+          "fund": data["fund"],
+        });
+      })
+      .catch((err) => {});
+    }), [token, profile]);
 
     const [editDialog, setEditDialog] = useState(false);
 
@@ -146,7 +167,7 @@ function UserHome(props) {
                 <Button variant="contained"color="secondary" style={{marginTop: '10px'}}>CHANGE PASSWORD</Button>
               </CardContent>
             </Card>
-            <EditProfileDialog open={editDialog} setOpen={setEditDialog}/>
+            <EditProfileDialog profile={profile} setProfile={setProfile} open={editDialog} setOpen={setEditDialog}/>
           </Grid> 
 
           <Grid item md={3} xs={12}>
