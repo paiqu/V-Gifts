@@ -59,7 +59,9 @@ function InterestSelectionPage(props) {
               variant="outlined" 
               color="secondary"
               style={{width: "100%"}} 
-              onClick={props.handleNext} 
+              onClick={() => {
+                history.push('/products');
+              }} 
             >
               Skip
             </Button>

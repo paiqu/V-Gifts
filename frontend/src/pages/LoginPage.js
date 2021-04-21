@@ -60,8 +60,10 @@ const useStyles = makeStyles((theme) => ({
   },
   adminButton: {
     position: "fixed",
-    bottom: 10,
-    right: 10,
+    bottom: 0,
+    // left: 10,
+    marginLeft: "1rem",
+    marginBottom: "1rem",
   }
 }));
 
