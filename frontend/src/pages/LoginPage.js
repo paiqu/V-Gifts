@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import ForgetPasswordDialog from '../components/ForgetPasswordDialog';
 const ERROR = 465;
 
 
@@ -115,6 +115,10 @@ function LoginPage({ setAuth, ...props }) {
       .catch((err) => { });
 
   }
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleForgetPassword = () => event => {
+    setOpenDialog(true);
+  }
 
   const classes = useStyles();
   const theme = useTheme();
@@ -174,7 +178,7 @@ function LoginPage({ setAuth, ...props }) {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to="#" variant="body2" color={theme.palette.secondary.contrastText}>
+                <Link button variant="body2" color={theme.palette.secondary.contrastText} onClick={handleForgetPassword()}>
                   Forgot password?
                 </Link>
               </Grid>
@@ -199,6 +203,7 @@ function LoginPage({ setAuth, ...props }) {
           Admin Login
         </Button>
       </Grid>
+      <ForgetPasswordDialog open={openDialog} setOpen={setOpenDialog}/>
     </Grid>
   );
 }
