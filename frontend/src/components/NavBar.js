@@ -18,7 +18,8 @@ import { useHistory } from 'react-router'
 
 const useStyles = makeStyles((theme) => ({
   grow: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    width: "100%",
   },
   menuButton: {
     marginRight: theme.spacing(2),
