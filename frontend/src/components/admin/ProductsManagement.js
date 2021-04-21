@@ -26,6 +26,7 @@ export default function ProductsManagement(props) {
   const token = props.token;
   const [products, setProducts] = useState([]);
   const [reloadProducts, setReloadProducts] = useState(false);
+  const [csv, setCsv] = useState(null);
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: 0,
@@ -219,6 +220,28 @@ export default function ProductsManagement(props) {
     }
   }), [selectionModel]);
 
+  const handleCsvChange = (event) => {
+    console.log(event.target.files[0]);
+    setCsv(event.target.files[0]);
+  }
+  
+  const handleCsvSubmit = (event) => {
+    event.preventDefault();
+    console.log(1111);
+    let formData = new FormData();
+    formData.append('token', token);
+    formData.append('file', csv);
+    console.log(formData);
+    axios.post('/product/import_csv', 
+      formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(res => {
+      console.log(res);
+    }).catch((err) => {});
+  }
   return (
     <div style={{width: '100%'}}>
       <Typography variant="h5">Products in the system</Typography>
@@ -561,6 +584,43 @@ export default function ProductsManagement(props) {
             </Grid>
           </form>
         </Grid>
+          <Grid item xs={10}>
+          <form onSubmit={handleCsvSubmit}>
+            <Typography variant="h5" style={{marginBottom: "1rem", marginTop: "20px"}}>
+                Import CSV File
+              </Typography>
+            
+            <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  component="label"
+                  color="primary"
+                  style={{
+                    width: "100%"
+                  }}
+                >CSV Uploaded
+                  <input
+                    type="file"
+                    accept=".csv"
+                    hidden
+                    onChange={handleCsvChange}
+                  />
+                </Button>
+            </Grid>
+            <Grid item xs={4}>
+              <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  style={{
+                    width: "100%",
+                    marginTop: "20px"
+                  }}
+                >Submit
+              </Button>
+            </Grid>
+            </form>
+          </Grid>
       </Grid>
       {alertOpen && 
         <CustomSnackBar 
