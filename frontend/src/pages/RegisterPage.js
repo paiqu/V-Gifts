@@ -10,6 +10,7 @@ import axios from 'axios';
 
 const EXISTED_NAME = 463;
 const EXISTED_EMAIL = 468;
+const INVALID_USERNAME = 461;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,6 +102,11 @@ function RegisterPage({ setAuth, ...props }) {
               email_error: true,
               email_text: "Email exists"
             })
+          } else if (data.code === 461 ) {
+            setState({
+              account_error: true,
+              account_text: "Account name invalid"
+            })
           }
           else {
             // mark the user as signed-in in local storage, it will be removed when it is logged out
@@ -112,7 +118,6 @@ function RegisterPage({ setAuth, ...props }) {
           }
 
       })
-      .catch((err) => {});
   };
 
   return (

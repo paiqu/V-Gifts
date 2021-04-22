@@ -19,7 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 
 const ERROR = 465;
-
+const INCORRECT_USERNAME = 464;
 
 function Copyright() {
   return (
@@ -106,10 +106,16 @@ function LoginPage({ setAuth, ...props }) {
     axios.post('user/login', { ...infos })
       .then((response) => {
         const data = response.data;
+        console.log(data.code);
         if (data.code === ERROR) {
           setState({
             error: true,
             help_text: "Invalid account name/Password error"
+          });
+        } else if (data.code === INCORRECT_USERNAME) {
+          setState({
+            error: true,
+            help_text: "Invalid account name"
           });
         }
         else {
@@ -121,7 +127,6 @@ function LoginPage({ setAuth, ...props }) {
         }
 
       })
-      .catch((err) => { });
 
   }
   const [openDialog, setOpenDialog] = useState(false);
