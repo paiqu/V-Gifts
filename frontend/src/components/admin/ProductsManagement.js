@@ -114,7 +114,7 @@ export default function ProductsManagement(props) {
     )
     .then((response) => {
       const data = response.data;
-
+      props.setUpdateProduct(true);
       setAlertInfo(ADD_ALERT);
       setAlertOpen(true);
 
@@ -206,7 +206,7 @@ export default function ProductsManagement(props) {
 
   // load products based on current selection
   useEffect((() => {
-    if (selectionModel.length != 0) {    
+    if (selectionModel.length !== 0) {    
       axios.get('/product/get_info', {
           params: {
             id: parseInt(selectionModel),
@@ -251,6 +251,7 @@ export default function ProductsManagement(props) {
           severity: "Success",
           message: res.data.status,
         });
+        props.setUpdateProduct(true);
         setAlertOpen(true);
         setReloadProducts(true);
       }

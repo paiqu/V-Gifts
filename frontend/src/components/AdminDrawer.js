@@ -91,6 +91,7 @@ export default function AdminDrawer(props) {
   });
 
   const [products, setProducts] = useState([]);
+  const [updateProduct, setUpdateProduct] = useState(false);
   const [users, setUsers] = useState([]);
   const [orders, SetOrders] = useState([]);
   const [admins, setAdmins] = useState([]);
@@ -104,7 +105,7 @@ export default function AdminDrawer(props) {
     })
     .then((response) => {
       const data = response.data["product_lst"];
-
+      setUpdateProduct(false);
       setProducts(data);
     })
     .catch((err) => {});
@@ -146,7 +147,7 @@ export default function AdminDrawer(props) {
     .catch((err) => {});
 
 
-  }), []);
+  }), [token, updateProduct]);
 
   const renderUsers = (
     <UsersDataGrid token={token} users={users} />
@@ -169,7 +170,7 @@ export default function AdminDrawer(props) {
   );
 
   const renderProducts = (
-    <ProductsManagement token={token} products={products} />
+    <ProductsManagement token={token} products={products} setUpdateProduct={setUpdateProduct}/>
   );
 
   const renderAdmins = (
