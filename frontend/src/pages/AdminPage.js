@@ -35,7 +35,7 @@ function AdminPage(props) {
         });
       })
       .catch((err) => {});
-    }), []);
+    }), [token]);
 
     return (
       <div>

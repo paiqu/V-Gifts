@@ -65,7 +65,7 @@ export default function ProductsManagement(props) {
     return {
       "id": x["product_id"],
       "name": x["name"],
-      "price": `\$${x["price"]}`,
+      "price": `$${x["price"]}`,
       "rating": `${x["rating"]}/5`,
     };
   });
@@ -131,12 +131,7 @@ export default function ProductsManagement(props) {
       setAlertInfo(NEGATIVE_NUM_ALERT);
       setAlertOpen(true);
       return;
-    } else if (newProduct.img === null) {
-      setAlertInfo(IMG_EMPTY_ALERT);
-      setAlertOpen(true);
-      return;
-    }
-
+    } 
     let formData = new FormData();
     formData.append('token', token);
     formData.append('file', selectedProduct.img);
@@ -486,7 +481,6 @@ export default function ProductsManagement(props) {
                       step: 1,
                       min: 0,
                     }}
-                    value={newProduct.price}
                     style={{
                       width: "100%",
                     }}

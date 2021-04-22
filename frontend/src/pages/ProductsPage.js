@@ -15,12 +15,9 @@ import Chatbot from '../components/chat/Chatbot';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Link } from 'react-router-dom';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import { useHistory, useLocation } from 'react-router'
+import { useHistory } from 'react-router'
 import CustomSnackBar from '../components/CustomSnackbar';
 
 
@@ -61,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
+    // height: "20rem"
   },
   gridList: {
     flexWrap: 'nowrap',
@@ -93,9 +91,7 @@ const strToNumList = (str) => {
 function ProductsPage(props) {
   const classes = useStyles();
   const history = useHistory();
-  const location = useLocation();
 
-  // const [currPage, setCurrPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [products, setProducts] = useState([]);
   const [recommendation, setRecommendation] = useState([]);
@@ -132,19 +128,6 @@ function ProductsPage(props) {
     setNlModalOpen(false);
   };
 
-  // const query = new URLSearchParams(props.location.search);
-  // const keywordQuery = query.get('keyword');
-  // const categoryQuery = query.getAll('category');
-  // const [categories, setCategories] = useState({
-  //   strList: categoryQuery ? categoryQuery : [],
-  //   numList: categoryQuery ? strListToNumList(categoryQuery) : []
-  // });
-  // const [categories, setCategories] = useState([]);
-  // const [keyword, setKeyword] = useState(
-  //   keywordQuery ? keywordQuery : ""
-  // );
-  // const [category, setCategory] = useState("");
-
   function usePrevious(value) {
     const ref = useRef();
     useEffect(() => {
@@ -154,66 +137,45 @@ function ProductsPage(props) {
   }
 
   const prevKeyword = usePrevious(infos.keyword);
-  const prevPage = usePrevious(infos.page);
-  const prevCategory = usePrevious(infos.category);
 
   const retrieveProducts = () => {
-    if (1 == 0) {    
-      axios.get('/product/get_all', {
-        params: {
-          token: token ? token : "",
-          "page": infos.page,
-        }
-      })
-      .then((response) => {
-        const data = response.data;
+    axios.post('/product/search', {
+      token: token ? token : "",
+      // page: prevKeyword !== keyword ? 1 : currPage, 
+      page: infos.page,
+      keyword: infos.keyword,
+      category: strToNumList(infos.category),
+      price_range: [],
+    })
+    .then((response) => {
+      const data = response.data;
 
-        setTotalPages(data['total_pages']);
-        setProducts(data['product_lst']);
-        setRecommendation(data["recommendation_list"]);
-      })
-    } else {
-      axios.post('/product/search', {
-        token: token ? token : "",
-        // page: prevKeyword !== keyword ? 1 : currPage, 
-        page: infos.page,
-        keyword: infos.keyword,
-        category: strToNumList(infos.category),
-        price_range: [],
-      })
-      .then((response) => {
-        const data = response.data;
+      if (data.code === ERROR) {
+        history.push('/404');
+      }
 
-        if (data.code === ERROR) {
-          history.push('/404');
-        }
+      const flag = data.flag;
+      if (!flag) {
+        setResult(false);
+      } else {
+        setResult(true);
+      }
 
-        const flag = data.flag;
-        if (!flag) {
-          setResult(false);
-        } else {
-          setResult(true);
-        }
+      setTotalPages(data['total_pages']);
+      setProducts(data['product_lst']);
+      setRecommendation(data["recommendation_list"]);
 
-        setTotalPages(data['total_pages']);
-        setProducts(data['product_lst']);
-        setRecommendation(data["recommendation_list"]);
-
-        if (prevKeyword !== infos.keyword) {
-          setInfos({
-            ...infos,
-            category: "",
-            page: 1,
-          })
-        }
-
-        // if (keyword === "" && prevCategory !== "") {
-        //   setCategory("");
-        // }
-      })
-    }
+      if (prevKeyword !== infos.keyword) {
+        setInfos({
+          ...infos,
+          category: "",
+          page: 1,
+        })
+      }
+    })
   };
 
+  // eslint-disable-next-line
   React.useEffect(retrieveProducts, [infos]);
 
 
@@ -235,16 +197,6 @@ function ProductsPage(props) {
 
 
   const [modalType, setModalType] = useState(1);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-    setOpen(!open);
-  };
-
-  const id = open ? 'simple-popper' : undefined;
 
   const handleCategory = (category) => {
     setInfos({
@@ -273,10 +225,12 @@ function ProductsPage(props) {
       >
         <Grid container spacing={0}>
           <Grid className={classes.leftContainer} container item xs={12} sm={2}>
-            <ProductFilter 
-              // categories={category} 
-              handleCategory={handleCategory}
-            />
+            <Grid item xs={12}>
+              <ProductFilter
+                // categories={category}
+                handleCategory={handleCategory}
+              />
+            </Grid>
           </Grid>
 
           <Grid 
@@ -300,7 +254,12 @@ function ProductsPage(props) {
                 <Grid item xs={12}>
                   <GridList className={classes.gridList} cols={4.5} >
                     {recommendation.map(x => (
-                      <GridListTile key={`rec-${x['product_id']}`} style={{height: "10rem"}}>
+                      <GridListTile 
+                        key={`rec-${x['product_id']}`} 
+                        style={{height: "10rem"}}
+                        component={Link}
+                        to={`/product/${x['product_id']}`}
+                      >
                         {/* <ButtonBase
                           component={Link}
                           to={`/product/${x['product_id']}`}
@@ -322,33 +281,33 @@ function ProductsPage(props) {
                             root: classes.titleBar,
                             title: classes.gridListTitle,
                           }}
-                          actionIcon={
-                            <ButtonGroup
-                              className={classes.gridListTitle}
-                              color="primary"
-                              variant="text"
-                              disableElevation
-                            >
-                              <IconButton
-                                aria-label={`cart-${x['name']}`}
-                                component={Link}
-                                to={`/product/${x['product_id']}`}
-                              >
-                                <InfoOutlinedIcon  />
-                              </IconButton>
-                              {/* <IconButton
-                                aria-label={`cart-${x['name']}`}
-                                onClick={handleAddToCart(x['product_id'])}
-                              >
-                                <ShoppingCartIcon  />
-                              </IconButton>
-                              <Button
-                                onClick={handlePurchase(x['product_id'])}
-                              >
-                                Buy
-                              </Button> */}
-                            </ButtonGroup>
-                          }
+                          // actionIcon={
+                            // <ButtonGroup
+                            //   className={classes.gridListTitle}
+                            //   color="primary"
+                            //   variant="text"
+                            //   disableElevation
+                            // >
+                            //   <IconButton
+                            //     aria-label={`cart-${x['name']}`}
+                            //     component={Link}
+                            //     to={`/product/${x['product_id']}`}
+                            //   >
+                            //     <InfoOutlinedIcon  />
+                            //   </IconButton>
+                            //   <IconButton
+                            //     aria-label={`cart-${x['name']}`}
+                            //     onClick={handleAddToCart(x['product_id'])}
+                            //   >
+                            //     <ShoppingCartIcon  />
+                            //   </IconButton>
+                            //   <Button
+                            //     onClick={handlePurchase(x['product_id'])}
+                            //   >
+                            //     Buy
+                            //   </Button>
+                            // </ButtonGroup>
+                          // }
                         />
                       </GridListTile>
                     ))}

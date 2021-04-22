@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import { useHistory } from 'react-router';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -26,8 +25,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AdminsManagement(props) {
   const classes = useStyles();
-
-  const history = useHistory();
 
   const token = props.token;
   const [admins, setAdmins] = useState([]);
@@ -126,7 +123,7 @@ export default function AdminsManagement(props) {
       setAdmins(data);
     })
     .catch((err) => {});
-  }), [loading]);
+  }), [loading, token]);
 
 
 
@@ -194,7 +191,6 @@ export default function AdminsManagement(props) {
             id="outlined-adornment-password"
             type={newAdmin.showPassword ? 'text' : 'password'}
             value={newAdmin.password}
-            id="admin-password"
             label="Admin Password"
             placeholder="Admin Password"
             variant="outlined"

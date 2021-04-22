@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AuthContext from '../../AuthContext';
 import Grid from '@material-ui/core/Grid';
@@ -37,8 +37,11 @@ function CartProductCard(props) {
 	const token = React.useContext(AuthContext).user;
   const item = props.item;
 
+  // eslint-disable-next-line
   const [id, setID] = useState(item["product_id"]);
+  // eslint-disable-next-line
   const [img, setImg] = useState(item["pic_link"]);
+  // eslint-disable-next-line
   const [name, setName] = useState(item["product_name"]);
   const [amount, setAmount] = useState(item["amount"]);
 
@@ -128,6 +131,7 @@ function CartProductCard(props) {
             // style={{
             //   border: `1px solid ${theme.palette.primary.contrastText}`
             // }}
+            alt=""
           />
         </Grid>
         

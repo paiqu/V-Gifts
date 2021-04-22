@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
@@ -25,6 +25,7 @@ function InterestSelectionPage(props) {
   const token = useContext(AuthContext).user;
   const history = useHistory();
 
+  // eslint-disable-next-line
   const [interests, setInterets] = useState(props.interests);
   const [selected, setSelected] = useState([]);
 

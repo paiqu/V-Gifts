@@ -1,18 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import CustomChip from './CustomChip';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    display: 'flex',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-}));
 
 export default function InterestsChips({
   setSelected, 
@@ -25,6 +12,7 @@ export default function InterestsChips({
 
   useEffect((() => {
     setInterests(props.interests);
+    // eslint-disable-next-line
   }), []);
 
 

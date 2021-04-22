@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { useHistory } from 'react-router'
 
 
 
@@ -19,41 +18,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CheckboxList(props) {
-    const classes = useStyles();
-    const history = useHistory();
+  const classes = useStyles();
 
-    const categoryList = ["for men", "for women", "for children", "for friends", "for elder", "for relationship", "foods", "tools", "luxuries", "entertainment", "working"];
-    // const categories = props.categories.numList;
-
-    // // const [checked, setChecked] = useState([0]);
-    // const [categories, setCategories] = useState(Array(11).fill(0));
-    // // console.log(props);
-    // if (props.categories.length > 0) {
-    //   for (let i = 0; i < props.categories.length; i++) {
-    //     if (categories.includes(props.categories[i])) {
-    //       setCategories(categories.map(x => (
-    //         x === props.categories[i] ? 1 : 0
-    //       )));
-    //     }
-    //   }
-    // }
-
-    // const setChecked = (index) => {
-    //   return !!categories[index];
-    // }
-
-    // const handleToggle = (value) => () => {
-    //     const currentIndex = checked.indexOf(value);
-    //     const newChecked = [...checked];
-
-    //     if (currentIndex === -1) {
-    //         newChecked.push(value);
-    //     } else {
-    //         newChecked.splice(currentIndex, 1);
-    //     }
-
-    //     setChecked(newChecked);
-    // };
+  const categoryList = ["for men", "for women", "for children", "for friends", "for elder", "for relationship", "foods", "tools", "luxuries", "entertainment", "working"];
 
   return (
     <List className={classes.root}>

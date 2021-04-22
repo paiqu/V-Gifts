@@ -4,13 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
 import axios from 'axios';
 import QuantitySelect from './QuantitySelect';
 import AuthContext from '../AuthContext';
 import PurchaseSucessModal from '../components/modals/PurchaseSuccessModal';
 import NotLoginModal from '../components/modals/NotLoginModal';
-import { FUND_ALERT, EMPTY_ALERT, THANKS_ALERT } from '../utils/AlertInfo';
+import { FUND_ALERT } from '../utils/AlertInfo';
 import { NOT_ENOUGH_FUND } from '../utils/ErrorCode';
 import CustomSnackBar from './CustomSnackbar';
 

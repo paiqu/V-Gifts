@@ -40,6 +40,8 @@ export default function PurchaseSuccessModal(props) {
         return <h2>Thanks for your purchase!</h2>;
       case 2:
         return <h2>Item added to Cart!</h2>;
+      default:
+        return <h2>Modal</h2>
     }
   ;}
 
@@ -58,7 +60,6 @@ export default function PurchaseSuccessModal(props) {
             My orders history
           </Button>
         );
-        break;
       case 2: // add to cart
         return (
           <Button
@@ -72,7 +73,8 @@ export default function PurchaseSuccessModal(props) {
             View my cart
           </Button>
         );
-        break;
+      default:
+        return;
     }
   }
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -10,15 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import StoreIcon from '@material-ui/icons/Store';
 import UsersDataGrid from './admin/UsersDataGrid';
-import OrdersDataGrid from './admin/OrdersDataGrid';
 import HomeIcon from '@material-ui/icons/Home';
 import AdminHome from './AdminHome';
 import axios from 'axios';
@@ -81,7 +77,6 @@ export default function AdminDrawer(props) {
   const profile = props.profile;
 
 
-  const [open, setOpen] = useState(false);
   const [display, setDisplay] = useState({
     home: true,
     products: false,

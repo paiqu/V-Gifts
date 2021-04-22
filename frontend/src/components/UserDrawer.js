@@ -71,7 +71,6 @@ export default function UserDrawer(props) {
   const token = React.useContext(AuthContext).user;
   const profile = props.profile;
 
-  const [open, setOpen] = React.useState(false);
   const [display, setDisplay] = React.useState({
     home: true,
     orders: false,
@@ -100,13 +99,6 @@ export default function UserDrawer(props) {
     />
   );
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
 
   const displayHome = () => {
     setDisplay({
@@ -116,13 +108,6 @@ export default function UserDrawer(props) {
     });
   }
 
-  const displayUsers = () => {
-    setDisplay({
-      home: false,
-      orders: false,
-      users: true,
-    });
-  }
 
   const displayOrders = () => {
     setDisplay({
@@ -191,10 +176,6 @@ export default function UserDrawer(props) {
               <ListItemIcon><ShoppingCartIcon /></ListItemIcon>
               <ListItemText primary={"Cart"} />
             </ListItem>
-            {/* <ListItem button key={"Market"} component={Link} to={"/products"}>
-              <ListItemIcon><StoreIcon /></ListItemIcon>
-              <ListItemText primary={"Back to Market"} />
-            </ListItem> */}
             <ListItem button key={"Orders"} onClick={displayOrders}>
               <ListItemIcon><ListAltIcon /></ListItemIcon>
               <ListItemText primary={"Orders"} />
