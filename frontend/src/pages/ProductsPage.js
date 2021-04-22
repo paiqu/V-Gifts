@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
+    // height: "20rem"
   },
   gridList: {
     flexWrap: 'nowrap',
@@ -273,10 +274,12 @@ function ProductsPage(props) {
       >
         <Grid container spacing={0}>
           <Grid className={classes.leftContainer} container item xs={12} sm={2}>
-            <ProductFilter 
-              // categories={category} 
-              handleCategory={handleCategory}
-            />
+            <Grid item xs={12}>
+              <ProductFilter
+                // categories={category}
+                handleCategory={handleCategory}
+              />
+            </Grid>
           </Grid>
 
           <Grid 
@@ -300,7 +303,12 @@ function ProductsPage(props) {
                 <Grid item xs={12}>
                   <GridList className={classes.gridList} cols={4.5} >
                     {recommendation.map(x => (
-                      <GridListTile key={`rec-${x['product_id']}`} style={{height: "10rem"}}>
+                      <GridListTile 
+                        key={`rec-${x['product_id']}`} 
+                        style={{height: "10rem"}}
+                        component={Link}
+                        to={`/product/${x['product_id']}`}
+                      >
                         {/* <ButtonBase
                           component={Link}
                           to={`/product/${x['product_id']}`}
@@ -322,33 +330,33 @@ function ProductsPage(props) {
                             root: classes.titleBar,
                             title: classes.gridListTitle,
                           }}
-                          actionIcon={
-                            <ButtonGroup
-                              className={classes.gridListTitle}
-                              color="primary"
-                              variant="text"
-                              disableElevation
-                            >
-                              <IconButton
-                                aria-label={`cart-${x['name']}`}
-                                component={Link}
-                                to={`/product/${x['product_id']}`}
-                              >
-                                <InfoOutlinedIcon  />
-                              </IconButton>
-                              {/* <IconButton
-                                aria-label={`cart-${x['name']}`}
-                                onClick={handleAddToCart(x['product_id'])}
-                              >
-                                <ShoppingCartIcon  />
-                              </IconButton>
-                              <Button
-                                onClick={handlePurchase(x['product_id'])}
-                              >
-                                Buy
-                              </Button> */}
-                            </ButtonGroup>
-                          }
+                          // actionIcon={
+                            // <ButtonGroup
+                            //   className={classes.gridListTitle}
+                            //   color="primary"
+                            //   variant="text"
+                            //   disableElevation
+                            // >
+                            //   <IconButton
+                            //     aria-label={`cart-${x['name']}`}
+                            //     component={Link}
+                            //     to={`/product/${x['product_id']}`}
+                            //   >
+                            //     <InfoOutlinedIcon  />
+                            //   </IconButton>
+                            //   <IconButton
+                            //     aria-label={`cart-${x['name']}`}
+                            //     onClick={handleAddToCart(x['product_id'])}
+                            //   >
+                            //     <ShoppingCartIcon  />
+                            //   </IconButton>
+                            //   <Button
+                            //     onClick={handlePurchase(x['product_id'])}
+                            //   >
+                            //     Buy
+                            //   </Button>
+                            // </ButtonGroup>
+                          // }
                         />
                       </GridListTile>
                     ))}
