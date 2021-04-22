@@ -26,11 +26,12 @@ function InterestSelectionPage(props) {
   const history = useHistory();
 
   const [interests, setInterets] = useState(props.interests);
+  const [selected, setSelected] = useState([]);
 
   const handleUserInterests = (handleNext) => {
     axios.post("/user/set_interest", {
       token: token,
-      interest_lst: interests,
+      interest_lst: selected,
     })
     .then((response) => {
       history.push('/products')
@@ -50,7 +51,7 @@ function InterestSelectionPage(props) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <InterestChips interests={interests} />
+          <InterestChips interests={interests} setSelected={setSelected} />
         </Grid>
         <Grid container item xs={12} spacing={2}>
           <Grid item xs={6} />

@@ -14,9 +14,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function InterestsChips(props) {
+export default function InterestsChips({setSelected, ...props}) {
   const [interests, setInterests] = useState(props.interests);
-  const [selected, setSelected] = useState([]);
+  // const [selected, setSelected] = useState([]);
 
   useEffect((() => {
     setInterests(props.interests);
