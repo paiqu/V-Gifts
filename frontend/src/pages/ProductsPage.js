@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   main: {
     // padding: 10,
+    marginTop: "1rem",
     width: "90%",
   },
   leftContainer: {
@@ -289,6 +290,9 @@ function ProductsPage(props) {
                 item
                 xs={12}
                 spacing={2}
+                style={{
+                  // backgroundColor: "red"
+                }}
               >
                 <Grid item xs={12}>
                   <h4><ThumbUpAltIcon />Recommendations for you:</h4>
@@ -306,7 +310,7 @@ function ProductsPage(props) {
                             src={x['pic_link']}
                             alt={`product-${x['product_id']}`}
                             style={{
-                              width: "10rem",
+                              // width: "10rem",
                               height: "10rem",
                               // width: "100%",
                               // height: "100%",
