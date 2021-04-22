@@ -28,6 +28,15 @@ function InterestSelectionPage(props) {
   const [interests, setInterets] = useState(props.interests);
   const [selected, setSelected] = useState([]);
 
+  const handleAdd = (interest) => {
+    setSelected(prevSelected => [...prevSelected, interest]);
+  };
+
+  const handleRemove = (interest) => {
+    setSelected(selected.filter(item => item !== interest));
+  }
+
+
   const handleUserInterests = (handleNext) => {
     axios.post("/user/set_interest", {
       token: token,
@@ -51,7 +60,12 @@ function InterestSelectionPage(props) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <InterestChips interests={interests} setSelected={setSelected} />
+          <InterestChips 
+            interests={interests} 
+            setSelected={setSelected}
+            handleAdd={handleAdd}
+            handleRemove={handleRemove}
+          />
         </Grid>
         <Grid container item xs={12} spacing={2}>
           <Grid item xs={6} />

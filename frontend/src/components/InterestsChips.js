@@ -14,7 +14,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function InterestsChips({setSelected, ...props}) {
+export default function InterestsChips({
+  setSelected, 
+  handleAdd,
+  handleRemove,
+  ...props
+}) {
   const [interests, setInterests] = useState(props.interests);
   // const [selected, setSelected] = useState([]);
 
@@ -22,13 +27,6 @@ export default function InterestsChips({setSelected, ...props}) {
     setInterests(props.interests);
   }), []);
 
-  const handleAdd = (interest) => {
-    setSelected(prevSelected => [...prevSelected, interest]);
-  };
-
-  const handleRemove = (interest) => {
-    setSelected(selected.filter(item => item !== interest));
-  }
 
   return (
     <div>

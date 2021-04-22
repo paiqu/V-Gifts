@@ -149,6 +149,7 @@ export default function ProductCardNew(props) {
               <Button
                 onClick={handleAddToCart}
                 variant="outlined"
+                size="small"
                 style={{
                   // width: "9rem",
                   width: "100%",
@@ -165,6 +166,7 @@ export default function ProductCardNew(props) {
               <Button
                 onClick={handlePurchase}
                 variant="outlined"
+                size="small"
                 style={{
                   // width: "9rem",
                   width: "100%",
