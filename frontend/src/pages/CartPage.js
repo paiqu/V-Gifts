@@ -70,7 +70,7 @@ function CartPage(props) {
   }), [token, reload]);
 
   const handleCheckout = () => {
-    if (products.length == 0) {
+    if (products.length === 0) {
       setAlertInfo(EMPTY_ALERT);
       setAlertOpen(true);
 

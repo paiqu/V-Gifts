@@ -5,8 +5,6 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import StoreIcon from '@material-ui/icons/Store';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import GroupIcon from '@material-ui/icons/Group';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import FaceIcon from '@material-ui/icons/Face';
@@ -45,9 +43,6 @@ const useStyles = makeStyles((theme) => ({
 function AdminHome(props) {
     const classes = useStyles();
     const theme = useTheme();
-
-    const token = props.token;
-    const profile = props.profile;
 
     return (
       <div classeName={classes.root}>

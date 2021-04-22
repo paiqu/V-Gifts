@@ -188,7 +188,7 @@ function UserHome(props) {
                   </Typography>
                 </div>
                 <Typography variant="h5" color={theme.palette.primary.contrastText} component="p">
-                  {`\$${profile['fund']} left`} 
+                  {`$${profile['fund']} left`} 
                 </Typography>
 
                 <Typography variant="h5" color={theme.palette.primary.contrastText} style={{marginTop: "1rem"}}>

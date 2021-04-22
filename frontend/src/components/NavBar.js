@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import axios from "axios";
-import { useHistory } from 'react-router'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -85,7 +84,6 @@ export default function NavBar(props) {
 
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
 
   const [searchInput, setSearchInput] = useState("");
   const [cartCount, setCartCount] = useState(0);
@@ -148,15 +146,8 @@ export default function NavBar(props) {
       })
       .catch((err) => {});
     }
-  })), [props.reload]);
+  })), [props.reload, token]);
 
-  const renderProfile = () => {
-    if (token) {
-      return <LoggedInProfile />
-    } else {
-      return <NotLoggedIn />
-    }
-  };
 
 
   return (

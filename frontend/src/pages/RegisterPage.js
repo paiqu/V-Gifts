@@ -102,7 +102,7 @@ function RegisterPage({ setAuth, ...props }) {
               email_error: true,
               email_text: "Email exists"
             })
-          } else if (data.code === 461 ) {
+          } else if (data.code === INVALID_USERNAME ) {
             setState({
               account_error: true,
               account_text: "Account name invalid"

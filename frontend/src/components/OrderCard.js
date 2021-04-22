@@ -54,6 +54,7 @@ export default function OrderCard(props) {
       severity: "",
       message: "",
     })
+    // eslint-disable-next-line
     useEffect(() => {
       if (props.state_in_text === 'Delivering') {
         setDisplayReceive(true);

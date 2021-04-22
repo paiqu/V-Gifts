@@ -21,6 +21,8 @@ export default function CustomChip(props) {
         props.handleRemove(name);
 
         break;
+      default:
+        break;
     }
   };
 

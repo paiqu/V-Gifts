@@ -7,7 +7,6 @@ import AdminPage from './pages/AdminPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
-import RegisterPage from './pages/RegisterPage';
 import RegisterStepperPage from './pages/RegisterStepperPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';

@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
 import axios from 'axios';
-import Rating from '@material-ui/lab/Rating';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -21,15 +18,11 @@ import { FUND_ALERT } from '../utils/AlertInfo';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // flexGrow: 1,
     height: "100%",
-    // maxHeight: "100%",
     display: "flex",
     flexDirection: "column",
   },
   media: {
-    // height: "20%",
-    // width: "100%",
     width: "auto",
     maxHeight: "20rem",
   },
@@ -37,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   CardActions: {
-    // justifyContent: "space-between",
+
   },
 }));
 
@@ -46,10 +39,15 @@ export default function ProductCardNew(props) {
     const theme = useTheme();
     const token = React.useContext(AuthContext).user;
 
+    // eslint-disable-next-line
     const [id, setId] = useState(props.id);
+    // eslint-disable-next-line
     const [name, setName] = useState(props.name);
+    // eslint-disable-next-line
     const [price, setPrice] = useState(props.price);
+    // eslint-disable-next-line
     const [rating, setRating] = useState(props.rating);
+    // eslint-disable-next-line
     const [img, setImg] = useState(props.img);
 
 
