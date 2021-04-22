@@ -198,7 +198,7 @@ export default function ProductsManagement(props) {
     })
     .then((response) => {
       const data = response.data["product_lst"];
-
+      setReloadProducts(false);
       setProducts(data);
     })
     .catch((err) => {});
