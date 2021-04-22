@@ -131,12 +131,7 @@ export default function ProductsManagement(props) {
       setAlertInfo(NEGATIVE_NUM_ALERT);
       setAlertOpen(true);
       return;
-    } else if (newProduct.img === null) {
-      setAlertInfo(IMG_EMPTY_ALERT);
-      setAlertOpen(true);
-      return;
-    }
-
+    } 
     let formData = new FormData();
     formData.append('token', token);
     formData.append('file', selectedProduct.img);
@@ -198,7 +193,7 @@ export default function ProductsManagement(props) {
     })
     .then((response) => {
       const data = response.data["product_lst"];
-
+      setReloadProducts(false);
       setProducts(data);
     })
     .catch((err) => {});
