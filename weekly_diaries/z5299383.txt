@@ -99,4 +99,9 @@ Plan for next week
 1. Make the website more responsive
 2. Handle all error received from flask by showing users an alert (snackbar)
 
+## Week 10
+1. Finalised our website design
+2. Fixed some display issues
+
+
 
