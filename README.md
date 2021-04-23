@@ -10,7 +10,7 @@ A gift shopping website
 
 ### Backend
 
-1. Install `python3` (If you have already installed it, skip this step)
+1. Install `virtualenv` 
 
    ```shell
    python3 -m pip install virtualenv
