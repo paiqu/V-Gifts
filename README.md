@@ -6,17 +6,29 @@ A gift shopping website
 * `python3`should be installed (recommended [Python 3.7.10](https://www.python.org/downloads/release/python-3710/))
 * `npm` should be installed
 
-## Installation
+## Installation & Usage
 
 ### Backend
 
-1. Open the `/backend` folder
+1. Install `python3` (If you have already installed it, skip this step)
+
+   ```shell
+   python3 -m pip install virtualenv
+   ```
+
+2. Open the `/backend` folder
 
    ```shell
    cd backend
    ```
 
-2. Start the backend server
+3. Install the required dependencies
+
+   ```shell
+   python3 -m pip install -r requirements.txt
+   ```
+
+4. Start the backend server
 
    ```shell
    python3 server.py # start the server in default port (5000)
@@ -42,7 +54,7 @@ A gift shopping website
 
    ```shell
    sh run.sh [BACKEND PORT] [FRONTEND PORT] 
-   # backend port number need to be same as what used in the backend server and can not be same as frontend 
+   # backend port number need to be same as what's used in the backend server and can not be the same as frontend port number
    ```
 
    example:
