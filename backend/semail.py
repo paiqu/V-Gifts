@@ -1,12 +1,16 @@
+"""
+    This file help to send email when user forgot their password
+"""
+
+
 import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 
 def send_email_gm(email, new_pswd):
     '''
-    send reset code email
+        This fuction send reset code email
     '''
-    # try:
     # set host and receiver
     host_name = "smtp.gmail.com"
     host_port = 465
@@ -26,8 +30,3 @@ def send_email_gm(email, new_pswd):
     server.sendmail(sender_email, receivers, message.as_string())
     server.quit()
     print("E-mail sent")
-    # except:
-    #     pass
-
-if __name__ == "__main__":
-    send_email_gm("haoran.lyu@student.unsw.edu.au", "123321")

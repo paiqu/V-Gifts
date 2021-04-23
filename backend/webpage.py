@@ -387,15 +387,3 @@ def search_filter_recommendation(keyword = "", ctgry = [], \
         "total_pages": us.ceil((len(rt3)/9)),
         "flag": flag
     }
-
-
-
-if __name__ == "__main__":
-    # print(prod_filter_type(ctgry = [], price_rg = [0, 99999999], \
-    #     db_name = "database_manual.json"))
-    # print(prod_filter_type(ctgry = [1, 0, 0], price_rg = [0, 99999999], \
-    #     db_name = "database_manual.json"))
-    # print(prod_filter_type(ctgry = [], price_rg = [50, 999999], \
-    #     db_name = "database_manual.json"))
-    print(search_filter_recommendation("mother", ctgry = [], \
-            price_rg = [0, 99999999], user_id = -1, page = -1, db_name = "database.json"))

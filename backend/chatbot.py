@@ -28,22 +28,6 @@ TEST_KEYWORDS = {
 
 NUM_CATA = 11
 
-# NEGATION_KEYWORDS = [
-#     "not",
-#     "don\"t",
-#     "doesn\"t",
-#     "dislike",
-#     "hate",
-#     "bad",
-# ]
-
-# CONTRARY_KEYWORDS = [
-#     "but",
-#     "although",
-#     "though",
-#     "instead",
-# ]
-
 TEST_QRY = \
     "I want a toy for children, and my wife. But I don\"t like it for men.\
     My neighbor's husband doesn't like toy."
@@ -127,30 +111,6 @@ def query_analysis_test2(qry):
                             query_analysis_test0(qryy))
     return list(map(deminishing_returns, vec))
 
-# def query_analysis_negation_included(qry):
-#     """
-#         This function identifies negations inside query
-#         Including:[
-#             "not", "don\"t", "doesn\"t", "dislike", etc.
-#         ]
-#     """
-#     negation = False 
-#     lst = re.split("[,.; ]", qry)
-#     # print(lst)
-#     vec = [0] * NUM_CATA
-#     kwds = TEST_KEYWORDS
-#     for wd in lst:
-#         # dentify negation
-#         if wd in NEGATION_KEYWORDS:
-#             negation = True
-#     for wd in lst:
-#         # punishing/rewarding values
-#         if wd in kwds.keys() and negation == False:
-#             vec[kwds[wd]] += 1
-#         elif wd in kwds.keys() and negation == True:
-#             vec[kwds[wd]] -= 1
-#     return vec
-
 def query_analysis_test3(qry):
     """
         This function identifies negation in qry,
@@ -165,23 +125,3 @@ def query_analysis_test3(qry):
         vec = adding_lsts(vec, 
                             query_analysis_test1(qry.lower()))
     return list(map(deminishing_returns, vec))
-
-def query_analysis_test4(qry):
-    """
-        This function breaks small query sentencies
-        into branch format to include negation, contrary,
-        and, or and etc. relationships
-        e.g. My wife likes toys, but not the ones for children or men.
-
-        ==>                       but
-                    wife + toy           not (children + men)
-    """
-    pass
-
-if __name__ == "__main__":
-    print(TEST_QRY)
-    print(query_analysis_test0(TEST_QRY))
-    print(query_analysis_test1(TEST_QRY))
-    print(query_analysis_test2(TEST_QRY))
-    print(query_analysis_test3(TEST_QRY))
-    print(query_analysis_test3(TEST_QRY_UPPER))

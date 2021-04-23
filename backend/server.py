@@ -11,7 +11,7 @@ import product as pdt
 import webpage as wbp
 import login as log
 import error as err
-import send_email as sem
+import semail as sem
 from logging import DEBUG
 from flask import Flask, request
 from flask_cors import CORS
