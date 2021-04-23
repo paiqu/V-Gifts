@@ -19,9 +19,9 @@ A gift shopping website
 2. Start the backend server
 
    ```shell
-   python3 server.py # Start the server in default port (5000)
+   python3 server.py # start the server in default port (5000)
    # or
-   python3 server.py [PORT NUMBER] # Example: python3 server 6000
+   python3 server.py [PORT NUMBER] # example: python3 server 6000
    ```
 
 ### Fronend
@@ -41,7 +41,8 @@ A gift shopping website
 3. After the backend server has been running, start the frontend
 
    ```shell
-   sh run.sh [BACKEND PORT] [FRONTEND PORT]
+   sh run.sh [BACKEND PORT] [FRONTEND PORT] 
+   # backend port number need to be same as what used in the backend server and can not be same as frontend 
    ```
 
    example:
