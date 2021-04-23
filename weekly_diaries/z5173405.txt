@@ -61,4 +61,29 @@ Solve the error report of the login and register link backend, complete the user
 
 Week 8:
 
-Complete the order history page.
+Update order detail page:
+1. add rating button for each order
+2. display each order purchase detail
+
+#######################################################################################
+
+Week 9:
+
+A Retrospective B meeting, write retrospective b report. Prepare for final report and final demo.
+
+Add order state Button live update the order state.
+
+#######################################################################################
+
+Week 10:
+
+1. Implement the forget password interface, add the countdown timer for that.
+
+2. Implement the import csv interface for admin product management page.
+
+3. Implement the edit profile dialog and change password dialog for user profile page.
+
+4. Implement admin update the order state.
+
+5. Fix some live update bug, add refund and received button for update the order state.
+
