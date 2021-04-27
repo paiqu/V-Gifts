@@ -18,6 +18,12 @@ from login import encrypt_password
 TYPE_OF_PRODUCTS_INIT = 11
 
 
+def correct_filename(filename):
+    my_dir = os.path.dirname(__file__)
+    json_file_path = os.path.join(my_dir, filename)
+
+    return json_file_path
+
 # Main fuctions
 
 def init_db():
@@ -92,7 +98,7 @@ def to_json(dbs, filename = "database.json"):
     """
         This fuction save database to json file
     """
-    with open(filename, "w") as fp:
+    with open(correct_filename(filename), "w") as fp:
         json.dump(dbs, fp)
     return {}
 
@@ -100,7 +106,7 @@ def load_json(filename = "database.json"):
     """
         This function loads database from json file
     """
-    with open(filename, "r") as fp:
+    with open(correct_filename(filename), "r") as fp:
         dbs = json.load(fp)
     return dbs
 

@@ -1,6 +1,7 @@
 require("dotenv").config();
 
-export const url = "http://localhost:" + process.env.REACT_APP_BACKEND_PORT;
+// export const url = "http://localhost:" + process.env.REACT_APP_BACKEND_PORT;
+export const url = "http://vgifts.pythonanywhere.com/";
 
 // General POST error
 export const DEFAULT_ERROR_TEXT = 'An error occured. Try again later';
