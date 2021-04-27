@@ -1,6 +1,5 @@
 # capstone-project-3900-h16a-victims
-A gift shopping website
-
+https://v-gifts.herokuapp.com/
 ## Prerequisites
 
 * `python3`should be installed (recommended [Python 3.7.10](https://www.python.org/downloads/release/python-3710/))
