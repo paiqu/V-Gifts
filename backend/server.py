@@ -58,6 +58,10 @@ app.config.update(
 app.register_error_handler(Exception, defaultHandler)
 mail = Mail(app)
 
+@app.route("/")
+def index():
+    return "Hello this is the new version!"
+
 
 # Admin related routes
 
@@ -720,4 +724,7 @@ def order_list():
     return dumps(result)
 
 if __name__ == "__main__":
-    app.run(port = (int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
+    # app.run(port = (int(sys.argv[1]) if len(sys.argv) == 2 else 5000))
+    port = int(os.environ.get('PORT', 5000))
+    
+    app.run(port=port)
