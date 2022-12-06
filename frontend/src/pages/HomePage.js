@@ -46,15 +46,6 @@ function HomePage(props) {
           gutterBottom>
           Welcome to <b>V-Gifts</b>
         </Typography>
-        <Typography 
-          variant="h3" 
-          align="center" 
-          style={{
-            color: theme.palette.primary.contrastText
-          }} 
-          paragraph>
-          Join us today and receive $2000! 
-        </Typography>
         <Box
           display="flex"
           style={{
